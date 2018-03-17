@@ -10,7 +10,7 @@ echo.
 echo.
 CleanQtProjects.exe STATIC_LIBS
 echo.
-CleanQtProjects.exe PLUGINS
+CleanQtProjects.exe PROFILES
 echo.
 CleanQtProjects.exe PROGRAM
 echo.
