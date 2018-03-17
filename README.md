@@ -9,7 +9,7 @@ This project allows the user to "program a set of real joysticks": events from t
 
 It does not use HMI to define the profile such as in "Thrustmaster TARGET GUI", "Univeral Control Remapper" or "Joystick Gremlin". All the profile is defined in C++ source code... but there is no need to have an accurate understanding of C++ to be able to use it, just like for Thrustmaster TARGET scripts with C language.
 
-Look at the files PLUGINS/StarCitizen_3.0.1_v1/CODE/Profile.h and .cpp for an example !
+Look at the files PROFILES/StarCitizen_3.0.1_v1/CODE/Profile.h and .cpp for an example !
 
 Under the hood this tool uses:
 - vJoy for virtual joysticks: http://vjoystick.sourceforge.net/site/ (installation needed)
