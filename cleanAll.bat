@@ -4,7 +4,7 @@ set PATH=CleanQtProjects/release;%PATH%
 echo.
 echo.
 
-echo cleaning projects STATIC_LIBS, PLUGINS, PROGRAM and MONITORING
+echo cleaning projects STATIC_LIBS, PROFILES, PROGRAM, MONITORING and AXES_CURVES
 echo in progress...
 echo.
 echo.
