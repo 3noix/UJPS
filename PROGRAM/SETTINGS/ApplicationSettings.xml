@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE genericProperties SYSTEM "genericProperties.xsd">
+<PROPERTIES>
+	<PROPERTY name="defaultDirectory" type="QStringList" value="Fixed|$APPDIR/../../PROFILES/"/>
+	<PROPERTY name="vJoyConfigBinary" type="QString" value="C:/Program Files/vJoy/x64/vJoyConfig.exe"/>
+</PROPERTIES>
