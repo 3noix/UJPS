@@ -104,7 +104,6 @@ void AbstractRemoteJoystickClient::slotSendButtonInfo(quint8 button, bool bPress
 	
 	out << quint16{0} << RemoteJoystickMessageType::Button << button << bPressed;
 	
-	m_tcpSocket->flush();
 	out.device()->seek(0);
 	quint16 dataSize = ba.size()-sizeof(quint16);
 	out << dataSize;
@@ -120,7 +119,6 @@ void AbstractRemoteJoystickClient::slotSendAxisInfo(quint8 axis, float axisValue
 	
 	out << quint16{0} << RemoteJoystickMessageType::Axis << axis << axisValue;
 	
-	m_tcpSocket->flush();
 	out.device()->seek(0);
 	quint16 dataSize = ba.size()-sizeof(quint16);
 	out << dataSize;
@@ -158,7 +156,6 @@ void AbstractRemoteJoystickClient::slotConnected()
 	QDataStream out{&ba, QIODevice::WriteOnly};
 	out.setVersion(QDataStream::Qt_5_7);
 	
-	m_tcpSocket->flush();
 	out << quint16{0} << RemoteJoystickMessageType::Init;
 	out << this->description();
 	out << this->buttonCount() << this->buttonsNames();
