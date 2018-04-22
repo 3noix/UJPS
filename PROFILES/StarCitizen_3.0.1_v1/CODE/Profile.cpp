@@ -8,17 +8,18 @@ LayersCombo AllLayers{};
 #include "WindowsKeys.h"
 using namespace Keys;
 
-#include "REAL_JOYSTICKS/RealJoysticksManager.h"
-#include "REAL_JOYSTICKS/EnhancedJoystick.h"
-#include "REAL_JOYSTICKS/SPECIFIC_JOYSTICKS/WarthogJoystick.h"
-#include "REAL_JOYSTICKS/SPECIFIC_JOYSTICKS/WarthogThrottle.h"
-#include "REAL_JOYSTICKS/SPECIFIC_JOYSTICKS/MfgCrosswindRudderPedals.h"
+#include "EnhancedJoystick.h"
+#include "RealJoysticksManager.h"
+#include "ThrustmasterWarthogJoystick.h"
+#include "ThrustmasterWarthogThrottle.h"
+#include "MfgCrosswindRudderPedals.h"
 #include "StarCitizenControls.h"
+#include <QCoreApplication>
 
 using VJOY = VirtualJoystick;
-using TMWJ = WarthogJoystick;
-using TMWT = WarthogThrottle;
-using MFGX = MfgCrosswindRudderPedals;
+namespace TMWJ = ThrustmasterWarthogJoystick;
+namespace TMWT = ThrustmasterWarthogThrottle;
+namespace MFGX = MfgCrosswindRudderPedals;
 namespace SC = StarCitizenControls;
 
 
@@ -102,7 +103,14 @@ bool Profile::setupJoysticks()
 	// in the QtControllerModif lib (cf line 25 of qgamecontroller_win.cpp)
 	
 	// we retrieve pointers on real joysticks we are interested in
-	if (!rjm) {rjm = new RealJoysticksManager{};}
+	if (!rjm)
+	{
+		rjm = new RealJoysticksManager{};
+		QString controllersPluginsDirPath = QCoreApplication::applicationDirPath() + "/../../ControllersPlugins/PLUGINS/";
+		rjm->loadPlugins(QCoreApplication::applicationDirPath() + "/../../ControllersPlugins/PLUGINS/");
+		QObject::connect(rjm, SIGNAL(message(QString,QColor)), this, SIGNAL(message(QString,QColor)));
+		rjm->searchForControllers();
+	}
 	bool btmwj = rjm->joystick("Joystick - HOTAS Warthog");
 	bool btmwt = rjm->joystick("Throttle - HOTAS Warthog");
 	bool bmfgx = rjm->joystick("MFG Crosswind V2");

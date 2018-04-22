@@ -31,6 +31,8 @@ class Profile : public AbstractProfile
 		void init();
 		
 		RealJoysticksManager *rjm;
+		EnhancedJoystick *tmwj; // for Thrustmaster Warthog Joystick
+		EnhancedJoystick *tmwt; // for Thrustmaster Warthog Throttle
 		EnhancedJoystick *mfgx; // for MFG Crosswind V2 rudder pedals
 		VirtualJoystick  *vj1;  // virtual joystick #1
 };

@@ -1,14 +1,16 @@
 CONFIG(debug, debug|release) {
     DESTDIR = debug
-	LIBS += ../../STATIC_LIBS/SOURCES/QtGameControllerModif/debug/libQtGameControllerModif.a \
-			../../STATIC_LIBS/SOURCES/VirtualJoysticks/debug/libvirtualJoysticks.a \
-			../../STATIC_LIBS/SOURCES/UjpsCore/debug/libujpsCore.a
+	LIBS += ../../StaticLibs/SOURCES/QtGameControllerModif/debug/libQtGameControllerModif.a \
+			../../StaticLibs/SOURCES/RealJoysticks/debug/librealJoysticks.a \
+			../../StaticLibs/SOURCES/VirtualJoysticks/debug/libvirtualJoysticks.a \
+			../../StaticLibs/SOURCES/UjpsCore/debug/libujpsCore.a
 }
 CONFIG(release, debug|release) {
     DESTDIR = release
-	LIBS += ../../STATIC_LIBS/SOURCES/QtGameControllerModif/release/libQtGameControllerModif.a \
-			../../STATIC_LIBS/SOURCES/VirtualJoysticks/release/libvirtualJoysticks.a \
-			../../STATIC_LIBS/SOURCES/UjpsCore/release/libujpsCore.a
+	LIBS += ../../StaticLibs/SOURCES/QtGameControllerModif/release/libQtGameControllerModif.a \
+			../../StaticLibs/SOURCES/RealJoysticks/release/librealJoysticks.a \
+			../../StaticLibs/SOURCES/VirtualJoysticks/release/libvirtualJoysticks.a \
+			../../StaticLibs/SOURCES/UjpsCore/release/libujpsCore.a
 }
 
 TEMPLATE = lib
@@ -23,33 +25,13 @@ MOC_DIR = $$DESTDIR/moc
 LIBS += ../../vJoy218SDK-291116/SDK/lib/vJoyInterface.lib
 
 
-INCLUDEPATH +=  ../../STATIC_LIBS/INCLUDES/QtGameControllerModif/ \
-				../../STATIC_LIBS/INCLUDES/Other/ \
-				../../STATIC_LIBS/INCLUDES/VirtualJoysticks/ \
-				../../STATIC_LIBS/INCLUDES/RealJoysticks/ \
-				../../STATIC_LIBS/INCLUDES/UjpsCore/
+INCLUDEPATH +=  ../../StaticLibs/INCLUDES/QtGameControllerModif/ \
+				../../StaticLibs/INCLUDES/Other/ \
+				../../StaticLibs/INCLUDES/VirtualJoysticks/ \
+				../../StaticLibs/INCLUDES/RealJoysticks/ \
+				../../StaticLibs/INCLUDES/UjpsCore/ \
+				../../ControllersPlugins/INCLUDES/
 
-
-HEADERS +=  CODE/Profile.h \
-			CODE/REAL_JOYSTICKS/RealJoysticksManager.h \
-			CODE/REAL_JOYSTICKS/EnhancedJoystick.h \
-			CODE/REAL_JOYSTICKS/RealJoystick.h \
-			CODE/REAL_JOYSTICKS/SPECIFIC_JOYSTICKS/WarthogJoystick.h \
-			CODE/REAL_JOYSTICKS/SPECIFIC_JOYSTICKS/WarthogThrottle.h \
-			CODE/REAL_JOYSTICKS/SPECIFIC_JOYSTICKS/MfgCrosswindRudderPedals.h \
-			CODE/REAL_JOYSTICKS/CURVES/SCurve.h \
-			CODE/REAL_JOYSTICKS/CURVES/JCurve.h \
-			CODE/REAL_JOYSTICKS/CURVES/CustomCurve.h
-			
-
-SOURCES +=  CODE/Profile.cpp \
-			CODE/REAL_JOYSTICKS/RealJoysticksManager.cpp \
-			CODE/REAL_JOYSTICKS/EnhancedJoystick.cpp \
-			CODE/REAL_JOYSTICKS/RealJoystick.cpp \
-			CODE/REAL_JOYSTICKS/SPECIFIC_JOYSTICKS/WarthogJoystick.cpp \
-			CODE/REAL_JOYSTICKS/SPECIFIC_JOYSTICKS/WarthogThrottle.cpp \
-			CODE/REAL_JOYSTICKS/SPECIFIC_JOYSTICKS/MfgCrosswindRudderPedals.cpp \
-			CODE/REAL_JOYSTICKS/CURVES/SCurve.cpp \
-			CODE/REAL_JOYSTICKS/CURVES/JCurve.cpp \
-			CODE/REAL_JOYSTICKS/CURVES/CustomCurve.cpp
+HEADERS +=  CODE/Profile.h
+SOURCES +=  CODE/Profile.cpp
 

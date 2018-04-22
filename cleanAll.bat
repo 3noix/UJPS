@@ -4,21 +4,32 @@ set PATH=CleanQtProjects/release;%PATH%
 echo.
 echo.
 
-echo cleaning projects STATIC_LIBS, PROFILES, PROGRAM, MONITORING and AXES_CURVES
+echo cleaning all projects contained in the sub-directories
 echo in progress...
 echo.
 echo.
-CleanQtProjects.exe STATIC_LIBS
+CleanQtProjects.exe StaticLibs
 echo.
-CleanQtProjects.exe PROFILES
+CleanQtProjects.exe UjpsMainApp
 echo.
-CleanQtProjects.exe PROGRAM
+CleanQtProjects.exe Monitoring1
 echo.
-CleanQtProjects.exe MONITORING
+CleanQtProjects.exe Monitoring2
 echo.
-CleanQtProjects.exe AXES_CURVES
+CleanQtProjects.exe AxesCurves
+echo.
+CleanQtProjects.exe Profiles
+echo.
+CleanQtProjects.exe RemoteControllers
+echo.
+CleanQtProjects.exe ControllersPlugins
 echo.
 echo.
+
+del UJPS.Ink
+del Monitoring1.Ink
+del Monitoring2.Ink
+del AxesCurves.Ink
 
 pause
 

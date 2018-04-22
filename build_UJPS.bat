@@ -7,7 +7,7 @@ echo.
 
 
 REM COMPILATION AND DEPLOYMENT OF CLEAN QT PROJECTS UTILITY
-echo compilating CleanQtProjects
+echo compiling CleanQtProjects
 echo.
 cd CleanQtProjects
 qmake
@@ -21,15 +21,23 @@ echo.
 
 
 REM COMPILATION OF STATIC LIBS
-echo compilating QtGameControllerModif
+echo compiling QtGameControllerModif
 echo.
-cd STATIC_LIBS/SOURCES/QtGameControllerModif
+cd StaticLibs/SOURCES/QtGameControllerModif
 qmake
 mingw32-make release
 echo.
 echo.
 
-echo compilating VirtualJoysticks
+echo compiling RealJoysticks
+echo.
+cd ../RealJoysticks
+qmake
+mingw32-make release
+echo.
+echo.
+
+echo compiling VirtualJoysticks
 echo.
 cd ../VirtualJoysticks
 qmake
@@ -37,7 +45,7 @@ mingw32-make release
 echo.
 echo.
 
-echo compilating UjpsCore
+echo compiling UjpsCore
 echo.
 cd ../UjpsCore
 qmake
@@ -46,53 +54,120 @@ echo.
 echo.
 
 
-REM COMPILATION AND DEPLOYMENT OF MAIN PROGRAM
-echo compilating the main program
+REM COMPILATION AND DEPLOYMENT OF CONTROLLERS PLUGINS
+cd ../../../ControllersPlugins/SOURCES
+call build_ControllersPlugins_fct.bat
+
+
+REM COMPILATION AND DEPLOYMENT OF UJPS MAIN APP
+echo compiling UjpsMainApp
 echo.
-cd ../../../PROGRAM
+cd ../../UjpsMainApp
 qmake
 mingw32-make release
 cd release
 echo.
 windeployqt Ujps.exe
 cd ../..
-copy /Y STATIC_LIBS\SOURCES\QtGameControllerModif\release\QtGameControllerModif.dll PROGRAM\release
-copy /Y STATIC_LIBS\SOURCES\VirtualJoysticks\release\virtualJoysticks.dll PROGRAM\release
-copy /Y STATIC_LIBS\SOURCES\UjpsCore\release\ujpsCore.dll PROGRAM\release
-copy /Y vJoy218SDK-291116\SDK\lib\vJoyInterface.dll PROGRAM\release
+copy /Y StaticLibs\SOURCES\QtGameControllerModif\release\QtGameControllerModif.dll UjpsMainApp\release
+copy /Y StaticLibs\SOURCES\RealJoysticks\release\realJoysticks.dll UjpsMainApp\release
+copy /Y StaticLibs\SOURCES\VirtualJoysticks\release\virtualJoysticks.dll UjpsMainApp\release
+copy /Y StaticLibs\SOURCES\UjpsCore\release\ujpsCore.dll UjpsMainApp\release
+copy /Y vJoy218SDK-291116\SDK\lib\vJoyInterface.dll UjpsMainApp\release
 echo.
 echo.
 
 
-REM COMPILATION AND DEPLOYMENT OF MONITORING
-echo compilating monitoring program
+REM COMPILATION AND DEPLOYMENT OF MONITORING1
+echo compiling Monitoring1
 echo.
-cd MONITORING
+cd Monitoring1
 qmake
 mingw32-make release
 echo.
 cd release
-windeployqt Monitoring.exe
+windeployqt Monitoring1.exe
 cd ../..
-copy /Y STATIC_LIBS\SOURCES\QtGameControllerModif\release\QtGameControllerModif.dll MONITORING\release
+copy /Y StaticLibs\SOURCES\QtGameControllerModif\release\QtGameControllerModif.dll Monitoring1\release
+copy /Y StaticLibs\SOURCES\RealJoysticks\release\realJoysticks.dll Monitoring1\release
+echo.
+echo.
+
+
+REM COMPILATION AND DEPLOYMENT OF MONITORING2
+echo compiling Monitoring2
+echo.
+cd Monitoring2
+qmake
+mingw32-make release
+echo.
+cd release
+windeployqt Monitoring2.exe
+cd ../..
+copy /Y StaticLibs\SOURCES\QtGameControllerModif\release\QtGameControllerModif.dll Monitoring2\release
+copy /Y StaticLibs\SOURCES\RealJoysticks\release\realJoysticks.dll Monitoring2\release
 echo.
 echo.
 
 
 REM COMPILATION AND DEPLOYMENT OF AXES_CURVES
-echo compilating axes curves program
+echo compiling AxesCurves
 echo.
-cd AXES_CURVES
+cd AxesCurves
 qmake
 mingw32-make release
 echo.
 cd release
 windeployqt AxesCurves.exe
 cd ../..
-copy /Y STATIC_LIBS\SOURCES\QtGameControllerModif\release\QtGameControllerModif.dll AXES_CURVES\release
+copy /Y StaticLibs\SOURCES\QtGameControllerModif\release\QtGameControllerModif.dll AxesCurves\release
+copy /Y StaticLibs\SOURCES\RealJoysticks\release\realJoysticks.dll AxesCurves\release
 echo.
 echo.
 
+
+
+
+
+REM create shortcut to UjpsMainApp
+set SCRIPT="%cd%\createShorcuts.vbs"
+echo Set oWS = WScript.CreateObject("WScript.Shell") >> %SCRIPT%
+echo sLinkFile = "%cd%\UJPS.lnk" >> %SCRIPT%
+echo Set oLink = oWS.CreateShortcut(sLinkFile) >> %SCRIPT%
+echo oLink.TargetPath = "%cd%\UjpsMainApp\release\UJPS.exe" >> %SCRIPT%
+echo oLink.Save >> %SCRIPT%
+cscript /nologo %SCRIPT%
+del %SCRIPT%
+
+REM create shortcut to Monitoring1
+set SCRIPT="%cd%\createShorcuts.vbs"
+echo Set oWS = WScript.CreateObject("WScript.Shell") >> %SCRIPT%
+echo sLinkFile = "%cd%\Monitoring1.lnk" >> %SCRIPT%
+echo Set oLink = oWS.CreateShortcut(sLinkFile) >> %SCRIPT%
+echo oLink.TargetPath = "%cd%\Monitoring1\release\Monitoring1.exe" >> %SCRIPT%
+echo oLink.Save >> %SCRIPT%
+cscript /nologo %SCRIPT%
+del %SCRIPT%
+
+REM create shortcut to Monitoring2
+set SCRIPT="%cd%\createShorcuts.vbs"
+echo Set oWS = WScript.CreateObject("WScript.Shell") >> %SCRIPT%
+echo sLinkFile = "%cd%\Monitoring2.lnk" >> %SCRIPT%
+echo Set oLink = oWS.CreateShortcut(sLinkFile) >> %SCRIPT%
+echo oLink.TargetPath = "%cd%\Monitoring2\release\Monitoring2.exe" >> %SCRIPT%
+echo oLink.Save >> %SCRIPT%
+cscript /nologo %SCRIPT%
+del %SCRIPT%
+
+REM create shortcut to AxesCurves
+set SCRIPT="%cd%\createShorcuts.vbs"
+echo Set oWS = WScript.CreateObject("WScript.Shell") >> %SCRIPT%
+echo sLinkFile = "%cd%\AxesCurves.lnk" >> %SCRIPT%
+echo Set oLink = oWS.CreateShortcut(sLinkFile) >> %SCRIPT%
+echo oLink.TargetPath = "%cd%\AxesCurves\release\AxesCurves.exe" >> %SCRIPT%
+echo oLink.Save >> %SCRIPT%
+cscript /nologo %SCRIPT%
+del %SCRIPT%
 
 
 echo build finished
