@@ -162,12 +162,9 @@ void CurveChartView::updateCurrent()
 {
 	if (!m_joystick) {return;}
 	qreal x = lim<qreal>(m_joystick->axisValue(m_axis)+m_trim1,-1.0,1.0);
-	qreal y = 0.0;
-	
-	if (m_curve)
-		y = lim<qreal>(m_curve->run(m_kdirection*x+m_trim2),-1.0,1.0);
-	else
-		y = lim<qreal>(m_kdirection*x+m_trim2,-1.0,1.0);
+	qreal y = x;
+	if (m_curve) {y = m_curve->run(x);}
+	y = lim<qreal>(m_kdirection*y+m_trim2,-1.0,1.0);
 	
 	m_seriesCurrent->replace(0,x,y);
 }
@@ -181,10 +178,9 @@ void CurveChartView::slotUpdateCurve()
 	for (int i=0; i<2001; ++i)
 	{
 		qreal x = lim<qreal>(0.001*i-1.0+m_trim1,-1.0,1.0);
-		qreal y = 0.0;
-		
-		if (m_curve) {y = lim<qreal>(m_curve->run(m_kdirection*x+m_trim2),-1.0,1.0);}
-		else {y = lim<qreal>(m_kdirection*x+m_trim2,-1.0,1.0);}
+		qreal y = x;
+		if (m_curve) {y = m_curve->run(x);}
+		y = lim<qreal>(m_kdirection*y+m_trim2,-1.0,1.0);
 		
 		points << QPointF{x,y};
 	}
