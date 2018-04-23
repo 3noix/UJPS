@@ -89,14 +89,13 @@ QVector<JoystickChange> EnhancedJoystick::changes()
 	for (int i=n-1; i>=0; --i)
 	{
 		JoystickChange &ch = chgts[i];
-		bool bGoodJoystick = ch.joystick->id() == this->id();
 		bool bLockedButton = (ch.type == ControlType::Button && m_buttonsLocked[ch.numButtonOrAxis]);
 		bool bLockedAxis = (ch.type == ControlType::Axis && ch.numButtonOrAxis < 8 && m_axesLocked[ch.numButtonOrAxis]);
 		bool bNotLockedAxis = (ch.type == ControlType::Axis && ch.numButtonOrAxis < 8 && !m_axesLocked[ch.numButtonOrAxis]);
 		
 		// if locked, we remove the event
-		if (bGoodJoystick && (bLockedButton || bLockedAxis)) {chgts.removeAt(i);}
-		else if (bGoodJoystick && bNotLockedAxis)
+		if (bLockedButton || bLockedAxis) {chgts.removeAt(i);}
+		else if (bNotLockedAxis)
 		{
 			float v = ch.axisValue + m_axesTrim[ch.numButtonOrAxis];	// we add the trim
 			if (m_axesCurves[ch.numButtonOrAxis])
