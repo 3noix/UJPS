@@ -40,10 +40,10 @@ namespace ThrustmasterWarthogThrottle
 	const uint EOLIGN   = 30;	// engine left oper ignition
 	const uint EORIGN   = 31;	// engine right oper ignition
 		
-	const uint CSU      = 32;	// virtual: slew control UP
-	const uint CSR      = 33;	// virtual: slew control RIGHT
-	const uint CSD      = 34;	// virtual: slew control DOWN
-	const uint CSL      = 35;	// virtual: slew control LEFT
+	const uint CSU      = 32;	// virtual: coolie switch UP
+	const uint CSR      = 33;	// virtual: coolie switch RIGHT
+	const uint CSD      = 34;	// virtual: coolie switch DOWN
+	const uint CSL      = 35;	// virtual: coolie switch LEFT
 	const uint EFLOVER  = 36;	// virtual: engine left fuel override
 	const uint EFROVER  = 37;	// virtual: engine right fuel override
 	const uint APUOFF   = 38;	// virtual

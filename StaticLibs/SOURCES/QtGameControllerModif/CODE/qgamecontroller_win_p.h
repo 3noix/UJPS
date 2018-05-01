@@ -20,10 +20,10 @@
 #ifndef QGAMECONTROLLER_WIN_P_H
 #define QGAMECONTROLLER_WIN_P_H
 
-#include <QMap>
+#include <QVector>
 
-#include "qgamecontroller.h"
-#include "qgamecontroller_p.h"
+#include "QGameController.h"
+#include "QGameController_p.h"
 
 #include <windows.h>
 #define DIRECTINPUT_VERSION 0x0800
@@ -41,6 +41,7 @@ struct DI_ENUM_CONTEXT
 BOOL CALLBACK    EnumJoysticksCallback( const DIDEVICEINSTANCE* pdidInstance, VOID* pContext );
 BOOL CALLBACK    EnumObjectsCallback( const DIDEVICEOBJECTINSTANCE* pdidoi, VOID* pContext );
 
+
 class QGameControllerPrivate
 {
 	Q_DECLARE_PUBLIC(QGameController)
@@ -55,15 +56,20 @@ class QGameControllerPrivate
 		QString HardwareId;
 		uint ID;
 		bool Valid;
-		QMap<uint, float> AxisValues;
-		QMap<uint, bool> ButtonValues;
-		LPDIRECTINPUTDEVICE8    g_pJoystick;
+		QVector<float> AxisValues;
+		QVector<bool> ButtonValues;
+		LPDIRECTINPUTDEVICE8 g_pJoystick;
 		uint enumCounter;
 		QList<GUID> DIaxisGIIDs;
 		uint Axis;
 		uint Buttons;
+		uint RealButtons;
+		uint Povs;
 		
 		void readGameController();
+		
+	private:
+		bool m_bFirstRead;
 };
 
 QT_END_NAMESPACE

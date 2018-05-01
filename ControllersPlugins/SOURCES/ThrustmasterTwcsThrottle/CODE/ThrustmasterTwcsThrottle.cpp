@@ -51,49 +51,9 @@ void ThrustmasterTwcsThrottle::slotGameControllerButtonEvent(QGameControllerButt
 void ThrustmasterTwcsThrottle::slotGameControllerAxisEvent(QGameControllerAxisEvent *event)
 {
 	Q_ASSERT(event);
-	
 	uint axis = event->axis();
-	float value = event->value();
 	
-	if (axis == 8)
-	{
-		if (value > 0)
-		{
-			if (m_oldAxis8Value < 0) {m_changes << JoystickChange{this,ControlType::Button, ThrustmasterTwcsThrottle::THAT2L, false, 0.0};}
-			m_changes << JoystickChange{this,ControlType::Button, ThrustmasterTwcsThrottle::THAT2R, true, 0.0};
-		}
-		else if (value == 0)
-		{
-			if (m_oldAxis8Value < 0) {m_changes << JoystickChange{this,ControlType::Button, ThrustmasterTwcsThrottle::THAT2L, false, 0.0};}
-			else if (m_oldAxis8Value > 0) {m_changes << JoystickChange{this,ControlType::Button, ThrustmasterTwcsThrottle::THAT2R, false, 0.0};}
-		}
-		else
-		{
-			if (m_oldAxis8Value > 0) {m_changes << JoystickChange{this,ControlType::Button, ThrustmasterTwcsThrottle::THAT2R, false, 0.0};}
-			m_changes << JoystickChange{this,ControlType::Button, ThrustmasterTwcsThrottle::THAT2L, true, 0.0};
-		}
-		m_oldAxis8Value = value;
-	}
-	else if (axis == 9)
-	{
-		if (value > 0)
-		{
-			if (m_oldAxis9Value < 0) {m_changes << JoystickChange{this,ControlType::Button, ThrustmasterTwcsThrottle::THAT2D, false, 0.0};}
-			m_changes << JoystickChange{this,ControlType::Button, ThrustmasterTwcsThrottle::THAT2U, true, 0.0};
-		}
-		else if (value == 0)
-		{
-			if (m_oldAxis9Value < 0) {m_changes << JoystickChange{this,ControlType::Button, ThrustmasterTwcsThrottle::THAT2D, false, 0.0};}
-			else if (m_oldAxis9Value > 0) {m_changes << JoystickChange{this,ControlType::Button, ThrustmasterTwcsThrottle::THAT2U, false, 0.0};}
-		}
-		else
-		{
-			if (m_oldAxis9Value > 0) {m_changes << JoystickChange{this,ControlType::Button, ThrustmasterTwcsThrottle::THAT2U, false, 0.0};}
-			m_changes << JoystickChange{this,ControlType::Button, ThrustmasterTwcsThrottle::THAT2D, true, 0.0};
-		}
-		m_oldAxis9Value = value;
-	}
-	else if (axis == 7) {m_changes << JoystickChange{this, ControlType::Axis, ThrustmasterTwcsThrottle::TTHR,  false, event->value()};}
+	if (axis == 7)      {m_changes << JoystickChange{this, ControlType::Axis, ThrustmasterTwcsThrottle::TTHR,  false, event->value()};}
 	else if (axis == 4) {m_changes << JoystickChange{this, ControlType::Axis, ThrustmasterTwcsThrottle::TRDR,  false, event->value()};}
 	else if (axis == 6) {m_changes << JoystickChange{this, ControlType::Axis, ThrustmasterTwcsThrottle::TMSTX, false, event->value()};}
 	else if (axis == 5) {m_changes << JoystickChange{this, ControlType::Axis, ThrustmasterTwcsThrottle::TMSTY, false, event->value()};}
@@ -125,23 +85,8 @@ uint ThrustmasterTwcsThrottle::buttonCount() const
 // BUTTON PRESSED /////////////////////////////////////////////////////////////
 bool ThrustmasterTwcsThrottle::buttonPressed(uint button) const
 {
-	// normal buttons
-	if (button < 14)
-	{
-		return this->RealJoystick::buttonPressed(button);
-	}
-	// POV
-	else if (button < 18)
-	{
-		float h = this->RealJoystick::axisValue(8);
-		float v = this->RealJoystick::axisValue(9);
-		if (button == ThrustmasterTwcsThrottle::THAT2U) {return (h == 0 && v >  0);}
-		if (button == ThrustmasterTwcsThrottle::THAT2R) {return (h >  0 && v == 0);}
-		if (button == ThrustmasterTwcsThrottle::THAT2D) {return (h == 0 && v <  0);}
-		if (button == ThrustmasterTwcsThrottle::THAT2L) {return (h <  0 && v == 0);}
-	}
-	
-	return false;
+	// normal buttons and POV virtual buttons
+	return this->RealJoystick::buttonPressed(button);
 }
 
 // BUTTON NAME ////////////////////////////////////////////////////////////////

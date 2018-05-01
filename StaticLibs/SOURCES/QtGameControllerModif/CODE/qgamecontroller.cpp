@@ -17,20 +17,19 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "qgamecontroller.h"
-#include "qgamecontroller_p.h"
+#include "QGameController.h"
+#include "QGameController_p.h"
 
-#ifdef Q_OS_LINUX
-#include "qgamecontroller_linux_p.h"
-#elif defined (Q_OS_WIN)
-#include "qgamecontroller_win_p.h"
-#elif defined (Q_OS_MAC)
-#include "qgamecontroller_mac_p.h"
+#if defined (Q_OS_WIN)
+#include "QGameController_win_p.h"
 #else
 #error Unsupported OS
 #endif
 
 
+///////////////////////////////////////////////////////////////////////////////
+// EVENT //////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 QGameControllerEvent::QGameControllerEvent(uint controllerId)
 	:d_ptr(new QGameControllerEventPrivate(this))
 {
@@ -55,6 +54,10 @@ QGameControllerEvent::~QGameControllerEvent()
 	delete d_ptr;
 }
 
+
+///////////////////////////////////////////////////////////////////////////////
+// BUTTON EVENT ///////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 QGameControllerButtonEvent::QGameControllerButtonEvent(uint controllerId, uint button, bool pressed)
 	: QGameControllerEvent(controllerId, *new QGameControllerButtonEventPrivate(this))
 {
@@ -75,6 +78,10 @@ bool QGameControllerButtonEvent::pressed()
 	return d->Pressed;
 }
 
+
+///////////////////////////////////////////////////////////////////////////////
+// AXIS EVENT /////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 QGameControllerAxisEvent::QGameControllerAxisEvent(uint controllerId, uint axis, float value)
 	: QGameControllerEvent(controllerId, *new QGameControllerAxisEventPrivate(this))
 {
@@ -95,6 +102,10 @@ float QGameControllerAxisEvent::value()
 	return d->Value;
 }
 
+
+///////////////////////////////////////////////////////////////////////////////
+// QGAMECONTROLLER ////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 QGameController::QGameController(uint id, QObject *parent) :
 	QObject(parent), d_ptr(new QGameControllerPrivate(id, this))
 {
@@ -116,13 +127,15 @@ uint QGameController::buttonCount()
 float QGameController::axisValue(uint axis)
 {
 	Q_D(QGameController);
-	return d->AxisValues.value(axis);
+	if (axis >= d->AxisValues.size()) {return 0.0f;}
+	return d->AxisValues.at(axis);
 }
 
 bool QGameController::buttonValue(uint button)
 {
 	Q_D(QGameController);
-	return d->ButtonValues.value(button);
+	if (button >= d->ButtonValues.size()) {return false;}
+	return d->ButtonValues.at(button);
 }
 
 QString QGameController::description()

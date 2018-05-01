@@ -51,52 +51,12 @@ void LogitechExtreme3D::slotGameControllerButtonEvent(QGameControllerButtonEvent
 void LogitechExtreme3D::slotGameControllerAxisEvent(QGameControllerAxisEvent *event)
 {
 	Q_ASSERT(event);
-	
 	uint axis = event->axis();
-	float value = event->value();
 	
-	if (axis == 2)
-	{
-		if (value > 0)
-		{
-			if (m_oldAxis2Value < 0) {m_changes << JoystickChange{this,ControlType::Button, LogitechExtreme3D::POVL, false, 0.0};}
-			m_changes << JoystickChange{this,ControlType::Button, LogitechExtreme3D::POVR, true, 0.0};
-		}
-		else if (value == 0)
-		{
-			if (m_oldAxis2Value < 0) {m_changes << JoystickChange{this,ControlType::Button, LogitechExtreme3D::POVL, false, 0.0};}
-			else if (m_oldAxis2Value > 0) {m_changes << JoystickChange{this,ControlType::Button, LogitechExtreme3D::POVR, false, 0.0};}
-		}
-		else
-		{
-			if (m_oldAxis2Value > 0) {m_changes << JoystickChange{this,ControlType::Button, LogitechExtreme3D::POVR, false, 0.0};}
-			m_changes << JoystickChange{this,ControlType::Button, LogitechExtreme3D::POVL, true, 0.0};
-		}
-		m_oldAxis2Value = value;
-	}
-	else if (axis == 3)
-	{
-		if (value > 0)
-		{
-			if (m_oldAxis3Value < 0) {m_changes << JoystickChange{this,ControlType::Button, LogitechExtreme3D::POVD, false, 0.0};}
-			m_changes << JoystickChange{this,ControlType::Button, LogitechExtreme3D::POVU, true, 0.0};
-		}
-		else if (value == 0)
-		{
-			if (m_oldAxis3Value < 0) {m_changes << JoystickChange{this,ControlType::Button, LogitechExtreme3D::POVD, false, 0.0};}
-			else if (m_oldAxis3Value > 0) {m_changes << JoystickChange{this,ControlType::Button, LogitechExtreme3D::POVU, false, 0.0};}
-		}
-		else
-		{
-			if (m_oldAxis3Value > 0) {m_changes << JoystickChange{this,ControlType::Button, LogitechExtreme3D::POVU, false, 0.0};}
-			m_changes << JoystickChange{this,ControlType::Button, LogitechExtreme3D::POVD, true, 0.0};
-		}
-		m_oldAxis3Value = value;
-	}
-	else if (axis == 1) {m_changes << JoystickChange{this, ControlType::Axis, LogitechExtreme3D::JOYX, false, event->value()};}
+	if (axis == 1)      {m_changes << JoystickChange{this, ControlType::Axis, LogitechExtreme3D::JOYX, false, event->value()};}
 	else if (axis == 0) {m_changes << JoystickChange{this, ControlType::Axis, LogitechExtreme3D::JOYY, false, event->value()};}
-	else if (axis == 4) {m_changes << JoystickChange{this, ControlType::Axis, LogitechExtreme3D::JOYZ, false, event->value()};}
-	else if (axis == 5) {m_changes << JoystickChange{this, ControlType::Axis, LogitechExtreme3D::THR,  false, event->value()};}
+	else if (axis == 2) {m_changes << JoystickChange{this, ControlType::Axis, LogitechExtreme3D::JOYZ, false, event->value()};}
+	else if (axis == 3) {m_changes << JoystickChange{this, ControlType::Axis, LogitechExtreme3D::THR,  false, event->value()};}
 }
 
 
@@ -121,23 +81,8 @@ uint LogitechExtreme3D::buttonCount() const
 // BUTTON PRESSED /////////////////////////////////////////////////////////////
 bool LogitechExtreme3D::buttonPressed(uint button) const
 {
-	// normal buttons
-	if (button < 12)
-	{
-		return this->RealJoystick::buttonPressed(button);
-	}
-	// POV virtual buttons
-	else if (button < 16)
-	{
-		float h = this->RealJoystick::axisValue(2);
-		float v = this->RealJoystick::axisValue(3);
-		if (button == LogitechExtreme3D::POVU) {return (h == 0 && v >  0);}
-		if (button == LogitechExtreme3D::POVR) {return (h >  0 && v == 0);}
-		if (button == LogitechExtreme3D::POVD) {return (h == 0 && v <  0);}
-		if (button == LogitechExtreme3D::POVL) {return (h <  0 && v == 0);}
-	}
-	
-	return false;
+	// normal buttons and POV virtual buttons
+	return this->RealJoystick::buttonPressed(button);
 }
 
 // BUTTON NAME ////////////////////////////////////////////////////////////////
@@ -170,8 +115,8 @@ float LogitechExtreme3D::axisValue(uint axis) const
 {
 	if (axis == LogitechExtreme3D::JOYX) {return this->RealJoystick::axisValue(1);}
 	if (axis == LogitechExtreme3D::JOYY) {return this->RealJoystick::axisValue(0);}
-	if (axis == LogitechExtreme3D::JOYZ) {return this->RealJoystick::axisValue(4);}
-	if (axis == LogitechExtreme3D::THR)  {return this->RealJoystick::axisValue(5);}
+	if (axis == LogitechExtreme3D::JOYZ) {return this->RealJoystick::axisValue(2);}
+	if (axis == LogitechExtreme3D::THR)  {return this->RealJoystick::axisValue(3);}
 	return 0.0;
 }
 

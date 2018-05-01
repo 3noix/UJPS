@@ -17,10 +17,22 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "qgamecontroller.h"
-#include "qgamecontroller_win_p.h"
+#include "QGameController.h"
+#include "QGameController_win_p.h"
 #include <QtDebug>
 
+///////////////////////////////////////////////////////////////////////////////
+// RESUME
+//
+//  HEXA STRING
+//  CONSTRUCTEUR
+//  ENUM JOYSTICKS CALLBACK
+//  ENUM OBJECTS CALLBACK
+//  READ GAME CONTROLLER
+///////////////////////////////////////////////////////////////////////////////
+
+
+// HEXA STRING ////////////////////////////////////////////////////////////////
 QString hexaString(DWORD value)
 {
 	QString str = QString("%1").arg(QString::number(value,16).toUpper(),8,'0');
@@ -28,26 +40,33 @@ QString hexaString(DWORD value)
 	return "VID_" + str.right(4) + "\\&PID_" + str.left(4);
 };
 
+
 QGameControllerPrivate *joysticktoenume; //TODO: Dispense with this global pointer.
 LPDIRECTINPUT8 g_pDI = nullptr;
 
+
+// CONSTRUCTEUR ///////////////////////////////////////////////////////////////
 QGameControllerPrivate::QGameControllerPrivate(uint id, QGameController *q) :
 	q_ptr(q)
 {
+	m_bFirstRead = true;
+	
 	ID = id;
 	Valid = false;
 	Axis = 0;
 	Buttons = 0;
+	RealButtons = 0;
+	Povs = 0;
 	//qDebug("QGameController::QGameController(%i)", ID);
 	
 	HRESULT hr;
 	g_pJoystick = nullptr;
 	
 	// Register with DirectInput to get a pointer to an IDirectInput
-	if (g_pDI==nullptr)
+	if (!g_pDI)
 	{
 		//qDebug() << "Setting up directinput";
-		if (FAILED(hr = DirectInput8Create(GetModuleHandle( nullptr ), DIRECTINPUT_VERSION, IID_IDirectInput8, (VOID**)&g_pDI, nullptr)))
+		if (FAILED(hr = DirectInput8Create(GetModuleHandle(nullptr), DIRECTINPUT_VERSION, IID_IDirectInput8, (VOID**)&g_pDI, nullptr)))
 			qDebug() << "Error 1";
 	}
 	
@@ -97,11 +116,13 @@ QGameControllerPrivate::QGameControllerPrivate(uint id, QGameController *q) :
 	Valid = true;
 }
 
+
+// ENUM JOYSTICKS CALLBACK ////////////////////////////////////////////////////
 BOOL CALLBACK EnumJoysticksCallback(const DIDEVICEINSTANCE* pdidInstance, VOID* pContext)
 {
 	Q_UNUSED(pContext)
 	//qDebug() << "EnumJoysticksCallback()" << joysticktoenume->enumCounter;
-	if (joysticktoenume->enumCounter!=joysticktoenume->ID)
+	if (joysticktoenume->enumCounter != joysticktoenume->ID)
 	{
 		//qDebug() << "Skiping" << joysticktoenume->enumCounter;
 		joysticktoenume->enumCounter++;
@@ -127,6 +148,8 @@ BOOL CALLBACK EnumJoysticksCallback(const DIDEVICEINSTANCE* pdidInstance, VOID* 
 	return DIENUM_STOP;
 }
 
+
+// ENUM OBJECTS CALLBACK //////////////////////////////////////////////////////
 BOOL CALLBACK EnumObjectsCallback(const DIDEVICEOBJECTINSTANCE* pdidoi, VOID* pContext)
 {
 	Q_UNUSED(pContext)
@@ -183,23 +206,20 @@ BOOL CALLBACK EnumObjectsCallback(const DIDEVICEOBJECTINSTANCE* pdidoi, VOID* pC
 	}
 	else if (pdidoi->guidType == GUID_Slider)
 	{
-		//qDebug() << "Slider found";
 		joysticktoenume->DIaxisGIIDs.push_back(pdidoi->guidType);
+		//qDebug() << "Slider found";
 		joysticktoenume->Axis++;
 	}
 	else if (pdidoi->guidType == GUID_POV)
 	{
 		//qDebug() << "POV found";
-		//We add two axis to represent this pov
-		joysticktoenume->DIaxisGIIDs.push_back(pdidoi->guidType);
-		joysticktoenume->Axis++;
-		joysticktoenume->DIaxisGIIDs.push_back(pdidoi->guidType);
-		joysticktoenume->Axis++;
+		//We add 4 buttons to represent this pov
+		joysticktoenume->Povs++;
 	}
 	else if (pdidoi->guidType == GUID_Button)
 	{
 		//qDebug() << "Button found";
-		joysticktoenume->Buttons++;
+		joysticktoenume->RealButtons++;
 	}
 	else if (pdidoi->guidType == GUID_Key)
 	{
@@ -210,15 +230,27 @@ BOOL CALLBACK EnumObjectsCallback(const DIDEVICEOBJECTINSTANCE* pdidoi, VOID* pC
 		//qDebug() << "Unknown object found";
 	}
 	
+	// updated at each new button or pov found
+	// (the beginning of readGameController is too late for that)
+	joysticktoenume->Buttons = joysticktoenume->RealButtons + 4 * joysticktoenume->Povs;
 	return DIENUM_CONTINUE;
 }
 
+
+// READ GAME CONTROLLER ///////////////////////////////////////////////////////
 void QGameControllerPrivate::readGameController()
 {
 	Q_Q(QGameController);
+	
+	if (m_bFirstRead)
+	{
+		AxisValues = QVector<float>(Axis,0.0f);
+		ButtonValues = QVector<bool>(Buttons,false);
+	}
+	
+	// read joystick state
 	HRESULT hr;
 	DIJOYSTATE2 js; // DInput joystick state
-	
 	if (!g_pJoystick) {return;}
 	hr = g_pJoystick->Poll();
 	if (FAILED(hr))
@@ -227,18 +259,15 @@ void QGameControllerPrivate::readGameController()
 		while (hr == DIERR_INPUTLOST) {hr = g_pJoystick->Acquire();}
 		return;
 	}
-	
 	if (FAILED(hr = g_pJoystick->GetDeviceState(sizeof(DIJOYSTATE2), &js))) {return;}
+	
 	
 	// Axes
 	float value = 0;
 	int slider = 0;
-	int pov = 0;
 	for (uint axisid=0; axisid<Axis; axisid++)
 	{
-		//qDebug("Reading joystick %i axis %i of %i, %i", id(), axisid, Axis, axisGIIDs.count());
-		Q_ASSERT(axisid<DIaxisGIIDs.count());
-		GUID guidForThisAxis = DIaxisGIIDs.at(axisid);
+		GUID guidForThisAxis = DIaxisGIIDs[axisid];
 		if (guidForThisAxis == GUID_XAxis)
 			value = (float)(js.lX);
 		else if (guidForThisAxis == GUID_YAxis)
@@ -257,79 +286,73 @@ void QGameControllerPrivate::readGameController()
 			slider++;
 		}
 		
-		if (guidForThisAxis == GUID_POV)
+		value = value * 0.001;
+		if (value != AxisValues[axisid] || m_bFirstRead)
 		{
-			DWORD povvalue = js.rgdwPOV[pov];
-			float valueX = 0;
-			float valueY = 0;
-			if (povvalue == -1u || (LOWORD(povvalue) == 0xFFFFu))
-			{
-				//qDebug("POV %i is centred %i.", pov, povvalue);
-			}
-			else
-			{
-				int povdegs = (int)povvalue/100;
-				float povrads = (float)povdegs/360.0*2*3.141593;
-				//qDebug("POV %i now %i (%i deg, %f rads).", pov, povvalue, povdegs, povrads);
-				valueX = sin(povrads);
-				valueY = cos(povrads);
-				//Disable these lines to get pov on circle.
-				valueX = qRound(valueX);
-				valueY = qRound(valueY);
-			}
-			if (valueX != AxisValues.value(axisid))
-			{
-				AxisValues.insert(axisid,valueX);
-				QGameControllerAxisEvent *event = new QGameControllerAxisEvent(ID, axisid, valueX);
-				//qDebug("Axis %i moved to %f.", axisid, valueX);
-				emit(q->gameControllerAxisEvent(event));
-			}
-			if (valueY != AxisValues.value(axisid+1))
-			{
-				AxisValues.insert(axisid+1,valueY);
-				QGameControllerAxisEvent *event = new QGameControllerAxisEvent(ID, axisid+1, valueY);
-				//qDebug("Axis %i moved to %f.", axisid+1, valueY);
-				emit(q->gameControllerAxisEvent(event));
-			}
-			axisid++; //We have dealt with 2 axis in one go.
-			pov++;
-		}
-		else
-		{
-			value = value/1000.0;
-			if (value != AxisValues.value(axisid))
-			{
-				AxisValues.insert(axisid,value);
-				QGameControllerAxisEvent *event = new QGameControllerAxisEvent(ID, axisid, value);
-				//qDebug("Axis %i moved to %f.", axisid, value);
-				emit(q->gameControllerAxisEvent(event));
-			}
+			AxisValues[axisid] = value;
+			emit(q->gameControllerAxisEvent(new QGameControllerAxisEvent(ID,axisid,value)));
 		}
 	}
 	
 	
 	//Buttons
-	for (int i=0; i<Buttons; i++)
+	for (uint i=0; i<RealButtons; i++)
 	{
-		if (js.rgbButtons[i] & 0x80)
+		bool bPressed = (js.rgbButtons[i] & 0x80);
+		if (bPressed != ButtonValues[i] || m_bFirstRead)
 		{
-			if (ButtonValues.value(i) != true)
-			{
-				ButtonValues.insert(i,true);
-				//qDebug("Button %i pressed.", i);
-				QGameControllerButtonEvent* event = new QGameControllerButtonEvent(ID, i, true);
-				emit(q->gameControllerButtonEvent((QGameControllerButtonEvent*)event));
-			}
+			ButtonValues[i] = bPressed;
+			emit(q->gameControllerButtonEvent(new QGameControllerButtonEvent(ID,i,bPressed)));
+		}
+	}
+	
+	
+	// POVs
+	for (uint i=0; i<Povs; i++)
+	{
+		DWORD povvalue = js.rgdwPOV[i];
+		uint j = RealButtons + 4 * i;
+		
+		bool bUp    = false;
+		bool bDown  = false;
+		bool bLeft  = false;
+		bool bRight = false;
+		
+		if (povvalue == -1u || (LOWORD(povvalue) == 0xFFFFu))
+		{
+			// POV centered
+			// nothing to do
 		}
 		else
 		{
-			if (ButtonValues.value(i) != false)
-			{
-				ButtonValues.insert(i,false);
-				//qDebug("Button %i released.", i);
-				QGameControllerButtonEvent* event = new QGameControllerButtonEvent(ID, i, false);
-				emit(q->gameControllerButtonEvent((QGameControllerButtonEvent*)event));
-			}
+			int povdegs = (int)povvalue/100;
+			bUp    = (povdegs < 60  || povdegs > 300);
+			bDown  = (povdegs > 120 && povdegs < 240);
+			bLeft  = (povdegs > 210 && povdegs < 330);
+			bRight = (povdegs > 30  && povdegs < 150);
+		}
+		
+		if (ButtonValues[j] != bUp || m_bFirstRead)
+		{
+			ButtonValues[j] = bUp;
+			emit(q->gameControllerButtonEvent(new QGameControllerButtonEvent(ID,j,bUp)));
+		}
+		if (ButtonValues[j+1] != bRight || m_bFirstRead)
+		{
+			ButtonValues[j+1] = bRight;
+			emit(q->gameControllerButtonEvent(new QGameControllerButtonEvent(ID,j+1,bRight)));
+		}
+		if (ButtonValues[j+2] != bDown || m_bFirstRead)
+		{
+			ButtonValues[j+2] = bDown;
+			emit(q->gameControllerButtonEvent(new QGameControllerButtonEvent(ID,j+2,bDown)));
+		}
+		if (ButtonValues[j+3] != bLeft || m_bFirstRead)
+		{
+			ButtonValues[j+3] = bLeft;
+			emit(q->gameControllerButtonEvent(new QGameControllerButtonEvent(ID,j+3,bLeft)));
 		}
 	}
+	
+	m_bFirstRead = false;
 }

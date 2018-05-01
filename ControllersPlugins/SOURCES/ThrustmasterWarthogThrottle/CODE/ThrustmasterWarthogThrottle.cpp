@@ -62,7 +62,11 @@ void ThrustmasterWarthogThrottle::slotGameControllerButtonEvent(QGameControllerB
 		button == ThrustmasterWarthogThrottle::MSD ||
 		button == ThrustmasterWarthogThrottle::MSL ||
 		button == ThrustmasterWarthogThrottle::LTB ||
-		button == ThrustmasterWarthogThrottle::LDGH)
+		button == ThrustmasterWarthogThrottle::LDGH ||
+		button == ThrustmasterWarthogThrottle::CSU ||
+		button == ThrustmasterWarthogThrottle::CSR ||
+		button == ThrustmasterWarthogThrottle::CSD ||
+		button == ThrustmasterWarthogThrottle::CSL)
 	{
 		m_changes << JoystickChange{this,ControlType::Button,button,bPressed,0.0};
 	}
@@ -192,53 +196,13 @@ void ThrustmasterWarthogThrottle::slotGameControllerButtonEvent(QGameControllerB
 void ThrustmasterWarthogThrottle::slotGameControllerAxisEvent(QGameControllerAxisEvent *event)
 {
 	Q_ASSERT(event);
-	
 	uint axis = event->axis();
-	float value = event->value();
 	
-	if (axis == 0)
-	{
-		if (value > 0)
-		{
-			if (m_oldAxis0Value < 0) {m_changes << JoystickChange{this,ControlType::Button, ThrustmasterWarthogThrottle::CSL, false, 0.0};}
-			m_changes << JoystickChange{this,ControlType::Button, ThrustmasterWarthogThrottle::CSR, true, 0.0};
-		}
-		else if (value == 0)
-		{
-			if (m_oldAxis0Value < 0) {m_changes << JoystickChange{this,ControlType::Button, ThrustmasterWarthogThrottle::CSL, false, 0.0};}
-			else if (m_oldAxis0Value > 0) {m_changes << JoystickChange{this,ControlType::Button, ThrustmasterWarthogThrottle::CSR, false, 0.0};}
-		}
-		else
-		{
-			if (m_oldAxis0Value > 0) {m_changes << JoystickChange{this,ControlType::Button, ThrustmasterWarthogThrottle::CSR, false, 0.0};}
-			m_changes << JoystickChange{this,ControlType::Button, ThrustmasterWarthogThrottle::CSL, true, 0.0};
-		}
-		m_oldAxis0Value = value;
-	}
-	else if (axis == 1)
-	{
-		if (value > 0)
-		{
-			if (m_oldAxis1Value < 0) {m_changes << JoystickChange{this,ControlType::Button, ThrustmasterWarthogThrottle::CSD, false, 0.0};}
-			m_changes << JoystickChange{this,ControlType::Button, ThrustmasterWarthogThrottle::CSU, true, 0.0};
-		}
-		else if (value == 0)
-		{
-			if (m_oldAxis1Value < 0) {m_changes << JoystickChange{this,ControlType::Button, ThrustmasterWarthogThrottle::CSD, false, 0.0};}
-			else if (m_oldAxis1Value > 0) {m_changes << JoystickChange{this,ControlType::Button, ThrustmasterWarthogThrottle::CSU, false, 0.0};}
-		}
-		else
-		{
-			if (m_oldAxis1Value > 0) {m_changes << JoystickChange{this,ControlType::Button, ThrustmasterWarthogThrottle::CSU, false, 0.0};}
-			m_changes << JoystickChange{this,ControlType::Button, ThrustmasterWarthogThrottle::CSD, true, 0.0};
-		}
-		m_oldAxis1Value = value;
-	}
-	else if (axis == 2) {m_changes << JoystickChange{this, ControlType::Axis, ThrustmasterWarthogThrottle::SCX,       false, event->value()};}
-	else if (axis == 3) {m_changes << JoystickChange{this, ControlType::Axis, ThrustmasterWarthogThrottle::SCY,       false, event->value()};}
-	else if (axis == 4) {m_changes << JoystickChange{this, ControlType::Axis, ThrustmasterWarthogThrottle::THR_FC,    false, event->value()};}
-	else if (axis == 5) {m_changes << JoystickChange{this, ControlType::Axis, ThrustmasterWarthogThrottle::THR_RIGHT, false, event->value()};}
-	else if (axis == 6) {m_changes << JoystickChange{this, ControlType::Axis, ThrustmasterWarthogThrottle::THR_LEFT,  false, event->value()};}
+	if (axis == 0)      {m_changes << JoystickChange{this, ControlType::Axis, ThrustmasterWarthogThrottle::SCX,       false, event->value()};}
+	else if (axis == 1) {m_changes << JoystickChange{this, ControlType::Axis, ThrustmasterWarthogThrottle::SCY,       false, event->value()};}
+	else if (axis == 2) {m_changes << JoystickChange{this, ControlType::Axis, ThrustmasterWarthogThrottle::THR_FC,    false, event->value()};}
+	else if (axis == 3) {m_changes << JoystickChange{this, ControlType::Axis, ThrustmasterWarthogThrottle::THR_RIGHT, false, event->value()};}
+	else if (axis == 4) {m_changes << JoystickChange{this, ControlType::Axis, ThrustmasterWarthogThrottle::THR_LEFT,  false, event->value()};}
 }
 
 
@@ -263,20 +227,10 @@ uint ThrustmasterWarthogThrottle::buttonCount() const
 // BUTTON PRESSED /////////////////////////////////////////////////////////////
 bool ThrustmasterWarthogThrottle::buttonPressed(uint button) const
 {
-	// normal buttons
-	if (button < 32)
+	// normal buttons and POV virtual buttons
+	if (button < 36)
 	{
 		return this->RealJoystick::buttonPressed(button);
-	}
-	// POV virtual buttons
-	else if (button < 36)
-	{
-		float h = this->RealJoystick::axisValue(0);
-		float v = this->RealJoystick::axisValue(1);
-		if (button == ThrustmasterWarthogThrottle::CSU) {return (h == 0 && v >  0);}
-		if (button == ThrustmasterWarthogThrottle::CSR) {return (h >  0 && v == 0);}
-		if (button == ThrustmasterWarthogThrottle::CSD) {return (h == 0 && v <  0);}
-		if (button == ThrustmasterWarthogThrottle::CSL) {return (h <  0 && v == 0);}
 	}
 	// other virtual buttons
 	else if (button == ThrustmasterWarthogThrottle::EFLOVER)  {return !(this->RealJoystick::buttonPressed(ThrustmasterWarthogThrottle::EFLNORM));}
@@ -327,11 +281,11 @@ uint ThrustmasterWarthogThrottle::axisCount() const
 // AXIS VALUE /////////////////////////////////////////////////////////////////
 float ThrustmasterWarthogThrottle::axisValue(uint axis) const
 {
-	if (axis == ThrustmasterWarthogThrottle::THR_LEFT)  {return this->RealJoystick::axisValue(6);}
-	if (axis == ThrustmasterWarthogThrottle::THR_RIGHT) {return this->RealJoystick::axisValue(5);}
-	if (axis == ThrustmasterWarthogThrottle::THR_FC)    {return this->RealJoystick::axisValue(4);}
-	if (axis == ThrustmasterWarthogThrottle::SCX)       {return this->RealJoystick::axisValue(2);}
-	if (axis == ThrustmasterWarthogThrottle::SCY)       {return this->RealJoystick::axisValue(3);}
+	if (axis == ThrustmasterWarthogThrottle::THR_LEFT)  {return this->RealJoystick::axisValue(4);}
+	if (axis == ThrustmasterWarthogThrottle::THR_RIGHT) {return this->RealJoystick::axisValue(3);}
+	if (axis == ThrustmasterWarthogThrottle::THR_FC)    {return this->RealJoystick::axisValue(2);}
+	if (axis == ThrustmasterWarthogThrottle::SCX)       {return this->RealJoystick::axisValue(0);}
+	if (axis == ThrustmasterWarthogThrottle::SCY)       {return this->RealJoystick::axisValue(1);}
 	return 0.0;
 }
 

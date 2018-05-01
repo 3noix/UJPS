@@ -83,10 +83,10 @@ class ThrustmasterWarthogThrottle : public RealJoystick
 		static const uint EOLIGN   = 30;	// engine left oper ignition
 		static const uint EORIGN   = 31;	// engine right oper ignition
 		
-		static const uint CSU      = 32;	// virtual: slew control UP
-		static const uint CSR      = 33;	// virtual: slew control RIGHT
-		static const uint CSD      = 34;	// virtual: slew control DOWN
-		static const uint CSL      = 35;	// virtual: slew control LEFT
+		static const uint CSU      = 32;	// virtual: coolie switch UP
+		static const uint CSR      = 33;	// virtual: coolie switch RIGHT
+		static const uint CSD      = 34;	// virtual: coolie switch DOWN
+		static const uint CSL      = 35;	// virtual: coolie switch LEFT
 		static const uint EFLOVER  = 36;	// virtual: engine left fuel override
 		static const uint EFROVER  = 37;	// virtual: engine right fuel override
 		static const uint APUOFF   = 38;	// virtual

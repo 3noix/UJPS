@@ -47,50 +47,10 @@ void ThrustmasterWarthogJoystick::slotGameControllerButtonEvent(QGameControllerB
 void ThrustmasterWarthogJoystick::slotGameControllerAxisEvent(QGameControllerAxisEvent *event)
 {
 	Q_ASSERT(event);
-	
 	uint axis = event->axis();
-	float value = event->value();
 	
-	if (axis == 0)
-	{
-		if (value > 0)
-		{
-			if (m_oldAxis0Value < 0) {m_changes << JoystickChange{this,ControlType::Button, ThrustmasterWarthogJoystick::H1L, false, 0.0};}
-			m_changes << JoystickChange{this,ControlType::Button, ThrustmasterWarthogJoystick::H1R, true, 0.0};
-		}
-		else if (value == 0)
-		{
-			if (m_oldAxis0Value < 0) {m_changes << JoystickChange{this,ControlType::Button, ThrustmasterWarthogJoystick::H1L, false, 0.0};}
-			else if (m_oldAxis0Value > 0) {m_changes << JoystickChange{this,ControlType::Button, ThrustmasterWarthogJoystick::H1R, false, 0.0};}
-		}
-		else
-		{
-			if (m_oldAxis0Value > 0) {m_changes << JoystickChange{this,ControlType::Button, ThrustmasterWarthogJoystick::H1R, false, 0.0};}
-			m_changes << JoystickChange{this,ControlType::Button, ThrustmasterWarthogJoystick::H1L, true, 0.0};
-		}
-		m_oldAxis0Value = value;
-	}
-	else if (axis == 1)
-	{
-		if (value > 0)
-		{
-			if (m_oldAxis1Value < 0) {m_changes << JoystickChange{this,ControlType::Button, ThrustmasterWarthogJoystick::H1D, false, 0.0};}
-			m_changes << JoystickChange{this,ControlType::Button, ThrustmasterWarthogJoystick::H1U, true, 0.0};
-		}
-		else if (value == 0)
-		{
-			if (m_oldAxis1Value < 0) {m_changes << JoystickChange{this,ControlType::Button, ThrustmasterWarthogJoystick::H1D, false, 0.0};}
-			else if (m_oldAxis1Value > 0) {m_changes << JoystickChange{this,ControlType::Button, ThrustmasterWarthogJoystick::H1U, false, 0.0};}
-		}
-		else
-		{
-			if (m_oldAxis1Value > 0) {m_changes << JoystickChange{this,ControlType::Button, ThrustmasterWarthogJoystick::H1U, false, 0.0};}
-			m_changes << JoystickChange{this,ControlType::Button, ThrustmasterWarthogJoystick::H1D, true, 0.0};
-		}
-		m_oldAxis1Value = value;
-	}
-	else if (axis == 3) {m_changes << JoystickChange{this, ControlType::Axis, ThrustmasterWarthogJoystick::JOYX, false, event->value()};}
-	else if (axis == 2) {m_changes << JoystickChange{this, ControlType::Axis, ThrustmasterWarthogJoystick::JOYY, false, event->value()};}
+	if (axis == 1)      {m_changes << JoystickChange{this, ControlType::Axis, ThrustmasterWarthogJoystick::JOYX, false, event->value()};}
+	else if (axis == 0) {m_changes << JoystickChange{this, ControlType::Axis, ThrustmasterWarthogJoystick::JOYY, false, event->value()};}
 }
 
 
@@ -115,21 +75,8 @@ uint ThrustmasterWarthogJoystick::buttonCount() const
 // BUTTON PRESSED /////////////////////////////////////////////////////////////
 bool ThrustmasterWarthogJoystick::buttonPressed(uint button) const
 {
-	if (button < 19) // normal buttons
-	{
-		return this->RealJoystick::buttonPressed(button);
-	}
-	else if (button < 23) // POV virtual buttons
-	{
-		float h = this->RealJoystick::axisValue(0);
-		float v = this->RealJoystick::axisValue(1);
-		if (button == ThrustmasterWarthogJoystick::H1U) {return (h == 0 && v >  0);}
-		if (button == ThrustmasterWarthogJoystick::H1R) {return (h >  0 && v == 0);}
-		if (button == ThrustmasterWarthogJoystick::H1D) {return (h == 0 && v <  0);}
-		if (button == ThrustmasterWarthogJoystick::H1L) {return (h <  0 && v == 0);}
-	}
-	
-	return false;
+	// normal buttons and POV virtual buttons
+	return this->RealJoystick::buttonPressed(button);
 }
 
 // BUTTON NAME ////////////////////////////////////////////////////////////////
@@ -159,8 +106,8 @@ uint ThrustmasterWarthogJoystick::axisCount() const
 // AXIS VALUE /////////////////////////////////////////////////////////////////
 float ThrustmasterWarthogJoystick::axisValue(uint axis) const
 {
-	if (axis == ThrustmasterWarthogJoystick::JOYX) {return this->RealJoystick::axisValue(3);}
-	if (axis == ThrustmasterWarthogJoystick::JOYY) {return this->RealJoystick::axisValue(2);}
+	if (axis == ThrustmasterWarthogJoystick::JOYX) {return this->RealJoystick::axisValue(1);}
+	if (axis == ThrustmasterWarthogJoystick::JOYY) {return this->RealJoystick::axisValue(0);}
 	return 0.0;
 }
 
