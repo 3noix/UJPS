@@ -55,7 +55,9 @@ echo.
 
 
 REM COMPILATION AND DEPLOYMENT OF CONTROLLERS PLUGINS
-cd ../../../ControllersPlugins/SOURCES
+cd ../../../ControllersPlugins
+If not exist PLUGINS mkdir PLUGINS
+cd SOURCES
 call build_ControllersPlugins_fct.bat
 
 
@@ -90,6 +92,7 @@ windeployqt Monitoring1.exe
 cd ../..
 copy /Y StaticLibs\SOURCES\QtGameControllerModif\release\QtGameControllerModif.dll Monitoring1\release
 copy /Y StaticLibs\SOURCES\RealJoysticks\release\realJoysticks.dll Monitoring1\release
+copy /Y UjpsMainApp\release\Qt5Network.dll Monitoring1\release
 echo.
 echo.
 
@@ -106,6 +109,7 @@ windeployqt Monitoring2.exe
 cd ../..
 copy /Y StaticLibs\SOURCES\QtGameControllerModif\release\QtGameControllerModif.dll Monitoring2\release
 copy /Y StaticLibs\SOURCES\RealJoysticks\release\realJoysticks.dll Monitoring2\release
+copy /Y UjpsMainApp\release\Qt5Network.dll Monitoring2\release
 echo.
 echo.
 
@@ -122,6 +126,7 @@ windeployqt AxesCurves.exe
 cd ../..
 copy /Y StaticLibs\SOURCES\QtGameControllerModif\release\QtGameControllerModif.dll AxesCurves\release
 copy /Y StaticLibs\SOURCES\RealJoysticks\release\realJoysticks.dll AxesCurves\release
+copy /Y UjpsMainApp\release\Qt5Network.dll AxesCurves\release
 echo.
 echo.
 
