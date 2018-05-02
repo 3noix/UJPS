@@ -22,6 +22,7 @@
 //  TAB NAME
 //  BUTTON OK CLICKED
 //  BUTTON CANCEL CLICKED
+//
 //  SLOT CHECK BOX STATE CHANGED
 //  SLOT BROWSE BUTTON CLICKED
 ///////////////////////////////////////////////////////////////////////////////
@@ -82,6 +83,10 @@ void VJoySettingsWidget::buttonCancelClicked()
 {
 	
 }
+
+
+
+
 
 // SLOT CHECK BOX STATE CHANGED ///////////////////////////////////////////////
 void VJoySettingsWidget::slotCheckBoxStateChanged(int state)
