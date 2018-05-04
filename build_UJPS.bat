@@ -80,6 +80,21 @@ echo.
 echo.
 
 
+REM COMPILATION AND DEPLOYMENT OF MONITORING0
+echo compiling Monitoring0
+echo.
+cd Monitoring0
+qmake
+mingw32-make release
+echo.
+cd release
+windeployqt Monitoring0.exe
+cd ../..
+copy /Y StaticLibs\SOURCES\QtGameControllerModif\release\QtGameControllerModif.dll Monitoring0\release
+echo.
+echo.
+
+
 REM COMPILATION AND DEPLOYMENT OF MONITORING1
 echo compiling Monitoring1
 echo.
@@ -140,6 +155,16 @@ echo Set oWS = WScript.CreateObject("WScript.Shell") >> %SCRIPT%
 echo sLinkFile = "%cd%\UJPS.lnk" >> %SCRIPT%
 echo Set oLink = oWS.CreateShortcut(sLinkFile) >> %SCRIPT%
 echo oLink.TargetPath = "%cd%\UjpsMainApp\release\UJPS.exe" >> %SCRIPT%
+echo oLink.Save >> %SCRIPT%
+cscript /nologo %SCRIPT%
+del %SCRIPT%
+
+REM create shortcut to Monitoring0
+set SCRIPT="%cd%\createShorcuts.vbs"
+echo Set oWS = WScript.CreateObject("WScript.Shell") >> %SCRIPT%
+echo sLinkFile = "%cd%\Monitoring0.lnk" >> %SCRIPT%
+echo Set oLink = oWS.CreateShortcut(sLinkFile) >> %SCRIPT%
+echo oLink.TargetPath = "%cd%\Monitoring0\release\Monitoring0.exe" >> %SCRIPT%
 echo oLink.Save >> %SCRIPT%
 cscript /nologo %SCRIPT%
 del %SCRIPT%

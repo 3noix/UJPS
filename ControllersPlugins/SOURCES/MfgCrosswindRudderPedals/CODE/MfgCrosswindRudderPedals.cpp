@@ -10,12 +10,12 @@
 //
 //  DESCRIPTION
 //
-//  BUTTON COUNT
+//  BUTTONS COUNT
 //  BUTTON PRESSED
 //  BUTTON NAME
 //  BUTTONS NAMES
 //
-//  AXIS COUNT
+//  AXES COUNT
 //  AXIS VALUE
 //  AXIS NAME
 //  AXES NAMES
@@ -62,8 +62,8 @@ QString MfgCrosswindRudderPedals::description() const
 
 
 
-// BUTTON COUNT ///////////////////////////////////////////////////////////////
-uint MfgCrosswindRudderPedals::buttonCount() const
+// BUTTONS COUNT //////////////////////////////////////////////////////////////
+uint MfgCrosswindRudderPedals::buttonsCount() const
 {
 	return 0;
 }
@@ -91,8 +91,8 @@ QStringList MfgCrosswindRudderPedals::buttonsNames() const
 
 
 
-// AXIS COUNT /////////////////////////////////////////////////////////////////
-uint MfgCrosswindRudderPedals::axisCount() const
+// AXES COUNT /////////////////////////////////////////////////////////////////
+uint MfgCrosswindRudderPedals::axesCount() const
 {
 	return 3;
 }

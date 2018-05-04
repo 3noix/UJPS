@@ -10,12 +10,12 @@
 //
 //  DESCRIPTION
 //
-//  BUTTON COUNT
+//  BUTTONS COUNT
 //  BUTTON PRESSED
 //  BUTTON NAME
 //  BUTTONS NAMES
 //
-//  AXIS COUNT
+//  AXES COUNT
 //  AXIS VALUE
 //  AXIS NAME
 //  AXES NAMES
@@ -72,8 +72,8 @@ QString LogitechExtreme3D::description() const
 
 
 
-// BUTTON COUNT ///////////////////////////////////////////////////////////////
-uint LogitechExtreme3D::buttonCount() const
+// BUTTONS COUNT //////////////////////////////////////////////////////////////
+uint LogitechExtreme3D::buttonsCount() const
 {
 	return 16;
 }
@@ -104,8 +104,8 @@ QStringList LogitechExtreme3D::buttonsNames() const
 
 
 
-// AXIS COUNT /////////////////////////////////////////////////////////////////
-uint LogitechExtreme3D::axisCount() const
+// AXES COUNT /////////////////////////////////////////////////////////////////
+uint LogitechExtreme3D::axesCount() const
 {
 	return 4;
 }

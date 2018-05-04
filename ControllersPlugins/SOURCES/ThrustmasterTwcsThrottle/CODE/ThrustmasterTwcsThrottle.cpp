@@ -10,12 +10,12 @@
 //
 //  DESCRIPTION
 //
-//  BUTTON COUNT
+//  BUTTONS COUNT
 //  BUTTON PRESSED
 //  BUTTON NAME
 //  BUTTONS NAMES
 //
-//  AXIS COUNT
+//  AXES COUNT
 //  AXIS VALUE
 //  AXIS NAME
 //  AXES NAMES
@@ -76,8 +76,8 @@ QString ThrustmasterTwcsThrottle::description() const
 
 
 
-// BUTTON COUNT ///////////////////////////////////////////////////////////////
-uint ThrustmasterTwcsThrottle::buttonCount() const
+// BUTTONS COUNT //////////////////////////////////////////////////////////////
+uint ThrustmasterTwcsThrottle::buttonsCount() const
 {
 	return 18;
 }
@@ -108,8 +108,8 @@ QStringList ThrustmasterTwcsThrottle::buttonsNames() const
 
 
 
-// AXIS COUNT /////////////////////////////////////////////////////////////////
-uint ThrustmasterTwcsThrottle::axisCount() const
+// AXES COUNT /////////////////////////////////////////////////////////////////
+uint ThrustmasterTwcsThrottle::axesCount() const
 {
 	return 8;
 }

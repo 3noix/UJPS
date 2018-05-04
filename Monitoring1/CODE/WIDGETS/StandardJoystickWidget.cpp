@@ -54,7 +54,7 @@ void StandardJoystickWidget::setupWidget()
 	axesLayout = new QGridLayout(boxAxes);
 	boxAxes->setLayout(axesLayout);
 	layout->addWidget(boxAxes);
-	for (uint i=0; i<m_joystick->axisCount(); ++i)
+	for (uint i=0; i<m_joystick->axesCount(); ++i)
 	{
 		QLabel *l1 = new QLabel(m_joystick->axisName(i),this);
 		l1->setMinimumWidth(20);
@@ -82,7 +82,7 @@ void StandardJoystickWidget::setupWidget()
 	buttonsLayout = new QGridLayout(boxButtons);
 	buttonsLayout->setVerticalSpacing(5);
 	boxButtons->setLayout(buttonsLayout);
-	int nbButtons = m_joystick->buttonCount();
+	int nbButtons = m_joystick->buttonsCount();
 	for (int i=0; i<qMax(32,nbButtons); ++i)
 	{
 		ButtonWidget *b = new ButtonWidget(i+1,i<nbButtons,this);
@@ -97,8 +97,8 @@ void StandardJoystickWidget::setupWidget()
 // INIT STATE /////////////////////////////////////////////////////////////////
 void StandardJoystickWidget::initState()
 {
-	for (uint i=0; i<m_joystick->axisCount(); ++i) {this->joystickAxisValueChanged(i,m_joystick->axisValue(i));}
-	for (uint i=0; i<m_joystick->buttonCount(); ++i) {buttonsChecks[i]->slotSetChecked(m_joystick->buttonPressed(i));}
+	for (uint i=0; i<m_joystick->axesCount(); ++i) {this->joystickAxisValueChanged(i,m_joystick->axisValue(i));}
+	for (uint i=0; i<m_joystick->buttonsCount(); ++i) {buttonsChecks[i]->slotSetChecked(m_joystick->buttonPressed(i));}
 }
 
 // JOYSTICK BUTTON STATE CHANGED //////////////////////////////////////////////

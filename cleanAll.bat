@@ -12,6 +12,8 @@ CleanQtProjects.exe StaticLibs
 echo.
 CleanQtProjects.exe UjpsMainApp
 echo.
+CleanQtProjects.exe Monitoring0
+echo.
 CleanQtProjects.exe Monitoring1
 echo.
 CleanQtProjects.exe Monitoring2

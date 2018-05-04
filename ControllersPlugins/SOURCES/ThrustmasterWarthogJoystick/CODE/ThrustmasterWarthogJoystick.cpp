@@ -10,12 +10,12 @@
 //
 //  DESCRIPTION
 //
-//  BUTTON COUNT
+//  BUTTONS COUNT
 //  BUTTON PRESSED
 //  BUTTON NAME
 //  BUTTONS NAMES
 //
-//  AXIS COUNT
+//  AXES COUNT
 //  AXIS VALUE
 //  AXIS NAME
 //  AXES NAMES
@@ -66,8 +66,8 @@ QString ThrustmasterWarthogJoystick::description() const
 
 
 
-// BUTTON COUNT ///////////////////////////////////////////////////////////////
-uint ThrustmasterWarthogJoystick::buttonCount() const
+// BUTTONS COUNT ///////////////////////////////////////////////////////////////
+uint ThrustmasterWarthogJoystick::buttonsCount() const
 {
 	return 23;
 }
@@ -97,8 +97,8 @@ QStringList ThrustmasterWarthogJoystick::buttonsNames() const
 
 
 
-// AXIS COUNT /////////////////////////////////////////////////////////////////
-uint ThrustmasterWarthogJoystick::axisCount() const
+// AXES COUNT /////////////////////////////////////////////////////////////////
+uint ThrustmasterWarthogJoystick::axesCount() const
 {
 	return 2;
 }

@@ -56,50 +56,74 @@ QGameControllerEvent::~QGameControllerEvent()
 
 
 ///////////////////////////////////////////////////////////////////////////////
-// BUTTON EVENT ///////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-QGameControllerButtonEvent::QGameControllerButtonEvent(uint controllerId, uint button, bool pressed)
-	: QGameControllerEvent(controllerId, *new QGameControllerButtonEventPrivate(this))
-{
-	Q_D(QGameControllerButtonEvent);
-	d->Button = button;
-	d->Pressed = pressed;
-}
-
-uint QGameControllerButtonEvent::button()
-{
-	Q_D(QGameControllerButtonEvent);
-	return d->Button;
-}
-
-bool QGameControllerButtonEvent::pressed()
-{
-	Q_D(QGameControllerButtonEvent);
-	return d->Pressed;
-}
-
-
-///////////////////////////////////////////////////////////////////////////////
 // AXIS EVENT /////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 QGameControllerAxisEvent::QGameControllerAxisEvent(uint controllerId, uint axis, float value)
 	: QGameControllerEvent(controllerId, *new QGameControllerAxisEventPrivate(this))
 {
 	Q_D(QGameControllerAxisEvent);
-	d->Axis = axis;
-	d->Value = value;
+	d->iAxis = axis;
+	d->value = value;
 }
 
 uint QGameControllerAxisEvent::axis()
 {
 	Q_D(QGameControllerAxisEvent);
-	return d->Axis;
+	return d->iAxis;
 }
 
 float QGameControllerAxisEvent::value()
 {
 	Q_D(QGameControllerAxisEvent);
-	return d->Value;
+	return d->value;
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+// BUTTON EVENT ///////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+QGameControllerButtonEvent::QGameControllerButtonEvent(uint controllerId, uint button, bool pressed)
+	: QGameControllerEvent(controllerId, *new QGameControllerButtonEventPrivate(this))
+{
+	Q_D(QGameControllerButtonEvent);
+	d->iButton = button;
+	d->bPressed = pressed;
+}
+
+uint QGameControllerButtonEvent::button()
+{
+	Q_D(QGameControllerButtonEvent);
+	return d->iButton;
+}
+
+bool QGameControllerButtonEvent::pressed()
+{
+	Q_D(QGameControllerButtonEvent);
+	return d->bPressed;
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+// POV EVENT //////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+QGameControllerPovEvent::QGameControllerPovEvent(uint controllerId, uint pov, float angle)
+	: QGameControllerEvent(controllerId, *new QGameControllerPovEventPrivate(this))
+{
+	Q_D(QGameControllerPovEvent);
+	d->iPov = pov;
+	d->angle = angle;
+}
+
+uint QGameControllerPovEvent::pov()
+{
+	Q_D(QGameControllerPovEvent);
+	return d->iPov;
+}
+
+float QGameControllerPovEvent::angle()
+{
+	Q_D(QGameControllerPovEvent);
+	return d->angle;
 }
 
 
@@ -110,32 +134,6 @@ QGameController::QGameController(uint id, QObject *parent) :
 	QObject(parent), d_ptr(new QGameControllerPrivate(id, this))
 {
 
-}
-
-uint QGameController::axisCount()
-{
-	Q_D(QGameController);
-	return d->Axis;
-}
-
-uint QGameController::buttonCount()
-{
-	Q_D(QGameController);
-	return d->Buttons;
-}
-
-float QGameController::axisValue(uint axis)
-{
-	Q_D(QGameController);
-	if (axis >= d->AxisValues.size()) {return 0.0f;}
-	return d->AxisValues.at(axis);
-}
-
-bool QGameController::buttonValue(uint button)
-{
-	Q_D(QGameController);
-	if (button >= d->ButtonValues.size()) {return false;}
-	return d->ButtonValues.at(button);
 }
 
 QString QGameController::description()
@@ -160,6 +158,45 @@ bool QGameController::isValid()
 {
 	Q_D(QGameController);
 	return d->Valid;
+}
+
+uint QGameController::axesCount()
+{
+	Q_D(QGameController);
+	return d->nbAxes;
+}
+
+uint QGameController::buttonsCount()
+{
+	Q_D(QGameController);
+	return d->nbButtons;
+}
+
+uint QGameController::povsCount()
+{
+	Q_D(QGameController);
+	return d->nbPovs;
+}
+
+float QGameController::axisValue(uint axis)
+{
+	Q_D(QGameController);
+	if (axis >= d->AxesValues.size()) {return 0.0f;}
+	return d->AxesValues.at(axis);
+}
+
+bool QGameController::buttonValue(uint button)
+{
+	Q_D(QGameController);
+	if (button >= d->ButtonsValues.size()) {return false;}
+	return d->ButtonsValues.at(button);
+}
+
+float QGameController::povValue(uint pov)
+{
+	Q_D(QGameController);
+	if (pov >= d->PovsValues.size()) {return false;}
+	return d->PovsValues.at(pov);
 }
 
 void QGameController::readGameController()

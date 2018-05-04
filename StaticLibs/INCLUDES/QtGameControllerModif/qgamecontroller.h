@@ -28,6 +28,7 @@ class QGameControllerPrivate;
 class QGameControllerEventPrivate;
 class QGameControllerAxisEventPrivate;
 class QGameControllerButtonEventPrivate;
+class QGameControllerPovEventPrivate;
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -49,6 +50,21 @@ class QGAMECONTROLLER_EXPORT QGameControllerEvent
 
 
 ///////////////////////////////////////////////////////////////////////////////
+// AXIS EVENT /////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+class QGAMECONTROLLER_EXPORT QGameControllerAxisEvent : public QGameControllerEvent
+{
+	Q_DECLARE_PRIVATE(QGameControllerAxisEvent)
+	
+	public:
+		QGameControllerAxisEvent(uint controllerId, uint axis, float value);
+		uint axis();
+		float value();
+};
+
+
+
+///////////////////////////////////////////////////////////////////////////////
 // BUTTON EVENT ///////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 class QGAMECONTROLLER_EXPORT QGameControllerButtonEvent : public QGameControllerEvent
@@ -63,16 +79,16 @@ class QGAMECONTROLLER_EXPORT QGameControllerButtonEvent : public QGameController
 
 
 ///////////////////////////////////////////////////////////////////////////////
-// AXIS EVENT /////////////////////////////////////////////////////////////////
+// POV EVENT //////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
-class QGAMECONTROLLER_EXPORT QGameControllerAxisEvent : public QGameControllerEvent
+class QGAMECONTROLLER_EXPORT QGameControllerPovEvent : public QGameControllerEvent
 {
-	Q_DECLARE_PRIVATE(QGameControllerAxisEvent)
+	Q_DECLARE_PRIVATE(QGameControllerPovEvent)
 	
 	public:
-		QGameControllerAxisEvent(uint controllerId, uint axis, float value);
-		uint axis();
-		float value();
+		QGameControllerPovEvent(uint controllerId, uint pov, float angle);
+		uint pov();
+		float angle();
 };
 
 
@@ -87,22 +103,28 @@ class QGAMECONTROLLER_EXPORT QGameController : public QObject
 	
 	public:
 		explicit QGameController(uint id = 0, QObject *parent = 0);
-		uint axisCount();
-		uint buttonCount();
-		float axisValue(uint axis);
-		bool buttonValue(uint button);
+		
 		QString description();
 		QString hardwareId();
 		uint id();
 		bool isValid();
+		
+		uint axesCount();
+		uint buttonsCount();
+		uint povsCount();
+		
+		float axisValue(uint axis);
+		bool buttonValue(uint button);
+		float povValue(uint pov);
 	
 	public slots:
 		void readGameController();
 	
 	signals:
 		void gameControllerEvent(QGameControllerEvent *event);
-		void gameControllerButtonEvent(QGameControllerButtonEvent *event);
 		void gameControllerAxisEvent(QGameControllerAxisEvent *event);
+		void gameControllerButtonEvent(QGameControllerButtonEvent *event);
+		void gameControllerPovEvent(QGameControllerPovEvent *event);
 	
 	private:
 		QGameControllerPrivate* const d_ptr;

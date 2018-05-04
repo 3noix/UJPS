@@ -32,7 +32,7 @@ QString vJoyDevice::buttonName(uint button) const
 QStringList vJoyDevice::buttonsNames() const
 {
 	QStringList list;
-	for (uint i=0; i<this->buttonCount(); ++i) {list << "DX" + QString::number(i+1);}
+	for (uint i=0; i<this->buttonsCount(); ++i) {list << "DX" + QString::number(i+1);}
 	return list;
 }
 
@@ -42,7 +42,7 @@ QStringList vJoyDevice::buttonsNames() const
 // AXIS NAME //////////////////////////////////////////////////////////////////
 QString vJoyDevice::axisName(uint axis) const
 {
-	if (axis < this->axisCount())
+	if (axis < this->axesCount())
 		return m_axesNames[axis];
 	else
 		return QString();

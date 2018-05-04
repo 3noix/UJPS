@@ -11,12 +11,12 @@
 //
 //  DESCRIPTION
 //
-//  BUTTON COUNT
+//  BUTTONS COUNT
 //  BUTTON PRESSED
 //  BUTTON NAME
 //  BUTTONS NAMES
 //
-//  AXIS COUNT
+//  AXES COUNT
 //  AXIS VALUE
 //  AXIS NAME
 //  AXES NAMES
@@ -218,8 +218,8 @@ QString ThrustmasterWarthogThrottle::description() const
 
 
 
-// BUTTON COUNT ///////////////////////////////////////////////////////////////
-uint ThrustmasterWarthogThrottle::buttonCount() const
+// BUTTONS COUNT //////////////////////////////////////////////////////////////
+uint ThrustmasterWarthogThrottle::buttonsCount() const
 {
 	return 52;
 }
@@ -272,8 +272,8 @@ QStringList ThrustmasterWarthogThrottle::buttonsNames() const
 
 
 
-// AXIS COUNT /////////////////////////////////////////////////////////////////
-uint ThrustmasterWarthogThrottle::axisCount() const
+// AXES COUNT /////////////////////////////////////////////////////////////////
+uint ThrustmasterWarthogThrottle::axesCount() const
 {
 	return 5;
 }

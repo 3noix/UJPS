@@ -15,12 +15,12 @@
 //  READ GAME CONTROLLER
 //  CHANGES
 //
-//  BUTTON COUNT
+//  BUTTONS COUNT
 //  BUTTON PRESSED
 //  BUTTON NAME
 //  BUTTONS NAMES
 //
-//  AXIS COUNT
+//  AXES COUNT
 //  AXIS VALUE
 //  AXIS NAME
 //  AXES NAMES
@@ -123,8 +123,8 @@ QVector<JoystickChange> EnhancedJoystick::changes()
 
 
 
-// BUTTON COUNT ///////////////////////////////////////////////////////////////
-uint EnhancedJoystick::buttonCount() const {return m_j->buttonCount();}
+// BUTTONS COUNT //////////////////////////////////////////////////////////////
+uint EnhancedJoystick::buttonsCount() const {return m_j->buttonsCount();}
 // BUTTON PRESSED /////////////////////////////////////////////////////////////
 bool EnhancedJoystick::buttonPressed(uint button) const {return m_j->buttonPressed(button);}
 // BUTTON NAME ////////////////////////////////////////////////////////////////
@@ -133,8 +133,8 @@ QString EnhancedJoystick::buttonName(uint button) const {return m_j->buttonName(
 QStringList EnhancedJoystick::buttonsNames() const {return m_j->buttonsNames();}
 
 
-// AXIS COUNT /////////////////////////////////////////////////////////////////
-uint EnhancedJoystick::axisCount() const {return m_j->axisCount();}
+// AXES COUNT /////////////////////////////////////////////////////////////////
+uint EnhancedJoystick::axesCount() const {return m_j->axesCount();}
 // AXIS VALUE /////////////////////////////////////////////////////////////////
 float EnhancedJoystick::axisValue(uint axis) const
 {

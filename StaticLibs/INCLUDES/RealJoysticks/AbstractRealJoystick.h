@@ -25,12 +25,12 @@ class AbstractRealJoystick
 		virtual void readGameController() = 0;
 		virtual QVector<JoystickChange> changes() = 0;
 		
-		virtual uint buttonCount() const = 0;
+		virtual uint buttonsCount() const = 0;
 		virtual bool buttonPressed(uint button) const = 0;
 		virtual QString buttonName(uint button) const = 0;
 		virtual QStringList buttonsNames() const = 0;
 		
-		virtual uint axisCount() const = 0;
+		virtual uint axesCount() const = 0;
 		virtual float axisValue(uint axis) const = 0;
 		virtual QString axisName(uint axis) const = 0;
 		virtual QStringList axesNames() const = 0;

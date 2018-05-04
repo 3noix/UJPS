@@ -38,8 +38,8 @@ struct DI_ENUM_CONTEXT
 };
 #define SAFE_DELETE(p)  { if(p) { delete (p);     (p)=nullptr; } }
 #define SAFE_RELEASE(p) { if(p) { (p)->Release(); (p)=nullptr; } }
-BOOL CALLBACK    EnumJoysticksCallback( const DIDEVICEINSTANCE* pdidInstance, VOID* pContext );
-BOOL CALLBACK    EnumObjectsCallback( const DIDEVICEOBJECTINSTANCE* pdidoi, VOID* pContext );
+BOOL CALLBACK EnumJoysticksCallback(const DIDEVICEINSTANCE* pdidInstance, VOID* pContext);
+BOOL CALLBACK EnumObjectsCallback(const DIDEVICEOBJECTINSTANCE* pdidoi, VOID* pContext);
 
 
 class QGameControllerPrivate
@@ -56,15 +56,18 @@ class QGameControllerPrivate
 		QString HardwareId;
 		uint ID;
 		bool Valid;
-		QVector<float> AxisValues;
-		QVector<bool> ButtonValues;
+		
+		QVector<float> AxesValues;
+		QVector<bool> ButtonsValues;
+		QVector<float> PovsValues;
+		
+		uint nbAxes;
+		uint nbButtons;
+		uint nbPovs;
+		
 		LPDIRECTINPUTDEVICE8 g_pJoystick;
 		uint enumCounter;
 		QList<GUID> DIaxisGIIDs;
-		uint Axis;
-		uint Buttons;
-		uint RealButtons;
-		uint Povs;
 		
 		void readGameController();
 		

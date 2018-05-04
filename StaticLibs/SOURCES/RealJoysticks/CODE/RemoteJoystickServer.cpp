@@ -15,12 +15,12 @@
 //  READ GAME CONTROLLER
 //  CHANGES
 //
-//  BUTTON COUNT
+//  BUTTONS COUNT
 //  BUTTON PRESSED
 //  BUTTON NAME
 //  BUTTONS NAMES
 //
-//  AXIS COUNT
+//  AXES COUNT
 //  AXIS VALUE
 //  AXIS NAME
 //  AXES NAMES
@@ -129,8 +129,8 @@ QVector<JoystickChange> RemoteJoystickServer::changes()
 
 
 
-// BUTTON COUNT ///////////////////////////////////////////////////////////////
-uint RemoteJoystickServer::buttonCount() const {return m_nbButtons;}
+// BUTTONS COUNT //////////////////////////////////////////////////////////////
+uint RemoteJoystickServer::buttonsCount() const {return m_nbButtons;}
 
 // BUTTON PRESSED /////////////////////////////////////////////////////////////
 bool RemoteJoystickServer::buttonPressed(uint button) const
@@ -153,8 +153,8 @@ QStringList RemoteJoystickServer::buttonsNames() const {return m_buttonsNames;}
 
 
 
-// AXIS COUNT /////////////////////////////////////////////////////////////////
-uint RemoteJoystickServer::axisCount() const {return m_nbAxes;}
+// AXES COUNT /////////////////////////////////////////////////////////////////
+uint RemoteJoystickServer::axesCount() const {return m_nbAxes;}
 
 // AXIS VALUE /////////////////////////////////////////////////////////////////
 float RemoteJoystickServer::axisValue(uint axis) const

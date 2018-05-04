@@ -23,12 +23,12 @@ class LogitechExtreme3D : public RealJoystick
 		
 		QString description() const override final;
 		
-		uint buttonCount() const override final;
+		uint buttonsCount() const override final;
 		bool buttonPressed(uint button) const override final;
 		QString buttonName(uint button) const override final;
 		QStringList buttonsNames() const override final;
 		
-		uint axisCount() const override final;
+		uint axesCount() const override final;
 		float axisValue(uint axis) const override final;
 		QString axisName(uint axis) const override final;
 		QStringList axesNames() const override final;

@@ -31,12 +31,12 @@ class RemoteJoystickServer : public QObject, public AbstractRealJoystick
 		void readGameController() override final;
 		QVector<JoystickChange> changes() override final;
 		
-		virtual uint buttonCount() const override;
+		virtual uint buttonsCount() const override;
 		virtual bool buttonPressed(uint button) const override;
 		virtual QString buttonName(uint button) const override;
 		virtual QStringList buttonsNames() const override;
 		
-		virtual uint axisCount() const override;
+		virtual uint axesCount() const override;
 		virtual float axisValue(uint axis) const override;
 		virtual QString axisName(uint axis) const override;
 		virtual QStringList axesNames() const override;
