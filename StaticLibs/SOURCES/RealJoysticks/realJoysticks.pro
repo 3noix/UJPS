@@ -1,9 +1,9 @@
 CONFIG(debug, debug|release) {
-    DESTDIR = debug
+	DESTDIR = debug
 	LIBS += ../QtGameControllerModif/debug/libQtGameControllerModif.a
 }
 CONFIG(release, debug|release) {
-    DESTDIR = release
+	DESTDIR = release
 	LIBS += ../QtGameControllerModif/release/libQtGameControllerModif.a
 }
 

@@ -1,9 +1,9 @@
 CONFIG(debug, debug|release) {
-    DESTDIR = debug
+	DESTDIR = debug
 	LIBS += ../VirtualJoysticks/debug/libvirtualJoysticks.a
 }
 CONFIG(release, debug|release) {
-    DESTDIR = release
+	DESTDIR = release
 	LIBS += ../VirtualJoysticks/release/libvirtualJoysticks.a
 }
 

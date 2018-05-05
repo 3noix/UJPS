@@ -1,8 +1,8 @@
 CONFIG(debug, debug|release) {
-    DESTDIR = debug
+	DESTDIR = debug
 }
 CONFIG(release, debug|release) {
-    DESTDIR = release
+	DESTDIR = release
 }
 
 

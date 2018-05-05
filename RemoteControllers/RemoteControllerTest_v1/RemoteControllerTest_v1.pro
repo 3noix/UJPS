@@ -5,12 +5,20 @@ CONFIG(release, debug|release) {
 	DESTDIR = release
 }
 
+
 TEMPLATE = app
-TARGET = CleanQtProjects
+TARGET = RemoteControllerTest_v1
 DEPENDPATH += .
 INCLUDEPATH += .
+CONFIG += c++11
 OBJECTS_DIR = $$DESTDIR/objects
 MOC_DIR = $$DESTDIR/moc
-CONFIG += console
+QT += network widgets
 
-SOURCES += main.cpp
+HEADERS =   CODE/MainWindow.h \
+			CODE/TextEdit.h
+
+SOURCES =   CODE/main.cpp \
+			CODE/MainWindow.cpp \
+			CODE/TextEdit.cpp
+
