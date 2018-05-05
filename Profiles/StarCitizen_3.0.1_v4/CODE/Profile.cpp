@@ -164,7 +164,7 @@ void Profile::init()
 	vj1->resetReport();
 	vj2->resetReport();
 	vj1->setAxis(VJOY::SLIDER0,0.0f); // vertical strafe at 0 to avoid bad surprises
-	
+	tmwt->setData("BRIGHTNESS",1);
 	
 	// 3. we create the initial mapping
 	// 150 ms for Star Citizen because of the current low framerate
@@ -300,7 +300,7 @@ void Profile::init()
 	Map(tmwt, ControlType::Button, TMWT::FLAPD, AllLayers, new TriggerButtonPress{}, new ActionCallback{[this]() {this->reset_dxxy_trims();}});
 	
 	// we send the report
-	vj1->sendReport();
+	vj1->flush();
 }
 
 
@@ -404,6 +404,10 @@ void Profile::set_dxxy_trims()
 // SET CONTROLS GROUND ////////////////////////////////////////////////////////
 void Profile::setControlsGround()
 {
+	tmwt->setData("LED1",true);
+	tmwt->setData("LED2",false);
+	tmwt->setData("LED3",false);
+	
 	if (true)
 	{
 		this->set_JOYXY_for_turn();
@@ -427,6 +431,10 @@ void Profile::setControlsGround()
 // SET CONTROLS FLIGHT LANDING ////////////////////////////////////////////////
 void Profile::setControlsFlightLanding()
 {
+	tmwt->setData("LED1",false);
+	tmwt->setData("LED2",true);
+	tmwt->setData("LED3",false);
+	
 	this->set_S4_for_landing(); // to quickly switch JOYXY from roll&pitch to strafe and vice-versa
 	this->set_JOYXY_for_landing();
 	this->set_BUTTONS_for_landing();
@@ -436,6 +444,10 @@ void Profile::setControlsFlightLanding()
 // SET CONTROLS FLIGHT CRUISE /////////////////////////////////////////////////
 void Profile::setControlsFlightCruise()
 {
+	tmwt->setData("LED1",false);
+	tmwt->setData("LED2",false);
+	tmwt->setData("LED3",true);
+	
 	this->set_S4_for_nothing();
 	this->set_JOYXY_for_rollNpitch();
 	this->set_BUTTONS_for_cruise();

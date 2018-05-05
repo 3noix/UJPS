@@ -37,7 +37,7 @@ QString VirtualJoystick::m_vJoyConfigExeFileName{};
 //  SET AXIS LOCKED
 //  SET AXIS TRIM
 //
-//  SEND REPORT
+//  FLUSH
 //  RESET REPORT
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -107,7 +107,7 @@ VirtualJoystick::VirtualJoystick(uint id, uint nbButtons, bool bForcedInit) : QO
 	
 	// init HID report
 	this->resetReport();
-	if (bForcedInit) {this->sendReport();}
+	if (bForcedInit) {this->flush();}
 	
 	m_nbInstances++;
 }
@@ -352,8 +352,8 @@ void VirtualJoystick::setAxisTrim(uint axis, float trimF, AbsoluteOrRelative aor
 
 
 
-// SEND REPORT ////////////////////////////////////////////////////////////////
-bool VirtualJoystick::sendReport(bool bEvenIfNoChange)
+// FLUSH //////////////////////////////////////////////////////////////////////
+bool VirtualJoystick::flush(bool bEvenIfNoChange)
 {
 	if (!m_reportModified && !bEvenIfNoChange) {return true;}
 	bool b = UpdateVJD(m_id, &m_report);

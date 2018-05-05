@@ -26,6 +26,7 @@
 //  AXES NAMES
 //
 //  SET DATA
+//  FLUSH
 ///////////////////////////////////////////////////////////////////////////////
 
 
@@ -216,6 +217,13 @@ void RealJoystick::setData(const QString &str, QVariant v)
 {
 	Q_UNUSED(str)
 	Q_UNUSED(v)
+	// nothing by default
+}
+
+// FLUSH //////////////////////////////////////////////////////////////////////
+void RealJoystick::flush()
+{
+	// nothing by default
 }
 
 

@@ -26,6 +26,7 @@
 //  AXES NAMES
 //
 //  SET DATA
+//  FLUSH
 //
 //  SET BUTTON LOCKED
 //  SET AXIS LOCKED
@@ -154,6 +155,8 @@ QStringList EnhancedJoystick::axesNames() const {return m_j->axesNames();}
 
 // SET DATA ///////////////////////////////////////////////////////////////////
 void EnhancedJoystick::setData(const QString &str, QVariant v) {m_j->setData(str,v);}
+// FLUSH //////////////////////////////////////////////////////////////////////
+void EnhancedJoystick::flush() {m_j->flush();}
 
 
 // SET BUTTON LOCKED //////////////////////////////////////////////////////////

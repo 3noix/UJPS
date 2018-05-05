@@ -141,8 +141,9 @@ void AbstractProfile::runOneLoop()
 	//     - for virtual joysticks, perform only setButton and setAxis
 	m_eventsQueue.processEvents();
 	
-	// send a HID report to each virtual joystick
-	for (VirtualJoystick *vj : m_virtualJoysticks) {vj->sendReport();}
+	// flush virtual then real joysticks
+	for (VirtualJoystick *vj : m_virtualJoysticks) {vj->flush();} // send HID report to vJoy devices
+	for (AbstractRealJoystick *rj : m_realJoysticks) {rj->flush();} // implementation defined
 	
 	// the end
 	m_changes.clear();

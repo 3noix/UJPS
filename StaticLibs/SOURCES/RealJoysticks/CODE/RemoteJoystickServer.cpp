@@ -26,6 +26,7 @@
 //  AXES NAMES
 //
 //  SET DATA
+//  FLUSH
 //
 //  SLOT SESSION OPENED
 //  SLOT NEW CONNECTION
@@ -185,6 +186,12 @@ void RemoteJoystickServer::setData(const QString &str, QVariant v)
 	out.setVersion(QDataStream::Qt_5_7);
 	out << str << v;
 	m_tcpSocket->write(ba);
+}
+
+// FLUSH //////////////////////////////////////////////////////////////////////
+void RemoteJoystickServer::flush()
+{
+	// nothing
 }
 
 

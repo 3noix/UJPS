@@ -42,6 +42,7 @@ class RemoteJoystickServer : public QObject, public AbstractRealJoystick
 		virtual QStringList axesNames() const override;
 		
 		virtual void setData(const QString &str, QVariant v) override;
+		virtual void flush() override;
 		
 		
 	signals:

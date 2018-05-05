@@ -47,7 +47,7 @@ class VirtualJoystick : public QObject
 		void setAxisTrim(uint axis, float trim, AbsoluteOrRelative aor = AbsoluteOrRelative::Absolute);
 		
 		void resetReport();
-		bool sendReport(bool bEvenIfNoChange = false);
+		bool flush(bool bEvenIfNoChange = false);
 		
 		bool enableVJoyIfNot();
 		void disableVJoy();

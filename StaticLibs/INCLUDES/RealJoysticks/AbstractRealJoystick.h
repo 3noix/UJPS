@@ -36,6 +36,7 @@ class AbstractRealJoystick
 		virtual QStringList axesNames() const = 0;
 		
 		virtual void setData(const QString &str, QVariant v) = 0;
+		virtual void flush() = 0;
 };
 
 Q_DECLARE_INTERFACE(AbstractRealJoystick,"AbstractRealJoystick")
