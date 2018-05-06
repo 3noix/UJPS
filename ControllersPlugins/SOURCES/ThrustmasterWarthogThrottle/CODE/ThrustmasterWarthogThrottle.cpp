@@ -1,12 +1,11 @@
 #include "ThrustmasterWarthogThrottle.h"
 #include "qgamecontroller.h"
 #include "Lim.h"
-#include "HidDevice.h"
+#include "WriteToHidThread.h"
 
 
 ///////////////////////////////////////////////////////////////////////////////
 //  CONSTRUCTEUR
-//  DESTRUCTEUR
 //
 //  SLOT GAME CONTROLLER BUTTON EVENT
 //  SLOT GAME CONTROLLER AXIS EVENT
@@ -47,10 +46,9 @@ ThrustmasterWarthogThrottle::ThrustmasterWarthogThrottle(QGameController *c) : R
 	m_oldAxis1Value = 0.0f;
 	
 	// led support
-	m_outputData[0] = 1;
-	m_outputData[1] = 6;
-	m_outputData[2] = 0;
-	m_outputData[3] = 0;
+	m_thread = new WriteToHidThread(this);
+	m_flags = 0;
+	m_brightness = 0;
 	m_dataModified = false;
 	m_bLed1 = false;
 	m_bLed2 = false;
@@ -58,18 +56,6 @@ ThrustmasterWarthogThrottle::ThrustmasterWarthogThrottle(QGameController *c) : R
 	m_bLed4 = false;
 	m_bLed5 = false;
 	m_bBackLit = false;
-	m_brightness = 0;
-	// initialize all shut down
-	m_hidDevice = new HidDevice(0x044F,0x0404);
-	m_hidDevice->openHidDevice();
-	//m_hidDevice->writeData(m_outputData,4);
-}
-
-// DESTRUCTEUR ////////////////////////////////////////////////////////////////
-ThrustmasterWarthogThrottle::~ThrustmasterWarthogThrottle()
-{
-	if (m_hidDevice)
-		delete m_hidDevice;
 }
 
 
@@ -348,7 +334,6 @@ void ThrustmasterWarthogThrottle::setData(const QString &str, QVariant v)
 		if (j == m_brightness) {return;}
 		m_brightness = j;
 		m_dataModified = true;
-		m_outputData[3] = m_brightness;
 	}
 	else if (str == "BACKLIT")
 	{
@@ -358,9 +343,9 @@ void ThrustmasterWarthogThrottle::setData(const QString &str, QVariant v)
 		m_dataModified = true;
 		
 		if (m_bBackLit)
-			m_outputData[2] |= bitChar(3);
+			m_flags |= bitChar(3);
 		else
-			m_outputData[2] &= ~bitChar(3);
+			m_flags &= ~bitChar(3);
 	}
 	else if (str == "LED1")
 	{
@@ -370,9 +355,9 @@ void ThrustmasterWarthogThrottle::setData(const QString &str, QVariant v)
 		m_dataModified = true;
 		
 		if (m_bLed1)
-			m_outputData[2] |= bitChar(6);
+			m_flags |= bitChar(6);
 		else
-			m_outputData[2] &= ~bitChar(6);
+			m_flags &= ~bitChar(6);
 	}
 	else if (str == "LED2")
 	{
@@ -382,9 +367,9 @@ void ThrustmasterWarthogThrottle::setData(const QString &str, QVariant v)
 		m_dataModified = true;
 		
 		if (m_bLed2)
-			m_outputData[2] |= bitChar(0);
+			m_flags |= bitChar(0);
 		else
-			m_outputData[2] &= ~bitChar(0);
+			m_flags &= ~bitChar(0);
 	}
 	else if (str == "LED3")
 	{
@@ -394,9 +379,9 @@ void ThrustmasterWarthogThrottle::setData(const QString &str, QVariant v)
 		m_dataModified = true;
 		
 		if (m_bLed3)
-			m_outputData[2] |= bitChar(4);
+			m_flags |= bitChar(4);
 		else
-			m_outputData[2] &= ~bitChar(4);
+			m_flags &= ~bitChar(4);
 	}
 	else if (str == "LED4")
 	{
@@ -406,9 +391,9 @@ void ThrustmasterWarthogThrottle::setData(const QString &str, QVariant v)
 		m_dataModified = true;
 		
 		if (m_bLed4)
-			m_outputData[2] |= bitChar(1);
+			m_flags |= bitChar(1);
 		else
-			m_outputData[2] &= ~bitChar(1);
+			m_flags &= ~bitChar(1);
 	}
 	else if (str == "LED5")
 	{
@@ -418,9 +403,9 @@ void ThrustmasterWarthogThrottle::setData(const QString &str, QVariant v)
 		m_dataModified = true;
 		
 		if (m_bLed5)
-			m_outputData[2] |= bitChar(2);
+			m_flags |= bitChar(2);
 		else
-			m_outputData[2] &= ~bitChar(2);
+			m_flags &= ~bitChar(2);
 	}
 }
 
@@ -428,7 +413,7 @@ void ThrustmasterWarthogThrottle::setData(const QString &str, QVariant v)
 void ThrustmasterWarthogThrottle::flush()
 {
 	if (!m_dataModified) {return;}
-	m_hidDevice->writeData(m_outputData,4);
+	m_thread->launchWriteData(m_flags,m_brightness);
 	m_dataModified = false;
 }
 

@@ -168,7 +168,7 @@ bool HidDevice::writeData(quint8 data[], int taille)
 	HidOverlapped.OffsetHigh = 0;
 	
 	BOOL bResult1 = WriteFile(m_hidDevHandle, &data[0], m_reportLength, NULL, (LPOVERLAPPED) &HidOverlapped);
-	BOOL bResult2 = WaitForSingleObject(ReportEvent,200);
+	BOOL bResult2 = WaitForSingleObject(ReportEvent,1000);
 	return (bResult1 == TRUE && bResult2 == TRUE);
 }
 

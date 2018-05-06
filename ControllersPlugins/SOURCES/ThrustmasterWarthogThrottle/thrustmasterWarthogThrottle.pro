@@ -27,8 +27,10 @@ INCLUDEPATH +=  ../../../StaticLibs/INCLUDES/QtGameControllerModif/ \
 
 HEADERS +=  CODE/RealJoystickFactory.h \
 			CODE/ThrustmasterWarthogThrottle.h \
+			CODE/WriteToHidThread.h \
 			CODE/HidDevice.h
 
 SOURCES +=  CODE/ThrustmasterWarthogThrottle.cpp \
+			CODE/WriteToHidThread.cpp \
 			CODE/HidDevice.cpp
 

@@ -3,7 +3,7 @@
 
 
 #include "RealJoystick.h"
-class HidDevice;
+class WriteToHidThread;
 class QGameController;
 class QGameControllerButtonEvent;
 class QGameControllerAxisEvent;
@@ -20,7 +20,7 @@ class ThrustmasterWarthogThrottle : public RealJoystick
 		ThrustmasterWarthogThrottle(ThrustmasterWarthogThrottle &&other) = delete;
 		ThrustmasterWarthogThrottle& operator=(const ThrustmasterWarthogThrottle &other) = delete;
 		ThrustmasterWarthogThrottle& operator=(ThrustmasterWarthogThrottle &&other) = delete;
-		~ThrustmasterWarthogThrottle();
+		~ThrustmasterWarthogThrottle() = default;
 		
 		QString description() const override final;
 		
@@ -50,8 +50,9 @@ class ThrustmasterWarthogThrottle : public RealJoystick
 		float m_oldAxis0Value;
 		float m_oldAxis1Value;
 		
-		HidDevice *m_hidDevice;
-		quint8 m_outputData[4];
+		WriteToHidThread *m_thread;
+		quint8 m_flags;
+		quint8 m_brightness;
 		bool m_dataModified;
 		bool m_bLed1;
 		bool m_bLed2;
@@ -59,8 +60,6 @@ class ThrustmasterWarthogThrottle : public RealJoystick
 		bool m_bLed4;
 		bool m_bLed5;
 		bool m_bBackLit;
-		quint8 m_brightness;
-		
 		quint8 bitChar(uint i);
 		
 		
