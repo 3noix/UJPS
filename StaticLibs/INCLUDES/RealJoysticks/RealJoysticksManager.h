@@ -30,9 +30,9 @@ class RealJoysticksManager : public QObject
 		QStringList joysticksNames() const;
 		
 		AbstractRealJoystick* joystick(int id) const;
-		AbstractRealJoystick* joystick(const QString &joystickName) const;
+		AbstractRealJoystick* joystick(const QString &joystickName, int num = 0) const;
 		AbstractRealJoystick* releaseJoystick(int id);
-		AbstractRealJoystick* releaseJoystick(const QString &joystickName);
+		AbstractRealJoystick* releaseJoystick(const QString &joystickName, int num = 0);
 		
 		
 	signals:

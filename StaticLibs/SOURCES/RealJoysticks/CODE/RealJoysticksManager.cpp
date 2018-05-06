@@ -115,12 +115,18 @@ AbstractRealJoystick* RealJoysticksManager::joystick(int id) const
 	return m_joysticks[id];
 }
 
-AbstractRealJoystick* RealJoysticksManager::joystick(const QString &joystickName) const
+AbstractRealJoystick* RealJoysticksManager::joystick(const QString &joystickName, int num) const
 {
+	int compteur = 0;
 	for (AbstractRealJoystick *j : m_joysticks)
 	{
 		if (j->description() == joystickName)
-		{return j;}
+		{
+			if (compteur == num)
+				return j;
+			else
+				++compteur;
+		}
 	}
 	
 	return nullptr;
@@ -133,12 +139,18 @@ AbstractRealJoystick* RealJoysticksManager::releaseJoystick(int id)
 	return m_joysticks.takeAt(id);
 }
 
-AbstractRealJoystick* RealJoysticksManager::releaseJoystick(const QString &joystickName)
+AbstractRealJoystick* RealJoysticksManager::releaseJoystick(const QString &joystickName, int num)
 {
+	int compteur = 0;
 	for (int i=0; i<m_joysticks.size(); ++i)
 	{
 		if (m_joysticks[i]->description() == joystickName)
-		{return m_joysticks.takeAt(i);}
+		{
+			if (compteur == num)
+				return m_joysticks.takeAt(i);
+			else
+				++compteur;
+		}
 	}
 	
 	return nullptr;
