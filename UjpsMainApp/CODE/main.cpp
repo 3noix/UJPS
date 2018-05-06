@@ -1,7 +1,7 @@
 #include <QApplication>
 #include "HMI/MainWindow.h"
 
-#define DEBUG_MODE
+//#define DEBUG_MODE
 
 #ifdef DEBUG_MODE
 void myMessageOutput(QtMsgType type, const QMessageLogContext &context, const QString &msg)

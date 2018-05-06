@@ -9,13 +9,14 @@
 ///////////////////////////////////////////////////////////////////////////////
 //  CONSTRUCTEUR ET DESTRUCTEUR
 //  RESET
+//  PLAY
+//  RUN
 //
 //  REGISTER REAL JOYSTICK
 //  REGISTER VIRTUAL JOYSTICK
 //  REGISTER LAYER DIM 1
 //  REGISTER LAYER DIM 2
 //
-//  RUN ONE LOOP
 //  PROCESS PENDING MAPPINGS REQUESTS
 //  SET TIME STEP
 //  MS 2 CYCLES
@@ -42,6 +43,7 @@ AbstractProfile::AbstractProfile() : QObject()
 {
 	m_dtms = 15;
 	m_isProcessingEvents = false;
+	m_bFirstStep = true;
 }
 
 AbstractProfile::~AbstractProfile()
@@ -60,52 +62,30 @@ void AbstractProfile::reset()
 	m_virtualJoysticks.clear();
 }
 
-
-
-
-
-
-
-
-// REGISTER REAL JOYSTICK /////////////////////////////////////////////////////
-void AbstractProfile::registerRealJoystick(AbstractRealJoystick *rj)
+// PLAY ///////////////////////////////////////////////////////////////////////
+bool AbstractProfile::play()
 {
-	m_realJoysticks.push_back(rj);
+	m_bFirstStep = true;
+	return this->setupJoysticks();
 }
 
-// REGISTER VIRTUAL JOYSTICK //////////////////////////////////////////////////
-void AbstractProfile::registerVirtualJoystick(VirtualJoystick *vj)
-{
-	m_virtualJoysticks.push_back(vj);
-}
-
-// REGISTER LAYER DIM 1 ///////////////////////////////////////////////////////
-void AbstractProfile::registerLayerDim1(Layers::LayerDim1 layer1, AbstractRealJoystick *rj, uint rButton)
-{
-	m_layerCalculator.registerLayerDim1(layer1,rj,rButton);
-}
-
-// REGISTER LAYER DIM 2 ///////////////////////////////////////////////////////
-void AbstractProfile::registerLayerDim2(Layers::LayerDim2 layer2, AbstractRealJoystick *rj, uint rButton)
-{
-	m_layerCalculator.registerLayerDim2(layer2,rj,rButton);
-}
-
-
-
-
-
-
-
-
-// RUN ONE LOOP ///////////////////////////////////////////////////////////////
-void AbstractProfile::runOneLoop()
+// RUN ////////////////////////////////////////////////////////////////////////
+void AbstractProfile::run()
 {
 	// retrieve the changes of each real joystick
 	for (AbstractRealJoystick *rj : m_realJoysticks)
 	{
 		rj->readGameController();
 		m_changes << rj->changes();
+	}
+	
+	// first run
+	if (m_bFirstStep)
+	{
+		m_bFirstStep = false;
+		this->runFirstStep();
+		m_changes.clear();
+		return;
 	}
 	
 	// process layers changes
@@ -149,6 +129,44 @@ void AbstractProfile::runOneLoop()
 	m_changes.clear();
 	this->processPendingMappingsRequests();
 }
+
+
+
+
+
+
+
+
+// REGISTER REAL JOYSTICK /////////////////////////////////////////////////////
+void AbstractProfile::registerRealJoystick(AbstractRealJoystick *rj)
+{
+	m_realJoysticks.push_back(rj);
+}
+
+// REGISTER VIRTUAL JOYSTICK //////////////////////////////////////////////////
+void AbstractProfile::registerVirtualJoystick(VirtualJoystick *vj)
+{
+	m_virtualJoysticks.push_back(vj);
+}
+
+// REGISTER LAYER DIM 1 ///////////////////////////////////////////////////////
+void AbstractProfile::registerLayerDim1(Layers::LayerDim1 layer1, AbstractRealJoystick *rj, uint rButton)
+{
+	m_layerCalculator.registerLayerDim1(layer1,rj,rButton);
+}
+
+// REGISTER LAYER DIM 2 ///////////////////////////////////////////////////////
+void AbstractProfile::registerLayerDim2(Layers::LayerDim2 layer2, AbstractRealJoystick *rj, uint rButton)
+{
+	m_layerCalculator.registerLayerDim2(layer2,rj,rButton);
+}
+
+
+
+
+
+
+
 
 // PROCESS PENDING MAPPINGS REQUESTS //////////////////////////////////////////
 void AbstractProfile::processPendingMappingsRequests()

@@ -34,14 +34,14 @@ class AbstractProfile : public QObject
 		AbstractProfile& operator=(AbstractProfile &&other) = delete;
 		virtual ~AbstractProfile();
 		
-		// pure virtual functions (called by the window only)
-		virtual bool play() = 0;	// executed when clicking "play"
+		// public functions (called by the window only)
+		bool play();				// executed when clicking "play"
+		void run();					// executed at each time step
 		virtual bool stop() = 0;	// executed when clicking "stop"
 		
-		void runOneLoop();
 		uint ms2cycles(uint msecs) const;
-		void setTimeStep(int dtms);				// useful to count the number of cycles for pulses and delays
-		void reset();							// call it before calling play a second time
+		void setTimeStep(int dtms);			// useful to count the number of cycles for pulses and delays
+		void reset();						// call it before calling play a second time
 		
 		
 	signals:
@@ -79,6 +79,10 @@ class AbstractProfile : public QObject
 		
 		
 	private:
+		// private pure virtual functions
+		virtual bool setupJoysticks() = 0;	// called by "play" function
+		virtual void runFirstStep() = 0;	// executed at the first run (called by "run")
+		
 		void addMapping(AbstractMapping *m);
 		
 		// the following 3 are used to manage mapping modifications requests while they are being processed
@@ -87,6 +91,7 @@ class AbstractProfile : public QObject
 		bool m_isProcessingEvents;
 		
 		int m_dtms;
+		bool m_bFirstStep;
 		
 		LayerCalculator m_layerCalculator;
 		QVector<JoystickChange> m_changes;

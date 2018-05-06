@@ -26,10 +26,9 @@ namespace SC = StarCitizenControls;
 ///////////////////////////////////////////////////////////////////////////////
 //  CONSTRUCTEUR ET DESTRUCTEUR
 //
-//  PLAY
 //  STOP
 //  SETUP JOYSTICKS
-//  INIT
+//  RUN FIRST STEP
 //
 //  BROWSE HOSTILE TARGETS
 //  BROWSE ALL TARGETS
@@ -78,17 +77,17 @@ Profile::~Profile()
 
 
 
-// PLAY ///////////////////////////////////////////////////////////////////////
-bool Profile::play()
-{
-	if (!this->setupJoysticks()) {return false;}
-	this->init();
-	return true;
-}
+
 
 // STOP ///////////////////////////////////////////////////////////////////////
 bool Profile::stop()
 {
+	if (tmwt)
+	{
+		tmwt->setData("BRIGHTNESS",0);
+		tmwt->flush();
+	}
+	
 	if (tmwj) {delete tmwj; tmwj = nullptr;}
 	if (tmwt) {delete tmwt; tmwt = nullptr;}
 	if (mfgx) {delete mfgx; mfgx = nullptr;}
@@ -152,8 +151,8 @@ bool Profile::setupJoysticks()
 	return (tmwj && tmwt && mfgx && vj1 && vj2);
 }
 
-// INIT ///////////////////////////////////////////////////////////////////////
-void Profile::init()
+// RUN FIRST STEP /////////////////////////////////////////////////////////////
+void Profile::runFirstStep()
 {
 	// 1. dealing with layers
 	this->registerLayerDim1(Layers::In, tmwt, TMWT::MSD);
@@ -165,6 +164,9 @@ void Profile::init()
 	vj2->resetReport();
 	vj1->setAxis(VJOY::SLIDER0,0.0f); // vertical strafe at 0 to avoid bad surprises
 	tmwt->setData("BRIGHTNESS",1);
+	tmwt->setData("BACKLIT",false);
+	tmwt->setData("LED4",false);
+	tmwt->setData("LED5",false);
 	
 	// 3. we create the initial mapping
 	// 150 ms for Star Citizen because of the current low framerate

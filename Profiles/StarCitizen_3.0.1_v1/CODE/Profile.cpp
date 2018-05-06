@@ -26,10 +26,9 @@ namespace SC = StarCitizenControls;
 ///////////////////////////////////////////////////////////////////////////////
 //  CONSTRUCTEUR ET DESTRUCTEUR
 //
-//  PLAY
 //  STOP
 //  SETUP JOYSTICKS
-//  INIT
+//  RUN FIRST STEP
 //
 //  BROWSE HOSTILE TARGETS
 //  BROWSE ALL TARGETS
@@ -77,13 +76,7 @@ Profile::~Profile()
 
 
 
-// PLAY ///////////////////////////////////////////////////////////////////////
-bool Profile::play()
-{
-	if (!this->setupJoysticks()) {return false;}
-	this->init();
-	return true;
-}
+
 
 // STOP ///////////////////////////////////////////////////////////////////////
 bool Profile::stop()
@@ -145,8 +138,8 @@ bool Profile::setupJoysticks()
 	return (tmwj && tmwt && mfgx && vj1);
 }
 
-// INIT ///////////////////////////////////////////////////////////////////////
-void Profile::init()
+// RUN FIRST STEP /////////////////////////////////////////////////////////////
+void Profile::runFirstStep()
 {
 	// 1. dealing with layers
 	this->registerLayerDim1(Layers::In, tmwt, TMWT::MSD);
@@ -279,7 +272,7 @@ void Profile::init()
 	Map(tmwt, ControlType::Button, TMWT::FLAPD, AllLayers, new TriggerButtonPress{}, new ActionCallback{[this]() {this->reset_dxxy_trims();}});
 	
 	// we send the report
-	vj1->sendReport();
+	vj1->flush();
 }
 
 
@@ -492,8 +485,8 @@ void Profile::set_JOYXY_for_strafe()
 	vj1->setAxis(VJOY::X, 0.0f);
 	vj1->setAxis(VJOY::Y, 0.0f);
 	// set strafe axes at correct value, otherwise it is necessary to wait for a movement of the stick
-	vj1->setAxis(VJOY::ROTX, -tmwj->axisValue(TMWJ::JOYX));
-	vj1->setAxis(VJOY::ROTY, tmwj->axisValue(TMWJ::JOYY));
+	vj1->setAxis(VJOY::ROTX, tmwj->axisValue(TMWJ::JOYX));
+	vj1->setAxis(VJOY::ROTY, -tmwj->axisValue(TMWJ::JOYY));
 	vj1->setButton(SC::Brake,false);
 }
 

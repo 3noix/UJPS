@@ -21,14 +21,12 @@ class Profile : public AbstractProfile
 		Profile& operator=(Profile &&other) = delete;
 		virtual ~Profile();
 		
-		virtual bool play() override final;
 		virtual bool stop() override final;
 		
 		
 	private:
-		// joysticks
-		bool setupJoysticks();
-		void init();
+		virtual bool setupJoysticks() override final;
+		virtual void runFirstStep() override final;
 		
 		RealJoysticksManager *rjm;
 		EnhancedJoystick *tmwj; // for Thrustmaster Warthog Joystick

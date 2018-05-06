@@ -424,7 +424,7 @@ void MainWindow::slotOneLoop()
 		return;
 	}
 	
-	try {m_profile->runOneLoop();}
+	try {m_profile->run();}
 	catch (std::exception &e) {textEdit->addMessage(e.what(),Qt::red);}
 }
 

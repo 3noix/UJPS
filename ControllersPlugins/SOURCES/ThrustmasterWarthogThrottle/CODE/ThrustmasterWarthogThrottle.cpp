@@ -62,7 +62,7 @@ ThrustmasterWarthogThrottle::ThrustmasterWarthogThrottle(QGameController *c) : R
 	// initialize all shut down
 	m_hidDevice = new HidDevice(0x044F,0x0404);
 	m_hidDevice->openHidDevice();
-	m_hidDevice->writeData(m_outputData,4);
+	//m_hidDevice->writeData(m_outputData,4);
 }
 
 // DESTRUCTEUR ////////////////////////////////////////////////////////////////

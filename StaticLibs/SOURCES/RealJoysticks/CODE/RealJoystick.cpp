@@ -35,6 +35,7 @@ RealJoystick::RealJoystick(QGameController *c) : QObject{}, AbstractRealJoystick
 {
 	Q_ASSERT(c);
 	m_controller = c;
+	m_controller->readGameController();
 	
 	QObject::connect(c,&QGameController::gameControllerAxisEvent,this,&RealJoystick::slotGameControllerAxisEvent);
 	QObject::connect(c,&QGameController::gameControllerButtonEvent,this,&RealJoystick::slotGameControllerButtonEvent);
