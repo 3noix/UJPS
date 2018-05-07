@@ -84,6 +84,9 @@ void AbstractProfile::run()
 	{
 		m_bFirstStep = false;
 		this->runFirstStep();
+		// flush virtual then real joysticks
+		for (VirtualJoystick *vj : m_virtualJoysticks) {vj->flush();} // send HID report to vJoy devices
+		for (AbstractRealJoystick *rj : m_realJoysticks) {rj->flush();} // implementation defined
 		m_changes.clear();
 		return;
 	}
