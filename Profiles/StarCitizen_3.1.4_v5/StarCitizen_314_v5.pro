@@ -14,7 +14,7 @@ CONFIG(release, debug|release) {
 }
 
 TEMPLATE = lib
-TARGET = StarCitizen_301_v4
+TARGET = StarCitizen_314_v5
 DEPENDPATH += .
 INCLUDEPATH += .
 CONFIG += plugin c++11

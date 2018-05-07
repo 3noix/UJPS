@@ -6,15 +6,22 @@ using VJOY = VirtualJoystick;
 using uint = unsigned int;
 
 
-namespace StarCitizenControls
+namespace StarCitizenControls_Keyboard
 {
-	/*const uint AxisRoll                  = VJOY::X;
-	const uint AxisPitch                 = VJOY::Y;
-	const uint AxisThrust                = VJOY::Z;
-	const uint AxisStrafeLat             = VJOY::ROTX;
-	const uint AxisStrafeLongi           = VJOY::ROTY;
-	const uint AxisYaw                   = VJOY::ROTZ;
-	const uint AxisStrafeVertical        = VJOY::SLIDER0;*/
+	const uint TrackIR_Precision = Key_F13;
+	const uint TrackIR_Center    = Key_F14;
+	const uint TrackIR_Pause     = Key_F15;
+}
+
+namespace StarCitizenControls_vJoy1
+{
+	const uint AxisFlightRoll            = VJOY::X;
+	const uint AxisFlightPitch           = VJOY::Y;
+	const uint AxisFlightYaw             = VJOY::Z;
+	const uint AxisFlightStrafeLongi     = VJOY::ROTX;
+	const uint AxisFlightStrafeLat       = VJOY::ROTY;
+	const uint AxisFlightStrafeVertical  = VJOY::ROTZ;
+	const uint AxisFlightThrust          = VJOY::SLIDER0;
 	
 	const uint LandingSystemToggle       = VJOY::DX1;
 	const uint IncreasePower             = VJOY::DX2;
@@ -77,15 +84,17 @@ namespace StarCitizenControls
 	const uint HeadlightsToggle          = VJOY::DX53;
 	const uint PersonalIdBroadCastToggle = VJOY::DX54;
 	
-	const uint TrackIR_Precision         = Key_F13;
-	const uint TrackIR_Center            = Key_F14;
-	const uint TrackIR_Pause             = Key_F15;
-	
-	const uint Brake                     = VJOY::DX55;
-	const uint Horn                      = VJOY::DX56;
-	
 	const uint LandingTargetLockOnToggle = VJOY::DX57;
 	const uint LaunchMissile             = VJOY::DX58;
+}
+
+namespace StarCitizenControls_vJoy2
+{
+	const uint AxisGroundThrust = VJOY::X;
+	const uint AxisGroundLat    = VJOY::Y;
+	
+	const uint Brake            = VJOY::DX1;
+	const uint Horn             = VJOY::DX2;
 }
 
 #endif

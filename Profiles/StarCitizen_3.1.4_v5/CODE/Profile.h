@@ -35,7 +35,8 @@ class Profile : public AbstractProfile
 		VirtualJoystick  *vj1;  // virtual joystick #1
 		VirtualJoystick  *vj2;  // virtual joystick #2
 		
-		const float brkRight_LDZ  = 0.055f;
+		const bool  bUseLed      = false;
+		const float brkRight_LDZ = 0.055f;
 		const float brkRight_RDZ = 0.1f;
 		const float thrBreak     = -0.80f;
 		
@@ -75,8 +76,6 @@ class Profile : public AbstractProfile
 		
 		// control modes sub-functions
 		void set_JOYXY_for_turn();
-		void set_JOYXY_for_turnNthrottle();
-		void set_JOYXY_for_turnNbrake();
 		void set_JOYXY_for_landing();
 		void set_JOYXY_for_strafe();
 		void set_JOYXY_for_rollNpitch();
@@ -88,16 +87,14 @@ class Profile : public AbstractProfile
 		void set_BUTTONS_for_landing();
 		void set_BUTTONS_for_cruise();
 		
+		void reset_THR_and_pedals();
 		void set_THR_and_pedals();
 		void set_THR_for_nothing();
-		void set_THR_for_ground();
 		void set_THR_for_landing();
 		void set_THR_for_cruise();
 		
 		void set_BRKRIGHT_for_groundForward();
 		void set_BRKRIGHT_for_groundBackward();
-		void set_THRLEFT_for_groundForward();
-		void set_THRLEFT_for_groundBackward();
 		void set_THRLEFT_for_verticalStrafe();
 		void set_THRLEFT_for_nothing();
 		void set_THRRIGHT_for_flightThrottle();
