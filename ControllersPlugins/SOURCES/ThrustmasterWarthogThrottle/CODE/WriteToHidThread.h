@@ -29,12 +29,13 @@ class WriteToHidThread : public QThread
 		
 		
 	private:
+		void stop();
 		QMutex m_mutex;
+		bool m_abort;
 		
 		QList<QPair<quint8,quint8>> m_queue;
 		HidDevice *m_hidDevice;
 };
 
 #endif
-
 
