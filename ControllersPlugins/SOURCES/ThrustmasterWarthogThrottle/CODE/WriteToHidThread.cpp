@@ -29,6 +29,7 @@ WriteToHidThread::~WriteToHidThread()
 {
 	this->stop();
 	this->wait();
+	delete m_hidDevice;
 }
 
 
