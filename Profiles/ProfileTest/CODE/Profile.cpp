@@ -84,7 +84,6 @@ bool Profile::setupJoysticks()
 	
 	// virtual joystick(s) setup
 	vj1 = new VirtualJoystick(1,128);
-	QObject::connect(vj1,&VirtualJoystick::message,this,&Profile::message);
 	emit message("Virtual joystick 1 configured",Qt::black);
 	this->registerVirtualJoystick(vj1);
 	

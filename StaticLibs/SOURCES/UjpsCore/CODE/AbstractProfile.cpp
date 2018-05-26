@@ -177,6 +177,7 @@ EnhancedJoystick* AbstractProfile::registerRealJoystick(RemoteJoystickServer *rj
 {
 	if (!rjs) {return nullptr;}
 	
+	QObject::connect(rjs,SIGNAL(message(QString,QColor)),this,SIGNAL(message(QString,QColor)));
 	EnhancedJoystick *erj = new EnhancedJoystick{rjs,true};
 	m_realJoysticks.push_back(erj);
 	return erj;
@@ -185,6 +186,7 @@ EnhancedJoystick* AbstractProfile::registerRealJoystick(RemoteJoystickServer *rj
 // REGISTER VIRTUAL JOYSTICK //////////////////////////////////////////////////
 void AbstractProfile::registerVirtualJoystick(VirtualJoystick *vj)
 {
+	QObject::connect(vj,SIGNAL(message(QString,QColor)),this,SIGNAL(message(QString,QColor)));
 	m_virtualJoysticks.push_back(vj);
 }
 
