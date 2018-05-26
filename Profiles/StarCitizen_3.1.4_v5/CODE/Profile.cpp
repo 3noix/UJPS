@@ -9,12 +9,11 @@ LayersCombo AllLayers{};
 using namespace Keys;
 
 #include "EnhancedJoystick.h"
-#include "RealJoysticksManager.h"
 #include "ThrustmasterWarthogJoystick.h"
 #include "ThrustmasterWarthogThrottle.h"
 #include "MfgCrosswindRudderPedals.h"
 #include "StarCitizenControls.h"
-#include <QCoreApplication>
+#include "Lim.h"
 
 namespace TMWJ = ThrustmasterWarthogJoystick;
 namespace TMWT = ThrustmasterWarthogThrottle;
@@ -27,6 +26,7 @@ namespace SC2 = StarCitizenControls_vJoy2;
 #include "Profile_shields.cpp"
 #include "Profile_trims.cpp"
 #include "Profile_modes.cpp"
+#include "Profile_configleds.cpp"
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -41,7 +41,6 @@ namespace SC2 = StarCitizenControls_vJoy2;
 // CONSTRUCTEUR ET DESTRUCTEUR ////////////////////////////////////////////////
 Profile::Profile() : AbstractProfile()
 {
-	rjm  = nullptr;
 	tmwj = nullptr;
 	tmwt = nullptr;
 	mfgx = nullptr;
@@ -51,12 +50,14 @@ Profile::Profile() : AbstractProfile()
 	ncPulse = ms2cycles(150); // 150 ms for Star Citizen because of the current low framerate
 	m_bShieldsHorizontalMode = true;
 	m_targetsTypeToCycle = 2;
+	
+	m_bBacklit = false;
+	m_brightness = 1;
 }
 
 Profile::~Profile()
 {
 	this->stop();
-	if (rjm) {delete rjm; rjm = nullptr;}
 }
 
 
@@ -67,20 +68,24 @@ Profile::~Profile()
 
 
 // STOP ///////////////////////////////////////////////////////////////////////
-bool Profile::stop()
+void Profile::stop()
 {
+	// set led brightness at 0
 	if (tmwt)
 	{
 		tmwt->setData("BRIGHTNESS",0);
 		tmwt->flush();
 	}
 	
-	if (tmwj) {delete tmwj; tmwj = nullptr;}
-	if (tmwt) {delete tmwt; tmwt = nullptr;}
-	if (mfgx) {delete mfgx; mfgx = nullptr;}
-	if (vj1)  {delete vj1;  vj1  = nullptr;}
-	if (vj2)  {delete vj2;  vj2  = nullptr;}
-	return true;
+	// UnmapAll, delete real and virtual joysticks
+	this->AbstractProfile::stop();
+	
+	// it is a good idea to set them to nullptr
+	tmwj = nullptr;
+	tmwt = nullptr;
+	mfgx = nullptr;
+	vj1  = nullptr;
+	vj2  = nullptr;
 }
 
 // SETUP JOYSTICKS ////////////////////////////////////////////////////////////
@@ -91,45 +96,29 @@ bool Profile::setupJoysticks()
 	// in the QtControllerModif lib (cf line 25 of qgamecontroller_win.cpp)
 	
 	// we retrieve pointers on real joysticks we are interested in
-	if (!rjm)
-	{
-		rjm = new RealJoysticksManager{};
-		QString controllersPluginsDirPath = QCoreApplication::applicationDirPath() + "/../../ControllersPlugins/PLUGINS/";
-		rjm->loadPlugins(QCoreApplication::applicationDirPath() + "/../../ControllersPlugins/PLUGINS/");
-		QObject::connect(rjm, SIGNAL(message(QString,QColor)), this, SIGNAL(message(QString,QColor)));
-		rjm->searchForControllers();
-	}
-	bool btmwj = rjm->joystick("Joystick - HOTAS Warthog");
-	bool btmwt = rjm->joystick("Throttle - HOTAS Warthog");
-	bool bmfgx = rjm->joystick("MFG Crosswind V2");
+	tmwj = this->registerRealJoystick("Joystick - HOTAS Warthog");
+	tmwt = this->registerRealJoystick("Throttle - HOTAS Warthog");
+	mfgx = this->registerRealJoystick("MFG Crosswind V2");
 	
-	if (btmwj) {emit message("Warthog joystick detected !",Qt::black);}
+	if (tmwj) {emit message("Warthog joystick detected !",Qt::black);}
 	else {emit message("Warthog joystick not detected !",Qt::red);}
 	
-	if (btmwt) {emit message("Warthog throttle detected !",Qt::black);}
+	if (tmwt) {emit message("Warthog throttle detected !",Qt::black);}
 	else {emit message("Warthog throttle not detected !",Qt::red);}
 	
-	if (bmfgx) {emit message("MFG Crosswind rudder pedals detected !",Qt::black);}
+	if (mfgx) {emit message("MFG Crosswind rudder pedals detected !",Qt::black);}
 	else {emit message("MFG Crosswind rudder pedals not detected !",Qt::red);}
 	
-	if (!btmwj || !btmwt || !bmfgx) {return false;}
-	
-	tmwj = new EnhancedJoystick(rjm->joystick("Joystick - HOTAS Warthog"),false);
-	tmwt = new EnhancedJoystick(rjm->joystick("Throttle - HOTAS Warthog"),false);
-	mfgx = new EnhancedJoystick(rjm->joystick("MFG Crosswind V2"),false);
-	
-	this->registerRealJoystick(tmwj);
-	this->registerRealJoystick(tmwt);
-	this->registerRealJoystick(mfgx);
+	if (!tmwj || !tmwt || !mfgx) {return false;}
 	
 	
 	// virtual joysticks setup
-	vj1 = new VirtualJoystick(1,128);
+	vj1 = new VirtualJoystick(1,50);
 	QObject::connect(vj1,&VirtualJoystick::message,this,&Profile::message);
 	emit message("Virtual joystick 1 configured",Qt::black);
 	this->registerVirtualJoystick(vj1);
 	
-	vj2 = new VirtualJoystick(2,34);
+	vj2 = new VirtualJoystick(2,50);
 	QObject::connect(vj2,&VirtualJoystick::message,this,&Profile::message);
 	emit message("Virtual joystick 2 configured",Qt::black);
 	this->registerVirtualJoystick(vj2);
@@ -152,14 +141,12 @@ void Profile::runFirstStep()
 	vj1->setAxis(SC1::AxisFlightStrafeVertical,0.0f); // vertical strafe at 0 to avoid bad surprises
 	
 	// leds initialisation
-	if (bUseLed)
-	{
-		tmwt->setData("BRIGHTNESS",1);
-		tmwt->setData("BACKLIT",false);
-		tmwt->setData("LED4",false);
-		tmwt->setData("LED5",false);
-	}
-	else {tmwt->setData("BRIGHTNESS",0);}
+	if (bUseLed) {m_brightness = 1;}
+	else {m_brightness = 0;}
+	tmwt->setData("BRIGHTNESS",m_brightness);
+	tmwt->setData("BACKLIT",m_bBacklit);
+	tmwt->setData("LED4",false);
+	tmwt->setData("LED5",false);
 	
 	// 3. we create the initial mapping
 	// 150 ms for Star Citizen because of the current low framerate
@@ -225,10 +212,15 @@ void Profile::runFirstStep()
 	MapButton(tmwj, TMWJ::S3,  AllLayers, vj1, SC1::FireGroup2);
 	
 	// IFCS safeties and look behind (HAT 1)
-	MapButton(tmwj, TMWJ::H1L, AllLayers, vj1, SC1::GForceSafetyToggle);
-	MapButton(tmwj, TMWJ::H1U, AllLayers, vj1, SC1::ESPToggle);
-	MapButton(tmwj, TMWJ::H1R, AllLayers, vj1, SC1::ComstabToggle);
+	MapButton(tmwj, TMWJ::H1L, {"o"}, vj1, SC1::GForceSafetyToggle);
+	MapButton(tmwj, TMWJ::H1U, {"o"}, vj1, SC1::ComstabToggle);
+	MapButton(tmwj, TMWJ::H1R, {"o"}, vj1, SC1::ESPToggle);
 	MapButton(tmwj, TMWJ::H1D, AllLayers, vj1, SC1::LookBehind);
+	
+	// config led brightness and backlit
+	Map(tmwj, ControlType::Button, TMWJ::H1L, {"i"}, new TriggerButtonPress{}, new ActionCallback{[this](){this->ledBrightnessDown();}});
+	Map(tmwj, ControlType::Button, TMWJ::H1U, {"i"}, new TriggerButtonPress{}, new ActionCallback{[this](){this->toggleBacklit();}});
+	Map(tmwj, ControlType::Button, TMWJ::H1R, {"i"}, new TriggerButtonPress{}, new ActionCallback{[this](){this->ledBrightnessUp();}});
 	
 	// COUNTER-MEASURES (hat 2 L/R)
 	MapButton(tmwj, TMWJ::H2L, AllLayers, vj1, SC1::CycleCounterMeasures);
@@ -249,6 +241,8 @@ void Profile::runFirstStep()
 	MapButton(tmwj, TMWJ::H4D, {"o"}, vj1, SC1::AcquireMissileLock);
 	
 	// POWER
+	MapButton(tmwt, TMWT::EOLIGN, AllLayers, vj2, SC2::FlightReady);
+	Map(tmwt, ControlType::Button, TMWT::EOLMOTOR, AllLayers, new TriggerButtonPress{}, new ActionButtonPulse{vj2,SC2::PowerOff,ncPulse});
 	// switchs on : off
 	auto powerPreset1Toggle = [this]() {if (!tmwt->buttonPressed(TMWT::LDGH)) DoAction(new ActionButtonPulse{vj1,SC1::PowerPreset1Toggle,ncPulse});};
 	auto powerPreset2Toggle = [this]() {if (!tmwt->buttonPressed(TMWT::LDGH)) DoAction(new ActionButtonPulse{vj1,SC1::PowerPreset2Toggle,ncPulse});};
@@ -265,12 +259,12 @@ void Profile::runFirstStep()
 	// SHIELDS distribution (slew control)
 	MapButtonTempo(tmwt, TMWT::SC, AllLayers, ms2cycles(500),
 		new ActionCallback{[this]() {this->switchShieldsMode();}},
-		new ActionButtonPulse{vj1, SC1::ResetShieldsLevels, ncPulse}
+		new ActionButtonPulse{vj2, SC2::ResetShieldsLevels, ncPulse}
 	);
 	MapAxis2(tmwt, TMWT::SCX, AllLayers, {-0.84,0.84},{
-		new ActionButtonPress(vj1,SC1::ShieldRaiseLeft),
-		new ActionChain({new ActionButtonRelease{vj1,SC1::ShieldRaiseLeft}, new ActionButtonRelease{vj1,SC1::ShieldRaiseRight}}),
-		new ActionButtonPress(vj1,SC1::ShieldRaiseRight)
+		new ActionButtonPress(vj2,SC2::ShieldRaiseLeft),
+		new ActionChain({new ActionButtonRelease{vj2,SC2::ShieldRaiseLeft}, new ActionButtonRelease{vj2,SC2::ShieldRaiseRight}}),
+		new ActionButtonPress(vj2,SC2::ShieldRaiseRight)
 	});
 	MapAxis2(tmwt, TMWT::SCY, AllLayers, {-0.84,0.84},{
 		new ActionCallback{[this]() {this->shieldsDownArrow();}},

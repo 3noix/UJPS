@@ -21,14 +21,13 @@ class Profile : public AbstractProfile
 		Profile& operator=(Profile &&other) = delete;
 		virtual ~Profile();
 		
-		virtual bool stop() override final;
+		virtual void stop() override final;
 		
 		
 	private:
 		virtual bool setupJoysticks() override final;
 		virtual void runFirstStep() override final;
 		
-		RealJoysticksManager *rjm;
 		EnhancedJoystick *tmwj; // for Thrustmaster Warthog Joystick
 		EnhancedJoystick *tmwt; // for Thrustmaster Warthog Throttle
 		EnhancedJoystick *mfgx; // for MFG Crosswind V2 rudder pedals

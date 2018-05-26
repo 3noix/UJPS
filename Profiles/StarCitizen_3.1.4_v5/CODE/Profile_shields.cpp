@@ -7,23 +7,23 @@ void Profile::switchShieldsMode()
 // SHIELDS DOWN ARROW /////////////////////////////////////////////////////////
 void Profile::shieldsDownArrow()
 {
-	if (m_bShieldsHorizontalMode) {vj1->setButton(SC1::ShieldRaiseBack,true);}
-	else {vj1->setButton(SC1::ShieldRaiseBottom,true);}
+	if (m_bShieldsHorizontalMode) {vj2->setButton(SC2::ShieldRaiseBack,true);}
+	else {vj2->setButton(SC2::ShieldRaiseBottom,true);}
 }
 
 // SHIELDS UP ARROW ///////////////////////////////////////////////////////////
 void Profile::shieldsUpArrow()
 {
-	if (m_bShieldsHorizontalMode) {vj1->setButton(SC1::ShieldRaiseFront,true);}
-	else {vj1->setButton(SC1::ShieldRaiseTop,true);}
+	if (m_bShieldsHorizontalMode) {vj2->setButton(SC2::ShieldRaiseFront,true);}
+	else {vj2->setButton(SC2::ShieldRaiseTop,true);}
 }
 
 // RELEASE LONGI SHIELDS BUTTONS //////////////////////////////////////////////
 void Profile::releaseLongiShieldsButtons()
 {
-	vj1->setButton(SC1::ShieldRaiseFront,false);
-	vj1->setButton(SC1::ShieldRaiseBack,false);
-	vj1->setButton(SC1::ShieldRaiseTop,false);
-	vj1->setButton(SC1::ShieldRaiseBottom,false);
+	vj2->setButton(SC2::ShieldRaiseFront,false);
+	vj2->setButton(SC2::ShieldRaiseBack,false);
+	vj2->setButton(SC2::ShieldRaiseTop,false);
+	vj2->setButton(SC2::ShieldRaiseBottom,false);
 }
 

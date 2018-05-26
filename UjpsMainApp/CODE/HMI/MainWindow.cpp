@@ -235,9 +235,13 @@ void MainWindow::closeEvent(QCloseEvent *event)
 	textEdit->addMessage("Closing",Qt::black);
 	timer->stop();
 	this->setState(HmiState::Quitting);
-	this->unloadProfile(true);
 	
-	QThread::sleep(1);
+	if (m_loader)
+	{
+		this->unloadProfile(true);
+		QThread::sleep(1);
+	}
+	
 	event->accept();
 }
 
@@ -369,7 +373,6 @@ void MainWindow::slotPlay()
 	timer->setInterval(boxRefreshRate->value());
 	try
 	{
-		m_profile->reset();
 		if (!m_profile->play())
 		{
 			textEdit->addMessage("Failed to initialize profile",Qt::red);

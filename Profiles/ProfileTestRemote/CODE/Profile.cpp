@@ -10,9 +10,7 @@ using namespace Keys;
 
 #include "EnhancedJoystick.h"
 #include "RemoteJoystickServer.h"
-#include "RealJoysticksManager.h"
 #include "ThrustmasterWarthogJoystick.h"
-#include <QCoreApplication>
 
 using VJOY = VirtualJoystick;
 namespace TMWJ = ThrustmasterWarthogJoystick;
@@ -30,7 +28,6 @@ namespace TMWJ = ThrustmasterWarthogJoystick;
 // CONSTRUCTEUR ET DESTRUCTEUR ////////////////////////////////////////////////
 Profile::Profile() : AbstractProfile()
 {
-	rjm  = nullptr;
 	tmwj = nullptr;
 	rjse = nullptr;
 	vj1  = nullptr;
@@ -39,23 +36,22 @@ Profile::Profile() : AbstractProfile()
 Profile::~Profile()
 {
 	this->stop();
-	if (rjm) {delete rjm; rjm = nullptr;}
 }
 
 
 
 
 
-
-
-
 // STOP ///////////////////////////////////////////////////////////////////////
-bool Profile::stop()
+void Profile::stop()
 {
-	if (tmwj) {delete tmwj; tmwj = nullptr;}
-	if (rjse) {delete rjse; rjse = nullptr;}
-	if (vj1)  {delete vj1;  vj1  = nullptr;}
-	return true;
+	// UnmapAll, delete real and virtual joysticks
+	this->AbstractProfile::stop();
+	
+	// it is a good idea to set them to nullptr
+	tmwj = nullptr;
+	rjse = nullptr;
+	vj1  = nullptr;
 }
 
 // SETUP JOYSTICKS ////////////////////////////////////////////////////////////
@@ -66,29 +62,14 @@ bool Profile::setupJoysticks()
 	// in the QtControllerModif lib (cf line 25 of qgamecontroller_win.cpp)
 	
 	// we retrieve pointers on real joysticks we are interested in
-	if (!rjm)
-	{
-		rjm = new RealJoysticksManager{};
-		QString controllersPluginsDirPath = QCoreApplication::applicationDirPath() + "/../../ControllersPlugins/PLUGINS/";
-		rjm->loadPlugins(QCoreApplication::applicationDirPath() + "/../../ControllersPlugins/PLUGINS/");
-		QObject::connect(rjm, SIGNAL(message(QString,QColor)), this, SIGNAL(message(QString,QColor)));
-		rjm->searchForControllers();
-	}
-	
-	AbstractRealJoystick *rj1 = rjm->joystick("Joystick - HOTAS Warthog");
-	if (rj1) {emit message("Warthog joystick detected !",Qt::black);}
+	tmwj = this->registerRealJoystick("Joystick - HOTAS Warthog");
+	if (tmwj) {emit message("Warthog joystick detected !",Qt::black);}
 	else {emit message("Warthog joystick not detected !",Qt::red); return false;}
 	
 	emit message("Now connect the client application for the remote controller", Qt::black);
-	RemoteJoystickServer *rj2 = new RemoteJoystickServer{"TouchScreen2",32241,100};
-	QObject::connect(rj2,SIGNAL(message(QString,QColor)),this,SIGNAL(message(QString,QColor)));
-	if (!rj2) {return false;}
-	
-	tmwj = new EnhancedJoystick(rj1,false);
-	rjse = new EnhancedJoystick(rj2,true);
-	
-	this->registerRealJoystick(tmwj);
-	this->registerRealJoystick(rjse);
+	RemoteJoystickServer *rjs = new RemoteJoystickServer{"TouchScreen2",32241,100};
+	QObject::connect(rjs,SIGNAL(message(QString,QColor)),this,SIGNAL(message(QString,QColor)));
+	rjse = this->registerRealJoystick(rjs);
 	
 	
 	// virtual joystick(s) setup
@@ -107,7 +88,8 @@ void Profile::runFirstStep()
 	vj1->resetReport();
 	
 	MapAxisRelative(tmwj, TMWJ::JOYY, AllLayers, vj1, VJOY::Z, 4000.0f);
-	Map(tmwj, ControlType::Button, TMWJ::TG1, AllLayers, new TriggerButtonPress{}, new ActionCallback{[this](){rjse->setData("button3",true);}});
+	Map(tmwj, ControlType::Button, TMWJ::TG1, AllLayers, new TriggerButtonPress{},   new ActionCallback{[this](){rjse->setData("button3",true);}});
+	Map(tmwj, ControlType::Button, TMWJ::TG1, AllLayers, new TriggerButtonRelease{}, new ActionCallback{[this](){rjse->setData("button3",false);}});
 	
 	MapButton(rjse, 0, AllLayers, vj1, VJOY::DX1);
 	MapButton(rjse, 1, AllLayers, vj1, VJOY::DX2);

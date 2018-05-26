@@ -21,26 +21,32 @@ class Profile : public AbstractProfile
 		Profile& operator=(Profile &&other) = delete;
 		virtual ~Profile();
 		
-		virtual bool stop() override final;
+		virtual void stop() override final;
 		
 		
 	private:
 		virtual bool setupJoysticks() override final;
 		virtual void runFirstStep() override final;
 		
-		RealJoysticksManager *rjm;
 		EnhancedJoystick *tmwj; // for Thrustmaster Warthog Joystick
 		EnhancedJoystick *tmwt; // for Thrustmaster Warthog Throttle
 		EnhancedJoystick *mfgx; // for MFG Crosswind V2 rudder pedals
 		VirtualJoystick  *vj1;  // virtual joystick #1
 		VirtualJoystick  *vj2;  // virtual joystick #2
 		
-		const bool  bUseLed      = false;
+		const bool  bUseLed      = true;
 		const float brkRight_LDZ = 0.055f;
 		const float brkRight_RDZ = 0.1f;
 		const float thrBreak     = -0.80f;
 		
 		
+		
+		// led configuration
+		void ledBrightnessDown();
+		void ledBrightnessUp();
+		void toggleBacklit();
+		bool m_bBacklit;
+		quint8 m_brightness;
 		
 		// control mode
 		void setControlsGround();

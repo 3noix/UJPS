@@ -1,8 +1,13 @@
 #include "AbstractProfile.h"
+#include "RealJoysticksManager.h"
+#include "EnhancedJoystick.h"
+#include "RemoteJoystickServer.h"
 #include "VirtualJoystick.h"
 #include "MAPPINGS/Mappings.h"
 #include "TRIGGERS/Triggers.h"
 #include "ACTIONS/Actions.h"
+
+#include <QCoreApplication>
 #include <vector>
 
 
@@ -10,6 +15,7 @@
 //  CONSTRUCTEUR ET DESTRUCTEUR
 //  RESET
 //  PLAY
+//  STOP
 //  RUN
 //
 //  REGISTER REAL JOYSTICK
@@ -41,25 +47,26 @@
 // CONSTRUCTEUR ET DESTRUCTEUR ////////////////////////////////////////////////
 AbstractProfile::AbstractProfile() : QObject()
 {
-	m_dtms = 15;
 	m_isProcessingEvents = false;
+	m_dtms = 15;
 	m_bFirstStep = true;
+	
+	m_rjm = new RealJoysticksManager{};
+	QString controllersPluginsDirPath = QCoreApplication::applicationDirPath() + "/../../ControllersPlugins/PLUGINS/";
+	m_rjm->loadPlugins(controllersPluginsDirPath);
+	QObject::connect(m_rjm, SIGNAL(message(QString,QColor)), this, SIGNAL(message(QString,QColor)));
+	m_rjm->searchForControllers();
 }
 
 AbstractProfile::~AbstractProfile()
 {
 	this->UnmapAll();
-}
-
-// RESET //////////////////////////////////////////////////////////////////////
-void AbstractProfile::reset()
-{
-	this->UnmapAll();
-	m_mappingsRequests.clear();
-	m_layerCalculator.clear();
-	m_changes.clear();
-	m_realJoysticks.clear();
-	m_virtualJoysticks.clear();
+	
+	if (m_rjm)
+	{
+		delete m_rjm;
+		m_rjm = nullptr;
+	}
 }
 
 // PLAY ///////////////////////////////////////////////////////////////////////
@@ -67,6 +74,21 @@ bool AbstractProfile::play()
 {
 	m_bFirstStep = true;
 	return this->setupJoysticks();
+}
+
+// STOP ///////////////////////////////////////////////////////////////////////
+void AbstractProfile::stop()
+{
+	this->UnmapAll();
+	
+	m_mappingsRequests.clear();
+	m_layerCalculator.clear();
+	m_changes.clear();
+	
+	qDeleteAll(m_realJoysticks);
+	qDeleteAll(m_virtualJoysticks);
+	m_realJoysticks.clear();
+	m_virtualJoysticks.clear();
 }
 
 // RUN ////////////////////////////////////////////////////////////////////////
@@ -141,9 +163,23 @@ void AbstractProfile::run()
 
 
 // REGISTER REAL JOYSTICK /////////////////////////////////////////////////////
-void AbstractProfile::registerRealJoystick(AbstractRealJoystick *rj)
+EnhancedJoystick* AbstractProfile::registerRealJoystick(const QString &description, int num)
 {
-	m_realJoysticks.push_back(rj);
+	AbstractRealJoystick *rj = m_rjm->joystick(description,num);
+	if (!rj) {return nullptr;}
+	
+	EnhancedJoystick *erj = new EnhancedJoystick{rj,false};
+	m_realJoysticks.push_back(erj);
+	return erj;
+}
+
+EnhancedJoystick* AbstractProfile::registerRealJoystick(RemoteJoystickServer *rjs)
+{
+	if (!rjs) {return nullptr;}
+	
+	EnhancedJoystick *erj = new EnhancedJoystick{rjs,true};
+	m_realJoysticks.push_back(erj);
+	return erj;
 }
 
 // REGISTER VIRTUAL JOYSTICK //////////////////////////////////////////////////

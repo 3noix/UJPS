@@ -39,8 +39,8 @@ namespace StarCitizenControls_vJoy1
 	const uint FireGroup1                = VJOY::DX14;
 	const uint FireGroup2                = VJOY::DX15;
 	const uint GForceSafetyToggle        = VJOY::DX16;
-	const uint ESPToggle                 = VJOY::DX17;
-	const uint ComstabToggle             = VJOY::DX18;
+	const uint ComstabToggle             = VJOY::DX17;
+	const uint ESPToggle                 = VJOY::DX18;
 	const uint LookBehind                = VJOY::DX19;
 	
 	const uint CycleCounterMeasures      = VJOY::DX20;
@@ -73,28 +73,31 @@ namespace StarCitizenControls_vJoy1
 	const uint PowerPreset3Increase      = VJOY::DX44;
 	const uint ResetPowerDistribution    = VJOY::DX45;
 	
-	const uint ResetShieldsLevels        = VJOY::DX46;
-	const uint ShieldRaiseLeft           = VJOY::DX47;
-	const uint ShieldRaiseRight          = VJOY::DX48;
-	const uint ShieldRaiseFront          = VJOY::DX49;
-	const uint ShieldRaiseBack           = VJOY::DX50;
-	const uint ShieldRaiseTop            = VJOY::DX51;
-	const uint ShieldRaiseBottom         = VJOY::DX52;
-	
-	const uint HeadlightsToggle          = VJOY::DX53;
-	const uint PersonalIdBroadCastToggle = VJOY::DX54;
-	
-	const uint LandingTargetLockOnToggle = VJOY::DX57;
-	const uint LaunchMissile             = VJOY::DX58;
+	const uint HeadlightsToggle          = VJOY::DX46;
+	const uint PersonalIdBroadCastToggle = VJOY::DX47;
+	const uint LandingTargetLockOnToggle = VJOY::DX48;
+	const uint LaunchMissile             = VJOY::DX49;
+	const uint MatchTargetVelocity       = VJOY::DX50;
 }
 
 namespace StarCitizenControls_vJoy2
 {
-	const uint AxisGroundThrust = VJOY::X;
-	const uint AxisGroundLat    = VJOY::Y;
+	const uint AxisGroundThrust   = VJOY::X;
+	const uint AxisGroundLat      = VJOY::Y;
 	
-	const uint Brake            = VJOY::DX1;
-	const uint Horn             = VJOY::DX2;
+	const uint ResetShieldsLevels = VJOY::DX1;
+	const uint ShieldRaiseLeft    = VJOY::DX2;
+	const uint ShieldRaiseRight   = VJOY::DX3;
+	const uint ShieldRaiseFront   = VJOY::DX4;
+	const uint ShieldRaiseBack    = VJOY::DX5;
+	const uint ShieldRaiseTop     = VJOY::DX6;
+	const uint ShieldRaiseBottom  = VJOY::DX7;
+	
+	const uint FlightReady        = VJOY::DX8;
+	const uint PowerOff           = VJOY::DX9;
+	
+	const uint Brake              = VJOY::DX30;
+	const uint Horn               = VJOY::DX31;
 }
 
 #endif

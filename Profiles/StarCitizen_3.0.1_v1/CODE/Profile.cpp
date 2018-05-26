@@ -9,12 +9,10 @@ LayersCombo AllLayers{};
 using namespace Keys;
 
 #include "EnhancedJoystick.h"
-#include "RealJoysticksManager.h"
 #include "ThrustmasterWarthogJoystick.h"
 #include "ThrustmasterWarthogThrottle.h"
 #include "MfgCrosswindRudderPedals.h"
 #include "StarCitizenControls.h"
-#include <QCoreApplication>
 
 using VJOY = VirtualJoystick;
 namespace TMWJ = ThrustmasterWarthogJoystick;
@@ -54,7 +52,6 @@ namespace SC = StarCitizenControls;
 // CONSTRUCTEUR ET DESTRUCTEUR ////////////////////////////////////////////////
 Profile::Profile() : AbstractProfile()
 {
-	rjm  = nullptr;
 	tmwj = nullptr;
 	tmwt = nullptr;
 	mfgx = nullptr;
@@ -68,7 +65,6 @@ Profile::Profile() : AbstractProfile()
 Profile::~Profile()
 {
 	this->stop();
-	if (rjm) {delete rjm; rjm = nullptr;}
 }
 
 
@@ -79,13 +75,16 @@ Profile::~Profile()
 
 
 // STOP ///////////////////////////////////////////////////////////////////////
-bool Profile::stop()
+void Profile::stop()
 {
-	if (tmwj) {delete tmwj; tmwj = nullptr;}
-	if (tmwt) {delete tmwt; tmwt = nullptr;}
-	if (mfgx) {delete mfgx; mfgx = nullptr;}
-	if (vj1)  {delete vj1;  vj1  = nullptr;}
-	return true;
+	// UnmapAll, delete real and virtual joysticks
+	this->AbstractProfile::stop();
+	
+	// it is a good idea to set them to nullptr
+	tmwj = nullptr;
+	tmwt = nullptr;
+	mfgx = nullptr;
+	vj1  = nullptr;
 }
 
 // SETUP JOYSTICKS ////////////////////////////////////////////////////////////
@@ -96,36 +95,20 @@ bool Profile::setupJoysticks()
 	// in the QtControllerModif lib (cf line 25 of qgamecontroller_win.cpp)
 	
 	// we retrieve pointers on real joysticks we are interested in
-	if (!rjm)
-	{
-		rjm = new RealJoysticksManager{};
-		QString controllersPluginsDirPath = QCoreApplication::applicationDirPath() + "/../../ControllersPlugins/PLUGINS/";
-		rjm->loadPlugins(QCoreApplication::applicationDirPath() + "/../../ControllersPlugins/PLUGINS/");
-		QObject::connect(rjm, SIGNAL(message(QString,QColor)), this, SIGNAL(message(QString,QColor)));
-		rjm->searchForControllers();
-	}
-	bool btmwj = rjm->joystick("Joystick - HOTAS Warthog");
-	bool btmwt = rjm->joystick("Throttle - HOTAS Warthog");
-	bool bmfgx = rjm->joystick("MFG Crosswind V2");
+	tmwj = this->registerRealJoystick("Joystick - HOTAS Warthog");
+	tmwt = this->registerRealJoystick("Throttle - HOTAS Warthog");
+	mfgx = this->registerRealJoystick("MFG Crosswind V2");
 	
-	if (btmwj) {emit message("Warthog joystick detected !",Qt::black);}
+	if (tmwj) {emit message("Warthog joystick detected !",Qt::black);}
 	else {emit message("Warthog joystick not detected !",Qt::red);}
 	
-	if (btmwt) {emit message("Warthog throttle detected !",Qt::black);}
+	if (tmwt) {emit message("Warthog throttle detected !",Qt::black);}
 	else {emit message("Warthog throttle not detected !",Qt::red);}
 	
-	if (bmfgx) {emit message("MFG Crosswind rudder pedals detected !",Qt::black);}
+	if (mfgx) {emit message("MFG Crosswind rudder pedals detected !",Qt::black);}
 	else {emit message("MFG Crosswind rudder pedals not detected !",Qt::red);}
 	
-	if (!btmwj || !btmwt || !bmfgx) {return false;}
-	
-	tmwj = new EnhancedJoystick(rjm->joystick("Joystick - HOTAS Warthog"),false);
-	tmwt = new EnhancedJoystick(rjm->joystick("Throttle - HOTAS Warthog"),false);
-	mfgx = new EnhancedJoystick(rjm->joystick("MFG Crosswind V2"),false);
-	
-	this->registerRealJoystick(tmwj);
-	this->registerRealJoystick(tmwt);
-	this->registerRealJoystick(mfgx);
+	if (!tmwj || !tmwt || !mfgx) {return false;}
 	
 	
 	// virtual joystick(s) setup

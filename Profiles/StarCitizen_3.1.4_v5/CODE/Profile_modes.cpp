@@ -224,10 +224,10 @@ void Profile::set_THR_and_pedals()
 	
 	// mapping BRK_RIGHT function of THR_RIGHT position
 	MapAxis2(tmwt, TMWT::THR_RIGHT, AllLayers, 1, {
-		new ActionCallback{[this](){this->set_BRKRIGHT_for_groundBackward();}},
-		new ActionCallback{[this](){this->set_BRKRIGHT_for_groundForward();}}
+		new ActionCallback{[this](){this->set_BRKRIGHT_for_groundForward();}},
+		new ActionCallback{[this](){this->set_BRKRIGHT_for_groundBackward();}}
 	});
-	if (tmwt->axisValue(TMWT::THR_RIGHT) > 0)
+	if (tmwt->axisValue(TMWT::THR_RIGHT) < 0)
 		this->set_BRKRIGHT_for_groundForward();
 	else
 		this->set_BRKRIGHT_for_groundBackward();

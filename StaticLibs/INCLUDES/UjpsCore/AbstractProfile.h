@@ -16,6 +16,8 @@
 
 class RealJoysticksManager;
 class AbstractRealJoystick;
+class EnhancedJoystick;
+class RemoteJoystickServer;
 class VirtualJoystick;
 class AbstractMapping;
 class AbstractTrigger;
@@ -37,11 +39,10 @@ class AbstractProfile : public QObject
 		// public functions (called by the window only)
 		bool play();				// executed when clicking "play"
 		void run();					// executed at each time step
-		virtual bool stop() = 0;	// executed when clicking "stop"
+		virtual void stop();		// executed when clicking "stop"
 		
 		uint ms2cycles(uint msecs) const;
 		void setTimeStep(int dtms);			// useful to count the number of cycles for pulses and delays
-		void reset();						// call it before calling play a second time
 		
 		
 	signals:
@@ -71,7 +72,8 @@ class AbstractProfile : public QObject
 		
 		
 	protected:
-		void registerRealJoystick(AbstractRealJoystick *rj);
+		EnhancedJoystick* registerRealJoystick(const QString &description, int num = 0);
+		EnhancedJoystick* registerRealJoystick(RemoteJoystickServer *rjs);
 		void registerVirtualJoystick(VirtualJoystick *vj);
 		
 		void registerLayerDim1(Layers::LayerDim1 layer1, AbstractRealJoystick *rj = nullptr, uint rButton = 0);
@@ -93,6 +95,7 @@ class AbstractProfile : public QObject
 		int m_dtms;
 		bool m_bFirstStep;
 		
+		RealJoysticksManager *m_rjm;
 		LayerCalculator m_layerCalculator;
 		QVector<JoystickChange> m_changes;
 		QVector<AbstractMapping*> m_mappings;
