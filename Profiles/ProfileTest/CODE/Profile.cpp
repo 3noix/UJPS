@@ -65,10 +65,6 @@ void Profile::stop()
 // SETUP JOYSTICKS ////////////////////////////////////////////////////////////
 bool Profile::setupJoysticks()
 {
-	// we allocate the RealJoysticksManager on the heap, because otherwise it will
-	// crash at the second call of setupJoysticks... maybe because of pointer global variable
-	// in the QtControllerModif lib (cf line 25 of qgamecontroller_win.cpp)
-	
 	// we retrieve pointers on real joysticks we are interested in
 	tmwj = this->registerRealJoystick("Joystick - HOTAS Warthog");
 	tmwt = this->registerRealJoystick("Throttle - HOTAS Warthog");
