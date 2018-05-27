@@ -28,13 +28,22 @@ CleanQtProjects.exe %~dp0\ControllersPlugins
 echo.
 echo.
 
-echo cleaning up shortcuts and CleanQtProjects manually
+echo cleaning all compile PLUGINS dlls
+del %~dp0\ControllersPlugins\PLUGINS\LogitechExtreme3D.dll
+del %~dp0\ControllersPlugins\PLUGINS\MfgCrosswindRudderPedals.dll
+del %~dp0\ControllersPlugins\PLUGINS\ThrustmasterTwcsThrottle.dll
+del %~dp0\ControllersPlugins\PLUGINS\ThrustmasterWarthogJoystick.dll
+del %~dp0\ControllersPlugins\PLUGINS\ThrustmasterWarthogThrottle.dll
+del %~dp0\ControllersPlugins\PLUGINS\vJoyDevice.dll
+
+echo removing CleanQtProjects manually
 del %~dp0\CleanQtProjects\.qmake.stash
 del %~dp0\CleanQtProjects\Makefile
 del %~dp0\CleanQtProjects\Makefile.Debug
 del %~dp0\CleanQtProjects\Makefile.Release
 rmdir /S /Q %~dp0\CleanQtProjects\release
 
+echo cleaning up shortcuts
 del %~dp0\UJPS.lnk
 del %~dp0\Monitoring0.lnk
 del %~dp0\Monitoring1.lnk
