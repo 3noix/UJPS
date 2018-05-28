@@ -1,8 +1,9 @@
 echo off
 echo Setting up environment for cleaning projects...
-set PATH=CleanQtProjects/release;%PATH%
+set PATH=%~dp0\CleanQtProjects\release;%PATH%
 echo.
 echo.
+
 
 echo cleaning all projects contained in the sub-directories
 echo in progress...
@@ -28,20 +29,19 @@ CleanQtProjects.exe %~dp0\ControllersPlugins
 echo.
 echo.
 
+
 echo cleaning all compile PLUGINS dlls
-del %~dp0\ControllersPlugins\PLUGINS\LogitechExtreme3D.dll
-del %~dp0\ControllersPlugins\PLUGINS\MfgCrosswindRudderPedals.dll
-del %~dp0\ControllersPlugins\PLUGINS\ThrustmasterTwcsThrottle.dll
-del %~dp0\ControllersPlugins\PLUGINS\ThrustmasterWarthogJoystick.dll
-del %~dp0\ControllersPlugins\PLUGINS\ThrustmasterWarthogThrottle.dll
-del %~dp0\ControllersPlugins\PLUGINS\vJoyDevice.dll
+If exist PLUGINS rmdir /S /Q %~dp0\ControllersPlugins\PLUGINS
+
 
 echo removing CleanQtProjects manually
 del %~dp0\CleanQtProjects\.qmake.stash
 del %~dp0\CleanQtProjects\Makefile
 del %~dp0\CleanQtProjects\Makefile.Debug
 del %~dp0\CleanQtProjects\Makefile.Release
+rmdir /S /Q %~dp0\CleanQtProjects\debug
 rmdir /S /Q %~dp0\CleanQtProjects\release
+
 
 echo cleaning up shortcuts
 del %~dp0\UJPS.lnk
@@ -49,6 +49,8 @@ del %~dp0\Monitoring0.lnk
 del %~dp0\Monitoring1.lnk
 del %~dp0\Monitoring2.lnk
 del %~dp0\AxesCurves.lnk
+echo.
+echo cleaning finished
+
 
 pause
-

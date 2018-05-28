@@ -2,7 +2,7 @@
 <!DOCTYPE genericProperties SYSTEM "genericProperties.xsd">
 <PROPERTIES>
 	<PROPERTY name="debugCompilation" type="bool" value="false"/>
-	<PROPERTY name="mingwBinaryDirPath" type="QString" value="E:\Qt5.7\Tools\mingw530_32\bin"/>
-	<PROPERTY name="qtBinaryDirPath" type="QString" value="E:\Qt5.7\5.7\mingw53_32\bin"/>
+	<PROPERTY name="mingwBinaryDirPath" type="QString" value="C:/Qt/Tools/mingw530_32/bin"/>
+	<PROPERTY name="qtBinaryDirPath" type="QString" value="C:/Qt/5.11.0/mingw53_32/bin"/>
 	<PROPERTY name="releaseCompilation" type="bool" value="true"/>
 </PROPERTIES>

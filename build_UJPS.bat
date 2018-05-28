@@ -9,7 +9,7 @@ echo.
 REM COMPILATION AND DEPLOYMENT OF CLEAN QT PROJECTS UTILITY
 echo compiling CleanQtProjects
 echo.
-cd CleanQtProjects
+cd %~dp0\CleanQtProjects
 qmake
 mingw32-make release
 echo.
