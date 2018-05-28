@@ -1,8 +1,8 @@
 echo off
 
 REM SET PATHS (line 4 to be updated with the paths that match your installation of Qt)
-echo Setting up environment for Qt 5.7 usage...
-set PATH=E:\Qt5.7\5.7\mingw53_32\bin;E:/Qt5.7/Tools/mingw530_32\bin;%PATH%
+echo Setting up environment for Qt 5.11 usage...
+set PATH=C:\Qt\5.11.0\mingw53_32\bin;C:\Qt\Tools\mingw530_32\bin;%PATH%
 echo.
 
 
@@ -150,51 +150,51 @@ echo.
 
 
 REM create shortcut to UjpsMainApp
-set SCRIPT="%cd%\createShorcuts.vbs"
+set SCRIPT="%~dp0\createShorcuts.vbs"
 echo Set oWS = WScript.CreateObject("WScript.Shell") >> %SCRIPT%
-echo sLinkFile = "%cd%\UJPS.lnk" >> %SCRIPT%
+echo sLinkFile = "%~dp0\UJPS.lnk" >> %SCRIPT%
 echo Set oLink = oWS.CreateShortcut(sLinkFile) >> %SCRIPT%
-echo oLink.TargetPath = "%cd%\UjpsMainApp\release\UJPS.exe" >> %SCRIPT%
+echo oLink.TargetPath = "%~dp0\UjpsMainApp\release\UJPS.exe" >> %SCRIPT%
 echo oLink.Save >> %SCRIPT%
 cscript /nologo %SCRIPT%
 del %SCRIPT%
 
 REM create shortcut to Monitoring0
-set SCRIPT="%cd%\createShorcuts.vbs"
+set SCRIPT="%~dp0\createShorcuts.vbs"
 echo Set oWS = WScript.CreateObject("WScript.Shell") >> %SCRIPT%
-echo sLinkFile = "%cd%\Monitoring0.lnk" >> %SCRIPT%
+echo sLinkFile = "%~dp0\Monitoring0.lnk" >> %SCRIPT%
 echo Set oLink = oWS.CreateShortcut(sLinkFile) >> %SCRIPT%
-echo oLink.TargetPath = "%cd%\Monitoring0\release\Monitoring0.exe" >> %SCRIPT%
+echo oLink.TargetPath = "%~dp0\Monitoring0\release\Monitoring0.exe" >> %SCRIPT%
 echo oLink.Save >> %SCRIPT%
 cscript /nologo %SCRIPT%
 del %SCRIPT%
 
 REM create shortcut to Monitoring1
-set SCRIPT="%cd%\createShorcuts.vbs"
+set SCRIPT="%~dp0\createShorcuts.vbs"
 echo Set oWS = WScript.CreateObject("WScript.Shell") >> %SCRIPT%
-echo sLinkFile = "%cd%\Monitoring1.lnk" >> %SCRIPT%
+echo sLinkFile = "%~dp0\Monitoring1.lnk" >> %SCRIPT%
 echo Set oLink = oWS.CreateShortcut(sLinkFile) >> %SCRIPT%
-echo oLink.TargetPath = "%cd%\Monitoring1\release\Monitoring1.exe" >> %SCRIPT%
+echo oLink.TargetPath = "%~dp0\Monitoring1\release\Monitoring1.exe" >> %SCRIPT%
 echo oLink.Save >> %SCRIPT%
 cscript /nologo %SCRIPT%
 del %SCRIPT%
 
 REM create shortcut to Monitoring2
-set SCRIPT="%cd%\createShorcuts.vbs"
+set SCRIPT="%~dp0\createShorcuts.vbs"
 echo Set oWS = WScript.CreateObject("WScript.Shell") >> %SCRIPT%
-echo sLinkFile = "%cd%\Monitoring2.lnk" >> %SCRIPT%
+echo sLinkFile = "%~dp0\Monitoring2.lnk" >> %SCRIPT%
 echo Set oLink = oWS.CreateShortcut(sLinkFile) >> %SCRIPT%
-echo oLink.TargetPath = "%cd%\Monitoring2\release\Monitoring2.exe" >> %SCRIPT%
+echo oLink.TargetPath = "%~dp0\Monitoring2\release\Monitoring2.exe" >> %SCRIPT%
 echo oLink.Save >> %SCRIPT%
 cscript /nologo %SCRIPT%
 del %SCRIPT%
 
 REM create shortcut to AxesCurves
-set SCRIPT="%cd%\createShorcuts.vbs"
+set SCRIPT="%~dp0\createShorcuts.vbs"
 echo Set oWS = WScript.CreateObject("WScript.Shell") >> %SCRIPT%
-echo sLinkFile = "%cd%\AxesCurves.lnk" >> %SCRIPT%
+echo sLinkFile = "%~dp0\AxesCurves.lnk" >> %SCRIPT%
 echo Set oLink = oWS.CreateShortcut(sLinkFile) >> %SCRIPT%
-echo oLink.TargetPath = "%cd%\AxesCurves\release\AxesCurves.exe" >> %SCRIPT%
+echo oLink.TargetPath = "%~dp0\AxesCurves\release\AxesCurves.exe" >> %SCRIPT%
 echo oLink.Save >> %SCRIPT%
 cscript /nologo %SCRIPT%
 del %SCRIPT%
