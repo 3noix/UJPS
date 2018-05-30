@@ -31,7 +31,7 @@ echo.
 
 
 echo cleaning all compile PLUGINS dlls
-If exist PLUGINS rmdir /S /Q %~dp0\ControllersPlugins\PLUGINS
+If exist ControllersPlugins\PLUGINS rmdir /S /Q %~dp0\ControllersPlugins\PLUGINS
 
 
 echo removing CleanQtProjects manually
