@@ -67,15 +67,14 @@ QGameControllerPrivate::QGameControllerPrivate(uint id, QGameController *q) :
 			qDebug() << "Error 1";
 	}
 	
-	DIJOYCONFIG PreferredJoyCfg = {0};
-	DI_ENUM_CONTEXT enumContext;
-	enumContext.pPreferredJoyCfg = &PreferredJoyCfg;
-	enumContext.bPreferredJoyCfgValid = false;
-	
 	IDirectInputJoyConfig8* pJoyConfig = nullptr;
 	if (FAILED(hr = g_pDI->QueryInterface(IID_IDirectInputJoyConfig8, (void**)&pJoyConfig))) {qDebug() << "Error 2";}
 
+	DIJOYCONFIG PreferredJoyCfg;
 	PreferredJoyCfg.dwSize = sizeof(PreferredJoyCfg);
+	DI_ENUM_CONTEXT enumContext;
+	enumContext.pPreferredJoyCfg = &PreferredJoyCfg;
+	enumContext.bPreferredJoyCfgValid = false;
 	if (SUCCEEDED(pJoyConfig->GetConfig(0, &PreferredJoyCfg, DIJC_GUIDINSTANCE))) // This function is expected to fail if no joystick is attached
 		enumContext.bPreferredJoyCfgValid = true;
 	else

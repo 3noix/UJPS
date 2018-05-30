@@ -181,21 +181,21 @@ uint QGameController::povsCount()
 float QGameController::axisValue(uint axis)
 {
 	Q_D(QGameController);
-	if (axis >= d->AxesValues.size()) {return 0.0f;}
+	if (axis >= (uint)d->AxesValues.size()) {return 0.0f;}
 	return d->AxesValues.at(axis);
 }
 
 bool QGameController::buttonValue(uint button)
 {
 	Q_D(QGameController);
-	if (button >= d->ButtonsValues.size()) {return false;}
+	if (button >= (uint)d->ButtonsValues.size()) {return false;}
 	return d->ButtonsValues.at(button);
 }
 
 float QGameController::povValue(uint pov)
 {
 	Q_D(QGameController);
-	if (pov >= d->PovsValues.size()) {return false;}
+	if (pov >= (uint)d->PovsValues.size()) {return false;}
 	return d->PovsValues.at(pov);
 }
 
