@@ -43,9 +43,6 @@ class ThrustmasterTwcsThrottle : public RealJoystick
 		QStringList m_buttonsNames;
 		QStringList m_axesNames;
 		
-		float m_oldAxis8Value;
-		float m_oldAxis9Value;
-		
 		
 	public:
 		static const uint TBTN1  = 0;	// instinctive disconnect

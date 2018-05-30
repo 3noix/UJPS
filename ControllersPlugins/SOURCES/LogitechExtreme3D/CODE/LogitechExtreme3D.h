@@ -43,9 +43,6 @@ class LogitechExtreme3D : public RealJoystick
 		QStringList m_buttonsNames;
 		QStringList m_axesNames;
 		
-		float m_oldAxis2Value;
-		float m_oldAxis3Value;
-		
 		
 	public:
 		static const uint TG    = 0;	// trigger

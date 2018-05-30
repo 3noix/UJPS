@@ -25,9 +25,6 @@
 // CONSTRUCTEUR ///////////////////////////////////////////////////////////////
 ThrustmasterTwcsThrottle::ThrustmasterTwcsThrottle(QGameController *c) : RealJoystick{c}
 {
-	m_oldAxis8Value = 0.0f;
-	m_oldAxis9Value = 0.0f;
-	
 	m_buttonsNames << "TBTN1" << "TBTN2" << "TBTN3" << "TBTN4" << "TBTN5" << "TLOCK";
 	m_buttonsNames << "THAT1U" << "THAT1R" << "THAT1D" << "THAT1L";
 	m_buttonsNames << "THAT3U" << "THAT3R" << "THAT3D" << "THAT3L";

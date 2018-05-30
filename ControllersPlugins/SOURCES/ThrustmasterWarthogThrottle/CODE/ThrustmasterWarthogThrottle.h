@@ -47,9 +47,6 @@ class ThrustmasterWarthogThrottle : public RealJoystick
 		QStringList m_buttonsNames;
 		QStringList m_axesNames;
 		
-		float m_oldAxis0Value;
-		float m_oldAxis1Value;
-		
 		WriteToHidThread *m_thread;
 		quint8 m_flags;
 		quint8 m_brightness;

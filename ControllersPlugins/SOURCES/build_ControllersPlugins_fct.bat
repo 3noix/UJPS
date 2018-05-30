@@ -1,7 +1,7 @@
 REM COMPILATION OF PLUGIN vJoyDevice
 echo compiling vJoyDevice
 echo.
-cd vJoyDevice
+cd %~dp0\vJoyDevice
 qmake
 mingw32-make release
 echo.

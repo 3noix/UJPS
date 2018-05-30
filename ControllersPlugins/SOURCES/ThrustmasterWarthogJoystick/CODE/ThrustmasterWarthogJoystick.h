@@ -43,9 +43,6 @@ class ThrustmasterWarthogJoystick : public RealJoystick
 		QStringList m_buttonsNames;
 		QStringList m_axesNames;
 		
-		float m_oldAxis0Value;
-		float m_oldAxis1Value;
-		
 		
 	public:
 		static const uint TG1 = 0;		// trigger stage 1

@@ -25,9 +25,6 @@
 // CONSTRUCTEUR ///////////////////////////////////////////////////////////////
 LogitechExtreme3D::LogitechExtreme3D(QGameController *c) : RealJoystick{c}
 {
-	m_oldAxis2Value = 0.0f;
-	m_oldAxis3Value = 0.0f;
-	
 	m_buttonsNames << "TG" << "THMB";
 	m_buttonsNames << "SBDL" << "SBDR" << "SBUL" << "SBUR";
 	m_buttonsNames << "BBUL" << "BBUR" << "BBML" << "BBMR" << "BBDL" << "BBDR";

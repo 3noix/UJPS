@@ -30,9 +30,6 @@ ThrustmasterWarthogJoystick::ThrustmasterWarthogJoystick(QGameController *c) : R
 	m_buttonsNames << "H1U" << "H1R" << "H1D" << "H1L";
 	
 	m_axesNames << "JOYX" << "JOYY";
-	
-	m_oldAxis0Value = 0.0f;
-	m_oldAxis1Value = 0.0f;
 }
 
 

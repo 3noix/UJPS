@@ -42,9 +42,6 @@ ThrustmasterWarthogThrottle::ThrustmasterWarthogThrottle(QGameController *c) : R
 	
 	m_axesNames << "THR_LEFT" << "THR_RIGHT" << "THR_FC" << "SCX" << "SCY";
 	
-	m_oldAxis0Value = 0.0f;
-	m_oldAxis1Value = 0.0f;
-	
 	// led support
 	m_thread = new WriteToHidThread(this);
 	m_flags = 0;
