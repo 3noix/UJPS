@@ -86,6 +86,7 @@ void StandardJoystickWidget::setupWidget()
 	for (int i=0; i<qMax(32,nbButtons); ++i)
 	{
 		ButtonWidget *b = new ButtonWidget(i+1,i<nbButtons,this);
+		if (i < nbButtons) {b->setToolTip(m_joystick->buttonName(i));}
 		buttonsLayout->addWidget(b,i/8,i%8,1,1);
 		buttonsChecks << b;
 	}

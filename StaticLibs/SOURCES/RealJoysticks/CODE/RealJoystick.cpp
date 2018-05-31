@@ -172,7 +172,7 @@ QString RealJoystick::buttonName(uint button) const
 {
 	if (button < m_controller->buttonsCount())
 	{
-		return "Button " + QString::number(button);
+		return "Button " + QString::number(button+1);
 	}
 	else if (button < m_controller->buttonsCount() + 4 * m_controller->povsCount())
 	{
@@ -183,7 +183,7 @@ QString RealJoystick::buttonName(uint button) const
 		if (num == 1)      {directionStr = "right";}
 		else if (num == 2) {directionStr = "down";}
 		else if (num == 3) {directionStr = "left";}
-		return "POV " + QString::number(pov) + " (" + directionStr + ")";
+		return "POV " + QString::number(pov+1) + " (" + directionStr + ")";
 	}
 	
 	return QString();

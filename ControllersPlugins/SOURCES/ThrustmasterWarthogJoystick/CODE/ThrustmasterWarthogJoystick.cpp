@@ -26,7 +26,7 @@
 ThrustmasterWarthogJoystick::ThrustmasterWarthogJoystick(QGameController *c) : RealJoystick{c}
 {
 	m_buttonsNames << "TG1" << "S2" << "S3" << "S4" << "S1" << "TG2" << "H2U" << "H2R" << "H2D" << "H2L";
-	m_buttonsNames << "H3U" << "H3R" << "H3D" << "H3L" << "H4U" << "H4R" << "H4D" << "H4L";
+	m_buttonsNames << "H3U" << "H3R" << "H3D" << "H3L" << "H4U" << "H4R" << "H4D" << "H4L" << "H4P";
 	m_buttonsNames << "H1U" << "H1R" << "H1D" << "H1L";
 	
 	m_axesNames << "JOYX" << "JOYY";
