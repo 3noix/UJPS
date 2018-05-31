@@ -7,6 +7,9 @@ class QGameController;
 class QGameControllerButtonEvent;
 class QGameControllerAxisEvent;
 
+#define INSIDE_PLUGIN
+#include "../../../INCLUDES/LogitechExtreme3D.h"
+
 
 class LogitechExtreme3D : public RealJoystick
 {
@@ -42,30 +45,6 @@ class LogitechExtreme3D : public RealJoystick
 	private:
 		QStringList m_buttonsNames;
 		QStringList m_axesNames;
-		
-		
-	public:
-		static const uint TG    = 0;	// trigger
-		static const uint THMB  = 1;	// thumb button
-		static const uint SBDL  = 2;	// stick button down left
-		static const uint SBDR  = 3;	// stick button down right
-		static const uint SBUL  = 4;	// stick button up left
-		static const uint SBUR  = 5;	// stick button up right
-		static const uint BBUL  = 6;	// base button up left
-		static const uint BBUR  = 7;	// base button up right
-		static const uint BBML  = 8;	// base button middle left
-		static const uint BBMR  = 9;	// base button middle right
-		static const uint BBDL  = 10;	// base button down left
-		static const uint BBDR  = 11;	// base button down right
-		static const uint POVU  = 12;	// POV button up
-		static const uint POVR  = 13;	// POV button right
-		static const uint POVD  = 14;	// POV button down
-		static const uint POVL  = 15;	// POV button left
-		
-		static const uint JOYX = 0;		// X stick axis
-		static const uint JOYY = 1;		// Y stick axis
-		static const uint JOYZ = 2;		// Z stick axis
-		static const uint THR  = 3;		// throttle axis
 };
 
 #endif

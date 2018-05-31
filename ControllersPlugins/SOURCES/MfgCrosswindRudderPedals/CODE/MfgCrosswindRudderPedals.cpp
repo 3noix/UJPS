@@ -45,9 +45,9 @@ void MfgCrosswindRudderPedals::slotGameControllerAxisEvent(QGameControllerAxisEv
 	Q_ASSERT(event);
 	
 	uint axis = event->axis();
-	if (axis == MfgCrosswindRudderPedals::RUDDER)         {m_changes << JoystickChange{this,ControlType::Axis,0,false,event->value()};}
-	else if (axis == MfgCrosswindRudderPedals::BRK_LEFT)  {m_changes << JoystickChange{this,ControlType::Axis,2,false,event->value()};}
-	else if (axis == MfgCrosswindRudderPedals::BRK_RIGHT) {m_changes << JoystickChange{this,ControlType::Axis,1,false,event->value()};}
+	if (axis == MfgCrosswindRudderPedals_::RUDDER)         {m_changes << JoystickChange{this,ControlType::Axis,0,false,event->value()};}
+	else if (axis == MfgCrosswindRudderPedals_::BRK_LEFT)  {m_changes << JoystickChange{this,ControlType::Axis,2,false,event->value()};}
+	else if (axis == MfgCrosswindRudderPedals_::BRK_RIGHT) {m_changes << JoystickChange{this,ControlType::Axis,1,false,event->value()};}
 }
 
 
@@ -100,9 +100,9 @@ uint MfgCrosswindRudderPedals::axesCount() const
 // AXIS VALUE /////////////////////////////////////////////////////////////////
 float MfgCrosswindRudderPedals::axisValue(uint axis) const
 {
-	if (axis == MfgCrosswindRudderPedals::RUDDER)    {return this->RealJoystick::axisValue(0);}
-	if (axis == MfgCrosswindRudderPedals::BRK_LEFT)  {return this->RealJoystick::axisValue(2);}
-	if (axis == MfgCrosswindRudderPedals::BRK_RIGHT) {return this->RealJoystick::axisValue(1);}
+	if (axis == MfgCrosswindRudderPedals_::RUDDER)    {return this->RealJoystick::axisValue(0);}
+	if (axis == MfgCrosswindRudderPedals_::BRK_LEFT)  {return this->RealJoystick::axisValue(2);}
+	if (axis == MfgCrosswindRudderPedals_::BRK_RIGHT) {return this->RealJoystick::axisValue(1);}
 	return 0.0;
 }
 

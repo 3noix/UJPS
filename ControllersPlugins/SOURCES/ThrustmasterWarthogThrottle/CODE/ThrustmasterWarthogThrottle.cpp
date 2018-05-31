@@ -67,140 +67,140 @@ void ThrustmasterWarthogThrottle::slotGameControllerButtonEvent(QGameControllerB
 	uint button = event->button();
 	bool bPressed = event->pressed();
 	
-	if (button == ThrustmasterWarthogThrottle::SC || 
-		button == ThrustmasterWarthogThrottle::MSP ||
-		button == ThrustmasterWarthogThrottle::MSU ||
-		button == ThrustmasterWarthogThrottle::MSR ||
-		button == ThrustmasterWarthogThrottle::MSD ||
-		button == ThrustmasterWarthogThrottle::MSL ||
-		button == ThrustmasterWarthogThrottle::LTB ||
-		button == ThrustmasterWarthogThrottle::LDGH ||
-		button == ThrustmasterWarthogThrottle::CSU ||
-		button == ThrustmasterWarthogThrottle::CSR ||
-		button == ThrustmasterWarthogThrottle::CSD ||
-		button == ThrustmasterWarthogThrottle::CSL)
+	if (button == ThrustmasterWarthogThrottle_::SC || 
+		button == ThrustmasterWarthogThrottle_::MSP ||
+		button == ThrustmasterWarthogThrottle_::MSU ||
+		button == ThrustmasterWarthogThrottle_::MSR ||
+		button == ThrustmasterWarthogThrottle_::MSD ||
+		button == ThrustmasterWarthogThrottle_::MSL ||
+		button == ThrustmasterWarthogThrottle_::LTB ||
+		button == ThrustmasterWarthogThrottle_::LDGH ||
+		button == ThrustmasterWarthogThrottle_::CSU ||
+		button == ThrustmasterWarthogThrottle_::CSR ||
+		button == ThrustmasterWarthogThrottle_::CSD ||
+		button == ThrustmasterWarthogThrottle_::CSL)
 	{
 		m_changes << JoystickChange{this,ControlType::Button,button,bPressed,0.0};
 	}
-	else if (button == ThrustmasterWarthogThrottle::SPDF)
+	else if (button == ThrustmasterWarthogThrottle_::SPDF)
 	{
-		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle::SPDF,bPressed,0.0};
-		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle::SPDM,!bPressed,0.0};
+		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle_::SPDF,bPressed,0.0};
+		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle_::SPDM,!bPressed,0.0};
 	}
-	else if (button == ThrustmasterWarthogThrottle::SPDB)
+	else if (button == ThrustmasterWarthogThrottle_::SPDB)
 	{
-		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle::SPDB,bPressed,0.0};
-		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle::SPDM,!bPressed,0.0};
+		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle_::SPDB,bPressed,0.0};
+		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle_::SPDM,!bPressed,0.0};
 	}
-	else if (button == ThrustmasterWarthogThrottle::BSF)
+	else if (button == ThrustmasterWarthogThrottle_::BSF)
 	{
-		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle::BSF,bPressed,0.0};
-		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle::BSM,!bPressed,0.0};
+		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle_::BSF,bPressed,0.0};
+		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle_::BSM,!bPressed,0.0};
 	}
-	else if (button == ThrustmasterWarthogThrottle::BSB)
+	else if (button == ThrustmasterWarthogThrottle_::BSB)
 	{
-		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle::BSB,bPressed,0.0};
-		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle::BSM,!bPressed,0.0};
+		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle_::BSB,bPressed,0.0};
+		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle_::BSM,!bPressed,0.0};
 	}
-	else if (button == ThrustmasterWarthogThrottle::CHF)
+	else if (button == ThrustmasterWarthogThrottle_::CHF)
 	{
-		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle::CHF,bPressed,0.0};
-		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle::CHM,!bPressed,0.0};
+		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle_::CHF,bPressed,0.0};
+		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle_::CHM,!bPressed,0.0};
 	}
-	else if (button == ThrustmasterWarthogThrottle::CHB)
+	else if (button == ThrustmasterWarthogThrottle_::CHB)
 	{
-		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle::CHB,bPressed,0.0};
-		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle::CHM,!bPressed,0.0};
+		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle_::CHB,bPressed,0.0};
+		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle_::CHM,!bPressed,0.0};
 	}
-	else if (button == ThrustmasterWarthogThrottle::PSF)
+	else if (button == ThrustmasterWarthogThrottle_::PSF)
 	{
-		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle::PSF,bPressed,0.0};
-		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle::PSM,!bPressed,0.0};
+		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle_::PSF,bPressed,0.0};
+		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle_::PSM,!bPressed,0.0};
 	}
-	else if (button == ThrustmasterWarthogThrottle::PSB)
+	else if (button == ThrustmasterWarthogThrottle_::PSB)
 	{
-		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle::PSB,bPressed,0.0};
-		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle::PSM,!bPressed,0.0};
+		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle_::PSB,bPressed,0.0};
+		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle_::PSM,!bPressed,0.0};
 	}
-	else if (button == ThrustmasterWarthogThrottle::EFLNORM)
+	else if (button == ThrustmasterWarthogThrottle_::EFLNORM)
 	{
-		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle::EFLNORM,bPressed,0.0};
-		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle::EFLOVER,!bPressed,0.0};
+		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle_::EFLNORM,bPressed,0.0};
+		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle_::EFLOVER,!bPressed,0.0};
 	}
-	else if (button == ThrustmasterWarthogThrottle::EFRNORM)
+	else if (button == ThrustmasterWarthogThrottle_::EFRNORM)
 	{
-		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle::EFRNORM,bPressed,0.0};
-		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle::EFROVER,!bPressed,0.0};
+		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle_::EFRNORM,bPressed,0.0};
+		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle_::EFROVER,!bPressed,0.0};
 	}
-	else if (button == ThrustmasterWarthogThrottle::EOLMOTOR)
+	else if (button == ThrustmasterWarthogThrottle_::EOLMOTOR)
 	{
-		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle::EOLMOTOR,bPressed,0.0};
-		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle::EOLNORM,!bPressed,0.0};
+		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle_::EOLMOTOR,bPressed,0.0};
+		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle_::EOLNORM,!bPressed,0.0};
 	}
-	else if (button == ThrustmasterWarthogThrottle::EORMOTOR)
+	else if (button == ThrustmasterWarthogThrottle_::EORMOTOR)
 	{
-		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle::EORMOTOR,bPressed,0.0};
-		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle::EORNORM,!bPressed,0.0};
+		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle_::EORMOTOR,bPressed,0.0};
+		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle_::EORNORM,!bPressed,0.0};
 	}
-	else if (button == ThrustmasterWarthogThrottle::APUON)
+	else if (button == ThrustmasterWarthogThrottle_::APUON)
 	{
-		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle::APUON,bPressed,0.0};
-		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle::APUOFF,!bPressed,0.0};
+		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle_::APUON,bPressed,0.0};
+		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle_::APUOFF,!bPressed,0.0};
 	}
-	else if (button == ThrustmasterWarthogThrottle::FLAPU)
+	else if (button == ThrustmasterWarthogThrottle_::FLAPU)
 	{
-		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle::FLAPU,bPressed,0.0};
-		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle::FLAPM,!bPressed,0.0};
+		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle_::FLAPU,bPressed,0.0};
+		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle_::FLAPM,!bPressed,0.0};
 	}
-	else if (button == ThrustmasterWarthogThrottle::FLAPD)
+	else if (button == ThrustmasterWarthogThrottle_::FLAPD)
 	{
-		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle::FLAPD,bPressed,0.0};
-		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle::FLAPM,!bPressed,0.0};
+		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle_::FLAPD,bPressed,0.0};
+		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle_::FLAPM,!bPressed,0.0};
 	}
-	else if (button == ThrustmasterWarthogThrottle::EACON)
+	else if (button == ThrustmasterWarthogThrottle_::EACON)
 	{
-		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle::EACON,bPressed,0.0};
-		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle::EACOFF,!bPressed,0.0};
+		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle_::EACON,bPressed,0.0};
+		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle_::EACOFF,!bPressed,0.0};
 	}
-	else if (button == ThrustmasterWarthogThrottle::RDRNRM)
+	else if (button == ThrustmasterWarthogThrottle_::RDRNRM)
 	{
-		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle::RDRNRM,bPressed,0.0};
-		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle::RDRDIS,!bPressed,0.0};
+		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle_::RDRNRM,bPressed,0.0};
+		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle_::RDRDIS,!bPressed,0.0};
 	}
-	else if (button == ThrustmasterWarthogThrottle::APENG)
+	else if (button == ThrustmasterWarthogThrottle_::APENG)
 	{
-		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle::APENG,bPressed,0.0};
-		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle::APDIS,!bPressed,0.0};
+		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle_::APENG,bPressed,0.0};
+		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle_::APDIS,!bPressed,0.0};
 	}
-	else if (button == ThrustmasterWarthogThrottle::APATT)
+	else if (button == ThrustmasterWarthogThrottle_::APATT)
 	{
-		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle::APATT,bPressed,0.0};
-		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle::APAH,!bPressed,0.0};
+		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle_::APATT,bPressed,0.0};
+		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle_::APAH,!bPressed,0.0};
 	}
-	else if (button == ThrustmasterWarthogThrottle::APALT)
+	else if (button == ThrustmasterWarthogThrottle_::APALT)
 	{
-		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle::APALT,bPressed,0.0};
-		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle::APAH,!bPressed,0.0};
+		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle_::APALT,bPressed,0.0};
+		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle_::APAH,!bPressed,0.0};
 	}
-	else if (button == ThrustmasterWarthogThrottle::IDLERON)
+	else if (button == ThrustmasterWarthogThrottle_::IDLERON)
 	{
-		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle::IDLERON,bPressed,0.0};
-		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle::IDLEROFF,!bPressed,0.0};
+		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle_::IDLERON,bPressed,0.0};
+		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle_::IDLEROFF,!bPressed,0.0};
 	}
-	else if (button == ThrustmasterWarthogThrottle::IDLELON)
+	else if (button == ThrustmasterWarthogThrottle_::IDLELON)
 	{
-		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle::IDLELON,bPressed,0.0};
-		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle::IDLELOFF,!bPressed,0.0};
+		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle_::IDLELON,bPressed,0.0};
+		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle_::IDLELOFF,!bPressed,0.0};
 	}
-	else if (button == ThrustmasterWarthogThrottle::EOLIGN)
+	else if (button == ThrustmasterWarthogThrottle_::EOLIGN)
 	{
-		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle::EOLIGN,bPressed,0.0};
-		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle::EOLNORM,!bPressed,0.0};
+		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle_::EOLIGN,bPressed,0.0};
+		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle_::EOLNORM,!bPressed,0.0};
 	}
-	else if (button == ThrustmasterWarthogThrottle::EORIGN)
+	else if (button == ThrustmasterWarthogThrottle_::EORIGN)
 	{
-		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle::EORIGN,bPressed,0.0};
-		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle::EORNORM,!bPressed,0.0};
+		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle_::EORIGN,bPressed,0.0};
+		m_changes << JoystickChange{this,ControlType::Button,ThrustmasterWarthogThrottle_::EORNORM,!bPressed,0.0};
 	}
 }
 
@@ -210,11 +210,11 @@ void ThrustmasterWarthogThrottle::slotGameControllerAxisEvent(QGameControllerAxi
 	Q_ASSERT(event);
 	uint axis = event->axis();
 	
-	if (axis == 0)      {m_changes << JoystickChange{this, ControlType::Axis, ThrustmasterWarthogThrottle::SCX,       false, event->value()};}
-	else if (axis == 1) {m_changes << JoystickChange{this, ControlType::Axis, ThrustmasterWarthogThrottle::SCY,       false, event->value()};}
-	else if (axis == 2) {m_changes << JoystickChange{this, ControlType::Axis, ThrustmasterWarthogThrottle::THR_FC,    false, event->value()};}
-	else if (axis == 3) {m_changes << JoystickChange{this, ControlType::Axis, ThrustmasterWarthogThrottle::THR_RIGHT, false, event->value()};}
-	else if (axis == 4) {m_changes << JoystickChange{this, ControlType::Axis, ThrustmasterWarthogThrottle::THR_LEFT,  false, event->value()};}
+	if (axis == 0)      {m_changes << JoystickChange{this, ControlType::Axis, ThrustmasterWarthogThrottle_::SCX,       false, event->value()};}
+	else if (axis == 1) {m_changes << JoystickChange{this, ControlType::Axis, ThrustmasterWarthogThrottle_::SCY,       false, event->value()};}
+	else if (axis == 2) {m_changes << JoystickChange{this, ControlType::Axis, ThrustmasterWarthogThrottle_::THR_FC,    false, event->value()};}
+	else if (axis == 3) {m_changes << JoystickChange{this, ControlType::Axis, ThrustmasterWarthogThrottle_::THR_RIGHT, false, event->value()};}
+	else if (axis == 4) {m_changes << JoystickChange{this, ControlType::Axis, ThrustmasterWarthogThrottle_::THR_LEFT,  false, event->value()};}
 }
 
 
@@ -245,22 +245,22 @@ bool ThrustmasterWarthogThrottle::buttonPressed(uint button) const
 		return this->RealJoystick::buttonPressed(button);
 	}
 	// other virtual buttons
-	else if (button == ThrustmasterWarthogThrottle::EFLOVER)  {return !(this->RealJoystick::buttonPressed(ThrustmasterWarthogThrottle::EFLNORM));}
-	else if (button == ThrustmasterWarthogThrottle::EFROVER)  {return !(this->RealJoystick::buttonPressed(ThrustmasterWarthogThrottle::EFRNORM));}
-	else if (button == ThrustmasterWarthogThrottle::APUOFF)   {return !(this->RealJoystick::buttonPressed(ThrustmasterWarthogThrottle::APUON));}
-	else if (button == ThrustmasterWarthogThrottle::EACOFF)   {return !(this->RealJoystick::buttonPressed(ThrustmasterWarthogThrottle::EACON));}
-	else if (button == ThrustmasterWarthogThrottle::RDRDIS)   {return !(this->RealJoystick::buttonPressed(ThrustmasterWarthogThrottle::RDRNRM));}
-	else if (button == ThrustmasterWarthogThrottle::APDIS)    {return !(this->RealJoystick::buttonPressed(ThrustmasterWarthogThrottle::APENG));}
-	else if (button == ThrustmasterWarthogThrottle::IDLEROFF) {return !(this->RealJoystick::buttonPressed(ThrustmasterWarthogThrottle::IDLERON));}
-	else if (button == ThrustmasterWarthogThrottle::IDLELOFF) {return !(this->RealJoystick::buttonPressed(ThrustmasterWarthogThrottle::IDLELON));}
-	else if (button == ThrustmasterWarthogThrottle::EOLNORM)  {return !(this->RealJoystick::buttonPressed(ThrustmasterWarthogThrottle::EOLMOTOR)) && !(this->RealJoystick::buttonPressed(ThrustmasterWarthogThrottle::EOLIGN));}
-	else if (button == ThrustmasterWarthogThrottle::EORNORM)  {return !(this->RealJoystick::buttonPressed(ThrustmasterWarthogThrottle::EORMOTOR)) && !(this->RealJoystick::buttonPressed(ThrustmasterWarthogThrottle::EORIGN));}
-	else if (button == ThrustmasterWarthogThrottle::FLAPM)    {return !(this->RealJoystick::buttonPressed(ThrustmasterWarthogThrottle::FLAPD))    && !(this->RealJoystick::buttonPressed(ThrustmasterWarthogThrottle::FLAPD));}
-	else if (button == ThrustmasterWarthogThrottle::SPDM)     {return !(this->RealJoystick::buttonPressed(ThrustmasterWarthogThrottle::SPDF))     && !(this->RealJoystick::buttonPressed(ThrustmasterWarthogThrottle::SPDB));}
-	else if (button == ThrustmasterWarthogThrottle::BSM)      {return !(this->RealJoystick::buttonPressed(ThrustmasterWarthogThrottle::BSF))      && !(this->RealJoystick::buttonPressed(ThrustmasterWarthogThrottle::BSB));}
-	else if (button == ThrustmasterWarthogThrottle::CHM)      {return !(this->RealJoystick::buttonPressed(ThrustmasterWarthogThrottle::CHF))      && !(this->RealJoystick::buttonPressed(ThrustmasterWarthogThrottle::CHB));}
-	else if (button == ThrustmasterWarthogThrottle::PSM)      {return !(this->RealJoystick::buttonPressed(ThrustmasterWarthogThrottle::PSF))      && !(this->RealJoystick::buttonPressed(ThrustmasterWarthogThrottle::PSB));}
-	else if (button == ThrustmasterWarthogThrottle::APAH)     {return !(this->RealJoystick::buttonPressed(ThrustmasterWarthogThrottle::APATT))    && !(this->RealJoystick::buttonPressed(ThrustmasterWarthogThrottle::APALT));}
+	else if (button == ThrustmasterWarthogThrottle_::EFLOVER)  {return !(this->RealJoystick::buttonPressed(ThrustmasterWarthogThrottle_::EFLNORM));}
+	else if (button == ThrustmasterWarthogThrottle_::EFROVER)  {return !(this->RealJoystick::buttonPressed(ThrustmasterWarthogThrottle_::EFRNORM));}
+	else if (button == ThrustmasterWarthogThrottle_::APUOFF)   {return !(this->RealJoystick::buttonPressed(ThrustmasterWarthogThrottle_::APUON));}
+	else if (button == ThrustmasterWarthogThrottle_::EACOFF)   {return !(this->RealJoystick::buttonPressed(ThrustmasterWarthogThrottle_::EACON));}
+	else if (button == ThrustmasterWarthogThrottle_::RDRDIS)   {return !(this->RealJoystick::buttonPressed(ThrustmasterWarthogThrottle_::RDRNRM));}
+	else if (button == ThrustmasterWarthogThrottle_::APDIS)    {return !(this->RealJoystick::buttonPressed(ThrustmasterWarthogThrottle_::APENG));}
+	else if (button == ThrustmasterWarthogThrottle_::IDLEROFF) {return !(this->RealJoystick::buttonPressed(ThrustmasterWarthogThrottle_::IDLERON));}
+	else if (button == ThrustmasterWarthogThrottle_::IDLELOFF) {return !(this->RealJoystick::buttonPressed(ThrustmasterWarthogThrottle_::IDLELON));}
+	else if (button == ThrustmasterWarthogThrottle_::EOLNORM)  {return !(this->RealJoystick::buttonPressed(ThrustmasterWarthogThrottle_::EOLMOTOR)) && !(this->RealJoystick::buttonPressed(ThrustmasterWarthogThrottle_::EOLIGN));}
+	else if (button == ThrustmasterWarthogThrottle_::EORNORM)  {return !(this->RealJoystick::buttonPressed(ThrustmasterWarthogThrottle_::EORMOTOR)) && !(this->RealJoystick::buttonPressed(ThrustmasterWarthogThrottle_::EORIGN));}
+	else if (button == ThrustmasterWarthogThrottle_::FLAPM)    {return !(this->RealJoystick::buttonPressed(ThrustmasterWarthogThrottle_::FLAPD))    && !(this->RealJoystick::buttonPressed(ThrustmasterWarthogThrottle_::FLAPD));}
+	else if (button == ThrustmasterWarthogThrottle_::SPDM)     {return !(this->RealJoystick::buttonPressed(ThrustmasterWarthogThrottle_::SPDF))     && !(this->RealJoystick::buttonPressed(ThrustmasterWarthogThrottle_::SPDB));}
+	else if (button == ThrustmasterWarthogThrottle_::BSM)      {return !(this->RealJoystick::buttonPressed(ThrustmasterWarthogThrottle_::BSF))      && !(this->RealJoystick::buttonPressed(ThrustmasterWarthogThrottle_::BSB));}
+	else if (button == ThrustmasterWarthogThrottle_::CHM)      {return !(this->RealJoystick::buttonPressed(ThrustmasterWarthogThrottle_::CHF))      && !(this->RealJoystick::buttonPressed(ThrustmasterWarthogThrottle_::CHB));}
+	else if (button == ThrustmasterWarthogThrottle_::PSM)      {return !(this->RealJoystick::buttonPressed(ThrustmasterWarthogThrottle_::PSF))      && !(this->RealJoystick::buttonPressed(ThrustmasterWarthogThrottle_::PSB));}
+	else if (button == ThrustmasterWarthogThrottle_::APAH)     {return !(this->RealJoystick::buttonPressed(ThrustmasterWarthogThrottle_::APATT))    && !(this->RealJoystick::buttonPressed(ThrustmasterWarthogThrottle_::APALT));}
 	
 	return false;
 }
@@ -293,11 +293,11 @@ uint ThrustmasterWarthogThrottle::axesCount() const
 // AXIS VALUE /////////////////////////////////////////////////////////////////
 float ThrustmasterWarthogThrottle::axisValue(uint axis) const
 {
-	if (axis == ThrustmasterWarthogThrottle::THR_LEFT)  {return this->RealJoystick::axisValue(4);}
-	if (axis == ThrustmasterWarthogThrottle::THR_RIGHT) {return this->RealJoystick::axisValue(3);}
-	if (axis == ThrustmasterWarthogThrottle::THR_FC)    {return this->RealJoystick::axisValue(2);}
-	if (axis == ThrustmasterWarthogThrottle::SCX)       {return this->RealJoystick::axisValue(0);}
-	if (axis == ThrustmasterWarthogThrottle::SCY)       {return this->RealJoystick::axisValue(1);}
+	if (axis == ThrustmasterWarthogThrottle_::THR_LEFT)  {return this->RealJoystick::axisValue(4);}
+	if (axis == ThrustmasterWarthogThrottle_::THR_RIGHT) {return this->RealJoystick::axisValue(3);}
+	if (axis == ThrustmasterWarthogThrottle_::THR_FC)    {return this->RealJoystick::axisValue(2);}
+	if (axis == ThrustmasterWarthogThrottle_::SCX)       {return this->RealJoystick::axisValue(0);}
+	if (axis == ThrustmasterWarthogThrottle_::SCY)       {return this->RealJoystick::axisValue(1);}
 	return 0.0;
 }
 

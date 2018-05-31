@@ -1,11 +1,15 @@
-#ifndef LOGITECH_EXTREME_3D
-#define LOGITECH_EXTREME_3D
+#ifndef LOGITECH_EXTREME_3D_
+#define LOGITECH_EXTREME_3D_
 
 
 using uint = unsigned int;
 
 
+#ifndef INSIDE_PLUGIN
 namespace LogitechExtreme3D
+#else
+namespace LogitechExtreme3D_
+#endif
 {
 	const uint TG    = 0;	// trigger
 	const uint THMB  = 1;	// thumb button

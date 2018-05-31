@@ -50,14 +50,14 @@ void ThrustmasterTwcsThrottle::slotGameControllerAxisEvent(QGameControllerAxisEv
 	Q_ASSERT(event);
 	uint axis = event->axis();
 	
-	if (axis == 7)      {m_changes << JoystickChange{this, ControlType::Axis, ThrustmasterTwcsThrottle::TTHR,  false, event->value()};}
-	else if (axis == 4) {m_changes << JoystickChange{this, ControlType::Axis, ThrustmasterTwcsThrottle::TRDR,  false, event->value()};}
-	else if (axis == 6) {m_changes << JoystickChange{this, ControlType::Axis, ThrustmasterTwcsThrottle::TMSTX, false, event->value()};}
-	else if (axis == 5) {m_changes << JoystickChange{this, ControlType::Axis, ThrustmasterTwcsThrottle::TMSTY, false, event->value()};}
-	else if (axis == 0) {m_changes << JoystickChange{this, ControlType::Axis, ThrustmasterTwcsThrottle::TANT,  false, event->value()};}
-	else if (axis == 1) {m_changes << JoystickChange{this, ControlType::Axis, ThrustmasterTwcsThrottle::TFRP1, false, event->value()};}
-	else if (axis == 2) {m_changes << JoystickChange{this, ControlType::Axis, ThrustmasterTwcsThrottle::TFRP2, false, event->value()};}
-	else if (axis == 3) {m_changes << JoystickChange{this, ControlType::Axis, ThrustmasterTwcsThrottle::TFRP3, false, event->value()};}
+	if (axis == 7)      {m_changes << JoystickChange{this, ControlType::Axis, ThrustmasterTwcsThrottle_::TTHR,  false, event->value()};}
+	else if (axis == 4) {m_changes << JoystickChange{this, ControlType::Axis, ThrustmasterTwcsThrottle_::TRDR,  false, event->value()};}
+	else if (axis == 6) {m_changes << JoystickChange{this, ControlType::Axis, ThrustmasterTwcsThrottle_::TMSTX, false, event->value()};}
+	else if (axis == 5) {m_changes << JoystickChange{this, ControlType::Axis, ThrustmasterTwcsThrottle_::TMSTY, false, event->value()};}
+	else if (axis == 0) {m_changes << JoystickChange{this, ControlType::Axis, ThrustmasterTwcsThrottle_::TANT,  false, event->value()};}
+	else if (axis == 1) {m_changes << JoystickChange{this, ControlType::Axis, ThrustmasterTwcsThrottle_::TFRP1, false, event->value()};}
+	else if (axis == 2) {m_changes << JoystickChange{this, ControlType::Axis, ThrustmasterTwcsThrottle_::TFRP2, false, event->value()};}
+	else if (axis == 3) {m_changes << JoystickChange{this, ControlType::Axis, ThrustmasterTwcsThrottle_::TFRP3, false, event->value()};}
 }
 
 
@@ -114,14 +114,14 @@ uint ThrustmasterTwcsThrottle::axesCount() const
 // AXIS VALUE /////////////////////////////////////////////////////////////////
 float ThrustmasterTwcsThrottle::axisValue(uint axis) const
 {
-	if (axis == ThrustmasterTwcsThrottle::TTHR)  {return this->RealJoystick::axisValue(7);}
-	if (axis == ThrustmasterTwcsThrottle::TRDR)  {return this->RealJoystick::axisValue(4);}
-	if (axis == ThrustmasterTwcsThrottle::TMSTX) {return this->RealJoystick::axisValue(6);}
-	if (axis == ThrustmasterTwcsThrottle::TMSTY) {return this->RealJoystick::axisValue(5);}
-	if (axis == ThrustmasterTwcsThrottle::TANT)  {return this->RealJoystick::axisValue(0);}
-	if (axis == ThrustmasterTwcsThrottle::TFRP1) {return this->RealJoystick::axisValue(1);}
-	if (axis == ThrustmasterTwcsThrottle::TFRP2) {return this->RealJoystick::axisValue(2);}
-	if (axis == ThrustmasterTwcsThrottle::TFRP3) {return this->RealJoystick::axisValue(3);}
+	if (axis == ThrustmasterTwcsThrottle_::TTHR)  {return this->RealJoystick::axisValue(7);}
+	if (axis == ThrustmasterTwcsThrottle_::TRDR)  {return this->RealJoystick::axisValue(4);}
+	if (axis == ThrustmasterTwcsThrottle_::TMSTX) {return this->RealJoystick::axisValue(6);}
+	if (axis == ThrustmasterTwcsThrottle_::TMSTY) {return this->RealJoystick::axisValue(5);}
+	if (axis == ThrustmasterTwcsThrottle_::TANT)  {return this->RealJoystick::axisValue(0);}
+	if (axis == ThrustmasterTwcsThrottle_::TFRP1) {return this->RealJoystick::axisValue(1);}
+	if (axis == ThrustmasterTwcsThrottle_::TFRP2) {return this->RealJoystick::axisValue(2);}
+	if (axis == ThrustmasterTwcsThrottle_::TFRP3) {return this->RealJoystick::axisValue(3);}
 	return 0.0;
 }
 

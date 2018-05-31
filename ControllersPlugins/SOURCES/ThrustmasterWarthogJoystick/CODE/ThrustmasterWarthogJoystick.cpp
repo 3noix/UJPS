@@ -46,8 +46,8 @@ void ThrustmasterWarthogJoystick::slotGameControllerAxisEvent(QGameControllerAxi
 	Q_ASSERT(event);
 	uint axis = event->axis();
 	
-	if (axis == 1)      {m_changes << JoystickChange{this, ControlType::Axis, ThrustmasterWarthogJoystick::JOYX, false, event->value()};}
-	else if (axis == 0) {m_changes << JoystickChange{this, ControlType::Axis, ThrustmasterWarthogJoystick::JOYY, false, event->value()};}
+	if (axis == 1)      {m_changes << JoystickChange{this, ControlType::Axis, ThrustmasterWarthogJoystick_::JOYX, false, event->value()};}
+	else if (axis == 0) {m_changes << JoystickChange{this, ControlType::Axis, ThrustmasterWarthogJoystick_::JOYY, false, event->value()};}
 }
 
 
@@ -103,8 +103,8 @@ uint ThrustmasterWarthogJoystick::axesCount() const
 // AXIS VALUE /////////////////////////////////////////////////////////////////
 float ThrustmasterWarthogJoystick::axisValue(uint axis) const
 {
-	if (axis == ThrustmasterWarthogJoystick::JOYX) {return this->RealJoystick::axisValue(1);}
-	if (axis == ThrustmasterWarthogJoystick::JOYY) {return this->RealJoystick::axisValue(0);}
+	if (axis == ThrustmasterWarthogJoystick_::JOYX) {return this->RealJoystick::axisValue(1);}
+	if (axis == ThrustmasterWarthogJoystick_::JOYY) {return this->RealJoystick::axisValue(0);}
 	return 0.0;
 }
 

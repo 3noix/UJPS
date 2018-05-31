@@ -1,11 +1,15 @@
-#ifndef THRUSTMASTER_WARTHOG_JOYSTICK
-#define THRUSTMASTER_WARTHOG_JOYSTICK
+#ifndef THRUSTMASTER_WARTHOG_JOYSTICK_
+#define THRUSTMASTER_WARTHOG_JOYSTICK_
 
 
 using uint = unsigned int;
 
 
+#ifndef INSIDE_PLUGIN
 namespace ThrustmasterWarthogJoystick
+#else
+namespace ThrustmasterWarthogJoystick_
+#endif
 {
 	const uint TG1 = 0;		// trigger stage 1
 	const uint S2  = 1;		// Weapon release

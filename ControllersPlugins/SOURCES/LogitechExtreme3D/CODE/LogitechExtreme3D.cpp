@@ -50,10 +50,10 @@ void LogitechExtreme3D::slotGameControllerAxisEvent(QGameControllerAxisEvent *ev
 	Q_ASSERT(event);
 	uint axis = event->axis();
 	
-	if (axis == 1)      {m_changes << JoystickChange{this, ControlType::Axis, LogitechExtreme3D::JOYX, false, event->value()};}
-	else if (axis == 0) {m_changes << JoystickChange{this, ControlType::Axis, LogitechExtreme3D::JOYY, false, event->value()};}
-	else if (axis == 2) {m_changes << JoystickChange{this, ControlType::Axis, LogitechExtreme3D::JOYZ, false, event->value()};}
-	else if (axis == 3) {m_changes << JoystickChange{this, ControlType::Axis, LogitechExtreme3D::THR,  false, event->value()};}
+	if (axis == 1)      {m_changes << JoystickChange{this, ControlType::Axis, LogitechExtreme3D_::JOYX, false, event->value()};}
+	else if (axis == 0) {m_changes << JoystickChange{this, ControlType::Axis, LogitechExtreme3D_::JOYY, false, event->value()};}
+	else if (axis == 2) {m_changes << JoystickChange{this, ControlType::Axis, LogitechExtreme3D_::JOYZ, false, event->value()};}
+	else if (axis == 3) {m_changes << JoystickChange{this, ControlType::Axis, LogitechExtreme3D_::THR,  false, event->value()};}
 }
 
 
@@ -110,10 +110,10 @@ uint LogitechExtreme3D::axesCount() const
 // AXIS VALUE /////////////////////////////////////////////////////////////////
 float LogitechExtreme3D::axisValue(uint axis) const
 {
-	if (axis == LogitechExtreme3D::JOYX) {return this->RealJoystick::axisValue(1);}
-	if (axis == LogitechExtreme3D::JOYY) {return this->RealJoystick::axisValue(0);}
-	if (axis == LogitechExtreme3D::JOYZ) {return this->RealJoystick::axisValue(2);}
-	if (axis == LogitechExtreme3D::THR)  {return this->RealJoystick::axisValue(3);}
+	if (axis == LogitechExtreme3D_::JOYX) {return this->RealJoystick::axisValue(1);}
+	if (axis == LogitechExtreme3D_::JOYY) {return this->RealJoystick::axisValue(0);}
+	if (axis == LogitechExtreme3D_::JOYZ) {return this->RealJoystick::axisValue(2);}
+	if (axis == LogitechExtreme3D_::THR)  {return this->RealJoystick::axisValue(3);}
 	return 0.0;
 }
 

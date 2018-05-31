@@ -1,11 +1,15 @@
-#ifndef THRUSTMASTER_WARTHOG_THROTTLE
-#define THRUSTMASTER_WARTHOG_THROTTLE
+#ifndef THRUSTMASTER_WARTHOG_THROTTLE_
+#define THRUSTMASTER_WARTHOG_THROTTLE_
 
 
 using uint = unsigned int;
 
 
+#ifndef INSIDE_PLUGIN
 namespace ThrustmasterWarthogThrottle
+#else
+namespace ThrustmasterWarthogThrottle_
+#endif
 {
 	const uint SC       = 0;	// slew control
 	const uint MSP      = 1;	// MS = micro switch

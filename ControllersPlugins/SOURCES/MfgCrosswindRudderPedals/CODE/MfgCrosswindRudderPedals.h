@@ -7,6 +7,9 @@ class QGameController;
 class QGameControllerButtonEvent;
 class QGameControllerAxisEvent;
 
+#define INSIDE_PLUGIN
+#include "../../../INCLUDES/MfgCrosswindRudderPedals.h"
+
 
 class MfgCrosswindRudderPedals : public RealJoystick
 {
@@ -41,12 +44,6 @@ class MfgCrosswindRudderPedals : public RealJoystick
 		
 	private:
 		QStringList m_axesNames;
-		
-		
-	public:
-		static const uint RUDDER    = 0;
-		static const uint BRK_LEFT  = 1;
-		static const uint BRK_RIGHT = 2;
 };
 
 #endif

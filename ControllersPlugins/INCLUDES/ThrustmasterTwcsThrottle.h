@@ -1,11 +1,15 @@
-#ifndef THRUSTMASTER_TWCS_THROTTLE
-#define THRUSTMASTER_TWCS_THROTTLE
+#ifndef THRUSTMASTER_TWCS_THROTTLE_
+#define THRUSTMASTER_TWCS_THROTTLE_
 
 
 using uint = unsigned int;
 
 
+#ifndef INSIDE_PLUGIN
 namespace ThrustmasterTwcsThrottle
+#else
+namespace ThrustmasterTwcsThrottle_
+#endif
 {
 	const uint TBTN1  = 0;	// instinctive disconnect
 	const uint TBTN2  = 1;	// pinky button left
