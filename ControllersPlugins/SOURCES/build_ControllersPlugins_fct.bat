@@ -50,6 +50,19 @@ echo.
 echo.
 
 
+REM COMPILATION OF PLUGIN ThrustmasterT16000MJoystick
+echo compiling ThrustmasterT16000MJoystick
+echo.
+cd ThrustmasterT16000MJoystick
+qmake
+mingw32-make release
+echo.
+copy /Y release\ThrustmasterT16000MJoystick.dll ..\..\PLUGINS
+cd ..
+echo.
+echo.
+
+
 REM COMPILATION OF PLUGIN ThrustmasterTwcsThrottle
 echo compiling ThrustmasterTwcsThrottle
 echo.
@@ -71,6 +84,19 @@ qmake
 mingw32-make release
 echo.
 copy /Y release\LogitechExtreme3D.dll ..\..\PLUGINS
+cd ..
+echo.
+echo.
+
+
+REM COMPILATION OF PLUGIN MicrosoftXbox360Controller
+echo compiling MicrosoftXbox360Controller
+echo.
+cd MicrosoftXbox360Controller
+qmake
+mingw32-make release
+echo.
+copy /Y release\MicrosoftXbox360Controller.dll ..\..\PLUGINS
 cd ..
 echo.
 echo.
