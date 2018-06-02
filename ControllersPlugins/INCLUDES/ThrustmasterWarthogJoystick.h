@@ -2,6 +2,7 @@
 #define THRUSTMASTER_WARTHOG_JOYSTICK_
 
 
+#include <QString>
 using uint = unsigned int;
 
 
@@ -11,6 +12,8 @@ namespace ThrustmasterWarthogJoystick
 namespace ThrustmasterWarthogJoystick_
 #endif
 {
+	const QString Description = "Joystick - HOTAS Warthog";
+	
 	const uint TG1 = 0;		// trigger stage 1
 	const uint S2  = 1;		// Weapon release
 	const uint S3  = 2;		// NWS (nose wheel steering)

@@ -8,6 +8,9 @@ class QGameControllerButtonEvent;
 class QGameControllerAxisEvent;
 class RealJoysticksManager;
 
+#define INSIDE_PLUGIN
+#include "../../../INCLUDES/vJoyDevice.h"
+
 
 class vJoyDevice : public RealJoystick
 {
@@ -21,6 +24,8 @@ class vJoyDevice : public RealJoystick
 		vJoyDevice& operator=(const vJoyDevice &other) = delete;
 		vJoyDevice& operator=(vJoyDevice &&other) = delete;
 		~vJoyDevice() = default;
+		
+		QString description() const override final;
 		
 		QString buttonName(uint button) const override final;
 		QStringList buttonsNames() const override final;

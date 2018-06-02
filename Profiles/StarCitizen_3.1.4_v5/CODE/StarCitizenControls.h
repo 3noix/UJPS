@@ -1,8 +1,9 @@
 #ifndef STAR_CITIZEN_CONTROLS
 #define STAR_CITIZEN_CONTROLS
 
-#include "VirtualJoystick.h"
-using VJOY = VirtualJoystick;
+
+#include "vJoyDevice.h"
+namespace VJOY = vJoyDevice;
 using uint = unsigned int;
 
 

@@ -2,6 +2,7 @@
 #define MICROSOFT_XBOX360_CONTROLLER_
 
 
+#include <QString>
 using uint = unsigned int;
 
 
@@ -11,6 +12,8 @@ namespace MicrosoftXbox360Controller
 namespace MicrosoftXbox360Controller_
 #endif
 {
+	const QString Description = "Controller (XBOX 360 For Windows)";
+	
 	const uint BA = 0;	// button A
 	const uint BB = 1;	// button B
 	const uint BX = 2;	// button X

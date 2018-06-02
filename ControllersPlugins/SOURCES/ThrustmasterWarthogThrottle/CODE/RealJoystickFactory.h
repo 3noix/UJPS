@@ -23,7 +23,7 @@ class RealJoystickFactory : public QObject, public AbstractRealJoystickFactory
 		
 		QString supportedJoystick() const override final
 		{
-			return "Throttle - HOTAS Warthog";
+			return ThrustmasterWarthogThrottle_::Description;
 		};
 		
 		AbstractRealJoystick* createRealJoystick(QGameController *c) override final

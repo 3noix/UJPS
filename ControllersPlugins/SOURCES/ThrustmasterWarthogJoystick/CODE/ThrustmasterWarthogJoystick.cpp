@@ -56,7 +56,7 @@ void ThrustmasterWarthogJoystick::slotGameControllerAxisEvent(QGameControllerAxi
 // DESCRIPTION ////////////////////////////////////////////////////////////////
 QString ThrustmasterWarthogJoystick::description() const
 {
-	return "Joystick - HOTAS Warthog";
+	return ThrustmasterWarthogJoystick_::Description;
 }
 
 

@@ -224,7 +224,7 @@ void ThrustmasterWarthogThrottle::slotGameControllerAxisEvent(QGameControllerAxi
 // DESCRIPTION ////////////////////////////////////////////////////////////////
 QString ThrustmasterWarthogThrottle::description() const
 {
-	return "Throttle - HOTAS Warthog";
+	return ThrustmasterWarthogThrottle_::Description;
 }
 
 

@@ -92,9 +92,9 @@ void Profile::stop()
 bool Profile::setupJoysticks()
 {
 	// we retrieve pointers on real joysticks we are interested in
-	tmwj = this->registerRealJoystick("Joystick - HOTAS Warthog");
-	tmwt = this->registerRealJoystick("Throttle - HOTAS Warthog");
-	mfgx = this->registerRealJoystick("MFG Crosswind V2");
+	tmwj = this->registerRealJoystick(TMWJ::Description);
+	tmwt = this->registerRealJoystick(TMWT::Description);
+	mfgx = this->registerRealJoystick(MFGX::Description);
 	
 	if (tmwj) {emit message("Warthog joystick detected !",Qt::black);}
 	else {emit message("Warthog joystick not detected !",Qt::red);}
@@ -109,11 +109,11 @@ bool Profile::setupJoysticks()
 	
 	
 	// virtual joysticks setup
-	vj1 = new VirtualJoystick(1,50);
+	vj1 = new VirtualJoystick{1};
 	emit message("Virtual joystick 1 configured",Qt::black);
 	this->registerVirtualJoystick(vj1);
 	
-	vj2 = new VirtualJoystick(2,50);
+	vj2 = new VirtualJoystick{2};
 	emit message("Virtual joystick 2 configured",Qt::black);
 	this->registerVirtualJoystick(vj2);
 	

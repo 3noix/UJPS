@@ -63,7 +63,7 @@ void LogitechExtreme3D::slotGameControllerAxisEvent(QGameControllerAxisEvent *ev
 // DESCRIPTION ////////////////////////////////////////////////////////////////
 QString LogitechExtreme3D::description() const
 {
-	return "Logitech Extreme 3D";
+	return LogitechExtreme3D_::Description;
 }
 
 

@@ -23,7 +23,7 @@ class RealJoystickFactory : public QObject, public AbstractRealJoystickFactory
 		
 		QString supportedJoystick() const override final
 		{
-			return "MFG Crosswind V2";
+			return MfgCrosswindRudderPedals_::Description;
 		};
 		
 		AbstractRealJoystick* createRealJoystick(QGameController *c) override final

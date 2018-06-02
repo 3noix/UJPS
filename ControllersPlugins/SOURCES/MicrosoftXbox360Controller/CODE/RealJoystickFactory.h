@@ -23,7 +23,7 @@ class RealJoystickFactory : public QObject, public AbstractRealJoystickFactory
 		
 		QString supportedJoystick() const override final
 		{
-			return "Controller (XBOX 360 For Windows)";
+			return MicrosoftXbox360Controller_::Description;
 		};
 		
 		AbstractRealJoystick* createRealJoystick(QGameController *c) override final

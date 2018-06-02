@@ -44,9 +44,9 @@ QString VirtualJoystick::m_vJoyConfigExeFileName{};
 
 
 // CONSTRUCTEUR ///////////////////////////////////////////////////////////////
-VirtualJoystick::VirtualJoystick(uint id, uint nbButtons, bool bForcedInit) : QObject()
+VirtualJoystick::VirtualJoystick(uint id, uint nbButtons, uint nbAxes, bool bForcedInit) : QObject()
 {
-	if (id > NB_JOYSTICKS_MAX || nbButtons > 128)
+	if (id > NB_JOYSTICKS_MAX || nbButtons > 128 || nbAxes > 8)
 		throw ExceptionBadVirtualJoystickArgs{};
 	
 	if (m_nbInstances == 0 && m_bUseVJoyConfigExe)
@@ -69,14 +69,13 @@ VirtualJoystick::VirtualJoystick(uint id, uint nbButtons, bool bForcedInit) : QO
 	
 	
 	m_id = id;
-	m_nbButtons = nbButtons;
 	m_reportModified = false;
 	m_report.bDevice = (BYTE)m_id;
 	
 	// create vJoy device
 	if (m_bUseVJoyConfigExe)
 	{
-		QString command = m_vJoyConfigExeFileName + " " + QString::number(m_id) + " -f -a X Y Z Rx Ry Rz Sl0 Sl1 -b " + QString::number(m_nbButtons);
+		QString command = m_vJoyConfigExeFileName + " " + QString::number(m_id) + " -f -a X Y Z Rx Ry Rz Sl0 Sl1 -b " + QString::number(nbButtons);
 		emit message("CREATE VJOY DEVICE: "+command,Qt::black);
 		QProcess::execute(command);
 	}

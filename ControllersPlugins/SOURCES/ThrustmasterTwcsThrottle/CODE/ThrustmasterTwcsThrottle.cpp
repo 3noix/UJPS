@@ -67,7 +67,7 @@ void ThrustmasterTwcsThrottle::slotGameControllerAxisEvent(QGameControllerAxisEv
 // DESCRIPTION ////////////////////////////////////////////////////////////////
 QString ThrustmasterTwcsThrottle::description() const
 {
-	return "TWCS Throttle";
+	return ThrustmasterTwcsThrottle_::Description;
 }
 
 

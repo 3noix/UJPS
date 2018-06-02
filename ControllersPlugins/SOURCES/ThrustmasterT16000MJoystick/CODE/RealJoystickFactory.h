@@ -23,7 +23,7 @@ class RealJoystickFactory : public QObject, public AbstractRealJoystickFactory
 		
 		QString supportedJoystick() const override final
 		{
-			return "T.16000M";
+			return ThrustmasterT16000MJoystick_::Description;
 		};
 		
 		AbstractRealJoystick* createRealJoystick(QGameController *c) override final

@@ -56,7 +56,7 @@ void MfgCrosswindRudderPedals::slotGameControllerAxisEvent(QGameControllerAxisEv
 // DESCRIPTION ////////////////////////////////////////////////////////////////
 QString MfgCrosswindRudderPedals::description() const
 {
-	return "MFG Crosswind V2";
+	return MfgCrosswindRudderPedals_::Description;
 }
 
 

@@ -5,6 +5,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 //  CONSTRUCTEUR
+//  DESCRIPTION
 //
 //  BUTTON NAME
 //  BUTTON NAMES
@@ -19,6 +20,14 @@ vJoyDevice::vJoyDevice(QGameController *c) : RealJoystick{c}
 {
 	m_axesNames << "X" << "Y" << "Z" << "ROTX" << "ROTY" << "ROTZ" << "SLIDER0" << "SLIDER1";
 }
+
+// DESCRIPTION ////////////////////////////////////////////////////////////////
+QString vJoyDevice::description() const
+{
+	return vJoyDevice_::Description;
+}
+
+
 
 
 

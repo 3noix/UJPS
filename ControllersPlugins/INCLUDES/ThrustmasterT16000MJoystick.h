@@ -2,6 +2,7 @@
 #define THRUSTMASTER_T16000M_JOYSTICK_
 
 
+#include <QString>
 using uint = unsigned int;
 
 
@@ -11,6 +12,8 @@ namespace ThrustmasterT16000MJoystick
 namespace ThrustmasterT16000MJoystick_
 #endif
 {
+	const QString Description = "T.16000M";
+	
 	const uint TS1   = 0;	// trigger button
 	const uint TS2   = 1;	// stick top middle button
 	const uint TS3   = 2;	// stick top left button

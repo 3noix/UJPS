@@ -2,6 +2,7 @@
 #define THRUSTMASTER_TWCS_THROTTLE_
 
 
+#include <QString>
 using uint = unsigned int;
 
 
@@ -11,6 +12,8 @@ namespace ThrustmasterTwcsThrottle
 namespace ThrustmasterTwcsThrottle_
 #endif
 {
+	const QString Description = "TWCS Throttle";
+	
 	const uint TBTN1  = 0;	// instinctive disconnect
 	const uint TBTN2  = 1;	// pinky button left
 	const uint TBTN3  = 2;	// pinky button right

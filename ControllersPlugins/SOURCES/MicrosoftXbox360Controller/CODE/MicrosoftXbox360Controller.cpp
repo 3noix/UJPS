@@ -59,7 +59,7 @@ void MicrosoftXbox360Controller::slotGameControllerAxisEvent(QGameControllerAxis
 // DESCRIPTION ////////////////////////////////////////////////////////////////
 QString MicrosoftXbox360Controller::description() const
 {
-	return "Controller (XBOX 360 For Windows)";
+	return MicrosoftXbox360Controller_::Description;
 }
 
 

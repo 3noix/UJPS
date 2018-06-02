@@ -2,6 +2,7 @@
 #define LOGITECH_EXTREME_3D_
 
 
+#include <QString>
 using uint = unsigned int;
 
 
@@ -11,6 +12,8 @@ namespace LogitechExtreme3D
 namespace LogitechExtreme3D_
 #endif
 {
+	const QString Description = "Logitech Extreme 3D";
+	
 	const uint TG    = 0;	// trigger
 	const uint THMB  = 1;	// thumb button
 	const uint SBDL  = 2;	// stick button down left

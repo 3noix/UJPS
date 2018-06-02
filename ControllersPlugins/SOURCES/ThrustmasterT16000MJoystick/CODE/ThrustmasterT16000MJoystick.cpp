@@ -63,7 +63,7 @@ void ThrustmasterT16000MJoystick::slotGameControllerAxisEvent(QGameControllerAxi
 // DESCRIPTION ////////////////////////////////////////////////////////////////
 QString ThrustmasterT16000MJoystick::description() const
 {
-	return "T.16000M";
+	return ThrustmasterT16000MJoystick_::Description;
 }
 
 

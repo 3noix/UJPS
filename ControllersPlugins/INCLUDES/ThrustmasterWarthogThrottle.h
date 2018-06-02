@@ -2,6 +2,7 @@
 #define THRUSTMASTER_WARTHOG_THROTTLE_
 
 
+#include <QString>
 using uint = unsigned int;
 
 
@@ -11,6 +12,8 @@ namespace ThrustmasterWarthogThrottle
 namespace ThrustmasterWarthogThrottle_
 #endif
 {
+	const QString Description = "Throttle - HOTAS Warthog";
+	
 	const uint SC       = 0;	// slew control
 	const uint MSP      = 1;	// MS = micro switch
 	const uint MSU      = 2;

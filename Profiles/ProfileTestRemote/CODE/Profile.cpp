@@ -5,6 +5,7 @@
 LayersCombo AllLayers{};
 
 #include "VirtualJoystick.h"
+#include "vJoyDevice.h"
 #include "WindowsKeys.h"
 using namespace Keys;
 
@@ -12,7 +13,7 @@ using namespace Keys;
 #include "RemoteJoystickServer.h"
 #include "ThrustmasterWarthogJoystick.h"
 
-using VJOY = VirtualJoystick;
+namespace VJOY = vJoyDevice;
 namespace TMWJ = ThrustmasterWarthogJoystick;
 
 
@@ -58,7 +59,7 @@ void Profile::stop()
 bool Profile::setupJoysticks()
 {
 	// we retrieve pointers on real joysticks we are interested in
-	tmwj = this->registerRealJoystick("Joystick - HOTAS Warthog");
+	tmwj = this->registerRealJoystick(TMWJ::Description);
 	if (tmwj) {emit message("Warthog joystick detected !",Qt::black);}
 	else {emit message("Warthog joystick not detected !",Qt::red); return false;}
 	
@@ -68,7 +69,7 @@ bool Profile::setupJoysticks()
 	
 	
 	// virtual joystick(s) setup
-	vj1 = new VirtualJoystick(1,128);
+	vj1 = new VirtualJoystick{1};
 	emit message("Virtual joystick 1 configured",Qt::black);
 	this->registerVirtualJoystick(vj1);
 	
