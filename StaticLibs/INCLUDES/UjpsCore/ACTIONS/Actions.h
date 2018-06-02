@@ -13,6 +13,8 @@
 #include "ACTIONS/ActionKeyPulse.h"
 #include "ACTIONS/ActionKeyPress.h"
 #include "ACTIONS/ActionKeyRelease.h"
+#include "ACTIONS/ActionKeySetChange.h"
+#include "ACTIONS/ActionKeySetChangeOpposite.h"
 #include "ACTIONS/ActionCallback.h"
 #include "ACTIONS/ActionChain.h"
 #include "ACTIONS/ActionDelay.h"
