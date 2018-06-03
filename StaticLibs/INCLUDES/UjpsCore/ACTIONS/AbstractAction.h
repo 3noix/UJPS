@@ -4,6 +4,7 @@
 
 #include "VirtualEvent.h"
 #include "JoystickChange.h"
+class AbstractRealJoystick;
 
 
 class AbstractAction

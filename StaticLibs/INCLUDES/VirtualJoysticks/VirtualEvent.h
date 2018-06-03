@@ -1,6 +1,7 @@
 #ifndef VIRTUAL_EVENT
 #define VIRTUAL_EVENT
 
+
 #include <functional>
 #include "../OTHER/ControlType.h"
 class VirtualJoystick;
@@ -16,6 +17,7 @@ enum class EventType
 	Keyboard,
 	Callback
 };
+
 
 struct VJoyEvent
 {

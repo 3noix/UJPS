@@ -2,9 +2,7 @@
 #define LAYERS_CALCULATOR
 
 
-#include "JoystickChange.h"
 #include "Layer.h"
-#include <QVector>
 #include <vector>
 #include <tuple>
 #include <algorithm>

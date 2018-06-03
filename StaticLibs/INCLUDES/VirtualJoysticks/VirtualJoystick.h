@@ -11,11 +11,13 @@
 #include "AbsoluteOrRelative.h"
 using uint = unsigned int;
 
+
 enum class RewriteOrNot
 {
 	CanRewrite,
 	NoRewrite
 };
+
 
 enum class TrimOrNot
 {

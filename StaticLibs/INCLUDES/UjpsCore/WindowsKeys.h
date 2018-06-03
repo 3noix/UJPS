@@ -1,10 +1,11 @@
 #ifndef KEYS
 #define KEYS
 
-using uint = unsigned int;
 
+using uint = unsigned int;
 // file established using this data: https://msdn.microsoft.com/fr-fr/library/windows/desktop/dd375731(v=vs.85).aspx
 // or search "virtual key code" on microsoft msdn
+
 
 namespace Keys
 {

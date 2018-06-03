@@ -6,7 +6,6 @@
 #include <QString>
 #include <QColor>
 #include <QVector>
-#include <QPair>
 #include "JoystickChange.h"
 #include "MappingModifRequest.h"
 #include "LAYERS/LayersCombo.h"

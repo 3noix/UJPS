@@ -3,7 +3,7 @@
 
 
 #include "AbstractAction.h"
-class VirtualJoystick;
+#include "AbstractRealJoystick.h"
 
 
 class ActionKeySetChangeOpposite : public AbstractAction

@@ -3,6 +3,7 @@
 
 
 #include "AbstractAction.h"
+#include "AbstractRealJoystick.h"
 class VirtualJoystick;
 
 

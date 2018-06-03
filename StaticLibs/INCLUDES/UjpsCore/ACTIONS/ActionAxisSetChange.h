@@ -4,6 +4,7 @@
 
 #include "AbstractAction.h"
 #include "AxisDirection.h"
+#include "AbstractRealJoystick.h"
 class VirtualJoystick;
 
 
