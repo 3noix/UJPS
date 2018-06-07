@@ -390,9 +390,9 @@ void VirtualJoystick::resetReport()
 	m_report.lButtonsEx1 = 0L;			// LONG
 	m_report.lButtonsEx2 = 0L;			// LONG
 	m_report.lButtonsEx3 = 0L;			// LONG
-	m_report.bHats       = 0L;			// DWORD
-	m_report.bHatsEx1    = 0L;			// DWORD
-	m_report.bHatsEx2    = 0L;			// DWORD
-	m_report.bHatsEx3    = 0L;			// DWORD
+	m_report.bHats       = -1L;			// DWORD
+	m_report.bHatsEx1    = -1L;			// DWORD
+	m_report.bHatsEx2    = -1L;			// DWORD
+	m_report.bHatsEx3    = -1L;			// DWORD
 }
 

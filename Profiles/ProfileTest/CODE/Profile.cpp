@@ -102,17 +102,10 @@ void Profile::runFirstStep()
 	
 	MapAxisRelative(tmwj, TMWJ::JOYY, AllLayers, vj1, VJOY::Z, 4000.0f);
 	
-	MapButton(tmwj, TMWJ::H2L, AllLayers, vj1, VJOY::DX50);
-	MapButton(tmwj, TMWJ::H2R, AllLayers, vj1, VJOY::DX51);
-	
-	Map(tmwj, ControlType::Button, TMWJ::H3L, AllLayers,
-		new TriggerButtonChange{},
-		new ActionKeySetChange{Key_A}
-	);
-	Map(tmwj, ControlType::Button, TMWJ::H3R, AllLayers,
-		new TriggerButtonChange{},
-		new ActionKeySetChangeOpposite{Key_B}
-	);
+	MapButton(tmwj, TMWJ::H2U, AllLayers, vj1, VJOY::DX49);
+	MapButton(tmwj, TMWJ::H2R, AllLayers, vj1, VJOY::DX50);
+	MapButton(tmwj, TMWJ::H2D, AllLayers, vj1, VJOY::DX51);
+	MapButton(tmwj, TMWJ::H2L, AllLayers, vj1, VJOY::DX52);
 }
 
 

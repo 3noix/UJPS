@@ -60,6 +60,7 @@ class RealJoystick : public QObject, public AbstractRealJoystick
 		
 	private:
 		QGameController *m_controller;
+		bool m_bTransFormPovsInto4Buttons;
 		QVector<float> m_povsAngles; // to keep track of the last values
 };
 

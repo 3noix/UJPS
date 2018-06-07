@@ -41,7 +41,8 @@ RealJoystick::RealJoystick(QGameController *c) : QObject{}, AbstractRealJoystick
 	QObject::connect(c,&QGameController::gameControllerButtonEvent,this,&RealJoystick::slotGameControllerButtonEvent);
 	QObject::connect(c,&QGameController::gameControllerPovEvent,this,&RealJoystick::slotGameControllerPovEvent);
 	
-	m_povsAngles = QVector<float>(m_controller->povsCount(),-1.0f);
+	m_bTransFormPovsInto4Buttons = (m_controller->description() != "vJoy Device");
+	if (m_bTransFormPovsInto4Buttons) {m_povsAngles = QVector<float>(m_controller->povsCount(),-1.0f);}
 }
 
 RealJoystick::~RealJoystick()
@@ -110,9 +111,12 @@ void RealJoystick::slotGameControllerPovEvent(QGameControllerPovEvent *event)
 {
 	Q_ASSERT(event);
 	
+	if (!m_bTransFormPovsInto4Buttons) {return;}
+	
 	uint pov = event->pov();
 	float angle = event->angle();
 	float oldAngle = m_povsAngles[pov];
+	m_povsAngles[pov] = angle;
 	
 	bool bCenter = (angle == -1.0f);
 	bool bUp     = (!bCenter && (angle < 60.0f  || angle > 300.0f));
@@ -131,8 +135,6 @@ void RealJoystick::slotGameControllerPovEvent(QGameControllerPovEvent *event)
 	if (bRight != bWasRight) {m_changes << JoystickChange{this, ControlType::Button, buttonUp+1, bRight,0.0};}
 	if (bDown  != bWasDown)  {m_changes << JoystickChange{this, ControlType::Button, buttonUp+2, bDown, 0.0};}
 	if (bLeft  != bWasLeft)  {m_changes << JoystickChange{this, ControlType::Button, buttonUp+3, bLeft, 0.0};}
-	
-	m_povsAngles[pov] = angle;
 }
 
 
@@ -142,7 +144,10 @@ void RealJoystick::slotGameControllerPovEvent(QGameControllerPovEvent *event)
 // BUTTONS COUNT //////////////////////////////////////////////////////////////
 uint RealJoystick::buttonsCount() const
 {
-	return m_controller->buttonsCount() + 4 * m_controller->povsCount();
+	if (m_bTransFormPovsInto4Buttons)
+		return m_controller->buttonsCount() + 4 * m_controller->povsCount();
+	else
+		return m_controller->buttonsCount();
 }
 
 // BUTTON PRESSED /////////////////////////////////////////////////////////////
@@ -152,7 +157,7 @@ bool RealJoystick::buttonPressed(uint button) const
 	{
 		return m_controller->buttonValue(button);
 	}
-	else if (button < m_controller->buttonsCount() + 4 * m_controller->povsCount())
+	else if (m_bTransFormPovsInto4Buttons && button < m_controller->buttonsCount() + 4 * m_controller->povsCount())
 	{
 		uint pov = (button-m_controller->buttonsCount()) / 4;
 		uint num = (button-m_controller->buttonsCount()) % 4;
@@ -174,7 +179,7 @@ QString RealJoystick::buttonName(uint button) const
 	{
 		return "Button " + QString::number(button+1);
 	}
-	else if (button < m_controller->buttonsCount() + 4 * m_controller->povsCount())
+	else if (m_bTransFormPovsInto4Buttons && button < m_controller->buttonsCount() + 4 * m_controller->povsCount())
 	{
 		uint pov = (button-m_controller->buttonsCount()) / 4;
 		uint num = (button-m_controller->buttonsCount()) % 4;
