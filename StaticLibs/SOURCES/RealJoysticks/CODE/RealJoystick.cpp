@@ -116,15 +116,15 @@ void RealJoystick::slotGameControllerPovEvent(QGameControllerPovEvent *event)
 	
 	bool bCenter = (angle == -1.0f);
 	bool bUp     = (!bCenter && (angle < 60.0f  || angle > 300.0f));
+	bool bRight  = (!bCenter && angle > 30.0f  && angle < 150.0f);
 	bool bDown   = (!bCenter && angle > 120.0f && angle < 240.0f);
 	bool bLeft   = (!bCenter && angle > 210.0f && angle < 330.0f);
-	bool bRight  = (!bCenter && angle > 30.0f  && angle < 150.0f);
 	
 	bool bWasCenter = (oldAngle == -1.0f);
 	bool bWasUp     = (!bWasCenter && (oldAngle < 60.0f  || oldAngle > 300.0f));
+	bool bWasRight  = (!bWasCenter && oldAngle > 30.0f  && oldAngle < 150.0f);
 	bool bWasDown   = (!bWasCenter && oldAngle > 120.0f && oldAngle < 240.0f);
 	bool bWasLeft   = (!bWasCenter && oldAngle > 210.0f && oldAngle < 330.0f);
-	bool bWasRight  = (!bWasCenter && oldAngle > 30.0f  && oldAngle < 150.0f);
 	
 	uint buttonUp = m_controller->buttonsCount() + 4 * pov;
 	if (bUp    != bWasUp)    {m_changes << JoystickChange{this, ControlType::Button, buttonUp,   bUp,   0.0};}
@@ -159,9 +159,9 @@ bool RealJoystick::buttonPressed(uint button) const
 		float angle = m_povsAngles[pov];
 		
 		if (num == 0)      {return (angle != -1.0f && (angle < 60.0f || angle > 300.0f));}
-		else if (num == 1) {return (angle != -1.0f && angle > 120.0f && angle < 240.0f);}
-		else if (num == 2) {return (angle != -1.0f && angle > 210.0f && angle < 330.0f);}
-		else if (num == 3) {return (angle != -1.0f && angle >  30.0f && angle < 150.0f);}
+		else if (num == 1) {return (angle != -1.0f && angle >  30.0f && angle < 150.0f);}
+		else if (num == 2) {return (angle != -1.0f && angle > 120.0f && angle < 240.0f);}
+		else if (num == 3) {return (angle != -1.0f && angle > 210.0f && angle < 330.0f);}
 	}
 	
 	return false;
