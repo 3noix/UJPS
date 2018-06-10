@@ -40,7 +40,7 @@ void VirtualEventsQueue::processEvents()
 					}
 					else if (e.vjev.type == ControlType::Pov)
 					{
-						//e.vjev.joystick->setPov(e.vjev.numButtonAxisPov, e.vjev.axisOrPovValue, RewriteOrNot::CanRewrite);
+						e.vjev.joystick->setPov(e.vjev.numButtonAxisPov, e.vjev.axisOrPovValue, RewriteOrNot::CanRewrite);
 					}
 				}
 			}

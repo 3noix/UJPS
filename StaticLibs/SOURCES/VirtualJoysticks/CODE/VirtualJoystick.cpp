@@ -32,10 +32,13 @@ QString VirtualJoystick::m_vJoyConfigExeFileName{};
 //  GET BUTTON
 //  SET AXIS
 //  GET AXIS
+//  SET POV
+//  GET POV
 //
 //  SET BUTTON LOCKED
 //  SET AXIS LOCKED
 //  SET AXIS TRIM
+//  SET POV LOCKED
 //
 //  FLUSH
 //  RESET REPORT
@@ -44,9 +47,9 @@ QString VirtualJoystick::m_vJoyConfigExeFileName{};
 
 
 // CONSTRUCTEUR ///////////////////////////////////////////////////////////////
-VirtualJoystick::VirtualJoystick(uint id, uint nbButtons, uint nbAxes, bool bForcedInit) : QObject()
+VirtualJoystick::VirtualJoystick(uint id, uint nbButtons, uint nbAxes, uint nbPovs, bool bForcedInit) : QObject()
 {
-	if (id > NB_JOYSTICKS_MAX || nbButtons > 128 || nbAxes > 8)
+	if (id > NB_JOYSTICKS_MAX || nbButtons > 128 || nbAxes > 8 || nbPovs > 4)
 		throw ExceptionBadVirtualJoystickArgs{};
 	
 	if (m_nbInstances == 0 && m_bUseVJoyConfigExe)
@@ -103,6 +106,8 @@ VirtualJoystick::VirtualJoystick(uint id, uint nbButtons, uint nbAxes, bool bFor
 	for (bool& b : m_axesLocked) {b = false;}
 	for (bool& b : m_axesNoRewrite) {b = false;}
 	for (LONG& t : m_axesTrim) {t = 0L;}
+	for (bool& b : m_povsLocked) {b = false;}
+	for (bool& b : m_povsNoRewrite) {b = false;}
 	
 	// init HID report
 	this->resetReport();
@@ -297,6 +302,44 @@ LONG VirtualJoystick::getAxisPrivate(uint axis) const
 	return 16384L;
 }
 
+// SET POV ////////////////////////////////////////////////////////////////////
+bool VirtualJoystick::setPov(uint pov, float value, RewriteOrNot ron)
+{
+	if (pov >= 4 || m_povsLocked[pov] || m_povsNoRewrite[pov]) {return false;}
+	if (ron == RewriteOrNot::NoRewrite) {m_povsNoRewrite[pov] = true;}
+	
+	DWORD v = -1L;
+	if (value > -0.5f) {v = (DWORD) (value*100.0f);}
+	
+	if (pov == 0)      {m_report.bHats    = v;}
+	else if (pov == 1) {m_report.bHatsEx1 = v;}
+	else if (pov == 2) {m_report.bHatsEx2 = v;}
+	else if (pov == 3) {m_report.bHatsEx3 = v;}
+	
+	m_reportModified = true;
+	return true;
+}
+
+// GET POV ////////////////////////////////////////////////////////////////////
+float VirtualJoystick::getPov(uint pov) const
+{
+	if (pov >= 4) {return 0.0f;}
+	DWORD value2 = this->getPovPrivate(pov);
+	if (value2 == -1UL) {return -1.0f;}
+	float value = 0.01f * value2;
+	return value;
+}
+
+DWORD VirtualJoystick::getPovPrivate(uint pov) const
+{
+	if (pov == 0)      {return m_report.bHats;}
+	else if (pov == 1) {return m_report.bHatsEx1;}
+	else if (pov == 2) {return m_report.bHatsEx2;}
+	else if (pov == 3) {return m_report.bHatsEx3;}
+	
+	return -1;
+}
+
 
 
 
@@ -345,6 +388,13 @@ void VirtualJoystick::setAxisTrim(uint axis, float trimF, AbsoluteOrRelative aor
 	m_reportModified = true;
 }
 
+// SET POV LOCKED /////////////////////////////////////////////////////////////
+void VirtualJoystick::setPovLocked(uint pov, bool locked)
+{
+	if (pov >= 4) {return;}
+	m_povsLocked[pov] = locked;
+}
+
 
 
 
@@ -360,6 +410,7 @@ bool VirtualJoystick::flush(bool bEvenIfNoChange)
 	m_reportModified = false;
 	for (std::array<bool,128>::iterator it=m_buttonsNoRewrite.begin(); it!=m_buttonsNoRewrite.end(); ++it) {*it = false;}
 	for (std::array<bool,8>::iterator it=m_axesNoRewrite.begin(); it!=m_axesNoRewrite.end(); ++it) {*it = false;}
+	for (std::array<bool,4>::iterator it=m_povsNoRewrite.begin(); it!=m_povsNoRewrite.end(); ++it) {*it = false;}
 	
 	return b;
 }

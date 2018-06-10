@@ -31,7 +31,7 @@ class VirtualJoystick : public QObject
 	Q_OBJECT
 	
 	public:
-		VirtualJoystick(uint id, uint nbButtons = 128, uint nbAxes = 8, bool bForcedInit = true);
+		VirtualJoystick(uint id, uint nbButtons = 128, uint nbAxes = 8, uint nbPovs = 0, bool bForcedInit = true);
 		VirtualJoystick(const VirtualJoystick &other) = delete;
 		VirtualJoystick(VirtualJoystick &&other) = delete;
 		VirtualJoystick& operator=(const VirtualJoystick &other) = delete;
@@ -43,10 +43,13 @@ class VirtualJoystick : public QObject
 		bool getButton(uint button) const;
 		bool setAxis(uint axis, float value, RewriteOrNot ron = RewriteOrNot::NoRewrite, TrimOrNot ton = TrimOrNot::NoTrim);
 		float getAxis(uint axis) const;
+		bool setPov(uint pov, float value, RewriteOrNot ron = RewriteOrNot::NoRewrite);
+		float getPov(uint pov) const;
 		
 		void setButtonLocked(uint button, bool locked);
 		void setAxisLocked(uint axis, bool locked);
 		void setAxisTrim(uint axis, float trim, AbsoluteOrRelative aor = AbsoluteOrRelative::Absolute);
+		void setPovLocked(uint pov, bool locked);
 		
 		void resetReport();
 		bool flush(bool bEvenIfNoChange = false);
@@ -63,6 +66,7 @@ class VirtualJoystick : public QObject
 		
 	private:
 		LONG getAxisPrivate(uint axis) const;
+		DWORD getPovPrivate(uint pov) const;
 		
 		uint m_id;
 		bool m_reportModified;
@@ -73,6 +77,8 @@ class VirtualJoystick : public QObject
 		std::array<bool,8> m_axesLocked;
 		std::array<bool,8> m_axesNoRewrite;
 		std::array<LONG,8> m_axesTrim;
+		std::array<bool,4> m_povsLocked;
+		std::array<bool,4> m_povsNoRewrite;
 		
 		static uint m_nbInstances;
 		static bool m_bUseVJoyConfigExe;

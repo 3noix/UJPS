@@ -22,6 +22,11 @@ namespace vJoyDevice_
 	const uint ROTZ    = 5;
 	const uint SLIDER0 = 6;
 	const uint SLIDER1 = 7;
+	
+	const uint POV1 = 0;
+	const uint POV2 = 1;
+	const uint POV3 = 2;
+	const uint POV4 = 3;
 		
 	const uint DX1   = 0;
 	const uint DX2   = 1;
