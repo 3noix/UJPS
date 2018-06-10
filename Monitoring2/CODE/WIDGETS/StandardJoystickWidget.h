@@ -5,6 +5,7 @@
 #include <QtWidgets>
 class AbstractRealJoystick;
 class ButtonWidget;
+class PovWidget;
 
 
 class StandardJoystickWidget : public QWidget
@@ -21,6 +22,7 @@ class StandardJoystickWidget : public QWidget
 		
 		void joystickButtonStateChanged(uint button, bool bPressed);
 		void joystickAxisValueChanged(uint axis, float value);
+		void joystickPovAngleChanged(uint pov, float value);
 		
 		
 	private slots:
@@ -34,13 +36,17 @@ class StandardJoystickWidget : public QWidget
 		
 		void setupWidget();
 		void initState();
-		QHBoxLayout *layout;
+		
+		QHBoxLayout *layout1;
+		QVBoxLayout *layout2;
+		QHBoxLayout *layout3;
 		QGridLayout *axesLayout, *buttonsLayout;
 		QGroupBox *boxAxes, *boxButtons, *boxPov;
 		QVector<QLabel*> axesLabels;
 		QVector<QSlider*> axesSliders;
 		QVector<QLabel*> axesValues;
-		QVector<ButtonWidget*> buttonsChecks;
+		QVector<ButtonWidget*> buttonsWidgets;
+		QVector<PovWidget*> povWidgets;
 };
 
 #endif

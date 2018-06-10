@@ -25,6 +25,11 @@
 //  AXIS NAME
 //  AXES NAMES
 //
+//  POVS COUNT
+//  POV VALUE
+//  POV NAME
+//  POVS NAMES
+//
 //  SET DATA
 //  FLUSH
 //
@@ -51,8 +56,10 @@ RemoteJoystickServer::RemoteJoystickServer(const QString &name, int portNumber, 
 	m_initFailed = false;
 	m_nbButtons = 0;
 	m_nbAxes = 0;
+	m_nbPovs = 0;
 	for (bool &b : m_buttons) {b = false;}
 	for (float &f : m_axes) {f = 0.0f;}
+	for (float &f : m_povs) {f = -1.0f;}
 	
 	m_tcpServer = nullptr;
 	m_tcpSocket = nullptr;
@@ -175,6 +182,36 @@ QString RemoteJoystickServer::axisName(uint axis) const
 QStringList RemoteJoystickServer::axesNames() const {return m_axesNames;}
 
 
+
+
+
+
+// POVS COUNT /////////////////////////////////////////////////////////////////
+uint RemoteJoystickServer::povsCount() const {return m_nbPovs;}
+
+// POV VALUE //////////////////////////////////////////////////////////////////
+float RemoteJoystickServer::povValue(uint pov) const
+{
+	if (pov >= m_nbPovs) {return -1.0f;}
+	return m_povs[pov];
+}
+
+// POV NAME ///////////////////////////////////////////////////////////////////
+QString RemoteJoystickServer::povName(uint pov) const
+{
+	if (pov >= m_nbPovs) {return QString();}
+	return m_povsNames[pov];
+}
+
+// POVS NAMES /////////////////////////////////////////////////////////////////
+QStringList RemoteJoystickServer::povsNames() const {return m_povsNames;}
+
+
+
+
+
+
+
 // SET DATA ///////////////////////////////////////////////////////////////////
 void RemoteJoystickServer::setData(const QString &str, QVariant v)
 {
@@ -283,9 +320,9 @@ void RemoteJoystickServer::slotReceiveData()
 	if (m_messageType == RemoteJoystickMessageType::Init)
 	{
 		QString name;
-		quint8 nbButtons, nbAxes;
-		QStringList buttonsNames, axesNames;
-		in >> name >> nbButtons >> buttonsNames >> nbAxes >> axesNames;
+		quint8 nbButtons, nbAxes, nbPovs;
+		QStringList buttonsNames, axesNames, povsNames;
+		in >> name >> nbButtons >> buttonsNames >> nbAxes >> axesNames >> nbPovs >> povsNames;
 		
 		m_messageType = RemoteJoystickMessageType::Invalid;
 		m_dataSize = 0;
@@ -298,7 +335,7 @@ void RemoteJoystickServer::slotReceiveData()
 			//throw ExceptionInconsistentInitData{str.toStdString()};
 		}
 		
-		if (nbButtons != buttonsNames.size() || nbAxes != axesNames.size())
+		if (nbButtons != buttonsNames.size() || nbAxes != axesNames.size() || nbPovs != povsNames.size())
 		{
 			QString str = "Wrong init data received: inconsistency in buttons/axes number and names";
 			emit message(str,QColor{255,127,0});
@@ -311,6 +348,8 @@ void RemoteJoystickServer::slotReceiveData()
 		m_buttonsNames = buttonsNames;
 		m_nbAxes = nbAxes;
 		m_axesNames = axesNames;
+		m_nbPovs = nbPovs;
+		m_povsNames = povsNames;
 		m_initialized = true;
 	}
 	// button change
@@ -342,6 +381,23 @@ void RemoteJoystickServer::slotReceiveData()
 			JoystickChange ch{this,ControlType::Axis,numAxis,false,axisValue};
 			m_changes << ch;
 			m_axes[numAxis] = axisValue;
+		}
+		
+		m_messageType = RemoteJoystickMessageType::Invalid;
+		m_dataSize = 0;
+	}
+	// pov change
+	else if (m_messageType == RemoteJoystickMessageType::Pov)
+	{
+		quint8 numPov;
+		float povValue;
+		in >> numPov >> povValue;
+		
+		if (numPov < m_nbPovs)
+		{
+			JoystickChange ch{this,ControlType::Pov,numPov,false,povValue};
+			m_changes << ch;
+			m_povs[numPov] = povValue;
 		}
 		
 		m_messageType = RemoteJoystickMessageType::Invalid;

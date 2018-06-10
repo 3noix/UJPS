@@ -35,6 +35,11 @@ class EnhancedJoystick : public AbstractRealJoystick
 		virtual QString axisName(uint axis) const override;
 		virtual QStringList axesNames() const override;
 		
+		virtual uint povsCount() const override;
+		virtual float povValue(uint pov) const override;
+		virtual QString povName(uint pov) const override;
+		virtual QStringList povsNames() const override;
+		
 		virtual void setData(const QString &str, QVariant v) override;
 		virtual void flush() override;
 		
@@ -44,6 +49,7 @@ class EnhancedJoystick : public AbstractRealJoystick
 		void setAxisLocked(uint axis, bool locked);
 		void setAxisTrim(uint axis, float trim, AbsoluteOrRelative aor = AbsoluteOrRelative::Absolute);
 		float axisRawValue(uint axis) const;
+		void setPovLocked(uint pov, bool locked);
 		
 		void setSCurve(uint axis, float lowerDZ, float centerDZ, float upperDZ, float curve, float zoom);
 		void setJCurve(uint axis, float zoom);
@@ -59,11 +65,16 @@ class EnhancedJoystick : public AbstractRealJoystick
 		bool m_bOwn;
 		
 		std::array<bool,128> m_buttonsLocked;
+		std::array<bool,128> m_buttonsValuesBeforeLock;
+		
 		std::array<bool,8> m_axesLocked;
 		std::array<float,8> m_axesTrim;
 		std::array<float,8> m_axesValuesBeforeLock;
 		std::array<AbstractAxisCurve*,8> m_axesCurves;
 		std::vector<uint> m_axesToUpdate;
+		
+		std::array<bool,4> m_povsLocked;
+		std::array<float,4> m_povsValuesBeforeLock;
 };
 
 #endif

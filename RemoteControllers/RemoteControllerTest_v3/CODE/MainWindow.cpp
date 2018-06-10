@@ -37,6 +37,8 @@ MainWindow::MainWindow(QWidget *parent) : QWidget(parent)
 	QObject::connect(m_button2, &QPushButton::pressed, this, &MainWindow::slotButton2Pressed);
 	QObject::connect(m_button1, &QPushButton::released, this, &MainWindow::slotButton1Released);
 	QObject::connect(m_button2, &QPushButton::released, this, &MainWindow::slotButton2Released);
+	
+	povValue = 0.0f;
 }
 
 // SETUP WIDGET ///////////////////////////////////////////////////////////////
@@ -122,7 +124,10 @@ void MainWindow::slotButton1Pressed()
 // SLOT BUTTON 2 PRESSED //////////////////////////////////////////////////////
 void MainWindow::slotButton2Pressed()
 {
-	m_client.slotSendButtonInfo(1,true);
+	povValue += 20.0f;
+	if (povValue >= 360.0f) {povValue -= 360.0f;}
+	m_client.slotSendPovInfo(0,povValue);
+	//m_client.slotSendButtonInfo(1,true);
 }
 
 // SLOT BUTTON 1 RELEASED /////////////////////////////////////////////////////
@@ -134,7 +139,7 @@ void MainWindow::slotButton1Released()
 // SLOT BUTTON 2 RELEASED /////////////////////////////////////////////////////
 void MainWindow::slotButton2Released()
 {
-	m_client.slotSendButtonInfo(1,false);
+	//m_client.slotSendButtonInfo(1,false);
 }
 
 

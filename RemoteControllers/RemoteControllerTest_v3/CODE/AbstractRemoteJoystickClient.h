@@ -30,10 +30,12 @@ class AbstractRemoteJoystickClient : public QObject
 		virtual ~AbstractRemoteJoystickClient() = default;
 		
 		virtual QString description() const = 0;
-		virtual quint8 buttonCount() const = 0;
+		virtual quint8 buttonsCount() const = 0;
 		virtual QStringList buttonsNames() const = 0;
-		virtual quint8 axisCount() const = 0;
+		virtual quint8 axesCount() const = 0;
 		virtual QStringList axesNames() const = 0;
+		virtual quint8 povsCount() const = 0;
+		virtual QStringList povsNames() const = 0;
 		virtual void setData(const QString &prop, QVariant v) = 0;
 		
 		State state() const;
@@ -49,6 +51,7 @@ class AbstractRemoteJoystickClient : public QObject
 		void slotDisconnect();
 		void slotSendButtonInfo(quint8 button, bool bPressed);
 		void slotSendAxisInfo(quint8 axis, float axisValue);
+		void slotSendPovInfo(quint8 pov, float povValue);
 		
 		
 	private slots:

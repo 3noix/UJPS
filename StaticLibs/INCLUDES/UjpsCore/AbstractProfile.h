@@ -63,6 +63,8 @@ class AbstractProfile : public QObject
 		void MapAxis2(AbstractRealJoystick *rj, uint rAxis, LayersCombo lc, uint nbPoints, const std::vector<AbstractAction*> actions);
 		void MapMergeAxes(AbstractRealJoystick *rj1, uint rAxis1, float k1, AbstractRealJoystick *rj2, uint rAxis2, float k2, LayersCombo lc, VirtualJoystick *vj, uint vAxis);
 		
+		void MapPov(AbstractRealJoystick *rj, uint rPov, LayersCombo lc, VirtualJoystick *vj, uint vPov);
+		
 		void UnmapAll();
 		void UnmapButton(AbstractRealJoystick *rj, uint rButton);
 		void UnmapAxis(AbstractRealJoystick *rj, uint rAxis);

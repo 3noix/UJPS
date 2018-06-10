@@ -51,6 +51,8 @@ class MainWindow : public QWidget
 		QGridLayout *m_layout2;
 		QSlider *m_slider;
 		QPushButton *m_button1, *m_button2, *m_button3;
+		
+		float povValue;
 };
 
 #endif

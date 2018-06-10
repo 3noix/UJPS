@@ -44,6 +44,11 @@ class RealJoystick : public QObject, public AbstractRealJoystick
 		virtual QString axisName(uint axis) const override;
 		virtual QStringList axesNames() const override;
 		
+		virtual uint povsCount() const override;
+		virtual float povValue(uint pov) const override;
+		virtual QString povName(uint pov) const override;
+		virtual QStringList povsNames() const override;
+		
 		virtual void setData(const QString &str, QVariant v) override;
 		virtual void flush() override;
 		

@@ -37,6 +37,7 @@
 //  MAP AXIS 1
 //  MAP AXIS 2
 //  MAP MERGE AXES
+//  MAP POV
 //
 //  UNMAP ALL
 //  UNMAP BUTTON
@@ -361,6 +362,16 @@ void AbstractProfile::MapMergeAxes(AbstractRealJoystick *rj1, uint rAxis1, float
 {
 	this->addMapping(new MappingMergeAxes(rj1, rAxis1, k1, rj2, rAxis2, k2, lc, vj, vAxis, m_eventsQueue));
 }
+
+// MAP POV ////////////////////////////////////////////////////////////////////
+void AbstractProfile::MapPov(AbstractRealJoystick *rj, uint rPov, LayersCombo lc, VirtualJoystick *vj, uint vPov)
+{
+	this->addMapping(new MappingStandard(rj,ControlType::Pov,rPov,lc,
+					new TriggerPovChange{},
+					new ActionPovSetChange(vj,vPov),
+					m_eventsQueue));
+}
+
 
 
 

@@ -106,6 +106,8 @@ void Profile::runFirstStep()
 	MapButton(tmwj, TMWJ::H2R, AllLayers, vj1, VJOY::DX50);
 	MapButton(tmwj, TMWJ::H2D, AllLayers, vj1, VJOY::DX51);
 	MapButton(tmwj, TMWJ::H2L, AllLayers, vj1, VJOY::DX52);
+	
+	MapPov(tmwj, 0, AllLayers, vj1, VJOY::POV1);
 }
 
 

@@ -195,7 +195,7 @@ bool QGameController::buttonValue(uint button)
 float QGameController::povValue(uint pov)
 {
 	Q_D(QGameController);
-	if (pov >= (uint)d->PovsValues.size()) {return false;}
+	if (pov >= (uint)d->PovsValues.size()) {return -1.0f;}
 	return d->PovsValues.at(pov);
 }
 

@@ -1,6 +1,7 @@
 #include "StandardJoystickWidget.h"
 #include "AbstractRealJoystick.h"
 #include "ButtonWidget.h"
+#include "PovWidget.h"
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -10,6 +11,7 @@
 //  INIT STATE
 //  JOYSTICK BUTTON STATE CHANGED
 //  JOYSTICK AXIS VALUE CHANGED
+//  JOYSTICK POV ANGLE CHANGED
 //  SLOT RUN ONE LOOP
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -46,14 +48,15 @@ StandardJoystickWidget::~StandardJoystickWidget()
 // SETUP WIDGET ///////////////////////////////////////////////////////////////
 void StandardJoystickWidget::setupWidget()
 {
-	layout = new QHBoxLayout(this);
-	this->setLayout(layout);
+	layout1 = new QHBoxLayout(this);
+	this->setLayout(layout1);
+	layout2 = new QVBoxLayout();
 	
 	// axes
 	boxAxes = new QGroupBox("Axes",this);
 	axesLayout = new QGridLayout(boxAxes);
 	boxAxes->setLayout(axesLayout);
-	layout->addWidget(boxAxes);
+	layout2->addWidget(boxAxes);
 	for (uint i=0; i<m_joystick->axesCount(); ++i)
 	{
 		QLabel *l1 = new QLabel(m_joystick->axisName(i),this);
@@ -77,6 +80,23 @@ void StandardJoystickWidget::setupWidget()
 		axesValues << l2;
 	}
 	
+	// pov
+	layout3 = new QHBoxLayout();
+	for (uint i=0; i<m_joystick->povsCount(); ++i)
+	{
+		QVBoxLayout *layout4 = new QVBoxLayout();
+		PovWidget *p = new PovWidget(this);
+		QLabel *label = new QLabel(m_joystick->povName(i),this);
+		label->setAlignment(Qt::AlignCenter);
+		layout4->addWidget(p);
+		layout4->addWidget(label);
+		layout3->addLayout(layout4);
+		povWidgets << p;
+	}
+	layout3->addStretch();
+	layout2->addLayout(layout3);
+	layout1->addLayout(layout2);
+	
 	// buttons
 	boxButtons = new QGroupBox("Buttons",this);
 	buttonsLayout = new QGridLayout(boxButtons);
@@ -88,24 +108,25 @@ void StandardJoystickWidget::setupWidget()
 		ButtonWidget *b = new ButtonWidget(i+1,i<nbButtons,this);
 		if (i < nbButtons) {b->setToolTip(m_joystick->buttonName(i));}
 		buttonsLayout->addWidget(b,i/8,i%8,1,1);
-		buttonsChecks << b;
+		buttonsWidgets << b;
 	}
 	
 	// fin
-	layout->addWidget(boxButtons);
+	layout1->addWidget(boxButtons);
 }
 
 // INIT STATE /////////////////////////////////////////////////////////////////
 void StandardJoystickWidget::initState()
 {
+	for (uint i=0; i<m_joystick->buttonsCount(); ++i) {this->joystickButtonStateChanged(i,m_joystick->buttonPressed(i));}
 	for (uint i=0; i<m_joystick->axesCount(); ++i) {this->joystickAxisValueChanged(i,m_joystick->axisValue(i));}
-	for (uint i=0; i<m_joystick->buttonsCount(); ++i) {buttonsChecks[i]->slotSetChecked(m_joystick->buttonPressed(i));}
+	for (uint i=0; i<m_joystick->povsCount(); ++i) {this->joystickPovAngleChanged(i,m_joystick->povValue(i));}
 }
 
 // JOYSTICK BUTTON STATE CHANGED //////////////////////////////////////////////
 void StandardJoystickWidget::joystickButtonStateChanged(uint button, bool bPressed)
 {
-	buttonsChecks[button]->slotSetChecked(bPressed);
+	buttonsWidgets[button]->slotSetChecked(bPressed);
 }
 
 // JOYSTICK AXIS VALUE CHANGED ////////////////////////////////////////////////
@@ -113,6 +134,12 @@ void StandardJoystickWidget::joystickAxisValueChanged(uint axis, float value)
 {
 	axesSliders[axis]->setValue(qRound(1000.0*value));
 	axesValues[axis]->setText(QString::number(qRound(1000.0*value)));
+}
+
+// JOYSTICK POV ANGLE CHANGED /////////////////////////////////////////////////
+void StandardJoystickWidget::joystickPovAngleChanged(uint pov, float value)
+{
+	povWidgets[pov]->slotSetAngle(value);
 }
 
 // SLOT RUN ONE LOOP //////////////////////////////////////////////////////////
@@ -124,14 +151,11 @@ void StandardJoystickWidget::slotRunOneLoop()
 	for (const JoystickChange &ch : changes)
 	{
 		if (ch.type == ControlType::Button)
-		{
-			buttonsChecks[ch.numButtonAxisPov]->slotSetChecked(ch.bButtonPressed);
-		}
-		else
-		{
-			axesSliders[ch.numButtonAxisPov]->setValue(qRound(1000.0*ch.axisOrPovValue));
-			axesValues[ch.numButtonAxisPov]->setText(QString::number(qRound(1000.0*ch.axisOrPovValue)));
-		}
+			this->joystickButtonStateChanged(ch.numButtonAxisPov,ch.bButtonPressed);
+		else if (ch.type == ControlType::Axis)
+			this->joystickAxisValueChanged(ch.numButtonAxisPov,ch.axisOrPovValue);
+		else if (ch.type == ControlType::Pov)
+			this->joystickPovAngleChanged(ch.numButtonAxisPov,ch.axisOrPovValue);
 	}
 }
 

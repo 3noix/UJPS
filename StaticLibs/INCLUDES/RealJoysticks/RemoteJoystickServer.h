@@ -41,6 +41,11 @@ class RemoteJoystickServer : public QObject, public AbstractRealJoystick
 		virtual QString axisName(uint axis) const override;
 		virtual QStringList axesNames() const override;
 		
+		virtual uint povsCount() const override;
+		virtual float povValue(uint pov) const override;
+		virtual QString povName(uint pov) const override;
+		virtual QStringList povsNames() const override;
+		
 		virtual void setData(const QString &str, QVariant v) override;
 		virtual void flush() override;
 		
@@ -73,10 +78,13 @@ class RemoteJoystickServer : public QObject, public AbstractRealJoystick
 		bool m_initFailed;
 		uint m_nbButtons;
 		uint m_nbAxes;
+		uint m_nbPovs;
 		QStringList m_buttonsNames;
 		QStringList m_axesNames;
+		QStringList m_povsNames;
 		std::array<bool,128> m_buttons;
 		std::array<float,8> m_axes;
+		std::array<float,4> m_povs;
 		
 		QNetworkSession *m_networkSession;
 		QTcpServer *m_tcpServer;

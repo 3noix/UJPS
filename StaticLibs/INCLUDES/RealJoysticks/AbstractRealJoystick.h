@@ -35,6 +35,11 @@ class AbstractRealJoystick
 		virtual QString axisName(uint axis) const = 0;
 		virtual QStringList axesNames() const = 0;
 		
+		virtual uint povsCount() const = 0;
+		virtual float povValue(uint pov) const = 0;
+		virtual QString povName(uint pov) const = 0;
+		virtual QStringList povsNames() const = 0;
+		
 		virtual void setData(const QString &str, QVariant v) = 0;
 		virtual void flush() = 0;
 };

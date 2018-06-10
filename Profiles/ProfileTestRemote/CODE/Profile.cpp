@@ -89,6 +89,7 @@ void Profile::runFirstStep()
 	MapButton(rjse, 0, AllLayers, vj1, VJOY::DX1);
 	MapButton(rjse, 1, AllLayers, vj1, VJOY::DX2);
 	MapAxis(rjse, 0, AllLayers, vj1, VJOY::X);
+	MapPov(rjse, 0, AllLayers, vj1, VJOY::POV1);
 }
 
 

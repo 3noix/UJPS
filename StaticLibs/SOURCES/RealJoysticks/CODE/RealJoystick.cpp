@@ -25,6 +25,11 @@
 //  AXIS NAME
 //  AXES NAMES
 //
+//  POVS COUNT
+//  POV VALUE
+//  POV NAME
+//  POVS NAMES
+//
 //  SET DATA
 //  FLUSH
 ///////////////////////////////////////////////////////////////////////////////
@@ -110,6 +115,7 @@ void RealJoystick::slotGameControllerButtonEvent(QGameControllerButtonEvent *eve
 void RealJoystick::slotGameControllerPovEvent(QGameControllerPovEvent *event)
 {
 	Q_ASSERT(event);
+	m_changes << JoystickChange{this,ControlType::Pov,event->pov(),false,event->angle()};
 	
 	if (!m_bTransFormPovsInto4Buttons) {return;}
 	
@@ -208,7 +214,7 @@ uint RealJoystick::axesCount() const {return m_controller->axesCount();}
 // AXIS VALUE /////////////////////////////////////////////////////////////////
 float RealJoystick::axisValue(uint axis) const {return m_controller->axisValue(axis);}
 // AXIS NAME //////////////////////////////////////////////////////////////////
-QString RealJoystick::axisName(uint axis) const {return "Axis " + QString::number(axis);}
+QString RealJoystick::axisName(uint axis) const {return "Axis " + QString::number(axis+1);}
 // AXES NAMES /////////////////////////////////////////////////////////////////
 QStringList RealJoystick::axesNames() const
 {
@@ -216,6 +222,24 @@ QStringList RealJoystick::axesNames() const
 	for (uint i=0; i<this->axesCount(); ++i) {list << this->axisName(i);}
 	return list;
 }
+
+
+// POVS COUNT /////////////////////////////////////////////////////////////////
+uint RealJoystick::povsCount() const {return m_controller->povsCount();}
+// POV VALUE //////////////////////////////////////////////////////////////////
+float RealJoystick::povValue(uint pov) const {return m_controller->povValue(pov);}
+// POV NAME ///////////////////////////////////////////////////////////////////
+QString RealJoystick::povName(uint pov) const {return "POV " + QString::number(pov+1);}
+// POVS NAMES /////////////////////////////////////////////////////////////////
+QStringList RealJoystick::povsNames() const
+{
+	QStringList list;
+	for (uint i=0; i<this->povsCount(); ++i) {list << this->povName(i);}
+	return list;
+}
+
+
+
 
 
 // SET DATA ///////////////////////////////////////////////////////////////////

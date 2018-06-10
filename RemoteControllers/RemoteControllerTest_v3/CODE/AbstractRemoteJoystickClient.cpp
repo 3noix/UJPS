@@ -14,6 +14,7 @@
 //  SLOT DISCONNECT
 //  SLOT SEND BUTTON INFO
 //  SLOT SEND AXIS INFO
+//  SLOT SEND POV INFO
 //
 //  SLOT SESSION OPENED
 //  SLOT CONNECTED
@@ -125,6 +126,21 @@ void AbstractRemoteJoystickClient::slotSendAxisInfo(quint8 axis, float axisValue
 	m_tcpSocket->write(ba);
 }
 
+// SLOT SEND POV INFO /////////////////////////////////////////////////////////
+void AbstractRemoteJoystickClient::slotSendPovInfo(quint8 pov, float povValue)
+{
+	QByteArray ba;
+	QDataStream out{&ba, QIODevice::WriteOnly};
+	out.setVersion(QDataStream::Qt_5_7);
+	
+	out << quint16{0} << RemoteJoystickMessageType::Pov << pov << povValue;
+	
+	out.device()->seek(0);
+	quint16 dataSize = ba.size()-sizeof(quint16);
+	out << dataSize;
+	m_tcpSocket->write(ba);
+}
+
 
 
 
@@ -158,8 +174,9 @@ void AbstractRemoteJoystickClient::slotConnected()
 	
 	out << quint16{0} << RemoteJoystickMessageType::Init;
 	out << this->description();
-	out << this->buttonCount() << this->buttonsNames();
-	out << this->axisCount() << this->axesNames();
+	out << this->buttonsCount() << this->buttonsNames();
+	out << this->axesCount() << this->axesNames();
+	out << this->povsCount() << this->povsNames();
 	out.device()->seek(0);
 	quint16 dataSize = ba.size()-sizeof(quint16);
 	out << dataSize;

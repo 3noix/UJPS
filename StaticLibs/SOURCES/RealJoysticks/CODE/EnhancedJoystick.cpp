@@ -25,6 +25,11 @@
 //  AXIS NAME
 //  AXES NAMES
 //
+//  POVS COUNT
+//  POV VALUE
+//  POV NAME
+//  POVS NAMES
+//
 //  SET DATA
 //  FLUSH
 //
@@ -32,13 +37,13 @@
 //  SET AXIS LOCKED
 //  SET AXIS TRIM
 //  AXIS RAW VALUE
+//  SET POV LOCKED
 //
 //  SET S CURVE
 //  SET J CURVE
 //  SET CUSTOM CURVE
 //  SET CURVE
 //  REMOVE CURVE
-//
 //  UPDATE AXIS
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -51,10 +56,13 @@ EnhancedJoystick::EnhancedJoystick(AbstractRealJoystick *j, bool bOwn) : Abstrac
 	m_bOwn = bOwn;
 	
 	for (bool& b : m_buttonsLocked) {b = false;}
+	for (bool& b : m_buttonsValuesBeforeLock) {b = false;}
 	for (bool& b : m_axesLocked) {b = false;}
 	for (float& f : m_axesTrim) {f = 0.0f;}
 	for (float& f : m_axesValuesBeforeLock) {f = 0.0f;}
 	for (AbstractAxisCurve*& c : m_axesCurves) {c = nullptr;}
+	for (bool& b : m_povsLocked) {b = false;}
+	for (float& f : m_povsValuesBeforeLock) {f = -1.0f;}
 }
 
 EnhancedJoystick::~EnhancedJoystick()
@@ -90,12 +98,13 @@ QVector<JoystickChange> EnhancedJoystick::changes()
 	for (int i=n-1; i>=0; --i)
 	{
 		JoystickChange &ch = chgts[i];
-		bool bLockedButton = (ch.type == ControlType::Button && m_buttonsLocked[ch.numButtonAxisPov]);
-		bool bLockedAxis = (ch.type == ControlType::Axis && ch.numButtonAxisPov < 8 && m_axesLocked[ch.numButtonAxisPov]);
-		bool bNotLockedAxis = (ch.type == ControlType::Axis && ch.numButtonAxisPov < 8 && !m_axesLocked[ch.numButtonAxisPov]);
+		bool bLockedButton  = (ch.type == ControlType::Button && ch.numButtonAxisPov < 128 && m_buttonsLocked[ch.numButtonAxisPov]);
+		bool bLockedAxis    = (ch.type == ControlType::Axis   && ch.numButtonAxisPov < 8   && m_axesLocked[ch.numButtonAxisPov]);
+		bool bNotLockedAxis = (ch.type == ControlType::Axis   && ch.numButtonAxisPov < 8   && !m_axesLocked[ch.numButtonAxisPov]);
+		bool bLockedPov     = (ch.type == ControlType::Pov    && ch.numButtonAxisPov < 4   && m_povsLocked[ch.numButtonAxisPov]);
 		
 		// if locked, we remove the event
-		if (bLockedButton || bLockedAxis) {chgts.removeAt(i);}
+		if (bLockedButton || bLockedAxis || bLockedPov) {chgts.removeAt(i);}
 		else if (bNotLockedAxis)
 		{
 			float v = ch.axisOrPovValue + m_axesTrim[ch.numButtonAxisPov];	// we add the trim
@@ -127,7 +136,12 @@ QVector<JoystickChange> EnhancedJoystick::changes()
 // BUTTONS COUNT //////////////////////////////////////////////////////////////
 uint EnhancedJoystick::buttonsCount() const {return m_j->buttonsCount();}
 // BUTTON PRESSED /////////////////////////////////////////////////////////////
-bool EnhancedJoystick::buttonPressed(uint button) const {return m_j->buttonPressed(button);}
+bool EnhancedJoystick::buttonPressed(uint button) const
+{
+	if (button >= 128) {return false;}
+	if (m_buttonsLocked[button]) {return m_buttonsValuesBeforeLock[button];}
+	return m_j->buttonPressed(button);
+}
 // BUTTON NAME ////////////////////////////////////////////////////////////////
 QString EnhancedJoystick::buttonName(uint button) const {return m_j->buttonName(button);}
 // BUTTONS NAMES //////////////////////////////////////////////////////////////
@@ -153,16 +167,38 @@ QString EnhancedJoystick::axisName(uint axis) const {return m_j->axisName(axis);
 QStringList EnhancedJoystick::axesNames() const {return m_j->axesNames();}
 
 
+
+// POVS COUNT /////////////////////////////////////////////////////////////////
+uint EnhancedJoystick::povsCount() const {return m_j->povsCount();}
+// POV VALUE //////////////////////////////////////////////////////////////////
+float EnhancedJoystick::povValue(uint pov) const
+{
+	if (pov >= 4) {return -1.0f;}
+	if (m_povsLocked[pov]) {return m_povsValuesBeforeLock[pov];}
+	return m_j->povValue(pov);
+}
+// POV NAME ///////////////////////////////////////////////////////////////////
+QString EnhancedJoystick::povName(uint pov) const {return m_j->povName(pov);}
+// POVS NAMES /////////////////////////////////////////////////////////////////
+QStringList EnhancedJoystick::povsNames() const {return m_j->povsNames();}
+
+
+
+
 // SET DATA ///////////////////////////////////////////////////////////////////
 void EnhancedJoystick::setData(const QString &str, QVariant v) {m_j->setData(str,v);}
 // FLUSH //////////////////////////////////////////////////////////////////////
 void EnhancedJoystick::flush() {m_j->flush();}
 
 
+
+
+
 // SET BUTTON LOCKED //////////////////////////////////////////////////////////
 void EnhancedJoystick::setButtonLocked(uint button, bool locked)
 {
 	if (button >= 128) {return;}
+	m_buttonsValuesBeforeLock[button] = this->buttonPressed(button);
 	m_buttonsLocked[button] = locked;
 }
 
@@ -193,6 +229,18 @@ float EnhancedJoystick::axisRawValue(uint axis) const
 	if (axis >= 8) {return 0.0f;}
 	return m_j->axisValue(axis);
 }
+
+// SET POV LOCKED /////////////////////////////////////////////////////////////
+void EnhancedJoystick::setPovLocked(uint pov, bool locked)
+{
+	if (pov >= 4) {return;}
+	m_povsValuesBeforeLock[pov] = this->povValue(pov);
+	m_povsLocked[pov] = locked;
+}
+
+
+
+
 
 
 
@@ -250,10 +298,6 @@ void EnhancedJoystick::removeCurve(uint axis)
 		this->updateAxis(axis);
 	}
 }
-
-
-
-
 
 // UPDATE AXIS ////////////////////////////////////////////////////////////////
 void EnhancedJoystick::updateAxis(uint axis)

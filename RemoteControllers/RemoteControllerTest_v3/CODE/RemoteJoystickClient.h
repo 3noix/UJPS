@@ -19,10 +19,12 @@ class RemoteJoystickClient : public AbstractRemoteJoystickClient
 		
 		QString description() const override final;
 		
-		quint8 buttonCount() const override final;
+		quint8 buttonsCount() const override final;
 		QStringList buttonsNames() const override final;
-		quint8 axisCount() const override final;
+		quint8 axesCount() const override final;
 		QStringList axesNames() const override final;
+		quint8 povsCount() const override final;
+		QStringList povsNames() const override final;
 		
 		void setData(const QString &prop, QVariant v) override final;
 		
