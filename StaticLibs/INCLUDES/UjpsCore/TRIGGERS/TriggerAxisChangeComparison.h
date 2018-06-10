@@ -33,7 +33,7 @@ class TriggerAxisChangeComparison : public AbstractTrigger
 					rj->id() == ch.joystick->id() &&
 					t == ControlType::Axis &&
 					ch.type == ControlType::Axis &&
-					rnum == ch.numButtonOrAxis &&
+					rnum == ch.numButtonAxisPov &&
 					((m_bgt && rj->axisValue(rnum) > m_thr) || (!m_bgt && rj->axisValue(rnum) < m_thr)));
 		};
 		

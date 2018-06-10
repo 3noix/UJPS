@@ -15,10 +15,10 @@ using uint = unsigned int;
 struct JoystickChange
 {
 	AbstractRealJoystick* joystick;
-	ControlType type; // button or axis
-	uint numButtonOrAxis;
+	ControlType type; // button, axis or pov
+	uint numButtonAxisPov;
 	bool bButtonPressed;
-	float axisValue;
+	float axisOrPovValue;
 };
 
 

@@ -125,12 +125,12 @@ void StandardJoystickWidget::slotRunOneLoop()
 	{
 		if (ch.type == ControlType::Button)
 		{
-			buttonsChecks[ch.numButtonOrAxis]->slotSetChecked(ch.bButtonPressed);
+			buttonsChecks[ch.numButtonAxisPov]->slotSetChecked(ch.bButtonPressed);
 		}
 		else
 		{
-			axesSliders[ch.numButtonOrAxis]->setValue(qRound(1000.0*ch.axisValue));
-			axesValues[ch.numButtonOrAxis]->setText(QString::number(qRound(1000.0*ch.axisValue)));
+			axesSliders[ch.numButtonAxisPov]->setValue(qRound(1000.0*ch.axisOrPovValue));
+			axesValues[ch.numButtonAxisPov]->setText(QString::number(qRound(1000.0*ch.axisOrPovValue)));
 		}
 	}
 }

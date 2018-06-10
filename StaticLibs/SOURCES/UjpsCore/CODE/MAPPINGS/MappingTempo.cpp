@@ -10,6 +10,7 @@
 //  IS TRIGGERED
 //  IS MAPPING BUTTON
 //  IS MAPPING AXIS
+//  IS MAPPING POV
 //  PERFORM ACTION
 //
 //  ACTIVATE BY LAYER CHANGE
@@ -82,7 +83,7 @@ bool MappingTempo::isTriggered(const JoystickChange &ch)
 			ch.joystick && m_rj &&
 			ch.joystick->id() == m_rj->id() &&
 			ch.type == ControlType::Button &&
-			ch.numButtonOrAxis == m_rButton &&
+			ch.numButtonAxisPov == m_rButton &&
 			ch.bButtonPressed);
 }
 
@@ -97,6 +98,14 @@ bool MappingTempo::isMappingAxis(AbstractRealJoystick *rj, uint rAxis) const
 {
 	Q_UNUSED(rj)
 	Q_UNUSED(rAxis)
+	return false;
+}
+
+// IS MAPPING POV /////////////////////////////////////////////////////////////
+bool MappingTempo::isMappingPov(AbstractRealJoystick *rj, uint rPov) const
+{
+	Q_UNUSED(rj)
+	Q_UNUSED(rPov)
 	return false;
 }
 

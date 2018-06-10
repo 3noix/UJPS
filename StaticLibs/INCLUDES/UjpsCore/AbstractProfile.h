@@ -66,6 +66,7 @@ class AbstractProfile : public QObject
 		void UnmapAll();
 		void UnmapButton(AbstractRealJoystick *rj, uint rButton);
 		void UnmapAxis(AbstractRealJoystick *rj, uint rAxis);
+		void UnmapPov(AbstractRealJoystick *rj, uint rPov);
 		
 		void DoAction(AbstractAction *action, bool deleteWhenDone = true);
 		

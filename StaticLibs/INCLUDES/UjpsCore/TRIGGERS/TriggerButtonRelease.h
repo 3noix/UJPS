@@ -33,7 +33,7 @@ class TriggerButtonRelease : public AbstractTrigger
 					rj->id() == ch.joystick->id() &&
 					t == ControlType::Button &&
 					ch.type == ControlType::Button &&
-					rnum == ch.numButtonOrAxis &&
+					rnum == ch.numButtonAxisPov &&
 					!ch.bButtonPressed);
 		};
 };

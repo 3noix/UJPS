@@ -12,6 +12,7 @@
 //  IS TRIGGERED
 //  IS MAPPING BUTTON
 //  IS MAPPING AXIS
+//  IS MAPPING POV
 //  PERFORM ACTION
 //
 //  ACTIVATE BY LAYER CHANGE
@@ -90,6 +91,13 @@ bool MappingStandard::isMappingAxis(AbstractRealJoystick *rj, uint rAxis) const
 {
 	if (!m_trigger) {return false;}
 	return (rj->id() == m_rj->id() && m_type == ControlType::Axis && m_rnum == rAxis);
+}
+
+// IS MAPPING POV /////////////////////////////////////////////////////////////
+bool MappingStandard::isMappingPov(AbstractRealJoystick *rj, uint rPov) const
+{
+	if (!m_trigger) {return false;}
+	return (rj->id() == m_rj->id() && m_type == ControlType::Pov && m_rnum == rPov);
 }
 
 // PERFORM ACTION /////////////////////////////////////////////////////////////

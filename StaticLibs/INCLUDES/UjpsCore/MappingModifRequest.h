@@ -12,6 +12,7 @@ enum class MappingModifRequestType
 	RequestUnmapAll,
 	RequestUnmapButton,
 	RequestUnmapAxis,
+	RequestUnmapPov,
 	RequestAddMapping
 };
 

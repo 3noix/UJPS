@@ -157,7 +157,7 @@ void MainWindow::slotRunOneLoop()
 	
 	for (const JoystickChange &ch : changes)
 	{
-		if (ch.type == ControlType::Axis && ch.numButtonOrAxis == (uint)m_axis)
+		if (ch.type == ControlType::Axis && ch.numButtonAxisPov == (uint)m_axis)
 		{chartView->updateCurrent();}
 	}
 }

@@ -90,18 +90,18 @@ QVector<JoystickChange> EnhancedJoystick::changes()
 	for (int i=n-1; i>=0; --i)
 	{
 		JoystickChange &ch = chgts[i];
-		bool bLockedButton = (ch.type == ControlType::Button && m_buttonsLocked[ch.numButtonOrAxis]);
-		bool bLockedAxis = (ch.type == ControlType::Axis && ch.numButtonOrAxis < 8 && m_axesLocked[ch.numButtonOrAxis]);
-		bool bNotLockedAxis = (ch.type == ControlType::Axis && ch.numButtonOrAxis < 8 && !m_axesLocked[ch.numButtonOrAxis]);
+		bool bLockedButton = (ch.type == ControlType::Button && m_buttonsLocked[ch.numButtonAxisPov]);
+		bool bLockedAxis = (ch.type == ControlType::Axis && ch.numButtonAxisPov < 8 && m_axesLocked[ch.numButtonAxisPov]);
+		bool bNotLockedAxis = (ch.type == ControlType::Axis && ch.numButtonAxisPov < 8 && !m_axesLocked[ch.numButtonAxisPov]);
 		
 		// if locked, we remove the event
 		if (bLockedButton || bLockedAxis) {chgts.removeAt(i);}
 		else if (bNotLockedAxis)
 		{
-			float v = ch.axisValue + m_axesTrim[ch.numButtonOrAxis];	// we add the trim
-			if (m_axesCurves[ch.numButtonOrAxis])
-				v = m_axesCurves[ch.numButtonOrAxis]->run(v);			// we apply the curve
-			ch.axisValue = lim<float>(v,-1.0f,1.0f);					// we limit between -1 and 1
+			float v = ch.axisOrPovValue + m_axesTrim[ch.numButtonAxisPov];	// we add the trim
+			if (m_axesCurves[ch.numButtonAxisPov])
+				v = m_axesCurves[ch.numButtonAxisPov]->run(v);			// we apply the curve
+			ch.axisOrPovValue = lim<float>(v,-1.0f,1.0f);					// we limit between -1 and 1
 		}
 	}
 	
@@ -112,7 +112,7 @@ QVector<JoystickChange> EnhancedJoystick::changes()
 	{
 		for (const JoystickChange &ch : chgts)
 		{
-			if (ch.joystick && ch.joystick->id() == this->id() && ch.type == ControlType::Axis && ch.numButtonOrAxis == axis)
+			if (ch.joystick && ch.joystick->id() == this->id() && ch.type == ControlType::Axis && ch.numButtonAxisPov == axis)
 				continue;
 		}
 		chgts << JoystickChange{this,ControlType::Axis,axis,false,this->axisValue(axis)};

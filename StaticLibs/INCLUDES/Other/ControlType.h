@@ -5,7 +5,8 @@
 enum class ControlType
 {
 	Button,
-	Axis
+	Axis,
+	Pov
 };
 
 

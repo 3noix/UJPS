@@ -41,6 +41,7 @@
 //  UNMAP ALL
 //  UNMAP BUTTON
 //  UNMAP AXIS
+//  UNMAP POV
 ///////////////////////////////////////////////////////////////////////////////
 
 
@@ -214,10 +215,11 @@ void AbstractProfile::processPendingMappingsRequests()
 {
 	for (const MappingModifRequest &r : m_mappingsRequests)
 	{
-		if (r.type == MappingModifRequestType::RequestUnmapAll) {this->UnmapAll();}
+		if (r.type == MappingModifRequestType::RequestUnmapAll)         {this->UnmapAll();}
 		else if (r.type == MappingModifRequestType::RequestUnmapButton) {this->UnmapButton(r.rj,r.rnum);}
-		else if (r.type == MappingModifRequestType::RequestUnmapAxis) {this->UnmapAxis(r.rj,r.rnum);}
-		else if (r.type == MappingModifRequestType::RequestAddMapping) {this->addMapping(r.mapping);}
+		else if (r.type == MappingModifRequestType::RequestUnmapAxis)   {this->UnmapAxis(r.rj,r.rnum);}
+		else if (r.type == MappingModifRequestType::RequestUnmapPov)    {this->UnmapPov(r.rj,r.rnum);}
+		else if (r.type == MappingModifRequestType::RequestAddMapping)  {this->addMapping(r.mapping);}
 	}
 	
 	m_mappingsRequests.clear();
@@ -425,4 +427,28 @@ void AbstractProfile::UnmapAxis(AbstractRealJoystick *rj, uint rAxis)
 		}
 	}
 }
+
+// UNMAP POV //////////////////////////////////////////////////////////////////
+void AbstractProfile::UnmapPov(AbstractRealJoystick *rj, uint rPov)
+{
+	if (!m_isProcessingEvents)
+	{
+		int n = m_mappings.size();
+		for (int i=n-1; i>=0; --i)
+		{
+			if (m_mappings[i]->isMappingPov(rj,rPov))
+			{delete m_mappings.takeAt(i);}
+		}
+	}
+	else
+	{
+		m_mappingsRequests << MappingModifRequest{MappingModifRequestType::RequestUnmapPov,rj,rPov,nullptr}; // add it in a queue, waiting for the current loop to end
+		for (AbstractMapping *m : m_mappings)
+		{
+			if (m->isMappingPov(rj,rPov))
+				m->aboutToBeDeleted();
+		}
+	}
+}
+
 

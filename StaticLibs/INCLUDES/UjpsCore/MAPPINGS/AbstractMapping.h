@@ -28,6 +28,7 @@ class AbstractMapping
 		virtual bool isTriggered(const JoystickChange &ch) = 0;
 		virtual bool isMappingButton(AbstractRealJoystick *rj, uint rButton) const = 0;
 		virtual bool isMappingAxis(AbstractRealJoystick *rj, uint rAxis) const = 0;
+		virtual bool isMappingPov(AbstractRealJoystick *rj, uint rPov) const = 0;
 		virtual void performAction() = 0;
 		virtual void performAction(const JoystickChange &ch) = 0;
 		

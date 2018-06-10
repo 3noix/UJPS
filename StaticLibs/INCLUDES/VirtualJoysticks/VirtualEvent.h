@@ -22,10 +22,10 @@ enum class EventType
 struct VJoyEvent
 {
 	VirtualJoystick* joystick;
-	ControlType type; // button or axis
-	uint numButtonOrAxis;
+	ControlType type; // button, axis or pov
+	uint numButtonAxisPov;
 	bool bButtonPressed;
-	float axisValue;
+	float axisOrPovValue;
 };
 
 

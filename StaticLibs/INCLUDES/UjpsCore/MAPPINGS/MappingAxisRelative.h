@@ -25,6 +25,7 @@ class MappingAxisRelative : public AbstractMapping
 		virtual bool isTriggered(const JoystickChange &ch) override final;
 		virtual bool isMappingButton(AbstractRealJoystick *rj, uint rButton) const override final;
 		virtual bool isMappingAxis(AbstractRealJoystick *rj, uint rAxis) const override final;
+		virtual bool isMappingPov(AbstractRealJoystick *rj, uint rPov) const override final;
 		virtual void performAction() override final;
 		virtual void performAction(const JoystickChange &ch) override final;
 		

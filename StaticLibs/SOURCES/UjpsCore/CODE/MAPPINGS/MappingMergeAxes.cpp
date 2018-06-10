@@ -11,6 +11,7 @@
 //  IS TRIGGERED
 //  IS MAPPING BUTTON
 //  IS MAPPING AXIS
+//  IS MAPPING POV
 //  PERFORM ACTION
 //
 //  ACTIVATE BY LAYER CHANGE
@@ -67,8 +68,8 @@ bool MappingMergeAxes::isTriggered()
 bool MappingMergeAxes::isTriggered(const JoystickChange &ch)
 {
 	return (ch.joystick != nullptr && m_rj1 != nullptr && m_rj2 != nullptr &&
-		((ch.joystick->id() == m_rj1->id() && ch.numButtonOrAxis == m_rAxis1)
-			|| (ch.joystick->id() == m_rj2->id() && ch.numButtonOrAxis == m_rAxis2)) &&
+		((ch.joystick->id() == m_rj1->id() && ch.numButtonAxisPov == m_rAxis1)
+			|| (ch.joystick->id() == m_rj2->id() && ch.numButtonAxisPov == m_rAxis2)) &&
 		ch.type == ControlType::Axis);
 }
 
@@ -86,6 +87,14 @@ bool MappingMergeAxes::isMappingAxis(AbstractRealJoystick *rj, uint rAxis) const
 {
 	return ((rj->id() == m_rj1->id() && rAxis == m_rAxis1)
 			|| (rj->id() == m_rj2->id() && rAxis == m_rAxis2));
+}
+
+// IS MAPPING POV /////////////////////////////////////////////////////////////
+bool MappingMergeAxes::isMappingPov(AbstractRealJoystick *rj, uint rPov) const
+{
+	Q_UNUSED(rj)
+	Q_UNUSED(rPov)
+	return false;
 }
 
 // PERFORM ACTION /////////////////////////////////////////////////////////////

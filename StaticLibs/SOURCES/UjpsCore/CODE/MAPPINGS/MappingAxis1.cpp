@@ -11,6 +11,7 @@
 //  IS TRIGGERED
 //  IS MAPPING BUTTON
 //  IS MAPPING AXIS
+//  IS MAPPING POV
 //  PERFORM ACTION
 //
 //  ACTIVATE BY LAYER CHANGE
@@ -82,7 +83,7 @@ bool MappingAxis1::isTriggered(const JoystickChange &ch)
 	bool b = (ch.joystick && m_rj &&
 			ch.joystick->id() == m_rj->id() &&
 			ch.type == ControlType::Axis &&
-			ch.numButtonOrAxis == m_rAxis);
+			ch.numButtonAxisPov == m_rAxis);
 	
 	if (!b) {return false;}
 	
@@ -90,15 +91,15 @@ bool MappingAxis1::isTriggered(const JoystickChange &ch)
 	bool bLastZone = (m_previousZone == m_points.size());
 	bool bOtherZone = (!bFirstZone && !bLastZone);
 	
-	if ((bFirstZone && ch.axisValue >= m_points[0]) ||
-		(bOtherZone && ch.axisValue >= m_points[m_previousZone]))
+	if ((bFirstZone && ch.axisOrPovValue >= m_points[0]) ||
+		(bOtherZone && ch.axisOrPovValue >= m_points[m_previousZone]))
 	{
 		m_useActionPlus = true;
 		return true;
 	}
 	
-	if ((bLastZone  && ch.axisValue < m_points[m_points.size()-1]) ||
-		(bOtherZone && ch.axisValue < m_points[m_previousZone-1]))
+	if ((bLastZone  && ch.axisOrPovValue < m_points[m_points.size()-1]) ||
+		(bOtherZone && ch.axisOrPovValue < m_points[m_previousZone-1]))
 	{
 		m_useActionPlus = false;
 		return true;
@@ -121,6 +122,14 @@ bool MappingAxis1::isMappingAxis(AbstractRealJoystick *rj, uint rAxis) const
 	return (rj->id() == m_rj->id() && rAxis == m_rAxis);
 }
 
+// IS MAPPING POV /////////////////////////////////////////////////////////////
+bool MappingAxis1::isMappingPov(AbstractRealJoystick *rj, uint rPov) const
+{
+	Q_UNUSED(rj)
+	Q_UNUSED(rPov)
+	return false;
+}
+
 // PERFORM ACTION /////////////////////////////////////////////////////////////
 void MappingAxis1::performAction()
 {
@@ -136,7 +145,7 @@ void MappingAxis1::performAction(const JoystickChange &ch)
 	else if (!m_useActionPlus && m_actionMoins)
 		this->postEvents(m_actionMoins->generateEvents());
 		
-	m_previousZone = this->computeZone(ch.axisValue);
+	m_previousZone = this->computeZone(ch.axisOrPovValue);
 }
 
 

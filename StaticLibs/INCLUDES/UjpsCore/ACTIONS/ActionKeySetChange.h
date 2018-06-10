@@ -33,7 +33,7 @@ class ActionKeySetChange : public AbstractAction
 		
 		virtual QVector<VirtualEvent> activateByLayerChange(AbstractRealJoystick *rj, ControlType t, uint rnum) override final
 		{
-			if (t == ControlType::Axis) {return {};}
+			Q_UNUSED(t)
 			// we don't wait for a change in the real joystick button to update the key
 			VirtualEvent ev{EventType::Keyboard,{},KeyboardEvent{rj->buttonPressed(rnum),m_key,m_modifier},{},0};
 			return {ev};

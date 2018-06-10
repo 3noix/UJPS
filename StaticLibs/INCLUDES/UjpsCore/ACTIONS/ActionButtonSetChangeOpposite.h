@@ -34,7 +34,7 @@ class ActionButtonSetChangeOpposite : public AbstractAction
 		
 		virtual QVector<VirtualEvent> activateByLayerChange(AbstractRealJoystick *rj, ControlType t, uint rnum) override final
 		{
-			if (t == ControlType::Axis) {return {};}
+			if (t != ControlType::Button) {return {};}
 			// we don't wait for a change in the real joystick button to update the virtual joystick button
 			VirtualEvent ev{EventType::VJoy,VJoyEvent{m_vj,ControlType::Button,m_vButton,!rj->buttonPressed(rnum),0.0},{},{},0};
 			return {ev};
