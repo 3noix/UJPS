@@ -37,6 +37,10 @@ class ThrustmasterWarthogThrottle : public RealJoystick
 		QString axisName(uint axis) const override final;
 		QStringList axesNames() const override final;
 		
+		uint povsCount() const override final;
+		QString povName(uint pov) const override final;
+		QStringList povsNames() const override final;
+		
 		void setData(const QString &str, QVariant v) override final;
 		void flush() override final;
 		
@@ -49,6 +53,7 @@ class ThrustmasterWarthogThrottle : public RealJoystick
 	private:
 		QStringList m_buttonsNames;
 		QStringList m_axesNames;
+		QStringList m_povsNames;
 		
 		WriteToHidThread *m_thread;
 		quint8 m_flags;

@@ -40,6 +40,11 @@ namespace ThrustmasterWarthogJoystick_
 		
 	const uint JOYX = 0;
 	const uint JOYY = 1;
+	
+	const uint HAT1 = 0;
+	const uint HAT2 = 1;
+	const uint HAT3 = 2;
+	const uint HAT4 = 3;
 };
 
 #endif

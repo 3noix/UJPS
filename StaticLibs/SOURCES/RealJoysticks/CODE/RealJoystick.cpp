@@ -32,6 +32,10 @@
 //
 //  SET DATA
 //  FLUSH
+//
+//  ADD VIRTUAL POV
+//  BUTTONS TO POV
+//  BUTTON MAPS POV
 ///////////////////////////////////////////////////////////////////////////////
 
 
@@ -46,8 +50,9 @@ RealJoystick::RealJoystick(QGameController *c) : QObject{}, AbstractRealJoystick
 	QObject::connect(c,&QGameController::gameControllerButtonEvent,this,&RealJoystick::slotGameControllerButtonEvent);
 	QObject::connect(c,&QGameController::gameControllerPovEvent,this,&RealJoystick::slotGameControllerPovEvent);
 	
-	m_bTransFormPovsInto4Buttons = (m_controller->description() != "vJoy Device");
-	if (m_bTransFormPovsInto4Buttons) {m_povsAngles = QVector<float>(m_controller->povsCount(),-1.0f);}
+	m_bTransformPovInto4Buttons = (m_controller->description() != "vJoy Device");
+	m_bTransform4ButtonsIntoPov = (m_controller->description() != "vJoy Device");
+	if (m_bTransformPovInto4Buttons) {m_realPovsAngles = QVector<float>(m_controller->povsCount(),-1.0f);}
 }
 
 RealJoystick::~RealJoystick()
@@ -90,6 +95,36 @@ void RealJoystick::readGameController()
 // CHANGES ////////////////////////////////////////////////////////////////////
 QVector<JoystickChange> RealJoystick::changes()
 {
+	if (!m_bTransform4ButtonsIntoPov || m_virtualPovsDef.size() == 0) {return m_changes;}
+	
+	// we add virtual pov events to the changes
+	// first we make the list of impacted povs
+	QVector<uint> povsImpacted;
+	for (const JoystickChange &ch : m_changes)
+	{
+		if (ch.type == ControlType::Button)
+		{
+			uint index = this->buttonMapsPov(ch.numButtonAxisPov);
+			if (index != -1u && !povsImpacted.contains(index)) {povsImpacted << index;}
+		}
+	}
+	qSort(povsImpacted);
+	
+	// we create one change per impacted pov
+	for (uint index : povsImpacted)
+	{
+		const VirtualPovDefinition &vpd = m_virtualPovsDef[index];
+		bool bUp    = m_controller->buttonValue(vpd.buttonUp);
+		bool bRight = m_controller->buttonValue(vpd.buttonRight);
+		bool bDown  = m_controller->buttonValue(vpd.buttonDown);
+		bool bLeft  = m_controller->buttonValue(vpd.buttonLeft);
+		
+		float f = RealJoystick::buttonsToPov(bUp,bRight,bDown,bLeft);
+		uint pov = m_controller->povsCount() + index;
+		m_changes << JoystickChange{this,ControlType::Pov,pov,false,f};
+	}
+	
+	// end
 	return m_changes;
 }
 
@@ -102,6 +137,7 @@ void RealJoystick::slotGameControllerAxisEvent(QGameControllerAxisEvent *event)
 {
 	Q_ASSERT(event);
 	m_changes << JoystickChange{this,ControlType::Axis,event->axis(),false,event->value()};
+	// for axes we do things simple!
 }
 
 // SLOT GAME CONTROLLER BUTTON EVENT //////////////////////////////////////////
@@ -109,6 +145,10 @@ void RealJoystick::slotGameControllerButtonEvent(QGameControllerButtonEvent *eve
 {
 	Q_ASSERT(event);
 	m_changes << JoystickChange{this,ControlType::Button,event->button(),event->pressed(),0.0};
+	
+	// if the button is a part of a virtual pov, we cannot compute the new virtual pov position now,
+	// as another button of this virtual pov may not have reported his new position yet. That is
+	// why the computation is done "at the end", i.e. in RealJoystick::changes
 }
 
 // SLOT GAME CONTROLLER POV EVENT /////////////////////////////////////////////
@@ -116,13 +156,13 @@ void RealJoystick::slotGameControllerPovEvent(QGameControllerPovEvent *event)
 {
 	Q_ASSERT(event);
 	m_changes << JoystickChange{this,ControlType::Pov,event->pov(),false,event->angle()};
+	if (!m_bTransformPovInto4Buttons) {return;}
 	
-	if (!m_bTransFormPovsInto4Buttons) {return;}
-	
+	// now, using the new pov value, we determine the value of the 4 virtual buttons
 	uint pov = event->pov();
 	float angle = event->angle();
-	float oldAngle = m_povsAngles[pov];
-	m_povsAngles[pov] = angle;
+	float oldAngle = m_realPovsAngles[pov];
+	m_realPovsAngles[pov] = angle;
 	
 	bool bCenter = (angle == -1.0f);
 	bool bUp     = (!bCenter && (angle < 60.0f  || angle > 300.0f));
@@ -150,7 +190,7 @@ void RealJoystick::slotGameControllerPovEvent(QGameControllerPovEvent *event)
 // BUTTONS COUNT //////////////////////////////////////////////////////////////
 uint RealJoystick::buttonsCount() const
 {
-	if (m_bTransFormPovsInto4Buttons)
+	if (m_bTransformPovInto4Buttons)
 		return m_controller->buttonsCount() + 4 * m_controller->povsCount();
 	else
 		return m_controller->buttonsCount();
@@ -163,11 +203,11 @@ bool RealJoystick::buttonPressed(uint button) const
 	{
 		return m_controller->buttonValue(button);
 	}
-	else if (m_bTransFormPovsInto4Buttons && button < m_controller->buttonsCount() + 4 * m_controller->povsCount())
+	else if (m_bTransformPovInto4Buttons && button < this->buttonsCount())
 	{
 		uint pov = (button-m_controller->buttonsCount()) / 4;
 		uint num = (button-m_controller->buttonsCount()) % 4;
-		float angle = m_povsAngles[pov];
+		float angle = m_controller->povValue(pov);
 		
 		if (num == 0)      {return (angle != -1.0f && (angle < 60.0f || angle > 300.0f));}
 		else if (num == 1) {return (angle != -1.0f && angle >  30.0f && angle < 150.0f);}
@@ -185,7 +225,7 @@ QString RealJoystick::buttonName(uint button) const
 	{
 		return "Button " + QString::number(button+1);
 	}
-	else if (m_bTransFormPovsInto4Buttons && button < m_controller->buttonsCount() + 4 * m_controller->povsCount())
+	else if (m_bTransformPovInto4Buttons && button < this->buttonsCount())
 	{
 		uint pov = (button-m_controller->buttonsCount()) / 4;
 		uint num = (button-m_controller->buttonsCount()) % 4;
@@ -225,11 +265,52 @@ QStringList RealJoystick::axesNames() const
 
 
 // POVS COUNT /////////////////////////////////////////////////////////////////
-uint RealJoystick::povsCount() const {return m_controller->povsCount();}
+uint RealJoystick::povsCount() const
+{
+	if (m_bTransform4ButtonsIntoPov)
+		return m_controller->povsCount() + m_virtualPovsDef.size();
+	else
+		return m_controller->povsCount();
+}
+
 // POV VALUE //////////////////////////////////////////////////////////////////
-float RealJoystick::povValue(uint pov) const {return m_controller->povValue(pov);}
+float RealJoystick::povValue(uint pov) const
+{
+	if (pov < m_controller->povsCount())
+	{
+		return m_controller->povValue(pov);
+	}
+	else if (m_bTransform4ButtonsIntoPov && pov < this->povsCount())
+	{
+		uint index = pov - m_controller->povsCount();
+		const VirtualPovDefinition &vpd = m_virtualPovsDef[index];
+		bool bUp    = m_controller->buttonValue(vpd.buttonUp);
+		bool bRight = m_controller->buttonValue(vpd.buttonRight);
+		bool bDown  = m_controller->buttonValue(vpd.buttonDown);
+		bool bLeft  = m_controller->buttonValue(vpd.buttonLeft);
+		
+		return RealJoystick::buttonsToPov(bUp,bRight,bDown,bLeft);
+	}
+	
+	return false;
+}
+
 // POV NAME ///////////////////////////////////////////////////////////////////
-QString RealJoystick::povName(uint pov) const {return "POV " + QString::number(pov+1);}
+QString RealJoystick::povName(uint pov) const
+{
+	if (pov < m_controller->povsCount())
+	{
+		return "POV " + QString::number(pov+1);
+	}
+	else if (m_bTransform4ButtonsIntoPov && pov < this->povsCount())
+	{
+		uint index = pov - m_controller->povsCount();
+		return m_virtualPovsDef[index].povName;
+	}
+	
+	return QString();
+}
+
 // POVS NAMES /////////////////////////////////////////////////////////////////
 QStringList RealJoystick::povsNames() const
 {
@@ -254,6 +335,59 @@ void RealJoystick::setData(const QString &str, QVariant v)
 void RealJoystick::flush()
 {
 	// nothing by default
+}
+
+
+
+
+
+
+// ADD VIRTUAL POV ////////////////////////////////////////////////////////////
+void RealJoystick::addVirtualPov(uint nUp, uint nRight, uint nDown, uint nLeft, const QString &povName)
+{
+	m_virtualPovsDef << VirtualPovDefinition{nUp,nRight,nDown,nLeft,povName};
+}
+
+// BUTTONS TO POV /////////////////////////////////////////////////////////////
+float RealJoystick::buttonsToPov(bool bUp, bool bRight, bool bDown, bool bLeft)
+{
+	if (bUp)
+	{
+		if (bLeft)       {return 315.0f;}
+		else if (bRight) {return 45.0f;}
+		else             {return 0.0f;}
+	}
+	else if (bDown)
+	{
+		if (bLeft)       {return 225.0f;}
+		else if (bRight) {return 135.0f;}
+		else             {return 180.0f;}
+	}
+	else
+	{
+		if (bLeft)       {return 270.0f;}
+		else if (bRight) {return 90.0f;}
+		else             {return -1.0f;}
+	}
+}
+
+// BUTTON MAPS POV ////////////////////////////////////////////////////////////
+uint RealJoystick::buttonMapsPov(uint button) const
+{
+	uint i = 0;
+	for (const VirtualPovDefinition &vpd : m_virtualPovsDef)
+	{
+		if (button == vpd.buttonUp    ||
+			button == vpd.buttonRight ||
+			button == vpd.buttonDown  ||
+			button == vpd.buttonLeft)
+			{
+				return i;
+			}
+		++i;
+	}
+	
+	return -1u;
 }
 
 

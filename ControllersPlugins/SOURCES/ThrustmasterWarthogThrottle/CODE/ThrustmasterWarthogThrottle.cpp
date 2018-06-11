@@ -22,6 +22,10 @@
 //  AXIS NAME
 //  AXES NAMES
 //
+//  POVS COUNT
+//  POV NAME
+//  POVS NAMES
+//
 //  SET DATA
 //  FLUSH
 //  BIT CHAR
@@ -41,6 +45,14 @@ ThrustmasterWarthogThrottle::ThrustmasterWarthogThrottle(QGameController *c) : R
 	m_buttonsNames << "FLAPM" << "SPDM" << "BSM" << "CHM" << "PSM" << "APAH";
 	
 	m_axesNames << "THR_LEFT" << "THR_RIGHT" << "THR_FC" << "SCX" << "SCY";
+	
+	m_povsNames << "CS" << "MS";
+	
+	this->addVirtualPov(ThrustmasterWarthogThrottle_::MSU,
+						ThrustmasterWarthogThrottle_::MSR,
+						ThrustmasterWarthogThrottle_::MSD,
+						ThrustmasterWarthogThrottle_::MSL,
+						"MS");
 	
 	// led support
 	m_thread = new WriteToHidThread(this);
@@ -314,6 +326,30 @@ QString ThrustmasterWarthogThrottle::axisName(uint axis) const
 QStringList ThrustmasterWarthogThrottle::axesNames() const
 {
 	return m_axesNames;
+}
+
+
+
+
+// POVS COUNT /////////////////////////////////////////////////////////////////
+uint ThrustmasterWarthogThrottle::povsCount() const
+{
+	return 2;
+}
+
+// POV NAME ///////////////////////////////////////////////////////////////////
+QString ThrustmasterWarthogThrottle::povName(uint pov) const
+{
+	if (pov < 2)
+		return m_povsNames[pov];
+	else
+		return QString();
+}
+
+// POVS NAMES /////////////////////////////////////////////////////////////////
+QStringList ThrustmasterWarthogThrottle::povsNames() const
+{
+	return m_povsNames;
 }
 
 

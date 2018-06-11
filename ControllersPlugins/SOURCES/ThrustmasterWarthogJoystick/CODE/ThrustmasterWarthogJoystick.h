@@ -27,7 +27,6 @@ class ThrustmasterWarthogJoystick : public RealJoystick
 		QString description() const override final;
 		
 		uint buttonsCount() const override final;
-		bool buttonPressed(uint button) const override final;
 		QString buttonName(uint button) const override final;
 		QStringList buttonsNames() const override final;
 		
@@ -36,15 +35,19 @@ class ThrustmasterWarthogJoystick : public RealJoystick
 		QString axisName(uint axis) const override final;
 		QStringList axesNames() const override final;
 		
+		uint povsCount() const override final;
+		QString povName(uint pov) const override final;
+		QStringList povsNames() const override final;
+		
 		
 	protected slots:
-		void slotGameControllerButtonEvent(QGameControllerButtonEvent *event) override final;
 		void slotGameControllerAxisEvent(QGameControllerAxisEvent *event) override final;
 		
 		
 	private:
 		QStringList m_buttonsNames;
 		QStringList m_axesNames;
+		QStringList m_povsNames;
 };
 
 #endif

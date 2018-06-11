@@ -278,7 +278,7 @@ bool MainWindow::unloadProfile(bool bResetPath)
 	if (!m_loader) {return true;}
 	
 	m_profile->stop();
-	bool b = m_loader->unload(); // delete m_profile
+	bool b = m_loader->unload(); // it deletes m_profile, but on Qt5.11 it does not unleash the dll
 	delete m_loader;
 	m_loader = nullptr;
 	m_profile = nullptr;
@@ -408,8 +408,8 @@ void MainWindow::slotStop()
 void MainWindow::slotUnload()
 {
 	textEdit->addMessage("Unload profile " + m_dllFileName,Qt::black);
-	this->setState(HmiState::ReadyToPlayNotLoaded);
 	this->unloadProfile(false);
+	this->setState(HmiState::ReadyToPlayNotLoaded);
 }
 
 // SLOT ONE LOOP //////////////////////////////////////////////////////////////

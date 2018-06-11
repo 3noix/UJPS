@@ -5,13 +5,11 @@
 ///////////////////////////////////////////////////////////////////////////////
 //  CONSTRUCTEUR
 //
-//  SLOT GAME CONTROLLER BUTTON EVENT
 //  SLOT GAME CONTROLLER AXIS EVENT
 //
 //  DESCRIPTION
 //
 //  BUTTONS COUNT
-//  BUTTON PRESSED
 //  BUTTON NAME
 //  BUTTONS NAMES
 //
@@ -19,6 +17,10 @@
 //  AXIS VALUE
 //  AXIS NAME
 //  AXES NAMES
+//
+//  POVS COUNT
+//  POV NAME
+//  POVS NAMES
 ///////////////////////////////////////////////////////////////////////////////
 
 
@@ -30,15 +32,29 @@ ThrustmasterWarthogJoystick::ThrustmasterWarthogJoystick(QGameController *c) : R
 	m_buttonsNames << "H1U" << "H1R" << "H1D" << "H1L";
 	
 	m_axesNames << "JOYX" << "JOYY";
+	
+	m_povsNames << "HAT1" << "HAT2" << "HAT3" << "HAT4";
+	
+	this->addVirtualPov(ThrustmasterWarthogJoystick_::H2U,
+						ThrustmasterWarthogJoystick_::H2R,
+						ThrustmasterWarthogJoystick_::H2D,
+						ThrustmasterWarthogJoystick_::H2L,
+						"HAT2");
+	
+	this->addVirtualPov(ThrustmasterWarthogJoystick_::H3U,
+						ThrustmasterWarthogJoystick_::H3R,
+						ThrustmasterWarthogJoystick_::H3D,
+						ThrustmasterWarthogJoystick_::H3L,
+						"HAT3");
+	
+	this->addVirtualPov(ThrustmasterWarthogJoystick_::H4U,
+						ThrustmasterWarthogJoystick_::H4R,
+						ThrustmasterWarthogJoystick_::H4D,
+						ThrustmasterWarthogJoystick_::H4L,
+						"HAT4");
 }
 
 
-// SLOT GAME CONTROLLER BUTTON EVENT //////////////////////////////////////////
-void ThrustmasterWarthogJoystick::slotGameControllerButtonEvent(QGameControllerButtonEvent *event)
-{
-	Q_ASSERT(event);
-	m_changes << JoystickChange{this,ControlType::Button,event->button(),event->pressed(),0.0};
-}
 
 // SLOT GAME CONTROLLER AXIS EVENT ////////////////////////////////////////////
 void ThrustmasterWarthogJoystick::slotGameControllerAxisEvent(QGameControllerAxisEvent *event)
@@ -67,13 +83,6 @@ QString ThrustmasterWarthogJoystick::description() const
 uint ThrustmasterWarthogJoystick::buttonsCount() const
 {
 	return 23;
-}
-
-// BUTTON PRESSED /////////////////////////////////////////////////////////////
-bool ThrustmasterWarthogJoystick::buttonPressed(uint button) const
-{
-	// normal buttons and POV virtual buttons
-	return this->RealJoystick::buttonPressed(button);
 }
 
 // BUTTON NAME ////////////////////////////////////////////////////////////////
@@ -122,4 +131,29 @@ QStringList ThrustmasterWarthogJoystick::axesNames() const
 {
 	return m_axesNames;
 }
+
+
+
+
+// POVS COUNT /////////////////////////////////////////////////////////////////
+uint ThrustmasterWarthogJoystick::povsCount() const
+{
+	return 4;
+}
+
+// POV NAME ///////////////////////////////////////////////////////////////////
+QString ThrustmasterWarthogJoystick::povName(uint pov) const
+{
+	if (pov < 4)
+		return m_povsNames[pov];
+	else
+		return QString();
+}
+
+// POVS NAMES /////////////////////////////////////////////////////////////////
+QStringList ThrustmasterWarthogJoystick::povsNames() const
+{
+	return m_povsNames;
+}
+
 

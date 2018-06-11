@@ -15,11 +15,11 @@ namespace ThrustmasterWarthogThrottle_
 	const QString Description = "Throttle - HOTAS Warthog";
 	
 	const uint SC       = 0;	// slew control
-	const uint MSP      = 1;	// MS = micro switch
-	const uint MSU      = 2;
-	const uint MSR      = 3;
-	const uint MSD      = 4;
-	const uint MSL      = 5;
+	const uint MSP      = 1;	// micro switch press
+	const uint MSU      = 2;	// micro switch up
+	const uint MSR      = 3;	// micro switch right
+	const uint MSD      = 4;	// micro switch down
+	const uint MSL      = 5;	// micro switch left
 	const uint SPDF     = 6;	// speedbrake forward
 	const uint SPDB     = 7;	// speedbrake backward
 	const uint BSF      = 8;	// boat switch forward
@@ -73,6 +73,9 @@ namespace ThrustmasterWarthogThrottle_
 	const uint THR_FC    = 2;	// friction control
 	const uint SCX       = 3;	// slew control X
 	const uint SCY       = 4;	// slew control Y
+	
+	const uint CS        = 0;	// coolie switch pov
+	const uint MS        = 1;	// micro switch virtual pov
 };
 
 #endif
