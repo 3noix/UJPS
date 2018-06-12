@@ -5,7 +5,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 //  CONSTRUCTEUR
 //
-//  SLOT GAME CONTROLLER BUTTON EVENT
 //  SLOT GAME CONTROLLER AXIS EVENT
 //
 //  DESCRIPTION
@@ -19,6 +18,10 @@
 //  AXIS VALUE
 //  AXIS NAME
 //  AXES NAMES
+//
+//  POVS COUNT
+//  POV NAME
+//  POVS NAMES
 ///////////////////////////////////////////////////////////////////////////////
 
 
@@ -30,14 +33,8 @@ MicrosoftXbox360Controller::MicrosoftXbox360Controller(QGameController *c) : Rea
 	m_buttonsNames << "DPADU" << "DPADR" << "DPADD" << "DPADL";
 	
 	m_axesNames << "THUMBLX" << "THUMBLY" << "THUMBRX" << "THUMBRY" << "TRIGGER";
-}
-
-
-// SLOT GAME CONTROLLER BUTTON EVENT //////////////////////////////////////////
-void MicrosoftXbox360Controller::slotGameControllerButtonEvent(QGameControllerButtonEvent *event)
-{
-	Q_ASSERT(event);
-	m_changes << JoystickChange{this,ControlType::Button,event->button(),event->pressed(),0.0};
+	
+	m_povsNames << "DPAD";
 }
 
 // SLOT GAME CONTROLLER AXIS EVENT ////////////////////////////////////////////
@@ -70,13 +67,6 @@ QString MicrosoftXbox360Controller::description() const
 uint MicrosoftXbox360Controller::buttonsCount() const
 {
 	return 14;
-}
-
-// BUTTON PRESSED /////////////////////////////////////////////////////////////
-bool MicrosoftXbox360Controller::buttonPressed(uint button) const
-{
-	// normal buttons and POV virtual buttons
-	return this->RealJoystick::buttonPressed(button);
 }
 
 // BUTTON NAME ////////////////////////////////////////////////////////////////
@@ -127,5 +117,29 @@ QString MicrosoftXbox360Controller::axisName(uint axis) const
 QStringList MicrosoftXbox360Controller::axesNames() const
 {
 	return m_axesNames;
+}
+
+
+
+
+// POVS COUNT /////////////////////////////////////////////////////////////////
+uint MicrosoftXbox360Controller::povsCount() const
+{
+	return 1;
+}
+
+// POV NAME ///////////////////////////////////////////////////////////////////
+QString MicrosoftXbox360Controller::povName(uint pov) const
+{
+	if (pov < 1)
+		return m_povsNames[pov];
+	else
+		return QString();
+}
+
+// POVS NAMES /////////////////////////////////////////////////////////////////
+QStringList MicrosoftXbox360Controller::povsNames() const
+{
+	return m_povsNames;
 }
 

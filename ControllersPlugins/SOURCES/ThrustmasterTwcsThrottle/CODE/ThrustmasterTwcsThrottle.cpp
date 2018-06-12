@@ -5,13 +5,12 @@
 ///////////////////////////////////////////////////////////////////////////////
 //  CONSTRUCTEUR
 //
-//  SLOT GAME CONTROLLER BUTTON EVENT
 //  SLOT GAME CONTROLLER AXIS EVENT
+//  SLOT GAME CONTROLLER POV EVENT
 //
 //  DESCRIPTION
 //
 //  BUTTONS COUNT
-//  BUTTON PRESSED
 //  BUTTON NAME
 //  BUTTONS NAMES
 //
@@ -19,6 +18,11 @@
 //  AXIS VALUE
 //  AXIS NAME
 //  AXES NAMES
+//
+//  POVS COUNT
+//  POV VALUE
+//  POV NAME
+//  POVS NAMES
 ///////////////////////////////////////////////////////////////////////////////
 
 
@@ -31,18 +35,25 @@ ThrustmasterTwcsThrottle::ThrustmasterTwcsThrottle(QGameController *c) : RealJoy
 	m_buttonsNames << "THAT2U" << "THAT2R" << "THAT2D" << "THAT2L";
 	
 	m_axesNames << "TTHR" << "TRDR" << "TMSTX" << "TMSTY" << "TANT" << "TFRP1" << "TFRP2" << "TFRP3";
+	
+	m_povsNames << "HAT1" << "HAT2" << "HAT3";
+	
+	this->addVirtualPov(ThrustmasterTwcsThrottle_::THAT1U,
+						ThrustmasterTwcsThrottle_::THAT1R,
+						ThrustmasterTwcsThrottle_::THAT1D,
+						ThrustmasterTwcsThrottle_::THAT1L,
+						"HAT1");
+	
+	this->addVirtualPov(ThrustmasterTwcsThrottle_::THAT3U,
+						ThrustmasterTwcsThrottle_::THAT3R,
+						ThrustmasterTwcsThrottle_::THAT3D,
+						ThrustmasterTwcsThrottle_::THAT3L,
+						"HAT3");
 }
 
 
 
 
-
-// SLOT GAME CONTROLLER BUTTON EVENT //////////////////////////////////////////
-void ThrustmasterTwcsThrottle::slotGameControllerButtonEvent(QGameControllerButtonEvent *event)
-{
-	Q_ASSERT(event);
-	m_changes << JoystickChange{this,ControlType::Button,event->button(),event->pressed(),0.0};
-}
 
 // SLOT GAME CONTROLLER AXIS EVENT ////////////////////////////////////////////
 void ThrustmasterTwcsThrottle::slotGameControllerAxisEvent(QGameControllerAxisEvent *event)
@@ -58,6 +69,17 @@ void ThrustmasterTwcsThrottle::slotGameControllerAxisEvent(QGameControllerAxisEv
 	else if (axis == 1) {m_changes << JoystickChange{this, ControlType::Axis, ThrustmasterTwcsThrottle_::TFRP1, false, event->value()};}
 	else if (axis == 2) {m_changes << JoystickChange{this, ControlType::Axis, ThrustmasterTwcsThrottle_::TFRP2, false, event->value()};}
 	else if (axis == 3) {m_changes << JoystickChange{this, ControlType::Axis, ThrustmasterTwcsThrottle_::TFRP3, false, event->value()};}
+}
+
+// SLOT GAME CONTROLLER POV EVENT /////////////////////////////////////////////
+void ThrustmasterTwcsThrottle::slotGameControllerPovEvent(QGameControllerPovEvent *event)
+{
+	Q_ASSERT(event);
+	uint pov = event->pov();
+	
+	if (pov == 1)      {m_changes << JoystickChange{this, ControlType::Pov, ThrustmasterTwcsThrottle_::HAT1, false, event->angle()};}
+	else if (pov == 0) {m_changes << JoystickChange{this, ControlType::Pov, ThrustmasterTwcsThrottle_::HAT2, false, event->angle()};}
+	else if (pov == 2) {m_changes << JoystickChange{this, ControlType::Pov, ThrustmasterTwcsThrottle_::HAT3, false, event->angle()};}
 }
 
 
@@ -77,13 +99,6 @@ QString ThrustmasterTwcsThrottle::description() const
 uint ThrustmasterTwcsThrottle::buttonsCount() const
 {
 	return 18;
-}
-
-// BUTTON PRESSED /////////////////////////////////////////////////////////////
-bool ThrustmasterTwcsThrottle::buttonPressed(uint button) const
-{
-	// normal buttons and POV virtual buttons
-	return this->RealJoystick::buttonPressed(button);
 }
 
 // BUTTON NAME ////////////////////////////////////////////////////////////////
@@ -138,6 +153,39 @@ QString ThrustmasterTwcsThrottle::axisName(uint axis) const
 QStringList ThrustmasterTwcsThrottle::axesNames() const
 {
 	return m_axesNames;
+}
+
+
+
+
+// POVS COUNT /////////////////////////////////////////////////////////////////
+uint ThrustmasterTwcsThrottle::povsCount() const
+{
+	return 3;
+}
+
+// POV VALUE //////////////////////////////////////////////////////////////////
+float ThrustmasterTwcsThrottle::povValue(uint pov) const
+{
+	if (pov == ThrustmasterTwcsThrottle_::HAT1)      {return this->RealJoystick::povValue(1);}
+	else if (pov == ThrustmasterTwcsThrottle_::HAT2) {return this->RealJoystick::povValue(0);}
+	else if (pov == ThrustmasterTwcsThrottle_::HAT3) {return this->RealJoystick::povValue(2);}
+	return -1.0f;
+}
+
+// POV NAME ///////////////////////////////////////////////////////////////////
+QString ThrustmasterTwcsThrottle::povName(uint pov) const
+{
+	if (pov < 3)
+		return m_povsNames[pov];
+	else
+		return QString();
+}
+
+// POVS NAMES /////////////////////////////////////////////////////////////////
+QStringList ThrustmasterTwcsThrottle::povsNames() const
+{
+	return m_povsNames;
 }
 
 

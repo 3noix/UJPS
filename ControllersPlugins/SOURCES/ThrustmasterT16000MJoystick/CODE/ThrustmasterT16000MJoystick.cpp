@@ -5,13 +5,11 @@
 ///////////////////////////////////////////////////////////////////////////////
 //  CONSTRUCTEUR
 //
-//  SLOT GAME CONTROLLER BUTTON EVENT
 //  SLOT GAME CONTROLLER AXIS EVENT
 //
 //  DESCRIPTION
 //
 //  BUTTONS COUNT
-//  BUTTON PRESSED
 //  BUTTON NAME
 //  BUTTONS NAMES
 //
@@ -19,6 +17,10 @@
 //  AXIS VALUE
 //  AXIS NAME
 //  AXES NAMES
+//
+//  POVS COUNT
+//  POV NAME
+//  POVS NAMES
 ///////////////////////////////////////////////////////////////////////////////
 
 
@@ -31,18 +33,13 @@ ThrustmasterT16000MJoystick::ThrustmasterT16000MJoystick(QGameController *c) : R
 	m_buttonsNames << "H1U" << "H1R" << "H1D" << "H1L";
 	
 	m_axesNames << "JOYX" << "JOYY" << "RUDDER" << "THR";
+	
+	m_povsNames << "HAT1";
 }
 
 
 
 
-
-// SLOT GAME CONTROLLER BUTTON EVENT //////////////////////////////////////////
-void ThrustmasterT16000MJoystick::slotGameControllerButtonEvent(QGameControllerButtonEvent *event)
-{
-	Q_ASSERT(event);
-	m_changes << JoystickChange{this,ControlType::Button,event->button(),event->pressed(),0.0};
-}
 
 // SLOT GAME CONTROLLER AXIS EVENT ////////////////////////////////////////////
 void ThrustmasterT16000MJoystick::slotGameControllerAxisEvent(QGameControllerAxisEvent *event)
@@ -73,13 +70,6 @@ QString ThrustmasterT16000MJoystick::description() const
 uint ThrustmasterT16000MJoystick::buttonsCount() const
 {
 	return 20;
-}
-
-// BUTTON PRESSED /////////////////////////////////////////////////////////////
-bool ThrustmasterT16000MJoystick::buttonPressed(uint button) const
-{
-	// normal buttons and POV virtual buttons
-	return this->RealJoystick::buttonPressed(button);
 }
 
 // BUTTON NAME ////////////////////////////////////////////////////////////////
@@ -132,4 +122,27 @@ QStringList ThrustmasterT16000MJoystick::axesNames() const
 	return m_axesNames;
 }
 
+
+
+
+// POVS COUNT /////////////////////////////////////////////////////////////////
+uint ThrustmasterT16000MJoystick::povsCount() const
+{
+	return 1;
+}
+
+// POV NAME ///////////////////////////////////////////////////////////////////
+QString ThrustmasterT16000MJoystick::povName(uint pov) const
+{
+	if (pov < 1)
+		return m_povsNames[pov];
+	else
+		return QString();
+}
+
+// POVS NAMES /////////////////////////////////////////////////////////////////
+QStringList ThrustmasterT16000MJoystick::povsNames() const
+{
+	return m_povsNames;
+}
 

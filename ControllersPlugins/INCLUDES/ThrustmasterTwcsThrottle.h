@@ -41,6 +41,10 @@ namespace ThrustmasterTwcsThrottle_
 	const uint TFRP1 = 5;	// TFRP unknown axis 1 (TCSRUDDER?)
 	const uint TFRP2 = 6;	// TFRP unknown axis 2 (TCSLEFT?)
 	const uint TFRP3 = 7;	// TFRP unknown axis 3 (TCSRIGHT?)
+	
+	const uint HAT1 = 0;	// central hat
+	const uint HAT2 = 1;	// upper hat (the one that is seen as a pov by windows)
+	const uint HAT3 = 2;	// lower hat
 };
 
 #endif

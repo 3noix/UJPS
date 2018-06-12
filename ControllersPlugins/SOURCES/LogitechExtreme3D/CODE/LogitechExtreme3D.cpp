@@ -5,13 +5,11 @@
 ///////////////////////////////////////////////////////////////////////////////
 //  CONSTRUCTEUR
 //
-//  SLOT GAME CONTROLLER BUTTON EVENT
 //  SLOT GAME CONTROLLER AXIS EVENT
 //
 //  DESCRIPTION
 //
 //  BUTTONS COUNT
-//  BUTTON PRESSED
 //  BUTTON NAME
 //  BUTTONS NAMES
 //
@@ -19,6 +17,10 @@
 //  AXIS VALUE
 //  AXIS NAME
 //  AXES NAMES
+//
+//  POVS COUNT
+//  POV NAME
+//  POVS NAMES
 ///////////////////////////////////////////////////////////////////////////////
 
 
@@ -31,18 +33,13 @@ LogitechExtreme3D::LogitechExtreme3D(QGameController *c) : RealJoystick{c}
 	m_buttonsNames << "POVU" << "POVR" << "POVD" << "POVL";
 	
 	m_axesNames << "JOYX" << "JOYY" << "JOYZ" << "THR";
+	
+	m_povsNames << "POV1";
 }
 
 
 
 
-
-// SLOT GAME CONTROLLER BUTTON EVENT //////////////////////////////////////////
-void LogitechExtreme3D::slotGameControllerButtonEvent(QGameControllerButtonEvent *event)
-{
-	Q_ASSERT(event);
-	m_changes << JoystickChange{this,ControlType::Button,event->button(),event->pressed(),0.0};
-}
 
 // SLOT GAME CONTROLLER AXIS EVENT ////////////////////////////////////////////
 void LogitechExtreme3D::slotGameControllerAxisEvent(QGameControllerAxisEvent *event)
@@ -73,13 +70,6 @@ QString LogitechExtreme3D::description() const
 uint LogitechExtreme3D::buttonsCount() const
 {
 	return 16;
-}
-
-// BUTTON PRESSED /////////////////////////////////////////////////////////////
-bool LogitechExtreme3D::buttonPressed(uint button) const
-{
-	// normal buttons and POV virtual buttons
-	return this->RealJoystick::buttonPressed(button);
 }
 
 // BUTTON NAME ////////////////////////////////////////////////////////////////
@@ -130,6 +120,30 @@ QString LogitechExtreme3D::axisName(uint axis) const
 QStringList LogitechExtreme3D::axesNames() const
 {
 	return m_axesNames;
+}
+
+
+
+
+// POVS COUNT /////////////////////////////////////////////////////////////////
+uint LogitechExtreme3D::povsCount() const
+{
+	return 1;
+}
+
+// POV NAME ///////////////////////////////////////////////////////////////////
+QString LogitechExtreme3D::povName(uint pov) const
+{
+	if (pov < 1)
+		return m_povsNames[pov];
+	else
+		return QString();
+}
+
+// POVS NAMES /////////////////////////////////////////////////////////////////
+QStringList LogitechExtreme3D::povsNames() const
+{
+	return m_povsNames;
 }
 
 

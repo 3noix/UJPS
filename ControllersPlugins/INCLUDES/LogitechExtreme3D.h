@@ -35,6 +35,8 @@ namespace LogitechExtreme3D_
 	const uint JOYY = 1;	// Y stick axis
 	const uint JOYZ = 2;	// Z stick axis
 	const uint THR  = 3;	// throttle axis
+	
+	const uint POV1 = 0;	// the only pov
 };
 
 #endif
