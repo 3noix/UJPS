@@ -45,7 +45,6 @@ QString VirtualJoystick::m_vJoyConfigExeFileName{};
 ///////////////////////////////////////////////////////////////////////////////
 
 
-
 // CONSTRUCTEUR ///////////////////////////////////////////////////////////////
 VirtualJoystick::VirtualJoystick(uint id, uint nbButtons, uint nbAxes, uint nbPovs, bool bForcedInit) : QObject()
 {
@@ -98,6 +97,7 @@ VirtualJoystick::VirtualJoystick(uint id, uint nbButtons, uint nbAxes, uint nbPo
 	if (!AcquireVJD(m_id))
 		throw ExceptionFailedToAcquireVJoyDevice("Failed to acquire vJoy device " + QString::number(m_id).toStdString());
 	//ResetVJD(m_id);
+	m_bUseDiscretePovs = (GetVJDDiscPovNumber(m_id) > 0);
 	emit message("vJoy device " + QString::number(m_id) + " successfully configured",Qt::black);
 	
 	// init trims and locks
@@ -308,13 +308,37 @@ bool VirtualJoystick::setPov(uint pov, float value, RewriteOrNot ron)
 	if (pov >= 4 || m_povsLocked[pov] || m_povsNoRewrite[pov]) {return false;}
 	if (ron == RewriteOrNot::NoRewrite) {m_povsNoRewrite[pov] = true;}
 	
-	DWORD v = -1L;
-	if (value > -0.5f) {v = (DWORD) (value*100.0f);}
-	
-	if (pov == 0)      {m_report.bHats    = v;}
-	else if (pov == 1) {m_report.bHatsEx1 = v;}
-	else if (pov == 2) {m_report.bHatsEx2 = v;}
-	else if (pov == 3) {m_report.bHatsEx3 = v;}
+	if (!m_bUseDiscretePovs)
+	{
+		DWORD v = -1u;
+		if (value > -0.5f)
+		{
+			v = (DWORD) (value*100.0f);
+			v = lim<DWORD>(v,0u,35999u);
+		}
+		
+		if (pov == 0)      {m_report.bHats    = v;}
+		else if (pov == 1) {m_report.bHatsEx1 = v;}
+		else if (pov == 2) {m_report.bHatsEx2 = v;}
+		else if (pov == 3) {m_report.bHatsEx3 = v;}
+	}
+	else
+	{
+		DWORD position = -1u;
+		if (value > -0.5f)
+		{
+			if (value < 60.0f  || value > 300.0f)      {position = 0;}
+			else if (value > 30.0f  && value < 150.0f) {position = 1;}
+			else if (value > 120.0f && value < 240.0f) {position = 2;}
+			else if (value > 210.0f && value < 330.0f) {position = 3;}
+		}
+		
+		position = (position<<(4*pov));
+		DWORD mask = (0x0000000F<<(4*pov));
+		DWORD v = m_report.bHats;
+		v = ((~mask)&v) | (mask&(position));
+		m_report.bHats = v;
+	}
 	
 	m_reportModified = true;
 	return true;
@@ -323,11 +347,22 @@ bool VirtualJoystick::setPov(uint pov, float value, RewriteOrNot ron)
 // GET POV ////////////////////////////////////////////////////////////////////
 float VirtualJoystick::getPov(uint pov) const
 {
-	if (pov >= 4) {return 0.0f;}
-	DWORD value2 = this->getPovPrivate(pov);
-	if (value2 == -1UL) {return -1.0f;}
-	float value = 0.01f * value2;
-	return value;
+	if (pov >= 4) {return -1.0f;}
+	
+	if (!m_bUseDiscretePovs)
+	{
+		DWORD value2 = this->getPovPrivate(pov);
+		if (value2 == -1UL) {return -1.0f;}
+		float value = 0.01f * value2;
+		return value;
+	}
+	else
+	{
+		DWORD mask = (0x0000000F<<(4*pov));
+		DWORD position = (mask & m_report.bHats) >> (4*pov);
+		if (position < 4) {return 90.0f * position;}
+		return -1.0f;
+	}
 }
 
 DWORD VirtualJoystick::getPovPrivate(uint pov) const

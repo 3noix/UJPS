@@ -70,6 +70,7 @@ class VirtualJoystick : public QObject
 		
 		uint m_id;
 		bool m_reportModified;
+		bool m_bUseDiscretePovs;
 		JOYSTICK_POSITION_V2 m_report; // vJoy HID report
 		
 		std::array<bool,128> m_buttonsLocked;
