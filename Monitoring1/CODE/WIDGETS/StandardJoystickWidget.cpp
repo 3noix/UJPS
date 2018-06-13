@@ -1,6 +1,6 @@
 #include "StandardJoystickWidget.h"
 #include "AbstractRealJoystick.h"
-#include "AxisWidget.h"
+#include "AxesWidget.h"
 #include "ButtonWidget.h"
 #include "PovWidgetDecorated.h"
 
@@ -15,7 +15,6 @@
 //  JOYSTICK POV ANGLE CHANGED
 //  SLOT RUN ONE LOOP
 ///////////////////////////////////////////////////////////////////////////////
-
 
 
 // CONSTRUCTEUR ET DESTRUCTEUR ////////////////////////////////////////////////
@@ -54,16 +53,10 @@ void StandardJoystickWidget::setupWidget()
 	layout2 = new QVBoxLayout();
 	
 	// axes
-	boxAxes = new QGroupBox("Axes",this);
-	axesLayout = new QVBoxLayout(boxAxes);
-	boxAxes->setLayout(axesLayout);
+	QStringList names;
+	for (uint i=0; i<m_joystick->axesCount(); ++i) {names << m_joystick->axisName(i);}
+	boxAxes = new AxesWidget(names,this);
 	layout2->addWidget(boxAxes);
-	for (uint i=0; i<m_joystick->axesCount(); ++i)
-	{
-		AxisWidget *a = new AxisWidget{m_joystick->axisName(i),this};
-		axesLayout->addWidget(a);
-		axesWidgets << a;
-	}
 	
 	// pov
 	layout3 = new QHBoxLayout();
@@ -112,7 +105,7 @@ void StandardJoystickWidget::joystickButtonStateChanged(uint button, bool bPress
 // JOYSTICK AXIS VALUE CHANGED ////////////////////////////////////////////////
 void StandardJoystickWidget::joystickAxisValueChanged(uint axis, float value)
 {
-	axesWidgets[axis]->slotSetValue(value);
+	boxAxes->slotSetValue(axis,value);
 }
 
 // JOYSTICK POV ANGLE CHANGED /////////////////////////////////////////////////

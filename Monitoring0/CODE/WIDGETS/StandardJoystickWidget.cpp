@@ -1,6 +1,6 @@
 #include "StandardJoystickWidget.h"
 #include "QGameController.h"
-#include "AxisWidget.h"
+#include "AxesWidget.h"
 #include "ButtonWidget.h"
 #include "PovWidgetDecorated.h"
 
@@ -57,16 +57,10 @@ void StandardJoystickWidget::setupWidget()
 	layout2 = new QVBoxLayout();
 	
 	// axes
-	boxAxes = new QGroupBox("Axes",this);
-	axesLayout = new QVBoxLayout(boxAxes);
-	boxAxes->setLayout(axesLayout);
+	QStringList names;
+	for (uint i=0; i<m_joystick->axesCount(); ++i) {names << "Axis "+QString::number(i+1);}
+	boxAxes = new AxesWidget(names,this);
 	layout2->addWidget(boxAxes);
-	for (uint i=0; i<m_joystick->axesCount(); ++i)
-	{
-		AxisWidget *a = new AxisWidget{"Axis "+QString::number(i+1),this};
-		axesLayout->addWidget(a);
-		axesWidgets << a;
-	}
 	
 	// pov
 	layout3 = new QHBoxLayout();
@@ -104,7 +98,7 @@ void StandardJoystickWidget::setupWidget()
 void StandardJoystickWidget::initState()
 {
 	for (uint axis=0; axis<m_joystick->axesCount(); ++axis)
-		axesWidgets[axis]->slotSetValue(m_joystick->axisValue(axis));
+		boxAxes->slotSetValue(axis,m_joystick->axisValue(axis));
 	
 	for (uint button=0; button<m_joystick->buttonsCount(); ++button)
 		buttonsWidgets[button]->slotSetChecked(m_joystick->buttonValue(button));
@@ -116,7 +110,7 @@ void StandardJoystickWidget::initState()
 // SLOT JOYSTICK AXIS VALUE CHANGED ///////////////////////////////////////////
 void StandardJoystickWidget::slotJoystickAxisValueChanged(QGameControllerAxisEvent *event)
 {
-	axesWidgets[event->axis()]->slotSetValue(event->value());
+	boxAxes->slotSetValue(event->axis(),event->value());
 }
 
 // SLOT JOYSTICK BUTTON STATE CHANGED /////////////////////////////////////////

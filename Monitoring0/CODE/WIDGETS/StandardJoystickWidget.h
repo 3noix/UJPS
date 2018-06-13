@@ -8,7 +8,7 @@ class QGameControllerButtonEvent;
 class QGameControllerPovEvent;
 
 #include <QtWidgets>
-class AxisWidget;
+class AxesWidget;
 class ButtonWidget;
 class PovWidgetDecorated;
 
@@ -43,10 +43,9 @@ class StandardJoystickWidget : public QWidget
 		QHBoxLayout *layout1;
 		QVBoxLayout *layout2;
 		QHBoxLayout *layout3;
-		QVBoxLayout *axesLayout;
 		QGridLayout *buttonsLayout;
-		QGroupBox *boxAxes, *boxButtons, *boxPov;
-		QVector<AxisWidget*> axesWidgets;
+		AxesWidget *boxAxes;
+		QGroupBox *boxButtons, *boxPov;
 		QVector<ButtonWidget*> buttonsWidgets;
 		QVector<PovWidgetDecorated*> povWidgets;
 };
