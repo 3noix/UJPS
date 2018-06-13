@@ -32,15 +32,15 @@ void VirtualEventsQueue::processEvents()
 				{
 					if (e.vjev.type == ControlType::Button)
 					{
-						e.vjev.joystick->setButton(e.vjev.numButtonAxisPov, e.vjev.bButtonPressed, RewriteOrNot::CanRewrite);
+						e.vjev.joystick->setButton(e.vjev.numButtonAxisPov, e.vjev.bButtonPressed, Priority::Low);
 					}
 					else if (e.vjev.type == ControlType::Axis)
 					{
-						e.vjev.joystick->setAxis(e.vjev.numButtonAxisPov, e.vjev.axisOrPovValue, RewriteOrNot::CanRewrite, TrimOrNot::UseTrim);
+						e.vjev.joystick->setAxis(e.vjev.numButtonAxisPov, e.vjev.axisOrPovValue, Priority::Low, TrimOrNot::UseTrim);
 					}
 					else if (e.vjev.type == ControlType::Pov)
 					{
-						e.vjev.joystick->setPov(e.vjev.numButtonAxisPov, e.vjev.axisOrPovValue, RewriteOrNot::CanRewrite);
+						e.vjev.joystick->setPov(e.vjev.numButtonAxisPov, e.vjev.axisOrPovValue, Priority::Low);
 					}
 				}
 			}

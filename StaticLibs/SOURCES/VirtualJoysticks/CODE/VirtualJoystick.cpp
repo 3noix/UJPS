@@ -101,13 +101,13 @@ VirtualJoystick::VirtualJoystick(uint id, uint nbButtons, uint nbAxes, uint nbPo
 	emit message("vJoy device " + QString::number(m_id) + " successfully configured",Qt::black);
 	
 	// init trims and locks
-	for (bool& b : m_buttonsLocked) {b = false;}
-	for (bool& b : m_buttonsNoRewrite) {b = false;}
-	for (bool& b : m_axesLocked) {b = false;}
-	for (bool& b : m_axesNoRewrite) {b = false;}
-	for (LONG& t : m_axesTrim) {t = 0L;}
-	for (bool& b : m_povsLocked) {b = false;}
-	for (bool& b : m_povsNoRewrite) {b = false;}
+	for (bool& b : m_buttonsLocked)   {b = false;}
+	for (bool& b : m_buttonsHighPrio) {b = false;}
+	for (bool& b : m_axesLocked)      {b = false;}
+	for (bool& b : m_axesHighPrio)    {b = false;}
+	for (LONG& t : m_axesTrim)        {t = 0L;}
+	for (bool& b : m_povsLocked)      {b = false;}
+	for (bool& b : m_povsHighPrio)    {b = false;}
 	
 	// init HID report
 	this->resetReport();
@@ -216,10 +216,11 @@ void VirtualJoystick::setVJoyConfigOptions(bool bUseIt, QString exeFilePath)
 
 
 // SET BUTTON /////////////////////////////////////////////////////////////////
-bool VirtualJoystick::setButton(uint button, bool bPressed, RewriteOrNot ron)
+bool VirtualJoystick::setButton(uint button, bool bPressed, Priority p)
 {
-	if (button >= 128 || m_buttonsLocked[button] || m_buttonsNoRewrite[button]) {return false;}
-	if (ron == RewriteOrNot::NoRewrite) {m_buttonsNoRewrite[button] = true;}
+	if (button >= 128 || m_buttonsLocked[button]) {return false;}
+	if (p == Priority::Low && m_buttonsHighPrio[button]) {return false;}
+	if (p == Priority::High) {m_buttonsHighPrio[button] = true;}
 	
 	if (button < 32 && bPressed)        {m_report.lButtons    |=  bitLong(button);}
 	else if (button < 32 && !bPressed)  {m_report.lButtons    &= ~bitLong(button);}
@@ -235,10 +236,10 @@ bool VirtualJoystick::setButton(uint button, bool bPressed, RewriteOrNot ron)
 }
 
 // TOGGLE BUTTON //////////////////////////////////////////////////////////////
-bool VirtualJoystick::toggleButton(uint button, RewriteOrNot ron)
+bool VirtualJoystick::toggleButton(uint button, Priority p)
 {
 	bool b = this->getButton(button);
-	return this->setButton(button,!b,ron);
+	return this->setButton(button,!b,p);
 }
 
 // GET BUTTON /////////////////////////////////////////////////////////////////
@@ -255,10 +256,11 @@ bool VirtualJoystick::getButton(uint button) const
 }
 
 // SET AXIS ///////////////////////////////////////////////////////////////////
-bool VirtualJoystick::setAxis(uint axis, float value, RewriteOrNot ron, TrimOrNot ton)
+bool VirtualJoystick::setAxis(uint axis, float value, Priority p, TrimOrNot ton)
 {
-	if (axis >= 8 || m_axesLocked[axis] || m_axesNoRewrite[axis]) {return false;}
-	if (ron == RewriteOrNot::NoRewrite) {m_axesNoRewrite[axis] = true;}
+	if (axis >= 8 || m_axesLocked[axis]) {return false;}
+	if (p == Priority::Low && m_axesHighPrio[axis]) {return false;}
+	if (p == Priority::High) {m_axesHighPrio[axis] = true;}
 	
 	LONG v = (value+1.0f) * 16384.0f;
 	if (ton == TrimOrNot::UseTrim) {v += m_axesTrim[axis];}
@@ -303,10 +305,11 @@ LONG VirtualJoystick::getAxisPrivate(uint axis) const
 }
 
 // SET POV ////////////////////////////////////////////////////////////////////
-bool VirtualJoystick::setPov(uint pov, float value, RewriteOrNot ron)
+bool VirtualJoystick::setPov(uint pov, float value, Priority p)
 {
-	if (pov >= 4 || m_povsLocked[pov] || m_povsNoRewrite[pov]) {return false;}
-	if (ron == RewriteOrNot::NoRewrite) {m_povsNoRewrite[pov] = true;}
+	if (pov >= 4 || m_povsLocked[pov]) {return false;}
+	if (p == Priority::Low && m_povsHighPrio[pov]) {return false;}
+	if (p == Priority::High) {m_povsHighPrio[pov] = true;}
 	
 	if (!m_bUseDiscretePovs)
 	{
@@ -443,9 +446,9 @@ bool VirtualJoystick::flush(bool bEvenIfNoChange)
 	bool b = UpdateVJD(m_id, &m_report);
 	
 	m_reportModified = false;
-	for (std::array<bool,128>::iterator it=m_buttonsNoRewrite.begin(); it!=m_buttonsNoRewrite.end(); ++it) {*it = false;}
-	for (std::array<bool,8>::iterator it=m_axesNoRewrite.begin(); it!=m_axesNoRewrite.end(); ++it) {*it = false;}
-	for (std::array<bool,4>::iterator it=m_povsNoRewrite.begin(); it!=m_povsNoRewrite.end(); ++it) {*it = false;}
+	for (std::array<bool,128>::iterator it=m_buttonsHighPrio.begin(); it!=m_buttonsHighPrio.end(); ++it) {*it = false;}
+	for (std::array<bool,8>::iterator it=m_axesHighPrio.begin(); it!=m_axesHighPrio.end(); ++it) {*it = false;}
+	for (std::array<bool,4>::iterator it=m_povsHighPrio.begin(); it!=m_povsHighPrio.end(); ++it) {*it = false;}
 	
 	return b;
 }

@@ -12,10 +12,10 @@
 using uint = unsigned int;
 
 
-enum class RewriteOrNot
+enum class Priority
 {
-	CanRewrite,
-	NoRewrite
+	Low,
+	High
 };
 
 
@@ -38,12 +38,12 @@ class VirtualJoystick : public QObject
 		VirtualJoystick& operator=(VirtualJoystick &&other) = delete;
 		virtual ~VirtualJoystick();
 		
-		bool setButton(uint button, bool bPressed, RewriteOrNot ron = RewriteOrNot::NoRewrite);
-		bool toggleButton(uint button, RewriteOrNot ron = RewriteOrNot::NoRewrite);
+		bool setButton(uint button, bool bPressed, Priority p = Priority::High);
+		bool toggleButton(uint button, Priority p = Priority::High);
 		bool getButton(uint button) const;
-		bool setAxis(uint axis, float value, RewriteOrNot ron = RewriteOrNot::NoRewrite, TrimOrNot ton = TrimOrNot::NoTrim);
+		bool setAxis(uint axis, float value, Priority p = Priority::High, TrimOrNot ton = TrimOrNot::NoTrim);
 		float getAxis(uint axis) const;
-		bool setPov(uint pov, float value, RewriteOrNot ron = RewriteOrNot::NoRewrite);
+		bool setPov(uint pov, float value, Priority p = Priority::High);
 		float getPov(uint pov) const;
 		
 		void setButtonLocked(uint button, bool locked);
@@ -74,12 +74,12 @@ class VirtualJoystick : public QObject
 		JOYSTICK_POSITION_V2 m_report; // vJoy HID report
 		
 		std::array<bool,128> m_buttonsLocked;
-		std::array<bool,128> m_buttonsNoRewrite;
+		std::array<bool,128> m_buttonsHighPrio;
 		std::array<bool,8> m_axesLocked;
-		std::array<bool,8> m_axesNoRewrite;
+		std::array<bool,8> m_axesHighPrio;
 		std::array<LONG,8> m_axesTrim;
 		std::array<bool,4> m_povsLocked;
-		std::array<bool,4> m_povsNoRewrite;
+		std::array<bool,4> m_povsHighPrio;
 		
 		static uint m_nbInstances;
 		static bool m_bUseVJoyConfigExe;
