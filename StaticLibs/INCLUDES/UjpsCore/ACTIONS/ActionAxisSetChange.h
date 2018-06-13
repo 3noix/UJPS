@@ -37,9 +37,18 @@ class ActionAxisSetChange : public AbstractAction
 		virtual QVector<VirtualEvent> activateByLayerChange(AbstractRealJoystick *rj, ControlType t, uint rnum) override final
 		{
 			if (t != ControlType::Axis) {return {};}
+			
 			// we don't wait for a change in the real joystick position to update the virtual joystick position
-			VirtualEvent ev{EventType::VJoy,VJoyEvent{m_vj,ControlType::Axis,m_vAxis,false,rj->axisValue(rnum)},{},{},0};
-			return {ev};
+			if (m_direction == AxisDirection::Normal)
+			{
+				VirtualEvent ev{EventType::VJoy,VJoyEvent{m_vj,ControlType::Axis,m_vAxis,false,rj->axisValue(rnum)},{},{},0};
+				return {ev};
+			}
+			else
+			{
+				VirtualEvent ev{EventType::VJoy,VJoyEvent{m_vj,ControlType::Axis,m_vAxis,false,-rj->axisValue(rnum)},{},{},0};
+				return {ev};
+			}
 		};
 		
 		virtual QVector<VirtualEvent> deactivateByLayerChange() override final

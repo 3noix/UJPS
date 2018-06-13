@@ -2,8 +2,9 @@
 #define ACTIONS
 
 
-#include "ACTIONS/ActionAxisSetChange.h"
 #include "ACTIONS/ActionAxisIncrement.h"
+#include "ACTIONS/ActionAxisSetChange.h"
+#include "ACTIONS/ActionAxisSetValue.h"
 #include "ACTIONS/ActionButtonPress.h"
 #include "ACTIONS/ActionButtonRelease.h"
 #include "ACTIONS/ActionButtonSetChange.h"
@@ -16,6 +17,7 @@
 #include "ACTIONS/ActionKeySetChange.h"
 #include "ACTIONS/ActionKeySetChangeOpposite.h"
 #include "ACTIONS/ActionPovSetChange.h"
+#include "ACTIONS/ActionPovSetValue.h"
 #include "ACTIONS/ActionCallback.h"
 #include "ACTIONS/ActionChain.h"
 #include "ACTIONS/ActionDelay.h"

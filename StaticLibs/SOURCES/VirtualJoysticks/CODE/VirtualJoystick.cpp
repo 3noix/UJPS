@@ -311,7 +311,7 @@ bool VirtualJoystick::setPov(uint pov, float value, RewriteOrNot ron)
 	if (!m_bUseDiscretePovs)
 	{
 		DWORD v = -1u;
-		if (value > -0.5f)
+		if (value >= 0.0f && value < 360.0f)
 		{
 			v = (DWORD) (value*100.0f);
 			v = lim<DWORD>(v,0u,35999u);
@@ -325,7 +325,7 @@ bool VirtualJoystick::setPov(uint pov, float value, RewriteOrNot ron)
 	else
 	{
 		DWORD position = -1u;
-		if (value > -0.5f)
+		if (value >= 0.0f && value < 360.0f)
 		{
 			if (value < 60.0f  || value > 300.0f)      {position = 0;}
 			else if (value > 30.0f  && value < 150.0f) {position = 1;}

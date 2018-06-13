@@ -101,13 +101,28 @@ void Profile::runFirstStep()
 	MapMergeAxes(mfgx, MFGX::BRK_LEFT, 0.5f, mfgx, MFGX::BRK_RIGHT, -0.5f, AllLayers, vj1, VJOY::Y);
 	
 	MapAxisRelative(tmwj, TMWJ::JOYY, AllLayers, vj1, VJOY::Z, 4000.0f);
+	//Map(tmwj, ControlType::Button, TMWJ::TG1, AllLayers, new TriggerButtonPress{},  new ActionAxisSetValue{vj1,VJOY::Z,0.5f});
+	Map(tmwj, ControlType::Button, TMWJ::TG1, AllLayers, new TriggerButtonPress{},  new ActionCallback{[this](){vj1->setAxis(VJOY::Z,0.5f);}});
 	
 	MapButton(tmwj, TMWJ::H2U, AllLayers, vj1, VJOY::DX49);
 	MapButton(tmwj, TMWJ::H2R, AllLayers, vj1, VJOY::DX50);
 	MapButton(tmwj, TMWJ::H2D, AllLayers, vj1, VJOY::DX51);
 	MapButton(tmwj, TMWJ::H2L, AllLayers, vj1, VJOY::DX52);
 	
-	MapPov(tmwj, 0, AllLayers, vj1, VJOY::POV1);
+	Map(tmwj, ControlType::Button, TMWJ::H3L, AllLayers, new TriggerButtonPress{},  new ActionKeyPress{Key_A});
+	Map(tmwj, ControlType::Button, TMWJ::H3R, AllLayers, new TriggerButtonPress{},  new ActionKeyRelease{Key_A});
+	Map(tmwj, ControlType::Button, TMWJ::H3D, AllLayers, new TriggerButtonChange{}, new ActionKeySetChange{Key_B});
+	Map(tmwj, ControlType::Button, TMWJ::H3U, AllLayers, new TriggerButtonPress{},  new ActionKeyPulse{Key_C,0,ms2cycles(200)});
+	
+	/*
+	Map(tmwj, ControlType::Button, TMWJ::H3L, AllLayers, new TriggerButtonPress{},  new ActionKeyPress{0x1C});
+	Map(tmwj, ControlType::Button, TMWJ::H3R, AllLayers, new TriggerButtonPress{},  new ActionKeyRelease{0x1C});
+	Map(tmwj, ControlType::Button, TMWJ::H3D, AllLayers, new TriggerButtonChange{}, new ActionKeySetChange{0x32});
+	Map(tmwj, ControlType::Button, TMWJ::H3U, AllLayers, new TriggerButtonPress{},  new ActionKeyPulse{0x21,0,ms2cycles(200)});
+	*/
+	
+	MapPov(tmwj, TMWJ::HAT1, AllLayers, vj1, VJOY::POV1);
+	Map(tmwj, ControlType::Button, TMWJ::S3,  AllLayers, new TriggerButtonPress{},  new ActionPovSetValue{vj1,VJOY::POV1,20.0f});
 }
 
 
