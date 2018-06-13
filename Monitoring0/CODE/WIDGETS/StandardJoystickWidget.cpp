@@ -1,15 +1,15 @@
 #include "StandardJoystickWidget.h"
 #include "QGameController.h"
+#include "AxisWidget.h"
 #include "ButtonWidget.h"
-#include "PovWidget.h"
+#include "PovWidgetDecorated.h"
 
 
 ///////////////////////////////////////////////////////////////////////////////
 //  CONSTRUCTEUR ET DESTRUCTEUR
-//
 //  SETUP WIDGET
-//  INIT STATE
 //
+//  INIT STATE
 //  SLOT JOYSTICK AXIS VALUE CHANGED
 //  SLOT JOYSTICK BUTTON STATE CHANGED
 //  SLOT JOYSTICK POV ANGLE CHANGED
@@ -49,9 +49,6 @@ StandardJoystickWidget::~StandardJoystickWidget()
 	}
 }
 
-
-
-
 // SETUP WIDGET ///////////////////////////////////////////////////////////////
 void StandardJoystickWidget::setupWidget()
 {
@@ -61,40 +58,25 @@ void StandardJoystickWidget::setupWidget()
 	
 	// axes
 	boxAxes = new QGroupBox("Axes",this);
-	axesLayout = new QGridLayout(boxAxes);
+	axesLayout = new QVBoxLayout(boxAxes);
 	boxAxes->setLayout(axesLayout);
 	layout2->addWidget(boxAxes);
 	for (uint i=0; i<m_joystick->axesCount(); ++i)
 	{
-		QLabel *l1 = new QLabel("Axis " + QString::number(i),this);
-		l1->setMinimumWidth(20);
-		QSlider *s = new QSlider(Qt::Horizontal,this);
-		s->setEnabled(false);
-		s->setTickPosition(QSlider::TicksBothSides);
-		s->setTickInterval(1000/5);
-		s->setMinimum(-1000);
-		s->setMaximum(1000);
-		s->setValue(0);
-		s->setMinimumWidth(150);
-		QLabel *l2 = new QLabel("0",this);
-		l2->setFixedWidth(50);
-		l2->setAlignment(Qt::AlignCenter);
-		axesLayout->addWidget(l1,i,0,1,1);
-		axesLayout->addWidget(s,i,1,1,1);
-		axesLayout->addWidget(l2,i,2,1,1);
-		axesLabels << l1;
-		axesSliders << s;
-		axesValues << l2;
+		AxisWidget *a = new AxisWidget{"Axis "+QString::number(i+1),this};
+		axesLayout->addWidget(a);
+		axesWidgets << a;
 	}
 	
 	// pov
 	layout3 = new QHBoxLayout();
 	for (uint i=0; i<m_joystick->povsCount(); ++i)
 	{
-		PovWidget *p = new PovWidget(this);
+		PovWidgetDecorated *p = new PovWidgetDecorated{"POV"+QString::number(i+1),this};
 		layout3->addWidget(p);
 		povWidgets << p;
 	}
+	layout3->addStretch();
 	layout2->addLayout(layout3);
 	layout1->addLayout(layout2);
 	
@@ -113,43 +95,28 @@ void StandardJoystickWidget::setupWidget()
 	layout1->addWidget(boxButtons);
 }
 
+
+
+
+
+
 // INIT STATE /////////////////////////////////////////////////////////////////
 void StandardJoystickWidget::initState()
 {
 	for (uint axis=0; axis<m_joystick->axesCount(); ++axis)
-	{
-		float value = m_joystick->axisValue(axis);
-		axesSliders[axis]->setValue(qRound(1000.0*value));
-		axesValues[axis]->setText(QString::number(qRound(1000.0*value)));
-	}
+		axesWidgets[axis]->slotSetValue(m_joystick->axisValue(axis));
 	
 	for (uint button=0; button<m_joystick->buttonsCount(); ++button)
-	{
 		buttonsWidgets[button]->slotSetChecked(m_joystick->buttonValue(button));
-	}
 	
 	for (uint pov=0; pov<m_joystick->povsCount(); ++pov)
-	{
-		// i
-		// m_joystick->povValue(i)
-	}
+		povWidgets[pov]->slotSetAngle(m_joystick->povValue(pov));
 }
-
-
-
-
-
-
-
 
 // SLOT JOYSTICK AXIS VALUE CHANGED ///////////////////////////////////////////
 void StandardJoystickWidget::slotJoystickAxisValueChanged(QGameControllerAxisEvent *event)
 {
-	uint axis = event->axis();
-	float value = event->value();
-	
-	axesSliders[axis]->setValue(qRound(1000.0*value));
-	axesValues[axis]->setText(QString::number(qRound(1000.0*value)));
+	axesWidgets[event->axis()]->slotSetValue(event->value());
 }
 
 // SLOT JOYSTICK BUTTON STATE CHANGED /////////////////////////////////////////
@@ -163,7 +130,5 @@ void StandardJoystickWidget::slotJoystickPovAngleChanged(QGameControllerPovEvent
 {
 	povWidgets[event->pov()]->slotSetAngle(event->angle());
 }
-
-
 
 

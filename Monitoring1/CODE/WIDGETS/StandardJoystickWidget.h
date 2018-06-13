@@ -4,8 +4,9 @@
 
 #include <QtWidgets>
 class AbstractRealJoystick;
+class AxisWidget;
 class ButtonWidget;
-class PovWidget;
+class PovWidgetDecorated;
 
 
 class StandardJoystickWidget : public QWidget
@@ -40,13 +41,12 @@ class StandardJoystickWidget : public QWidget
 		QHBoxLayout *layout1;
 		QVBoxLayout *layout2;
 		QHBoxLayout *layout3;
-		QGridLayout *axesLayout, *buttonsLayout;
+		QVBoxLayout *axesLayout;
+		QGridLayout *buttonsLayout;
 		QGroupBox *boxAxes, *boxButtons, *boxPov;
-		QVector<QLabel*> axesLabels;
-		QVector<QSlider*> axesSliders;
-		QVector<QLabel*> axesValues;
+		QVector<AxisWidget*> axesWidgets;
 		QVector<ButtonWidget*> buttonsWidgets;
-		QVector<PovWidget*> povWidgets;
+		QVector<PovWidgetDecorated*> povWidgets;
 };
 
 #endif

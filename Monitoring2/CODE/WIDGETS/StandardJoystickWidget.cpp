@@ -1,7 +1,8 @@
 #include "StandardJoystickWidget.h"
 #include "AbstractRealJoystick.h"
+#include "AxisWidget.h"
 #include "ButtonWidget.h"
-#include "PovWidget.h"
+#include "PovWidgetDecorated.h"
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -54,43 +55,22 @@ void StandardJoystickWidget::setupWidget()
 	
 	// axes
 	boxAxes = new QGroupBox("Axes",this);
-	axesLayout = new QGridLayout(boxAxes);
+	axesLayout = new QVBoxLayout(boxAxes);
 	boxAxes->setLayout(axesLayout);
 	layout2->addWidget(boxAxes);
 	for (uint i=0; i<m_joystick->axesCount(); ++i)
 	{
-		QLabel *l1 = new QLabel(m_joystick->axisName(i),this);
-		l1->setMinimumWidth(20);
-		QSlider *s = new QSlider(Qt::Horizontal,this);
-		s->setEnabled(false);
-		s->setTickPosition(QSlider::TicksBothSides);
-		s->setTickInterval(1000/5);
-		s->setMinimum(-1000);
-		s->setMaximum(1000);
-		s->setValue(0);
-		s->setMinimumWidth(150);
-		QLabel *l2 = new QLabel("0",this);
-		l2->setFixedWidth(50);
-		l2->setAlignment(Qt::AlignCenter);
-		axesLayout->addWidget(l1,i,0,1,1);
-		axesLayout->addWidget(s,i,1,1,1);
-		axesLayout->addWidget(l2,i,2,1,1);
-		axesLabels << l1;
-		axesSliders << s;
-		axesValues << l2;
+		AxisWidget *a = new AxisWidget{m_joystick->axisName(i),this};
+		axesLayout->addWidget(a);
+		axesWidgets << a;
 	}
 	
 	// pov
 	layout3 = new QHBoxLayout();
 	for (uint i=0; i<m_joystick->povsCount(); ++i)
 	{
-		QVBoxLayout *layout4 = new QVBoxLayout();
-		PovWidget *p = new PovWidget(this);
-		QLabel *label = new QLabel(m_joystick->povName(i),this);
-		label->setAlignment(Qt::AlignCenter);
-		layout4->addWidget(p);
-		layout4->addWidget(label);
-		layout3->addLayout(layout4);
+		PovWidgetDecorated *p = new PovWidgetDecorated{m_joystick->povName(i),this};
+		layout3->addWidget(p);
 		povWidgets << p;
 	}
 	layout3->addStretch();
@@ -119,8 +99,8 @@ void StandardJoystickWidget::setupWidget()
 void StandardJoystickWidget::initState()
 {
 	for (uint i=0; i<m_joystick->buttonsCount(); ++i) {this->joystickButtonStateChanged(i,m_joystick->buttonPressed(i));}
-	for (uint i=0; i<m_joystick->axesCount(); ++i) {this->joystickAxisValueChanged(i,m_joystick->axisValue(i));}
-	for (uint i=0; i<m_joystick->povsCount(); ++i) {this->joystickPovAngleChanged(i,m_joystick->povValue(i));}
+	for (uint i=0; i<m_joystick->axesCount(); ++i)    {this->joystickAxisValueChanged(i,m_joystick->axisValue(i));}
+	for (uint i=0; i<m_joystick->povsCount(); ++i)    {this->joystickPovAngleChanged(i,m_joystick->povValue(i));}
 }
 
 // JOYSTICK BUTTON STATE CHANGED //////////////////////////////////////////////
@@ -132,8 +112,7 @@ void StandardJoystickWidget::joystickButtonStateChanged(uint button, bool bPress
 // JOYSTICK AXIS VALUE CHANGED ////////////////////////////////////////////////
 void StandardJoystickWidget::joystickAxisValueChanged(uint axis, float value)
 {
-	axesSliders[axis]->setValue(qRound(1000.0*value));
-	axesValues[axis]->setText(QString::number(qRound(1000.0*value)));
+	axesWidgets[axis]->slotSetValue(value);
 }
 
 // JOYSTICK POV ANGLE CHANGED /////////////////////////////////////////////////

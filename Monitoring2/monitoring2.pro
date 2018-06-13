@@ -24,13 +24,17 @@ INCLUDEPATH +=  ../StaticLibs/INCLUDES/QtGameControllerModif/ \
 
 HEADERS +=  CODE/MainWindow.h \
 			CODE/WIDGETS/StandardJoystickWidget.h \
+			CODE/WIDGETS/AxisWidget.h \
 			CODE/WIDGETS/ButtonWidget.h \
+			CODE/WIDGETS/PovWidgetDecorated.h \
 			CODE/WIDGETS/PovWidget.h
 
 SOURCES +=  CODE/main.cpp \
 			CODE/MainWindow.cpp \
 			CODE/WIDGETS/StandardJoystickWidget.cpp \
+			CODE/WIDGETS/AxisWidget.cpp \
 			CODE/WIDGETS/ButtonWidget.cpp \
+			CODE/WIDGETS/PovWidgetDecorated.cpp \
 			CODE/WIDGETS/PovWidget.cpp
 
 RESOURCES += resources.qrc
