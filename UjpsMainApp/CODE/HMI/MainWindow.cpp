@@ -6,15 +6,12 @@
 #include <QToolBar>
 #include <QLabel>
 #include <QSpinBox>
-#include <QTimer>
 #include <QThread>
 #include <QFileDialog>
-#include <QPluginLoader>
-#include <QCoreApplication>
 
+#include "../ProfileEngine.h"
 #include "MainWindow.h"
 #include "TextEdit.h"
-#include "AbstractProfile.h"
 #include "VirtualJoystick.h"
 #include "../otherFunctions.h"
 #include "../COMPILER/CompilationWidget.h"
@@ -33,16 +30,12 @@
 //  SET STATE
 //  CLOSE EVENT
 //
-//  LOAD PROFILE
-//  UNLOAD PROFILE
-//
 //  SLOT BROWSE BUTTON CLICKED
 //  SLOT SETTINGS
 //  SLOT COMPILATION
 //  SLOT PLAY
 //  SLOT STOP
 //  SLOT UNLOAD
-//  SLOT ONE LOOP
 ///////////////////////////////////////////////////////////////////////////////
 
 
@@ -60,11 +53,8 @@ MainWindow::MainWindow(QWidget *parent) : QWidget(parent)
 	m_proFilePath = "";
 	m_dllFilePath = "";
 	m_dllFileName = "";
-	m_profile = nullptr;
-	m_loader = nullptr;
-	m_bConfigOk = false;
+	m_engine = new ProfileEngine{this};
 	
-	timer = new QTimer(this);
 	m_compilWidget = new CompilationWidget{this};
 	
 	this->createActions();
@@ -72,7 +62,7 @@ MainWindow::MainWindow(QWidget *parent) : QWidget(parent)
 	this->setState(HmiState::WaitingForDll);
 	
 	// connections
-	QObject::connect(timer, &QTimer::timeout, this, &MainWindow::slotOneLoop);
+	QObject::connect(m_engine,&ProfileEngine::message,textEdit,&TextEdit::addMessage);
 	QObject::connect(actionCompilation,&QAction::triggered,this,&MainWindow::slotCompilation);
 	QObject::connect(actionSettings,&QAction::triggered,this,&MainWindow::slotSettings);
 	QObject::connect(actionPlay,&QAction::triggered,this,&MainWindow::slotPlay);
@@ -83,9 +73,6 @@ MainWindow::MainWindow(QWidget *parent) : QWidget(parent)
 
 MainWindow::~MainWindow()
 {
-	timer->stop();
-	this->unloadProfile(true);
-	
 	// write settings
 	ApplicationSettings& settings = ApplicationSettings::instance();
 	if (!settings.isEmpty()) {settings.writeFile();}
@@ -233,12 +220,12 @@ void MainWindow::setState(HmiState s)
 void MainWindow::closeEvent(QCloseEvent *event)
 {
 	textEdit->addMessage("Closing",Qt::black);
-	timer->stop();
+	m_engine->stop();
 	this->setState(HmiState::Quitting);
 	
-	if (m_loader)
+	if (m_engine->isLoaded())
 	{
-		this->unloadProfile(true);
+		m_engine->unloadProfile();
 		QThread::sleep(1);
 	}
 	
@@ -248,49 +235,6 @@ void MainWindow::closeEvent(QCloseEvent *event)
 
 
 
-
-
-
-// LOAD PROFILE ///////////////////////////////////////////////////////////////
-bool MainWindow::loadProfile(const QString &dllFilePath)
-{
-	m_loader = new QPluginLoader(dllFilePath);
-	if (QObject *plugin = m_loader->instance())
-	{
-		AbstractProfile* profile = qobject_cast<AbstractProfile*>(plugin);
-		if (profile)
-		{
-			m_profile = profile;
-			QObject::connect(m_profile,SIGNAL(message(QString,QColor)),textEdit,SLOT(addMessage(QString,QColor)));
-			//QObject::connect(m_profile,&AbstractProfile::message,textEdit,&TextEdit::addMessage); // ne marche pas !!
-			return true;
-		}
-	}
-	
-	delete m_loader;
-	m_loader = nullptr;
-	return false;
-}
-
-// UNLOAD PROFILE /////////////////////////////////////////////////////////////
-bool MainWindow::unloadProfile(bool bResetPath)
-{
-	if (!m_loader) {return true;}
-	
-	m_profile->stop();
-	bool b = m_loader->unload(); // it deletes m_profile, but on Qt5.11 it does not unleash the dll
-	delete m_loader;
-	m_loader = nullptr;
-	m_profile = nullptr;
-	m_bConfigOk = false;
-	if (bResetPath)
-	{
-		m_proFilePath = "";
-		m_dllFilePath = "";
-		m_dllFileName = "";
-	}
-	return b;
-}
 
 
 
@@ -304,8 +248,10 @@ void MainWindow::slotBrowseButtonClicked()
 	QString proFilePath = MyFileDialog::getOpenFileName(this, "Select profile plugin", "defaultDirectory", "*.pro");
 	if (proFilePath == "" || proFilePath == m_proFilePath) {return;}
 	
-	this->unloadProfile(true);
+	m_engine->unloadProfile();
 	m_proFilePath = proFilePath;
+	m_dllFilePath = "";
+	m_dllFileName = "";
 	
 	lineDllPath->setText(m_proFilePath);
 	textEdit->addMessage("Plugin path changed for " + m_proFilePath,Qt::black);
@@ -318,6 +264,7 @@ void MainWindow::slotSettings()
 	SettingsDialog settingsDialog(this);
 	settingsDialog.addSettingsWidget(new GeneralSettingsWidget(&settingsDialog));
 	settingsDialog.addSettingsWidget(new VJoySettingsWidget(&settingsDialog));
+	
 	int result = settingsDialog.exec();
 	if (result == QDialog::Rejected) {return;}
 }
@@ -332,10 +279,11 @@ void MainWindow::slotCompilation()
 // SLOT PLAY //////////////////////////////////////////////////////////////////
 void MainWindow::slotPlay()
 {
-	if (timer->isActive()) {return;}
+	if (m_engine->isActive()) {return;}
 	
 	// load the plugin only if necessary
-	if (!m_loader || m_dllFilePath == "")
+	bool bConfigOk = true;
+	if (m_dllFilePath == "" || !m_engine->isLoaded())
 	{
 		// search for one dll
 		QString dllDir = dirName(m_proFilePath) + "/" + debugOrRelease();
@@ -355,9 +303,11 @@ void MainWindow::slotPlay()
 		
 		// load the profile plugin
 		textEdit->addMessage("Loading profile " + m_dllFileName,Qt::black);
-		m_bConfigOk = this->loadProfile(m_dllFilePath);
+		bConfigOk = m_engine->loadProfile(m_dllFilePath);
 	}
-	if (!m_bConfigOk)
+	
+	// manages loading errors
+	if (!bConfigOk)
 	{
 		textEdit->addMessage("Plugin loading failed",Qt::red);
 		this->setState(HmiState::ReadyToPlayNotLoaded);
@@ -368,29 +318,8 @@ void MainWindow::slotPlay()
 	textEdit->addMessage("Starting " + m_dllFileName,Qt::black);
 	this->setState(HmiState::Playing);
 	
-	// configuration
-	m_profile->setTimeStep(boxRefreshRate->value());
-	timer->setInterval(boxRefreshRate->value());
-	try
-	{
-		if (!m_profile->play())
-		{
-			textEdit->addMessage("Failed to initialize profile",Qt::red);
-			this->setState(HmiState::ReadyToPlayLoaded);
-			return;
-		}
-	}
-	catch (std::exception &e)
-	{
-		QString msg = "Failed to initialize profile: " + QString{e.what()};
-		textEdit->addMessage(msg,Qt::red);
-		this->setState(HmiState::ReadyToPlayLoaded);
-		return;
-	}
-	
-	// start the loop!
-	timer->start();
-	textEdit->addMessage("Running",Qt::black);
+	// configuration and start
+	m_engine->run(boxRefreshRate->value());
 }
 
 // SLOT STOP //////////////////////////////////////////////////////////////////
@@ -398,36 +327,14 @@ void MainWindow::slotStop()
 {
 	textEdit->addMessage("Stop profile " + m_dllFileName,Qt::black);
 	this->setState(HmiState::ReadyToPlayLoaded);
-	
-	timer->stop();
-	m_profile->stop();
-	m_profile->UnmapAll();
+	m_engine->stop();
 }
 
 // SLOT UNLOAD ////////////////////////////////////////////////////////////////
 void MainWindow::slotUnload()
 {
 	textEdit->addMessage("Unload profile " + m_dllFileName,Qt::black);
-	this->unloadProfile(false);
+	m_engine->unloadProfile();
 	this->setState(HmiState::ReadyToPlayNotLoaded);
-}
-
-// SLOT ONE LOOP //////////////////////////////////////////////////////////////
-void MainWindow::slotOneLoop()
-{
-	if (!m_profile)
-	{
-		textEdit->addMessage("Impossible: no profile set",Qt::red);
-		return;
-	}
-	
-	if (!m_bConfigOk)
-	{
-		textEdit->addMessage("Impossible: profile not correctly initialized",Qt::red);
-		return;
-	}
-	
-	try {m_profile->run();}
-	catch (std::exception &e) {textEdit->addMessage(e.what(),Qt::red);}
 }
 

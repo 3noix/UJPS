@@ -65,11 +65,13 @@ REM COMPILATION AND DEPLOYMENT OF UJPS MAIN APP
 echo compiling UjpsMainApp
 echo.
 cd ../../UjpsMainApp
-qmake
+qmake ujps.pro
+mingw32-make release
+qmake ujps_console.pro
 mingw32-make release
 cd release
 echo.
-windeployqt Ujps.exe
+windeployqt UJPS.exe
 cd ../..
 copy /Y StaticLibs\SOURCES\QtGameControllerModif\release\QtGameControllerModif.dll UjpsMainApp\release
 copy /Y StaticLibs\SOURCES\RealJoysticks\release\realJoysticks.dll UjpsMainApp\release

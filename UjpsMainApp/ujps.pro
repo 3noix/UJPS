@@ -17,7 +17,7 @@ TARGET = UJPS
 CONFIG += c++11
 OBJECTS_DIR = $$DESTDIR/objects
 MOC_DIR = $$DESTDIR/moc
-QT += widgets xmlpatterns
+QT = core xmlpatterns gui widgets
 DEFINES -= QT_NO_DEBUG
 
 
@@ -30,7 +30,8 @@ INCLUDEPATH +=  ../StaticLibs/INCLUDES/QtGameControllerModif/ \
 				../StaticLibs/INCLUDES/UjpsCore/
 
 
-HEADERS +=  CODE/HMI/MainWindow.h \
+HEADERS +=  CODE/ProfileEngine.h \
+			CODE/HMI/MainWindow.h \
 			CODE/HMI/TextEdit.h \
 			CODE/COMPILER/AbstractCompiler.h \
 			CODE/COMPILER/QtCompiler.h \
@@ -48,6 +49,7 @@ HEADERS +=  CODE/HMI/MainWindow.h \
 			
 			
 SOURCES +=  CODE/main.cpp \
+			CODE/ProfileEngine.cpp \
 			CODE/otherFunctions.cpp \
 			CODE/HMI/MainWindow.cpp \
 			CODE/HMI/TextEdit.cpp \

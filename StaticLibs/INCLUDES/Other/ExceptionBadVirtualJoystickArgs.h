@@ -13,7 +13,7 @@ class ExceptionBadVirtualJoystickArgs : public std::exception
 		
 		const char* what() const noexcept
 		{
-			return "ExceptionBadVirtualJoystickArgs: id must be <=16, and # of buttons <= 128";
+			return "ExceptionBadVirtualJoystickArgs: id must be <=16, # of buttons <= 128, # of axes <= 8 and # of povs <= 4";
 		};
 };
 

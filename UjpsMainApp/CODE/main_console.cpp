@@ -1,8 +1,8 @@
-#include <QApplication>
+#include <QCoreApplication>
 #include <QFile>
 #include <iostream>
 #include "ProfileEngine.h"
-#include "HMI/MainWindow.h"
+#include "MessagesDirector.h"
 
 //#define DEBUG_MODE
 
@@ -37,11 +37,22 @@ int main(int argc, char *argv[])
 	debugFile.remove();
 	#endif
 	
-	if (argc == 1) // open GUI
+	if (argc == 2) // to run profile from line
 	{
-		QApplication app(argc,argv);
-		MainWindow w;
-		w.show();
+		QCoreApplication app(argc,argv);
+		QStringList args = app.arguments();
+		QString dllFilePath = args[1];
+		if (!QFile::exists(dllFilePath))
+		{
+			std::cerr << "file does not exist";
+			return 1;
+		}
+		
+		ProfileEngine engine;
+		MessagesDirector messenger;
+		messenger.startsListeningTo(&engine);
+		if (!engine.loadProfile(dllFilePath)) {return 1;}
+		if (!engine.run(15)) {return 1;} // only 15 ms time step for now
 		return app.exec();
 	}
 	else

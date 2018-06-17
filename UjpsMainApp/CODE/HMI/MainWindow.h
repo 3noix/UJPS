@@ -13,11 +13,9 @@ class QLineEdit;
 class QToolBar;
 class QLabel;
 class QSpinBox;
-class QTimer;
-class QPluginLoader;
 
-class AbstractProfile;
 class CompilationWidget;
+class ProfileEngine;
 
 
 enum class HmiState
@@ -51,7 +49,6 @@ class MainWindow : public QWidget
 		void slotPlay();
 		void slotStop();
 		void slotUnload();
-		void slotOneLoop();
 		
 		
 	protected:
@@ -60,10 +57,6 @@ class MainWindow : public QWidget
 		
 	private:
 		void setState(HmiState s);
-		
-		bool loadProfile(const QString &dllFilePath);
-		bool unloadProfile(bool bResetPath);
-		
 		void createActions();
 		void setupWidget();
 		
@@ -79,14 +72,11 @@ class MainWindow : public QWidget
 		QLabel *labelRefreshRate;
 		QSpinBox *boxRefreshRate;
 		
-		QTimer *timer;
 		QString m_proFilePath;
 		QString m_dllFilePath;
 		QString m_dllFileName;
-		AbstractProfile *m_profile;
-		QPluginLoader *m_loader;
 		CompilationWidget *m_compilWidget;
-		bool m_bConfigOk;
+		ProfileEngine *m_engine;
 };
 
 #endif
