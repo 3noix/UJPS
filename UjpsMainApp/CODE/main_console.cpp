@@ -37,22 +37,37 @@ int main(int argc, char *argv[])
 	debugFile.remove();
 	#endif
 	
-	if (argc == 2) // to run profile from line
+	if (argc == 2 || argc == 3) // to run profile from command line
 	{
 		QCoreApplication app(argc,argv);
 		QStringList args = app.arguments();
+		
+		// first argument: the profile dll
 		QString dllFilePath = args[1];
 		if (!QFile::exists(dllFilePath))
 		{
-			std::cerr << "file does not exist";
+			std::cerr << "Error: file does not exist";
 			return 1;
+		}
+		
+		// second optional argument, the time step (in milliseconds)
+		int dtms = 15;
+		if (argc == 3)
+		{
+			bool bok;
+			dtms = args[2].toInt(&bok);
+			if (!bok)
+			{
+				std::cerr << "Error: invalid time step value";
+				return 1;
+			}
 		}
 		
 		ProfileEngine engine;
 		MessagesDirector messenger;
 		messenger.startsListeningTo(&engine);
 		if (!engine.loadProfile(dllFilePath)) {return 1;}
-		if (!engine.run(15)) {return 1;} // only 15 ms time step for now
+		if (!engine.run(dtms)) {return 1;} // only 15 ms time step for now
 		return app.exec();
 	}
 	else
