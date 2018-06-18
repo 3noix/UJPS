@@ -36,14 +36,12 @@ class ThrustmasterTwcsThrottle : public RealJoystick
 		QStringList axesNames() const override final;
 		
 		uint povsCount() const override final;
-		float povValue(uint pov) const override final;
 		QString povName(uint pov) const override final;
 		QStringList povsNames() const override final;
 		
 		
 	private slots:
 		void slotGameControllerAxisEvent(QGameControllerAxisEvent *event) override final;
-		void slotGameControllerPovEvent(QGameControllerPovEvent *event) override final;
 		
 		
 	private:

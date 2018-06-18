@@ -6,7 +6,6 @@
 //  CONSTRUCTEUR
 //
 //  SLOT GAME CONTROLLER AXIS EVENT
-//  SLOT GAME CONTROLLER POV EVENT
 //
 //  DESCRIPTION
 //
@@ -20,7 +19,6 @@
 //  AXES NAMES
 //
 //  POVS COUNT
-//  POV VALUE
 //  POV NAME
 //  POVS NAMES
 ///////////////////////////////////////////////////////////////////////////////
@@ -36,7 +34,7 @@ ThrustmasterTwcsThrottle::ThrustmasterTwcsThrottle(QGameController *c) : RealJoy
 	
 	m_axesNames << "TTHR" << "TRDR" << "TMSTX" << "TMSTY" << "TANT" << "TFRP1" << "TFRP2" << "TFRP3";
 	
-	m_povsNames << "HAT1" << "HAT2" << "HAT3";
+	m_povsNames << "HAT2" << "HAT1" << "HAT3";
 	
 	this->addVirtualPov(ThrustmasterTwcsThrottle_::THAT1U,
 						ThrustmasterTwcsThrottle_::THAT1R,
@@ -69,17 +67,6 @@ void ThrustmasterTwcsThrottle::slotGameControllerAxisEvent(QGameControllerAxisEv
 	else if (axis == 1) {m_changes << JoystickChange{this, ControlType::Axis, ThrustmasterTwcsThrottle_::TFRP1, false, event->value()};}
 	else if (axis == 2) {m_changes << JoystickChange{this, ControlType::Axis, ThrustmasterTwcsThrottle_::TFRP2, false, event->value()};}
 	else if (axis == 3) {m_changes << JoystickChange{this, ControlType::Axis, ThrustmasterTwcsThrottle_::TFRP3, false, event->value()};}
-}
-
-// SLOT GAME CONTROLLER POV EVENT /////////////////////////////////////////////
-void ThrustmasterTwcsThrottle::slotGameControllerPovEvent(QGameControllerPovEvent *event)
-{
-	Q_ASSERT(event);
-	uint pov = event->pov();
-	
-	if (pov == 1)      {m_changes << JoystickChange{this, ControlType::Pov, ThrustmasterTwcsThrottle_::HAT1, false, event->angle()};}
-	else if (pov == 0) {m_changes << JoystickChange{this, ControlType::Pov, ThrustmasterTwcsThrottle_::HAT2, false, event->angle()};}
-	else if (pov == 2) {m_changes << JoystickChange{this, ControlType::Pov, ThrustmasterTwcsThrottle_::HAT3, false, event->angle()};}
 }
 
 
@@ -162,15 +149,6 @@ QStringList ThrustmasterTwcsThrottle::axesNames() const
 uint ThrustmasterTwcsThrottle::povsCount() const
 {
 	return 3;
-}
-
-// POV VALUE //////////////////////////////////////////////////////////////////
-float ThrustmasterTwcsThrottle::povValue(uint pov) const
-{
-	if (pov == ThrustmasterTwcsThrottle_::HAT1)      {return this->RealJoystick::povValue(1);}
-	else if (pov == ThrustmasterTwcsThrottle_::HAT2) {return this->RealJoystick::povValue(0);}
-	else if (pov == ThrustmasterTwcsThrottle_::HAT3) {return this->RealJoystick::povValue(2);}
-	return -1.0f;
 }
 
 // POV NAME ///////////////////////////////////////////////////////////////////
