@@ -36,6 +36,7 @@ HEADERS +=  CODE/ProfileEngine.h \
 			
 SOURCES +=  CODE/main_console.cpp \
 			CODE/ProfileEngine.cpp \
+			CODE/otherFunctions.cpp \
 			CODE/MessagesDirector.cpp
 
 

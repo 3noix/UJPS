@@ -1,5 +1,6 @@
 #include <QApplication>
 #include <QFile>
+#include <QFileInfo>
 #include <iostream>
 #include "ProfileEngine.h"
 #include "HMI/MainWindow.h"
@@ -62,7 +63,7 @@ int main(int argc, char *argv[])
 	// profile dll and time step
 	if (args.size() == 1 || args.size() == 2)
 	{
-		proFilePath = args[0];
+		proFilePath = QFileInfo{args[0]}.absoluteFilePath();
 		if (!QFile::exists(proFilePath))
 		{
 			std::cerr << "Error: file does not exist" << std::endl;

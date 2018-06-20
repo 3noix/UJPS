@@ -1,4 +1,5 @@
 #include "ProfileEngine.h"
+#include "otherFunctions.h"
 #include <QTimer>
 #include <QPluginLoader>
 #include "AbstractProfile.h"
@@ -25,6 +26,7 @@ ProfileEngine::ProfileEngine(QObject *parent) : QObject(parent)
 	m_timer = new QTimer{this};
 	QObject::connect(m_timer, &QTimer::timeout, this, &ProfileEngine::slotOneLoop);
 	
+	m_dllFileName = "";
 	m_profile = nullptr;
 	m_loader = nullptr;
 }
@@ -44,18 +46,21 @@ bool ProfileEngine::loadProfile(const QString &dllFilePath)
 {
 	if (m_loader) {return false;}
 	
+	emit message("Loading profile " + m_dllFileName,Qt::black);
 	m_loader = new QPluginLoader(dllFilePath);
 	if (QObject *plugin = m_loader->instance())
 	{
 		AbstractProfile* profile = qobject_cast<AbstractProfile*>(plugin);
 		if (profile)
 		{
+			m_dllFileName = shortName(dllFilePath);
 			m_profile = profile;
 			QObject::connect(m_profile,SIGNAL(message(QString,QColor)),this,SIGNAL(message(QString,QColor)));
 			return true;
 		}
 	}
 	
+	emit message("Plugin loading failed",Qt::red);
 	delete m_loader;
 	m_loader = nullptr;
 	return false;
@@ -69,6 +74,9 @@ bool ProfileEngine::unloadProfile()
 	this->stop();
 	bool b = m_loader->unload(); // it deletes m_profile, but on Qt5.11 it does not unleash the dll
 	delete m_loader;
+	
+	emit message("Unload profile " + m_dllFileName,Qt::black);
+	m_dllFileName = "";
 	m_loader = nullptr;
 	m_profile = nullptr;
 	return b;
@@ -90,6 +98,7 @@ bool ProfileEngine::run(int dtms)
 	if (!m_profile || m_timer->isActive()) {return false;}
 	
 	// initialize profile
+	emit message("Starting " + m_dllFileName,Qt::black);
 	m_profile->setTimeStep(dtms);
 	m_timer->setInterval(dtms);
 	try
@@ -120,6 +129,7 @@ void ProfileEngine::stop()
 	
 	m_timer->stop();
 	m_profile->stop();
+	emit message("Stop profile " + m_dllFileName,Qt::black);
 }
 
 // IS ACTIVE //////////////////////////////////////////////////////////////////

@@ -1,5 +1,6 @@
 #include <QCoreApplication>
 #include <QFile>
+#include <QFileInfo>
 #include <iostream>
 #include "ProfileEngine.h"
 #include "MessagesDirector.h"
@@ -41,9 +42,10 @@ int main(int argc, char *argv[])
 	{
 		QCoreApplication app(argc,argv);
 		QStringList args = app.arguments();
+		args.removeFirst();
 		
 		// first argument: the profile dll
-		QString profileDllFilePath = args[1];
+		QString profileDllFilePath = QFileInfo{args[0]}.absoluteFilePath();
 		if (!QFile::exists(profileDllFilePath))
 		{
 			std::cerr << "Error: file does not exist" << std::endl;
@@ -55,7 +57,7 @@ int main(int argc, char *argv[])
 		if (argc == 3)
 		{
 			bool bok;
-			dtms = args[2].toInt(&bok);
+			dtms = args[1].toInt(&bok);
 			if (!bok)
 			{
 				std::cerr << "Error: invalid time step value" << std::endl;
@@ -72,7 +74,7 @@ int main(int argc, char *argv[])
 	}
 	else
 	{
-		std::cerr << "Error: too much arguments provided" << std::endl;
+		std::cerr << "Error: incorrect number of arguments provided" << std::endl;
 		return 1;
 	}
 }

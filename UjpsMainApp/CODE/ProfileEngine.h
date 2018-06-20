@@ -40,6 +40,7 @@ class ProfileEngine : public QObject
 		
 	private:
 		QTimer *m_timer;
+		QString m_dllFileName;
 		AbstractProfile *m_profile;
 		QPluginLoader *m_loader;
 };

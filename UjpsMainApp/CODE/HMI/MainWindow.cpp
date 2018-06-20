@@ -318,30 +318,24 @@ void MainWindow::slotPlay()
 		m_dllFilePath = dllDir + "/" + m_dllFileName;
 		
 		// load the profile plugin
-		textEdit->addMessage("Loading profile " + m_dllFileName,Qt::black);
 		bConfigOk = m_engine->loadProfile(m_dllFilePath);
 	}
 	
 	// manages loading errors
 	if (!bConfigOk)
 	{
-		textEdit->addMessage("Plugin loading failed",Qt::red);
 		this->setState(HmiState::ReadyToPlayNotLoaded);
 		return;
 	}
 	
-	// updating widgets
-	textEdit->addMessage("Starting " + m_dllFileName,Qt::black);
-	this->setState(HmiState::Playing);
-	
 	// configuration and start
-	m_engine->run(boxRefreshRate->value());
+	this->setState(HmiState::Playing);
+	if (!m_engine->run(boxRefreshRate->value())) {this->setState(HmiState::ReadyToPlayLoaded);}
 }
 
 // SLOT STOP //////////////////////////////////////////////////////////////////
 void MainWindow::slotStop()
 {
-	textEdit->addMessage("Stop profile " + m_dllFileName,Qt::black);
 	this->setState(HmiState::ReadyToPlayLoaded);
 	m_engine->stop();
 }
@@ -349,7 +343,6 @@ void MainWindow::slotStop()
 // SLOT UNLOAD ////////////////////////////////////////////////////////////////
 void MainWindow::slotUnload()
 {
-	textEdit->addMessage("Unload profile " + m_dllFileName,Qt::black);
 	m_engine->unloadProfile();
 	this->setState(HmiState::ReadyToPlayNotLoaded);
 }
