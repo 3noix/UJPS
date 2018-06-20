@@ -43,10 +43,10 @@ int main(int argc, char *argv[])
 		QStringList args = app.arguments();
 		
 		// first argument: the profile dll
-		QString dllFilePath = args[1];
-		if (!QFile::exists(dllFilePath))
+		QString profileDllFilePath = args[1];
+		if (!QFile::exists(profileDllFilePath))
 		{
-			std::cerr << "Error: file does not exist";
+			std::cerr << "Error: file does not exist" << std::endl;
 			return 1;
 		}
 		
@@ -58,7 +58,7 @@ int main(int argc, char *argv[])
 			dtms = args[2].toInt(&bok);
 			if (!bok)
 			{
-				std::cerr << "Error: invalid time step value";
+				std::cerr << "Error: invalid time step value" << std::endl;
 				return 1;
 			}
 		}
@@ -66,13 +66,13 @@ int main(int argc, char *argv[])
 		ProfileEngine engine;
 		MessagesDirector messenger;
 		messenger.startsListeningTo(&engine);
-		if (!engine.loadProfile(dllFilePath)) {return 1;}
+		if (!engine.loadProfile(profileDllFilePath)) {return 1;}
 		if (!engine.run(dtms)) {return 1;} // only 15 ms time step for now
 		return app.exec();
 	}
 	else
 	{
-		std::cerr << "wrong number of provided arguments";
+		std::cerr << "Error: too much arguments provided" << std::endl;
 		return 1;
 	}
 }

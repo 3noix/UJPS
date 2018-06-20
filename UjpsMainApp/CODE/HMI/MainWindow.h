@@ -34,7 +34,7 @@ class MainWindow : public QWidget
 	Q_OBJECT
 	
 	public:
-		MainWindow(QWidget *parent = nullptr);
+		MainWindow(QString proFilePath, int dtms, bool bPlay, QWidget *parent = nullptr);
 		MainWindow(const MainWindow &other) = delete;
 		MainWindow(MainWindow &&other) = delete;
 		MainWindow& operator=(const MainWindow &other) = delete;

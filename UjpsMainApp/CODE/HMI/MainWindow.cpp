@@ -40,7 +40,7 @@
 
 
 // CONSTRUCTEUR ET DESTRUCTEUR ////////////////////////////////////////////////
-MainWindow::MainWindow(QWidget *parent) : QWidget(parent)
+MainWindow::MainWindow(QString proFilePath, int dtms, bool bPlay, QWidget *parent) : QWidget(parent)
 {
 	// read settings
 	ApplicationSettings& settings = ApplicationSettings::instance();
@@ -69,6 +69,22 @@ MainWindow::MainWindow(QWidget *parent) : QWidget(parent)
 	QObject::connect(actionStop,&QAction::triggered,this,&MainWindow::slotStop);
 	QObject::connect(actionUnload,&QAction::triggered,this,&MainWindow::slotUnload);
 	QObject::connect(boutonBrowse,&QPushButton::clicked,this,&MainWindow::slotBrowseButtonClicked);
+	
+	// arguments supplémentaires
+	if (!proFilePath.isEmpty())
+	{
+		m_proFilePath = proFilePath;
+		m_dllFilePath = "";
+		m_dllFileName = "";
+		
+		lineDllPath->setText(m_proFilePath);
+		textEdit->addMessage("Plugin path changed for " + m_proFilePath,Qt::black);
+		this->setState(HmiState::ReadyToPlayNotLoaded);
+		
+		boxRefreshRate->setValue(dtms);
+		
+		if (bPlay) {this->slotPlay();}
+	}
 }
 
 MainWindow::~MainWindow()
