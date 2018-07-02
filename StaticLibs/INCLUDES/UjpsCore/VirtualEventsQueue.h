@@ -5,11 +5,10 @@
 #include <QVector>
 #include <QTimer>
 #include "VirtualEvent.h"
-#include "ujpscore-global.h"
 
 class AbstractProfile;
 
-class UJPSCORE_EXPORT VirtualEventsQueue
+class VirtualEventsQueue
 {
 	public:
 		VirtualEventsQueue(AbstractProfile &profileRef);
