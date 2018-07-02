@@ -3,12 +3,16 @@
 
 
 #include <QVector>
+#include <QTimer>
 #include "VirtualEvent.h"
+#include "ujpscore-global.h"
 
-class VirtualEventsQueue
+class AbstractProfile;
+
+class UJPSCORE_EXPORT VirtualEventsQueue
 {
 	public:
-		VirtualEventsQueue() = default;
+		VirtualEventsQueue(AbstractProfile &profileRef);
 		VirtualEventsQueue(const VirtualEventsQueue &other) = delete;
 		VirtualEventsQueue(VirtualEventsQueue &&other) = delete;
 		VirtualEventsQueue& operator=(const VirtualEventsQueue &other) = delete;
@@ -19,9 +23,18 @@ class VirtualEventsQueue
 		void postEvents(const QVector<VirtualEvent> &events);
 		void processEvents();
 		
-		
 	private:
+		void setMappingRepeaterEvent(const VirtualEvent &event);
+		void updateMappingRepeaterEvent();
+
+		AbstractProfile &m_profileRef;
+
 		QVector<VirtualEvent> m_events;
+
+		VirtualEvent m_repeaterEvent;
+		float m_repeaterOriginalAxisValue;
+		int m_repeaterDtms;
+		int m_repeaterDtmsTotal;
 };
 
 

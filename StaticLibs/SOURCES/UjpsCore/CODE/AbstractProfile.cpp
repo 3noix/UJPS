@@ -47,11 +47,12 @@
 
 
 // CONSTRUCTEUR ET DESTRUCTEUR ////////////////////////////////////////////////
-AbstractProfile::AbstractProfile() : QObject()
+AbstractProfile::AbstractProfile() : QObject(), m_eventsQueue(*this)
 {
 	m_isProcessingEvents = false;
 	m_dtms = 15;
 	m_bFirstStep = true;
+	m_bMappingRepeaterEnabled = false;
 	
 	m_rjm = new RealJoysticksManager{};
 	QString controllersPluginsDirPath = QCoreApplication::applicationDirPath() + "/../../ControllersPlugins/PLUGINS/";
@@ -231,6 +232,21 @@ void AbstractProfile::setTimeStep(int dtms)
 {
 	Q_ASSERT(dtms > 0);
 	m_dtms = dtms;
+}
+
+int AbstractProfile::getTimeStep()
+{
+	return m_dtms;
+}
+
+void AbstractProfile::setMappingRepeater(bool enable)
+{
+	m_bMappingRepeaterEnabled = enable;
+}
+
+bool AbstractProfile::isMappingRepeater()
+{
+	return m_bMappingRepeaterEnabled;
 }
 
 // MS 2 CYCLES ////////////////////////////////////////////////////////////////

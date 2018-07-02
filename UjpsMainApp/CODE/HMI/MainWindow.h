@@ -13,6 +13,7 @@ class QLineEdit;
 class QToolBar;
 class QLabel;
 class QSpinBox;
+class QCheckBox;
 
 class CompilationWidget;
 class ProfileEngine;
@@ -71,6 +72,7 @@ class MainWindow : public QWidget
 		QToolBar *toolbar;
 		QLabel *labelRefreshRate;
 		QSpinBox *boxRefreshRate;
+		QCheckBox *chkMappingRepeater;
 		
 		QString m_proFilePath;
 		QString m_dllFilePath;

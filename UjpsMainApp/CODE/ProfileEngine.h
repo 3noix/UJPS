@@ -32,6 +32,9 @@ class ProfileEngine : public QObject
 		
 	private slots:
 		void slotOneLoop();
+
+	public slots:
+		void slotMappingRepeaterChanged(int state);
 		
 		
 	signals:

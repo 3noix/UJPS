@@ -9,8 +9,10 @@
 #include "vJoyModifiedInterface/stdafx.h"
 #include "vJoyModifiedInterface/public.h"
 #include "AbsoluteOrRelative.h"
+#include "virtualjoysticks-global.h"
 using uint = unsigned int;
 
+const int g_MAPPING_REPEATER_DURATION = 5; // in seconds
 
 enum class Priority
 {
@@ -26,7 +28,7 @@ enum class TrimOrNot
 };
 
 
-class VirtualJoystick : public QObject
+class VIRTUALJOYSTICKS_EXPORT VirtualJoystick : public QObject
 {
 	Q_OBJECT
 	
