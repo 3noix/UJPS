@@ -35,12 +35,12 @@ namespace LogitechX56Joystick_
 	const uint POVR = 18;
 	const uint POVD = 19;
 	const uint POVL = 20;
-		
-	const uint JOYY    = 0;
-	const uint JOYX    = 1;
+	
+	const uint JOYX    = 0;
+	const uint JOYY    = 1;
 	const uint RUDDER  = 2;
-	const uint JOYROTY = 3;
-	const uint JOYROTX = 4;
+	const uint JOYROTX = 3;
+	const uint JOYROTY = 4;
 	
 	const uint HAT1 = 0;
 	const uint HAT2 = 1;
