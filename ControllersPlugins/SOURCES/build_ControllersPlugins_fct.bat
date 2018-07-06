@@ -101,6 +101,7 @@ cd ..
 echo.
 echo.
 
+
 REM COMPILATION OF PLUGIN LogitechX56Joystick
 echo compiling LogitechX56Joystick
 echo.
@@ -125,3 +126,4 @@ copy /Y release\LogitechX56Throttle.dll ..\..\PLUGINS
 cd ..
 echo.
 echo.
+

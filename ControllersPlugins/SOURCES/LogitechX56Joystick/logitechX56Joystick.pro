@@ -1,10 +1,10 @@
 CONFIG(debug, debug|release) {
-    DESTDIR = debug
+	DESTDIR = debug
 	LIBS += ../../../StaticLibs/SOURCES/QtGameControllerModif/debug/libQtGameControllerModif.a \
 			../../../StaticLibs/SOURCES/RealJoysticks/debug/librealJoysticks.a
 }
 CONFIG(release, debug|release) {
-    DESTDIR = release
+	DESTDIR = release
 	LIBS += ../../../StaticLibs/SOURCES/QtGameControllerModif/release/libQtGameControllerModif.a \
 			../../../StaticLibs/SOURCES/RealJoysticks/release/librealJoysticks.a
 }

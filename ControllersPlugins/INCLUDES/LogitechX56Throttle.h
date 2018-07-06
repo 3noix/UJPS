@@ -60,8 +60,8 @@ namespace LogitechX56Throttle_
 	const uint RTY3      = 6;	// Rotary Dial 3
 	const uint RTY4      = 7;	// Rotary Dial 4
 	
-	const uint HAT1      = 0;	// Upper 4-way Hat
-	const uint HAT2      = 1;	// Lower 4-way Hat
+	const uint HAT1 = 0;		// Upper 4-way Hat
+	const uint HAT2 = 1;		// Lower 4-way Hat
 };
 
 #endif
