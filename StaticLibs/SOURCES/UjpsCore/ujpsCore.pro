@@ -23,16 +23,7 @@ INCLUDEPATH +=  ../../INCLUDES/Other/ \
 				../../INCLUDES/RealJoysticks/ \
 				../../INCLUDES/UjpsCore/
 
-HEADERS +=  ../../INCLUDES/UjpsCore/AbstractProfile.h \
-			../../INCLUDES/UjpsCore/VirtualEventsQueue.h \
-			../../INCLUDES/UjpsCore/LAYERS/LayersCombo.h \
-			../../INCLUDES/UjpsCore/LAYERS/LayerCalculator.h \
-			../../INCLUDES/UjpsCore/MAPPINGS/AbstractMapping.h \
-			../../INCLUDES/UjpsCore/MAPPINGS/MappingStandard.h \
-			../../INCLUDES/UjpsCore/MAPPINGS/MappingTempo.h \
-			../../INCLUDES/UjpsCore/MAPPINGS/MappingAxisRelative.h \
-			../../INCLUDES/UjpsCore/MAPPINGS/MappingAxis1.h \
-			../../INCLUDES/UjpsCore/MAPPINGS/MappingAxis2.h
+HEADERS +=  ../../INCLUDES/UjpsCore/AbstractProfile.h
 
 
 SOURCES +=  CODE/AbstractProfile.cpp \
@@ -44,5 +35,6 @@ SOURCES +=  CODE/AbstractProfile.cpp \
 			CODE/MAPPINGS/MappingAxisRelative.cpp \
 			CODE/MAPPINGS/MappingAxis1.cpp \
 			CODE/MAPPINGS/MappingAxis2.cpp \
-			CODE/MAPPINGS/MappingMergeAxes.cpp
+			CODE/MAPPINGS/MappingMergeAxes.cpp \
+			CODE/MAPPINGS/MappingSplitAxis.cpp
 

@@ -37,6 +37,7 @@
 //  MAP AXIS 1
 //  MAP AXIS 2
 //  MAP MERGE AXES
+//  MAP SPLIT AXIS
 //  MAP POV
 //
 //  UNMAP ALL
@@ -361,6 +362,12 @@ void AbstractProfile::MapAxis2(AbstractRealJoystick *rj, uint rAxis, LayersCombo
 void AbstractProfile::MapMergeAxes(AbstractRealJoystick *rj1, uint rAxis1, float k1, AbstractRealJoystick *rj2, uint rAxis2, float k2, LayersCombo lc, VirtualJoystick *vj, uint vAxis)
 {
 	this->addMapping(new MappingMergeAxes(rj1, rAxis1, k1, rj2, rAxis2, k2, lc, vj, vAxis, m_eventsQueue));
+}
+
+// MAP SPLIT AXIS /////////////////////////////////////////////////////////////
+void AbstractProfile::MapSplitAxis(AbstractRealJoystick *rj, uint rAxis, LayersCombo lc, VirtualJoystick *vj1, uint vAxis1, VirtualJoystick *vj2, uint vAxis2)
+{
+	this->addMapping(new MappingSplitAxis(rj, rAxis, lc, vj1, vAxis1, vj2, vAxis2, m_eventsQueue));
 }
 
 // MAP POV ////////////////////////////////////////////////////////////////////

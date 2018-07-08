@@ -8,6 +8,7 @@
 #include "MAPPINGS/MappingAxis1.h"
 #include "MAPPINGS/MappingAxis2.h"
 #include "MAPPINGS/MappingMergeAxes.h"
+#include "MAPPINGS/MappingSplitAxis.h"
 
 
 #endif

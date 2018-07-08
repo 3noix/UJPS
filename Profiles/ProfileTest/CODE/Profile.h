@@ -32,6 +32,7 @@ class Profile : public AbstractProfile
 		EnhancedJoystick *tmwt; // for Thrustmaster Warthog Throttle
 		EnhancedJoystick *mfgx; // for MFG Crosswind V2 rudder pedals
 		VirtualJoystick  *vj1;  // virtual joystick #1
+		VirtualJoystick  *vj2;  // virtual joystick #2
 };
 
 #endif
