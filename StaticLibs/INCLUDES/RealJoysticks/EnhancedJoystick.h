@@ -4,6 +4,7 @@
 
 #include "AbstractRealJoystick.h"
 #include "AbsoluteOrRelative.h"
+#include "AxesRotator.h"
 #include <array>
 class AbstractAxisCurve;
 
@@ -43,6 +44,10 @@ class EnhancedJoystick : public AbstractRealJoystick
 		virtual void setData(const QString &str, QVariant v) override;
 		virtual void flush() override;
 		
+		// axes rotations
+		bool rotateAxes(uint axis1, uint axis2, float angle);
+		bool removeAxisRotation(uint axis);
+		
 		
 		// decoration functions
 		void setButtonLocked(uint button, bool locked);
@@ -62,6 +67,7 @@ class EnhancedJoystick : public AbstractRealJoystick
 		void updateAxis(uint axis);
 		
 		AbstractRealJoystick *m_j;
+		AxesRotator m_axesRotator;
 		bool m_bOwn;
 		
 		std::array<bool,128> m_buttonsLocked;

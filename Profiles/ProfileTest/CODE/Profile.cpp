@@ -120,7 +120,12 @@ void Profile::runFirstStep()
 	MapAxis(mfgx, MFGX::RUDDER, AllLayers, vj1, VJOY::X);
 	MapMergeAxes(mfgx, MFGX::BRK_LEFT, 0.5f, mfgx, MFGX::BRK_RIGHT, -0.5f, AllLayers, vj1, VJOY::Y);
 	
-	MapSplitAxis(tmwj, TMWJ::JOYY, AllLayers, vj1, VJOY::ROTX, vj1, VJOY::ROTY);
+	//MapSplitAxis(tmwj, TMWJ::JOYY, AllLayers, vj1, VJOY::ROTX, vj1, VJOY::ROTY);
+	
+	MapAxis(tmwj, TMWJ::JOYX, AllLayers, vj1, VJOY::ROTX);
+	MapAxis(tmwj, TMWJ::JOYY, AllLayers, vj1, VJOY::ROTY);
+	Map(tmwj, ControlType::Button, TMWJ::H2L, AllLayers, new TriggerButtonPress{}, new ActionCallback{[this](){tmwj->rotateAxes(TMWJ::JOYX, TMWJ::JOYY, 45.0);}});
+	Map(tmwj, ControlType::Button, TMWJ::H2R, AllLayers, new TriggerButtonPress{}, new ActionCallback{[this](){tmwj->removeAxisRotation(TMWJ::JOYX);}});
 	
 	//MapAxisRelative(tmwj, TMWJ::JOYY, AllLayers, vj1, VJOY::Z, 4000.0f);
 	//Map(tmwj, ControlType::Button, TMWJ::TG1, AllLayers, new TriggerButtonPress{},  new ActionAxisSetValue{vj1,VJOY::Z,0.5f});

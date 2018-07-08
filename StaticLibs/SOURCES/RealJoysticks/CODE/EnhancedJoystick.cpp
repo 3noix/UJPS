@@ -33,6 +33,9 @@
 //  SET DATA
 //  FLUSH
 //
+//  ROTATE AXES
+//  REMOVE AXIS ROTATION
+//
 //  SET BUTTON LOCKED
 //  SET AXIS LOCKED
 //  SET AXIS TRIM
@@ -49,7 +52,7 @@
 
 
 // CONSTRUCTEUR ET DESTRUCTEUR ////////////////////////////////////////////////
-EnhancedJoystick::EnhancedJoystick(AbstractRealJoystick *j, bool bOwn) : AbstractRealJoystick()
+EnhancedJoystick::EnhancedJoystick(AbstractRealJoystick *j, bool bOwn) : AbstractRealJoystick{}, m_axesRotator{j}
 {
 	if (!j) {throw ExceptionNoDecoratedJoystick{};}
 	m_j = j;
@@ -90,8 +93,8 @@ void EnhancedJoystick::readGameController() {m_j->readGameController();}
 // CHANGES ////////////////////////////////////////////////////////////////////
 QVector<JoystickChange> EnhancedJoystick::changes()
 {
-	// recover changes of the embedded object
-	QVector<JoystickChange> chgts = m_j->changes();
+	// recover changes of the embedded object (after possible rotations)
+	QVector<JoystickChange> chgts = m_axesRotator.changes();
 	int n = chgts.size();
 	
 	// remove or modify some of them function of locking and axes curves
@@ -156,7 +159,7 @@ float EnhancedJoystick::axisValue(uint axis) const
 	if (axis >= 8) {return 0.0f;}
 	if (m_axesLocked[axis]) {return m_axesValuesBeforeLock[axis];}
 	
-	float v = m_j->axisValue(axis);
+	float v = m_axesRotator.axisValue(axis);					// recover axis value (after probable rotation)
 	v += m_axesTrim[axis];										// we add the trim
 	if (m_axesCurves[axis]) {v = m_axesCurves[axis]->run(v);}	// we apply the curve if needed
 	return lim<float>(v, -1.0f, 1.0f);							// we limit between -1 and 1
@@ -190,6 +193,24 @@ void EnhancedJoystick::setData(const QString &str, QVariant v) {m_j->setData(str
 // FLUSH //////////////////////////////////////////////////////////////////////
 void EnhancedJoystick::flush() {m_j->flush();}
 
+
+// ROTATE AXES ////////////////////////////////////////////////////////////////
+bool EnhancedJoystick::rotateAxes(uint axis1, uint axis2, float angle)
+{
+	if (!m_axesRotator.rotateAxes(axis1,axis2,angle)) {return false;}
+	this->updateAxis(axis1);
+	this->updateAxis(axis2);
+	return true;
+}
+// REMOVE AXIS ROTATION ///////////////////////////////////////////////////////
+bool EnhancedJoystick::removeAxisRotation(uint axis)
+{
+	uint axis2 = m_axesRotator.removeAxisRotation(axis);
+	if (axis2 == -1u) {return false;}
+	this->updateAxis(axis);
+	this->updateAxis(axis2);
+	return true;
+}
 
 
 
