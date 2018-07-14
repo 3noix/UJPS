@@ -1,5 +1,5 @@
 #include "vJoyDevice.h"
-#include "qgamecontroller.h"
+#include "GameController.h"
 #include "Lim.h"
 
 
@@ -16,7 +16,7 @@
 
 
 // CONSTRUCTEUR ///////////////////////////////////////////////////////////////
-vJoyDevice::vJoyDevice(QGameController *c) : RealJoystick{c}
+vJoyDevice::vJoyDevice(GameController *c) : RealJoystick{c}
 {
 	m_axesNames << "X" << "Y" << "Z" << "ROTX" << "ROTY" << "ROTZ" << "SLIDER0" << "SLIDER1";
 }

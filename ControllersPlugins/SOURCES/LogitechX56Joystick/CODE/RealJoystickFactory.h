@@ -26,7 +26,7 @@ class RealJoystickFactory : public QObject, public AbstractRealJoystickFactory
 			return LogitechX56Joystick_::Description;
 		};
 		
-		AbstractRealJoystick* createRealJoystick(QGameController *c) override final
+		AbstractRealJoystick* createRealJoystick(GameController *c) override final
 		{
 			return new LogitechX56Joystick{c};
 		};

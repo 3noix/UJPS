@@ -89,14 +89,14 @@ echo.
 echo.
 
 
-REM COMPILATION OF PLUGIN MicrosoftXbox360Controller
-echo compiling MicrosoftXbox360Controller
+REM COMPILATION OF PLUGIN MicrosoftXbox360Gamepad
+echo compiling MicrosoftXbox360Gamepad
 echo.
-cd MicrosoftXbox360Controller
+cd MicrosoftXbox360Gamepad
 qmake
 mingw32-make release
 echo.
-copy /Y release\MicrosoftXbox360Controller.dll ..\..\PLUGINS
+copy /Y release\MicrosoftXbox360Gamepad.dll ..\..\PLUGINS
 cd ..
 echo.
 echo.

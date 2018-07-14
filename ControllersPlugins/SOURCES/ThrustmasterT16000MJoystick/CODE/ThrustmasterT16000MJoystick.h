@@ -3,9 +3,8 @@
 
 
 #include "RealJoystick.h"
-class QGameController;
-class QGameControllerButtonEvent;
-class QGameControllerAxisEvent;
+class GameController;
+class GameControllerAxisEvent;
 
 #define INSIDE_PLUGIN
 #include "../../../INCLUDES/ThrustmasterT16000MJoystick.h"
@@ -17,7 +16,7 @@ class ThrustmasterT16000MJoystick : public RealJoystick
 	
 	
 	public:
-		ThrustmasterT16000MJoystick(QGameController *c);
+		ThrustmasterT16000MJoystick(GameController *c);
 		ThrustmasterT16000MJoystick(const ThrustmasterT16000MJoystick &other) = delete;
 		ThrustmasterT16000MJoystick(ThrustmasterT16000MJoystick &&other) = delete;
 		ThrustmasterT16000MJoystick& operator=(const ThrustmasterT16000MJoystick &other) = delete;
@@ -41,7 +40,7 @@ class ThrustmasterT16000MJoystick : public RealJoystick
 		
 		
 	private slots:
-		void slotGameControllerAxisEvent(QGameControllerAxisEvent *event) override final;
+		void slotGameControllerAxisEvent(GameControllerAxisEvent *event) override final;
 		
 		
 	private:

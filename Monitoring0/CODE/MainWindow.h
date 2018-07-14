@@ -2,7 +2,7 @@
 #define MAIN_WINDOW
 
 #include <QtWidgets>
-class QGameController;
+class GameController;
 
 
 class MainWindow : public QMainWindow
@@ -21,7 +21,7 @@ class MainWindow : public QMainWindow
 	private:
 		QTabWidget *mainTabWidget;
 		QVector<QWidget*> joysticksWidgets;
-		QVector<QGameController*> joysticks;
+		QVector<GameController*> joysticks;
 };
 
 #endif

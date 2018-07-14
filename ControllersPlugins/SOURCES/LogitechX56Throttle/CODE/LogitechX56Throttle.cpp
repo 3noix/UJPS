@@ -1,5 +1,6 @@
 #include "LogitechX56Throttle.h"
-#include "qgamecontroller.h"
+#include "GameController.h"
+#include "GameControllerEvents.h"
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -25,7 +26,7 @@
 
 
 // CONSTRUCTEUR ///////////////////////////////////////////////////////////////
-LogitechX56Throttle::LogitechX56Throttle(QGameController *c) : RealJoystick{c}
+LogitechX56Throttle::LogitechX56Throttle(GameController *c) : RealJoystick{c}
 {
 	m_buttonsNames << "E" << "F" << "G" << "I" << "H";
 	m_buttonsNames << "SW1" << "SW2" << "SW3" << "SW4" << "SW5" << "SW6";
@@ -54,7 +55,7 @@ LogitechX56Throttle::LogitechX56Throttle(QGameController *c) : RealJoystick{c}
 
 
 // SLOT GAME CONTROLLER AXIS EVENT ////////////////////////////////////////////
-void LogitechX56Throttle::slotGameControllerAxisEvent(QGameControllerAxisEvent *event)
+void LogitechX56Throttle::slotGameControllerAxisEvent(GameControllerAxisEvent *event)
 {
 	Q_ASSERT(event);
 	uint axis = event->axis();

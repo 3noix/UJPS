@@ -4,9 +4,9 @@
 
 #include "RealJoystick.h"
 class WriteToHidThread;
-class QGameController;
-class QGameControllerButtonEvent;
-class QGameControllerAxisEvent;
+class GameController;
+class GameControllerButtonEvent;
+class GameControllerAxisEvent;
 
 #define INSIDE_PLUGIN
 #include "../../../INCLUDES/ThrustmasterWarthogThrottle.h"
@@ -18,7 +18,7 @@ class ThrustmasterWarthogThrottle : public RealJoystick
 	
 	
 	public:
-		ThrustmasterWarthogThrottle(QGameController *c);
+		ThrustmasterWarthogThrottle(GameController *c);
 		ThrustmasterWarthogThrottle(const ThrustmasterWarthogThrottle &other) = delete;
 		ThrustmasterWarthogThrottle(ThrustmasterWarthogThrottle &&other) = delete;
 		ThrustmasterWarthogThrottle& operator=(const ThrustmasterWarthogThrottle &other) = delete;
@@ -46,8 +46,8 @@ class ThrustmasterWarthogThrottle : public RealJoystick
 		
 		
 	private slots:
-		void slotGameControllerButtonEvent(QGameControllerButtonEvent *event) override final;
-		void slotGameControllerAxisEvent(QGameControllerAxisEvent *event) override final;
+		void slotGameControllerButtonEvent(GameControllerButtonEvent *event) override final;
+		void slotGameControllerAxisEvent(GameControllerAxisEvent *event) override final;
 		
 		
 	private:

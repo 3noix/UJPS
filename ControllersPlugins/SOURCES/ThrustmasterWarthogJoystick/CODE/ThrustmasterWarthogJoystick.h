@@ -3,9 +3,8 @@
 
 
 #include "RealJoystick.h"
-class QGameController;
-class QGameControllerButtonEvent;
-class QGameControllerAxisEvent;
+class GameController;
+class GameControllerAxisEvent;
 
 #define INSIDE_PLUGIN
 #include "../../../INCLUDES/ThrustmasterWarthogJoystick.h"
@@ -17,7 +16,7 @@ class ThrustmasterWarthogJoystick : public RealJoystick
 	
 	
 	public:
-		ThrustmasterWarthogJoystick(QGameController *c);
+		ThrustmasterWarthogJoystick(GameController *c);
 		ThrustmasterWarthogJoystick(const ThrustmasterWarthogJoystick &other) = delete;
 		ThrustmasterWarthogJoystick(ThrustmasterWarthogJoystick &&other) = delete;
 		ThrustmasterWarthogJoystick& operator=(const ThrustmasterWarthogJoystick &other) = delete;
@@ -41,7 +40,7 @@ class ThrustmasterWarthogJoystick : public RealJoystick
 		
 		
 	protected slots:
-		void slotGameControllerAxisEvent(QGameControllerAxisEvent *event) override final;
+		void slotGameControllerAxisEvent(GameControllerAxisEvent *event) override final;
 		
 		
 	private:

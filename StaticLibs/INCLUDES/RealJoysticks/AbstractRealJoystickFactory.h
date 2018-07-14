@@ -5,7 +5,7 @@
 #include <QObject>
 #include <QString>
 class AbstractRealJoystick;
-class QGameController;
+class GameController;
 
 
 class AbstractRealJoystickFactory
@@ -19,7 +19,7 @@ class AbstractRealJoystickFactory
 		virtual ~AbstractRealJoystickFactory() = default;
 		
 		virtual QString supportedJoystick() const = 0;
-		virtual AbstractRealJoystick* createRealJoystick(QGameController *c) = 0;
+		virtual AbstractRealJoystick* createRealJoystick(GameController *c) = 0;
 };
 
 Q_DECLARE_INTERFACE(AbstractRealJoystickFactory,"AbstractRealJoystickFactory")

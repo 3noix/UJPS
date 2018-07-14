@@ -5,10 +5,10 @@
 #include <QObject>
 #include "AbstractRealJoystick.h"
 #include "VirtualPovDefinition.h"
-class QGameController;
-class QGameControllerButtonEvent;
-class QGameControllerAxisEvent;
-class QGameControllerPovEvent;
+class GameController;
+class GameControllerButtonEvent;
+class GameControllerAxisEvent;
+class GameControllerPovEvent;
 class RealJoysticksManager;
 
 
@@ -19,7 +19,7 @@ class RealJoystick : public QObject, public AbstractRealJoystick
 	friend class RealJoysticksManager;
 	
 	protected:
-		RealJoystick(QGameController *c);
+		RealJoystick(GameController *c);
 		
 		
 	public:
@@ -55,9 +55,9 @@ class RealJoystick : public QObject, public AbstractRealJoystick
 		
 		
 	private slots:
-		virtual void slotGameControllerAxisEvent(QGameControllerAxisEvent *event);
-		virtual void slotGameControllerButtonEvent(QGameControllerButtonEvent *event);
-		virtual void slotGameControllerPovEvent(QGameControllerPovEvent *event);
+		virtual void slotGameControllerAxisEvent(GameControllerAxisEvent *event);
+		virtual void slotGameControllerButtonEvent(GameControllerButtonEvent *event);
+		virtual void slotGameControllerPovEvent(GameControllerPovEvent *event);
 		
 		
 	protected:
@@ -69,7 +69,7 @@ class RealJoystick : public QObject, public AbstractRealJoystick
 		static float buttonsToPov(bool bUp, bool bRight, bool bDown, bool bLeft);
 		uint buttonMapsPov(uint button) const;
 		
-		QGameController *m_controller;
+		GameController *m_controller;
 		bool m_bTransformPovInto4Buttons;
 		bool m_bTransform4ButtonsIntoPov;
 		QVector<float> m_realPovsAngles; // to keep track of the last values

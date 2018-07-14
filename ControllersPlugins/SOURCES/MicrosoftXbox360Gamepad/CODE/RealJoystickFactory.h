@@ -3,7 +3,7 @@
 
 
 #include "AbstractRealJoystickFactory.h"
-#include "MicrosoftXbox360Controller.h"
+#include "MicrosoftXbox360Gamepad.h"
 
 
 class RealJoystickFactory : public QObject, public AbstractRealJoystickFactory
@@ -23,12 +23,12 @@ class RealJoystickFactory : public QObject, public AbstractRealJoystickFactory
 		
 		QString supportedJoystick() const override final
 		{
-			return MicrosoftXbox360Controller_::Description;
+			return MicrosoftXbox360Gamepad_::Description;
 		};
 		
-		AbstractRealJoystick* createRealJoystick(QGameController *c) override final
+		AbstractRealJoystick* createRealJoystick(GameController *c) override final
 		{
-			return new MicrosoftXbox360Controller{c};
+			return new MicrosoftXbox360Gamepad{c};
 		};
 };
 

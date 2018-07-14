@@ -1,5 +1,6 @@
 #include "ThrustmasterT16000MJoystick.h"
-#include "qgamecontroller.h"
+#include "GameController.h"
+#include "GameControllerEvents.h"
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -25,7 +26,7 @@
 
 
 // CONSTRUCTEUR ///////////////////////////////////////////////////////////////
-ThrustmasterT16000MJoystick::ThrustmasterT16000MJoystick(QGameController *c) : RealJoystick{c}
+ThrustmasterT16000MJoystick::ThrustmasterT16000MJoystick(GameController *c) : RealJoystick{c}
 {
 	m_buttonsNames << "TS1" << "TS2" << "TS3" << "TS4";
 	m_buttonsNames << "B5" << "B6" << "B7" << "B8" << "B9" << "B10";
@@ -42,7 +43,7 @@ ThrustmasterT16000MJoystick::ThrustmasterT16000MJoystick(QGameController *c) : R
 
 
 // SLOT GAME CONTROLLER AXIS EVENT ////////////////////////////////////////////
-void ThrustmasterT16000MJoystick::slotGameControllerAxisEvent(QGameControllerAxisEvent *event)
+void ThrustmasterT16000MJoystick::slotGameControllerAxisEvent(GameControllerAxisEvent *event)
 {
 	Q_ASSERT(event);
 	uint axis = event->axis();

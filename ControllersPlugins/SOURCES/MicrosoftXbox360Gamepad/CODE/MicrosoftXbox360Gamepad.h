@@ -1,5 +1,5 @@
-#ifndef LOGITECH_EXTREME_3D
-#define LOGITECH_EXTREME_3D
+#ifndef MICROSOFT_XBOX_360_GAMEPAD
+#define MICROSOFT_XBOX_360_GAMEPAD
 
 
 #include "RealJoystick.h"
@@ -7,21 +7,21 @@ class GameController;
 class GameControllerAxisEvent;
 
 #define INSIDE_PLUGIN
-#include "../../../INCLUDES/LogitechExtreme3D.h"
+#include "../../../INCLUDES/MicrosoftXbox360Gamepad.h"
 
 
-class LogitechExtreme3D : public RealJoystick
+class MicrosoftXbox360Gamepad : public RealJoystick
 {
 	Q_OBJECT
 	
 	
 	public:
-		LogitechExtreme3D(GameController *c);
-		LogitechExtreme3D(const LogitechExtreme3D &other) = delete;
-		LogitechExtreme3D(LogitechExtreme3D &&other) = delete;
-		LogitechExtreme3D& operator=(const LogitechExtreme3D &other) = delete;
-		LogitechExtreme3D& operator=(LogitechExtreme3D &&other) = delete;
-		~LogitechExtreme3D() = default;
+		MicrosoftXbox360Gamepad(GameController *c);
+		MicrosoftXbox360Gamepad(const MicrosoftXbox360Gamepad &other) = delete;
+		MicrosoftXbox360Gamepad(MicrosoftXbox360Gamepad &&other) = delete;
+		MicrosoftXbox360Gamepad& operator=(const MicrosoftXbox360Gamepad &other) = delete;
+		MicrosoftXbox360Gamepad& operator=(MicrosoftXbox360Gamepad &&other) = delete;
+		~MicrosoftXbox360Gamepad() = default;
 		
 		QString description() const override final;
 		
@@ -30,17 +30,12 @@ class LogitechExtreme3D : public RealJoystick
 		QStringList buttonsNames() const override final;
 		
 		uint axesCount() const override final;
-		float axisValue(uint axis) const override final;
 		QString axisName(uint axis) const override final;
 		QStringList axesNames() const override final;
 		
 		uint povsCount() const override final;
 		QString povName(uint pov) const override final;
 		QStringList povsNames() const override final;
-		
-		
-	private slots:
-		void slotGameControllerAxisEvent(GameControllerAxisEvent *event) override final;
 		
 		
 	private:

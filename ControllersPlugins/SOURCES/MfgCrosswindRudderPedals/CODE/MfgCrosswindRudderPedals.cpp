@@ -1,5 +1,6 @@
 #include "MfgCrosswindRudderPedals.h"
-#include "qgamecontroller.h"
+#include "GameController.h"
+#include "GameControllerEvents.h"
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -23,7 +24,7 @@
 
 
 // CONSTRUCTEUR ///////////////////////////////////////////////////////////////
-MfgCrosswindRudderPedals::MfgCrosswindRudderPedals(QGameController *c) : RealJoystick{c}
+MfgCrosswindRudderPedals::MfgCrosswindRudderPedals(GameController *c) : RealJoystick{c}
 {
 	m_axesNames << "RUDDER" << "BRK_LEFT" << "BRK_RIGHT";
 }
@@ -34,13 +35,13 @@ MfgCrosswindRudderPedals::MfgCrosswindRudderPedals(QGameController *c) : RealJoy
 
 
 // SLOT GAME CONTROLLER BUTTON EVENT //////////////////////////////////////////
-void MfgCrosswindRudderPedals::slotGameControllerButtonEvent(QGameControllerButtonEvent *event)
+void MfgCrosswindRudderPedals::slotGameControllerButtonEvent(GameControllerButtonEvent *event)
 {
 	Q_UNUSED(event)
 }
 
 // SLOT GAME CONTROLLER AXIS EVENT ////////////////////////////////////////////
-void MfgCrosswindRudderPedals::slotGameControllerAxisEvent(QGameControllerAxisEvent *event)
+void MfgCrosswindRudderPedals::slotGameControllerAxisEvent(GameControllerAxisEvent *event)
 {
 	Q_ASSERT(event);
 	

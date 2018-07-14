@@ -1,5 +1,6 @@
 #include "LogitechX56Joystick.h"
-#include "qgamecontroller.h"
+#include "GameController.h"
+#include "GameControllerEvents.h"
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -25,7 +26,7 @@
 
 
 // CONSTRUCTEUR ///////////////////////////////////////////////////////////////
-LogitechX56Joystick::LogitechX56Joystick(QGameController *c) : RealJoystick{c}
+LogitechX56Joystick::LogitechX56Joystick(GameController *c) : RealJoystick{c}
 {
 	m_buttonsNames << "TG1" << "A" << "B" << "STK" << "D" << "LVR" << "H1U" << "H1R" << "H1D" << "H1L";
 	m_buttonsNames << "H2U" << "H2R" << "H2D" << "H2L" << "M1" << "M2" << "S1" << "POVU" << "POVR";
@@ -51,7 +52,7 @@ LogitechX56Joystick::LogitechX56Joystick(QGameController *c) : RealJoystick{c}
 
 
 // SLOT GAME CONTROLLER AXIS EVENT ////////////////////////////////////////////
-void LogitechX56Joystick::slotGameControllerAxisEvent(QGameControllerAxisEvent *event)
+void LogitechX56Joystick::slotGameControllerAxisEvent(GameControllerAxisEvent *event)
 {
 	Q_ASSERT(event);
 	uint axis = event->axis();

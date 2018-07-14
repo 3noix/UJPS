@@ -26,7 +26,7 @@ class RealJoystickFactory : public QObject, public AbstractRealJoystickFactory
 			return ThrustmasterT16000MJoystick_::Description;
 		};
 		
-		AbstractRealJoystick* createRealJoystick(QGameController *c) override final
+		AbstractRealJoystick* createRealJoystick(GameController *c) override final
 		{
 			return new ThrustmasterT16000MJoystick{c};
 		};

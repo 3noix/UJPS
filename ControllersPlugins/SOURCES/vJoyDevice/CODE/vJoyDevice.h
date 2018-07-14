@@ -3,10 +3,7 @@
 
 
 #include "RealJoystick.h"
-class QGameController;
-class QGameControllerButtonEvent;
-class QGameControllerAxisEvent;
-class RealJoysticksManager;
+class GameController;
 
 #define INSIDE_PLUGIN
 #include "../../../INCLUDES/vJoyDevice.h"
@@ -18,7 +15,7 @@ class vJoyDevice : public RealJoystick
 	
 	
 	public:
-		vJoyDevice(QGameController *c);
+		vJoyDevice(GameController *c);
 		vJoyDevice(const vJoyDevice &other) = delete;
 		vJoyDevice(vJoyDevice &&other) = delete;
 		vJoyDevice& operator=(const vJoyDevice &other) = delete;

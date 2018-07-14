@@ -3,9 +3,9 @@
 
 
 #include "RealJoystick.h"
-class QGameController;
-class QGameControllerButtonEvent;
-class QGameControllerAxisEvent;
+class GameController;
+class GameControllerButtonEvent;
+class GameControllerAxisEvent;
 
 #define INSIDE_PLUGIN
 #include "../../../INCLUDES/MfgCrosswindRudderPedals.h"
@@ -17,7 +17,7 @@ class MfgCrosswindRudderPedals : public RealJoystick
 	
 	
 	public:
-		MfgCrosswindRudderPedals(QGameController *c);
+		MfgCrosswindRudderPedals(GameController *c);
 		MfgCrosswindRudderPedals(const MfgCrosswindRudderPedals &other) = delete;
 		MfgCrosswindRudderPedals(MfgCrosswindRudderPedals &&other) = delete;
 		MfgCrosswindRudderPedals& operator=(const MfgCrosswindRudderPedals &other) = delete;
@@ -38,8 +38,8 @@ class MfgCrosswindRudderPedals : public RealJoystick
 		
 		
 	private slots:
-		void slotGameControllerButtonEvent(QGameControllerButtonEvent *event) override final;
-		void slotGameControllerAxisEvent(QGameControllerAxisEvent *event) override final;
+		void slotGameControllerButtonEvent(GameControllerButtonEvent *event) override final;
+		void slotGameControllerAxisEvent(GameControllerAxisEvent *event) override final;
 		
 		
 	private:

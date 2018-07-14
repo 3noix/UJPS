@@ -6,7 +6,6 @@
 #include <QVector>
 #include <QVariant>
 #include "JoystickChange.h"
-class QGameController;
 
 
 class AbstractRealJoystick

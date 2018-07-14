@@ -1,5 +1,6 @@
 #include "ThrustmasterWarthogThrottle.h"
-#include "qgamecontroller.h"
+#include "GameController.h"
+#include "GameControllerEvents.h"
 #include "Lim.h"
 #include "WriteToHidThread.h"
 
@@ -33,7 +34,7 @@
 
 
 // CONSTRUCTEUR ///////////////////////////////////////////////////////////////
-ThrustmasterWarthogThrottle::ThrustmasterWarthogThrottle(QGameController *c) : RealJoystick{c}
+ThrustmasterWarthogThrottle::ThrustmasterWarthogThrottle(GameController *c) : RealJoystick{c}
 {
 	m_buttonsNames << "SC" << "MSP" << "MSU" << "MSR" << "MSD" << "MSL" << "SPDF" << "SPDB" << "BSF" << "BSB";
 	m_buttonsNames << "CHF" << "CHB" << "PSF" << "PSB" << "LTB" << "EFLNORM" << "EFRNORM" << "EOLMOTOR" << "EORMOTOR";
@@ -72,7 +73,7 @@ ThrustmasterWarthogThrottle::ThrustmasterWarthogThrottle(QGameController *c) : R
 
 
 // SLOT GAME CONTROLLER BUTTON EVENT //////////////////////////////////////////
-void ThrustmasterWarthogThrottle::slotGameControllerButtonEvent(QGameControllerButtonEvent *event)
+void ThrustmasterWarthogThrottle::slotGameControllerButtonEvent(GameControllerButtonEvent *event)
 {
 	Q_ASSERT(event);
 	
@@ -217,7 +218,7 @@ void ThrustmasterWarthogThrottle::slotGameControllerButtonEvent(QGameControllerB
 }
 
 // SLOT GAME CONTROLLER AXIS EVENT ////////////////////////////////////////////
-void ThrustmasterWarthogThrottle::slotGameControllerAxisEvent(QGameControllerAxisEvent *event)
+void ThrustmasterWarthogThrottle::slotGameControllerAxisEvent(GameControllerAxisEvent *event)
 {
 	Q_ASSERT(event);
 	uint axis = event->axis();

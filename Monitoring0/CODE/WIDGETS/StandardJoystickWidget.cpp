@@ -1,5 +1,6 @@
 #include "StandardJoystickWidget.h"
-#include "QGameController.h"
+#include "GameController.h"
+#include "GameControllerEvents.h"
 #include "AxesWidget.h"
 #include "ButtonWidget.h"
 #include "PovWidgetDecorated.h"
@@ -16,9 +17,8 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 
-
 // CONSTRUCTEUR ET DESTRUCTEUR ////////////////////////////////////////////////
-StandardJoystickWidget::StandardJoystickWidget(QGameController *j, bool own)
+StandardJoystickWidget::StandardJoystickWidget(GameController *j, bool own)
 {
 	Q_ASSERT(j);
 	m_joystick = j;
@@ -29,12 +29,15 @@ StandardJoystickWidget::StandardJoystickWidget(QGameController *j, bool own)
 	
 	m_timer = new QTimer(this);
 	m_timer->setInterval(15);
-	connect(m_timer, &QTimer::timeout, m_joystick, &QGameController::readGameController);
+	connect(m_timer, &QTimer::timeout, m_joystick, &GameController::readGameController);
 	m_timer->start();
 	
-	QObject::connect(j, &QGameController::gameControllerAxisEvent,   this, &StandardJoystickWidget::slotJoystickAxisValueChanged);
-	QObject::connect(j, &QGameController::gameControllerButtonEvent, this, &StandardJoystickWidget::slotJoystickButtonStateChanged);
-	QObject::connect(j, &QGameController::gameControllerPovEvent,    this, &StandardJoystickWidget::slotJoystickPovAngleChanged);
+	QObject::connect(j, SIGNAL(gameControllerAxisEvent(GameControllerAxisEvent*)),     this, SLOT(slotJoystickAxisValueChanged(GameControllerAxisEvent*)));
+	QObject::connect(j, SIGNAL(gameControllerButtonEvent(GameControllerButtonEvent*)), this, SLOT(slotJoystickButtonStateChanged(GameControllerButtonEvent*)));
+	QObject::connect(j, SIGNAL(gameControllerPovEvent(GameControllerPovEvent*)),       this, SLOT(slotJoystickPovAngleChanged(GameControllerPovEvent*)));
+	//QObject::connect(j, &GameController::gameControllerAxisEvent,   this, &StandardJoystickWidget::slotJoystickAxisValueChanged);
+	//QObject::connect(j, &GameController::gameControllerButtonEvent, this, &StandardJoystickWidget::slotJoystickButtonStateChanged);
+	//QObject::connect(j, &GameController::gameControllerPovEvent,    this, &StandardJoystickWidget::slotJoystickPovAngleChanged);
 }
 
 StandardJoystickWidget::~StandardJoystickWidget()
@@ -108,19 +111,19 @@ void StandardJoystickWidget::initState()
 }
 
 // SLOT JOYSTICK AXIS VALUE CHANGED ///////////////////////////////////////////
-void StandardJoystickWidget::slotJoystickAxisValueChanged(QGameControllerAxisEvent *event)
+void StandardJoystickWidget::slotJoystickAxisValueChanged(GameControllerAxisEvent *event)
 {
 	boxAxes->slotSetValue(event->axis(),event->value());
 }
 
 // SLOT JOYSTICK BUTTON STATE CHANGED /////////////////////////////////////////
-void StandardJoystickWidget::slotJoystickButtonStateChanged(QGameControllerButtonEvent *event)
+void StandardJoystickWidget::slotJoystickButtonStateChanged(GameControllerButtonEvent *event)
 {
 	buttonsWidgets[event->button()]->slotSetChecked(event->pressed());
 }
 
 // SLOT JOYSTICK POV ANGLE CHANGED ////////////////////////////////////////////
-void StandardJoystickWidget::slotJoystickPovAngleChanged(QGameControllerPovEvent *event)
+void StandardJoystickWidget::slotJoystickPovAngleChanged(GameControllerPovEvent *event)
 {
 	povWidgets[event->pov()]->slotSetAngle(event->angle());
 }

@@ -1,5 +1,6 @@
 #include "ThrustmasterTwcsThrottle.h"
-#include "qgamecontroller.h"
+#include "GameController.h"
+#include "GameControllerEvents.h"
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -25,7 +26,7 @@
 
 
 // CONSTRUCTEUR ///////////////////////////////////////////////////////////////
-ThrustmasterTwcsThrottle::ThrustmasterTwcsThrottle(QGameController *c) : RealJoystick{c}
+ThrustmasterTwcsThrottle::ThrustmasterTwcsThrottle(GameController *c) : RealJoystick{c}
 {
 	m_buttonsNames << "TBTN1" << "TBTN2" << "TBTN3" << "TBTN4" << "TBTN5" << "TLOCK";
 	m_buttonsNames << "THAT1U" << "THAT1R" << "THAT1D" << "THAT1L";
@@ -54,7 +55,7 @@ ThrustmasterTwcsThrottle::ThrustmasterTwcsThrottle(QGameController *c) : RealJoy
 
 
 // SLOT GAME CONTROLLER AXIS EVENT ////////////////////////////////////////////
-void ThrustmasterTwcsThrottle::slotGameControllerAxisEvent(QGameControllerAxisEvent *event)
+void ThrustmasterTwcsThrottle::slotGameControllerAxisEvent(GameControllerAxisEvent *event)
 {
 	Q_ASSERT(event);
 	uint axis = event->axis();

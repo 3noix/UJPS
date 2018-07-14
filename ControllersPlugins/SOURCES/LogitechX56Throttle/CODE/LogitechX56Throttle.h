@@ -3,9 +3,8 @@
 
 
 #include "RealJoystick.h"
-class QGameController;
-class QGameControllerButtonEvent;
-class QGameControllerAxisEvent;
+class GameController;
+class GameControllerAxisEvent;
 
 #define INSIDE_PLUGIN
 #include "../../../INCLUDES/LogitechX56Throttle.h"
@@ -17,7 +16,7 @@ class LogitechX56Throttle : public RealJoystick
 	
 	
 	public:
-		LogitechX56Throttle(QGameController *c);
+		LogitechX56Throttle(GameController *c);
 		LogitechX56Throttle(const LogitechX56Throttle &other) = delete;
 		LogitechX56Throttle(LogitechX56Throttle &&other) = delete;
 		LogitechX56Throttle& operator=(const LogitechX56Throttle &other) = delete;
@@ -41,7 +40,7 @@ class LogitechX56Throttle : public RealJoystick
 		
 		
 	protected slots:
-		void slotGameControllerAxisEvent(QGameControllerAxisEvent *event) override final;
+		void slotGameControllerAxisEvent(GameControllerAxisEvent *event) override final;
 		
 		
 	private:

@@ -1,5 +1,5 @@
 CONFIG(debug, debug|release) {
-    DESTDIR = debug
+	DESTDIR = debug
 	LIBS += ../../../StaticLibs/SOURCES/QtGameControllerModif/debug/libQtGameControllerModif.a \
 			../../../StaticLibs/SOURCES/RealJoysticks/debug/librealJoysticks.a
 }
@@ -10,7 +10,7 @@ CONFIG(release, debug|release) {
 }
 
 TEMPLATE = lib
-TARGET = MicrosoftXbox360Controller
+TARGET = MicrosoftXbox360Gamepad
 DEPENDPATH += .
 INCLUDEPATH += .
 CONFIG += plugin c++11
@@ -24,7 +24,7 @@ INCLUDEPATH +=  ../../../StaticLibs/INCLUDES/QtGameControllerModif/ \
 
 
 HEADERS +=  CODE/RealJoystickFactory.h \
-			CODE/MicrosoftXbox360Controller.h
+			CODE/MicrosoftXbox360Gamepad.h
 
-SOURCES +=  CODE/MicrosoftXbox360Controller.cpp
+SOURCES +=  CODE/MicrosoftXbox360Gamepad.cpp
 

@@ -3,9 +3,8 @@
 
 
 #include "RealJoystick.h"
-class QGameController;
-class QGameControllerButtonEvent;
-class QGameControllerAxisEvent;
+class GameController;
+class GameControllerAxisEvent;
 
 #define INSIDE_PLUGIN
 #include "../../../INCLUDES/ThrustmasterTwcsThrottle.h"
@@ -17,7 +16,7 @@ class ThrustmasterTwcsThrottle : public RealJoystick
 	
 	
 	public:
-		ThrustmasterTwcsThrottle(QGameController *c);
+		ThrustmasterTwcsThrottle(GameController *c);
 		ThrustmasterTwcsThrottle(const ThrustmasterTwcsThrottle &other) = delete;
 		ThrustmasterTwcsThrottle(ThrustmasterTwcsThrottle &&other) = delete;
 		ThrustmasterTwcsThrottle& operator=(const ThrustmasterTwcsThrottle &other) = delete;
@@ -41,7 +40,7 @@ class ThrustmasterTwcsThrottle : public RealJoystick
 		
 		
 	private slots:
-		void slotGameControllerAxisEvent(QGameControllerAxisEvent *event) override final;
+		void slotGameControllerAxisEvent(GameControllerAxisEvent *event) override final;
 		
 		
 	private:

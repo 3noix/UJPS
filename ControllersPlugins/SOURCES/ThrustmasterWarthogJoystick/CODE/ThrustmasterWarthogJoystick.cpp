@@ -1,5 +1,6 @@
 #include "ThrustmasterWarthogJoystick.h"
-#include "qgamecontroller.h"
+#include "GameController.h"
+#include "GameControllerEvents.h"
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -25,7 +26,7 @@
 
 
 // CONSTRUCTEUR ///////////////////////////////////////////////////////////////
-ThrustmasterWarthogJoystick::ThrustmasterWarthogJoystick(QGameController *c) : RealJoystick{c}
+ThrustmasterWarthogJoystick::ThrustmasterWarthogJoystick(GameController *c) : RealJoystick{c}
 {
 	m_buttonsNames << "TG1" << "S2" << "S3" << "S4" << "S1" << "TG2" << "H2U" << "H2R" << "H2D" << "H2L";
 	m_buttonsNames << "H3U" << "H3R" << "H3D" << "H3L" << "H4U" << "H4R" << "H4D" << "H4L" << "H4P";
@@ -57,7 +58,7 @@ ThrustmasterWarthogJoystick::ThrustmasterWarthogJoystick(QGameController *c) : R
 
 
 // SLOT GAME CONTROLLER AXIS EVENT ////////////////////////////////////////////
-void ThrustmasterWarthogJoystick::slotGameControllerAxisEvent(QGameControllerAxisEvent *event)
+void ThrustmasterWarthogJoystick::slotGameControllerAxisEvent(GameControllerAxisEvent *event)
 {
 	Q_ASSERT(event);
 	uint axis = event->axis();

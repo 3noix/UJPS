@@ -7,7 +7,7 @@
 #include <QColor>
 class AbstractRealJoystick;
 class AbstractRealJoystickFactory;
-class QGameController;
+class GameController;
 class QPluginLoader;
 
 
@@ -40,7 +40,7 @@ class RealJoysticksManager : public QObject
 		
 		
 	private:
-		AbstractRealJoystick* createJoystick(QGameController *c);
+		AbstractRealJoystick* createJoystick(GameController *c);
 		
 		QVector<AbstractRealJoystick*> m_joysticks;
 		QVector<QPluginLoader*> m_loaders;

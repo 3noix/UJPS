@@ -3,9 +3,8 @@
 
 
 #include "RealJoystick.h"
-class QGameController;
-class QGameControllerButtonEvent;
-class QGameControllerAxisEvent;
+class GameController;
+class GameControllerAxisEvent;
 
 #define INSIDE_PLUGIN
 #include "../../../INCLUDES/LogitechX56Joystick.h"
@@ -17,7 +16,7 @@ class LogitechX56Joystick : public RealJoystick
 	
 	
 	public:
-		LogitechX56Joystick(QGameController *c);
+		LogitechX56Joystick(GameController *c);
 		LogitechX56Joystick(const LogitechX56Joystick &other) = delete;
 		LogitechX56Joystick(LogitechX56Joystick &&other) = delete;
 		LogitechX56Joystick& operator=(const LogitechX56Joystick &other) = delete;
@@ -41,7 +40,7 @@ class LogitechX56Joystick : public RealJoystick
 		
 		
 	protected slots:
-		void slotGameControllerAxisEvent(QGameControllerAxisEvent *event) override final;
+		void slotGameControllerAxisEvent(GameControllerAxisEvent *event) override final;
 		
 		
 	private:

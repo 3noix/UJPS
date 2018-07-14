@@ -1,5 +1,6 @@
 #include "RealJoystick.h"
-#include "qgamecontroller.h"
+#include "GameController.h"
+#include "GameControllerEvents.h"
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -40,15 +41,18 @@
 
 
 // CONSTRUCTEUR ET DESTRUCTEUR ////////////////////////////////////////////////
-RealJoystick::RealJoystick(QGameController *c) : QObject{}, AbstractRealJoystick{}
+RealJoystick::RealJoystick(GameController *c) : QObject{}, AbstractRealJoystick{}
 {
 	Q_ASSERT(c);
 	m_controller = c;
 	m_controller->readGameController();
 	
-	QObject::connect(c,&QGameController::gameControllerAxisEvent,this,&RealJoystick::slotGameControllerAxisEvent);
-	QObject::connect(c,&QGameController::gameControllerButtonEvent,this,&RealJoystick::slotGameControllerButtonEvent);
-	QObject::connect(c,&QGameController::gameControllerPovEvent,this,&RealJoystick::slotGameControllerPovEvent);
+	QObject::connect(c, SIGNAL(gameControllerAxisEvent(GameControllerAxisEvent*)),     this, SLOT(slotGameControllerAxisEvent(GameControllerAxisEvent*)));
+	QObject::connect(c, SIGNAL(gameControllerButtonEvent(GameControllerButtonEvent*)), this, SLOT(slotGameControllerButtonEvent(GameControllerButtonEvent*)));
+	QObject::connect(c, SIGNAL(gameControllerPovEvent(GameControllerPovEvent*)),       this, SLOT(slotGameControllerPovEvent(GameControllerPovEvent*)));
+	//QObject::connect(c,&GameController::gameControllerAxisEvent,this,&RealJoystick::slotGameControllerAxisEvent);
+	//QObject::connect(c,&GameController::gameControllerButtonEvent,this,&RealJoystick::slotGameControllerButtonEvent);
+	//QObject::connect(c,&GameController::gameControllerPovEvent,this,&RealJoystick::slotGameControllerPovEvent);
 	
 	m_bTransformPovInto4Buttons = (m_controller->description() != "vJoy Device");
 	m_bTransform4ButtonsIntoPov = (m_controller->description() != "vJoy Device");
@@ -133,7 +137,7 @@ QVector<JoystickChange> RealJoystick::changes()
 
 
 // SLOT GAME CONTROLLER AXIS EVENT ////////////////////////////////////////////
-void RealJoystick::slotGameControllerAxisEvent(QGameControllerAxisEvent *event)
+void RealJoystick::slotGameControllerAxisEvent(GameControllerAxisEvent *event)
 {
 	Q_ASSERT(event);
 	m_changes << JoystickChange{this,ControlType::Axis,event->axis(),false,event->value()};
@@ -141,7 +145,7 @@ void RealJoystick::slotGameControllerAxisEvent(QGameControllerAxisEvent *event)
 }
 
 // SLOT GAME CONTROLLER BUTTON EVENT //////////////////////////////////////////
-void RealJoystick::slotGameControllerButtonEvent(QGameControllerButtonEvent *event)
+void RealJoystick::slotGameControllerButtonEvent(GameControllerButtonEvent *event)
 {
 	Q_ASSERT(event);
 	m_changes << JoystickChange{this,ControlType::Button,event->button(),event->pressed(),0.0};
@@ -152,7 +156,7 @@ void RealJoystick::slotGameControllerButtonEvent(QGameControllerButtonEvent *eve
 }
 
 // SLOT GAME CONTROLLER POV EVENT /////////////////////////////////////////////
-void RealJoystick::slotGameControllerPovEvent(QGameControllerPovEvent *event)
+void RealJoystick::slotGameControllerPovEvent(GameControllerPovEvent *event)
 {
 	Q_ASSERT(event);
 	m_changes << JoystickChange{this,ControlType::Pov,event->pov(),false,event->angle()};

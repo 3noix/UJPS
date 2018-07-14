@@ -1,5 +1,6 @@
 #include "LogitechExtreme3D.h"
-#include "qgamecontroller.h"
+#include "GameController.h"
+#include "GameControllerEvents.h"
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -25,7 +26,7 @@
 
 
 // CONSTRUCTEUR ///////////////////////////////////////////////////////////////
-LogitechExtreme3D::LogitechExtreme3D(QGameController *c) : RealJoystick{c}
+LogitechExtreme3D::LogitechExtreme3D(GameController *c) : RealJoystick{c}
 {
 	m_buttonsNames << "TG" << "THMB";
 	m_buttonsNames << "SBDL" << "SBDR" << "SBUL" << "SBUR";
@@ -42,7 +43,7 @@ LogitechExtreme3D::LogitechExtreme3D(QGameController *c) : RealJoystick{c}
 
 
 // SLOT GAME CONTROLLER AXIS EVENT ////////////////////////////////////////////
-void LogitechExtreme3D::slotGameControllerAxisEvent(QGameControllerAxisEvent *event)
+void LogitechExtreme3D::slotGameControllerAxisEvent(GameControllerAxisEvent *event)
 {
 	Q_ASSERT(event);
 	uint axis = event->axis();
