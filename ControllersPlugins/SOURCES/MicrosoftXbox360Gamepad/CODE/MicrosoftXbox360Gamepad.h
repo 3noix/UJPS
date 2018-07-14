@@ -21,7 +21,7 @@ class MicrosoftXbox360Gamepad : public RealJoystick
 		MicrosoftXbox360Gamepad(MicrosoftXbox360Gamepad &&other) = delete;
 		MicrosoftXbox360Gamepad& operator=(const MicrosoftXbox360Gamepad &other) = delete;
 		MicrosoftXbox360Gamepad& operator=(MicrosoftXbox360Gamepad &&other) = delete;
-		~MicrosoftXbox360Gamepad() = default;
+		~MicrosoftXbox360Gamepad();
 		
 		QString description() const override final;
 		
@@ -37,11 +37,18 @@ class MicrosoftXbox360Gamepad : public RealJoystick
 		QString povName(uint pov) const override final;
 		QStringList povsNames() const override final;
 		
+		void setData(const QString &str, QVariant v) override final;
+		void flush() override final;
+		
 		
 	private:
 		QStringList m_buttonsNames;
 		QStringList m_axesNames;
 		QStringList m_povsNames;
+		
+		double m_leftMotorSpeed;
+		double m_rightMotorSpeed;
+		bool m_dataModified;
 };
 
 #endif

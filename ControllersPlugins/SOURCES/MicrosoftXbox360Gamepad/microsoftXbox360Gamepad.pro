@@ -18,6 +18,9 @@ OBJECTS_DIR = $$DESTDIR/objects
 MOC_DIR = $$DESTDIR/moc
 
 
+LIBS += -lXInput
+
+
 INCLUDEPATH +=  ../../../StaticLibs/INCLUDES/QtGameControllerModif/ \
 				../../../StaticLibs/INCLUDES/Other/ \
 				../../../StaticLibs/INCLUDES/RealJoysticks/

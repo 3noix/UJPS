@@ -1,10 +1,14 @@
 #include "MicrosoftXbox360Gamepad.h"
 #include "GameController.h"
 #include "GameControllerEvents.h"
+#include "Lim.h"
+#include <XInput.h>
+#include <windows.h>
 
 
 ///////////////////////////////////////////////////////////////////////////////
 //  CONSTRUCTEUR
+//  DESTRUCTEUR
 //
 //  DESCRIPTION
 //
@@ -20,12 +24,19 @@
 //  POVS COUNT
 //  POV NAME
 //  POVS NAMES
+//
+//  SET DATA
+//  FLUSH
 ///////////////////////////////////////////////////////////////////////////////
 
 
-// CONSTRUCTEUR ///////////////////////////////////////////////////////////////
+// CONSTRUCTEUR ET DESTRUCTEUR/////////////////////////////////////////////////
 MicrosoftXbox360Gamepad::MicrosoftXbox360Gamepad(GameController *c) : RealJoystick{c}
 {
+	m_leftMotorSpeed = 0;
+	m_rightMotorSpeed = 0;
+	m_dataModified = false;
+	
 	m_buttonsNames << "DPADU" << "DPADR" << "DPADD" << "DPADL";
 	m_buttonsNames << "START" << "BACK" << "THUMBL" << "THUMBR" << "SHOULDERL" << "SHOULDERR";
 	m_buttonsNames << "BA" << "BB" << "BX" << "BY";
@@ -39,6 +50,13 @@ MicrosoftXbox360Gamepad::MicrosoftXbox360Gamepad(GameController *c) : RealJoysti
 						MicrosoftXbox360Gamepad_::DPADD,
 						MicrosoftXbox360Gamepad_::DPADL,
 						"DPAD");
+}
+
+MicrosoftXbox360Gamepad::~MicrosoftXbox360Gamepad()
+{
+	this->setData("LEFT_MOTOR_SPEED",0.0);
+	this->setData("RIGHT_MOTOR_SPEED",0.0);
+	this->flush();
 }
 
 
@@ -121,5 +139,42 @@ QString MicrosoftXbox360Gamepad::povName(uint pov) const
 QStringList MicrosoftXbox360Gamepad::povsNames() const
 {
 	return m_povsNames;
+}
+
+
+
+
+
+// SET DATA ///////////////////////////////////////////////////////////////////
+void MicrosoftXbox360Gamepad::setData(const QString &str, QVariant v)
+{
+	if (str == "LEFT_MOTOR_SPEED") // double between 0 and 100% expected
+	{
+		double leftSpeed = v.toDouble();
+		if (leftSpeed == m_leftMotorSpeed) {return;}
+		m_leftMotorSpeed = leftSpeed;
+		m_dataModified = true;
+	}
+	else if (str == "RIGHT_MOTOR_SPEED") // double between 0 and 100% expected
+	{
+		double rightSpeed = v.toDouble();
+		if (rightSpeed == m_rightMotorSpeed) {return;}
+		m_rightMotorSpeed = rightSpeed;
+		m_dataModified = true;
+	}
+}
+
+// FLUSH //////////////////////////////////////////////////////////////////////
+void MicrosoftXbox360Gamepad::flush()
+{
+	if (!m_dataModified) {return;}
+	
+	XINPUT_VIBRATION state;
+	memset(&state,0,sizeof(XINPUT_VIBRATION));
+	state.wLeftMotorSpeed = lim<double>(655.35*m_leftMotorSpeed,0.0,65535.0);
+	state.wRightMotorSpeed = lim<double>(655.35*m_rightMotorSpeed,0.0,65535.0);
+	XInputSetState(this->id()-100,&state);
+	
+	m_dataModified = false;
 }
 
