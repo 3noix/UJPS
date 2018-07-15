@@ -31,7 +31,7 @@ class MainWindow : public QWidget
 		
 	private slots:
 		void slotSetData(const QString &prop, QVariant data);
-		void slotSetState(AbstractRemoteJoystickClient::State s);
+		void slotSetState(RemoteJoystickClient::State s);
 		
 		void slotSliderValueChanged(int value);
 		void slotButton1Pressed();

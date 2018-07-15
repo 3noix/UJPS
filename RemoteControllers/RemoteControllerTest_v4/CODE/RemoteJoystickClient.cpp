@@ -1,4 +1,4 @@
-#include "AbstractRemoteJoystickClient.h"
+#include "RemoteJoystickClient.h"
 #include "RemoteJoystickMessageTypes.h"
 
 #include <QtWidgets>
@@ -7,6 +7,15 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 //  CONSTRUCTEUR
+//
+//  DESCRIPTION
+//  BUTTONS COUNT
+//  BUTTONS NAMES
+//  AXES COUNT
+//  AXES NAMES
+//  POVS COUNT
+//  POVS NAMES
+//  SET DATA
 //  SET STATE
 //  STATE
 //
@@ -25,8 +34,18 @@
 
 
 // CONSTRUCTEUR ///////////////////////////////////////////////////////////////
-AbstractRemoteJoystickClient::AbstractRemoteJoystickClient(QObject *parent) : QObject{parent}
+RemoteJoystickClient::RemoteJoystickClient(
+	const QString &description,
+	const QStringList &buttonsNames,
+	const QStringList &axesNames,
+	const QStringList &povsNames,
+	QObject *parent) : QObject{parent}
 {
+	m_description = description;
+	m_buttonsNames = buttonsNames;
+	m_axesNames = axesNames;
+	m_povsNames = povsNames;
+	
 	m_hostName = "";
 	m_port = 0;
 	m_state = State::NotConnected;
@@ -34,11 +53,11 @@ AbstractRemoteJoystickClient::AbstractRemoteJoystickClient(QObject *parent) : QO
 	m_networkSession = nullptr;
 	
 	// connections
-	connect(m_tcpSocket, &QTcpSocket::connected, this, &AbstractRemoteJoystickClient::slotConnected);
-	connect(m_tcpSocket, &QTcpSocket::disconnected, this, &AbstractRemoteJoystickClient::slotDisconnected);
-	connect(m_tcpSocket, &QIODevice::readyRead, this, &AbstractRemoteJoystickClient::slotReceiveData);
+	connect(m_tcpSocket, &QTcpSocket::connected, this, &RemoteJoystickClient::slotConnected);
+	connect(m_tcpSocket, &QTcpSocket::disconnected, this, &RemoteJoystickClient::slotDisconnected);
+	connect(m_tcpSocket, &QIODevice::readyRead, this, &RemoteJoystickClient::slotReceiveData);
 	typedef void (QAbstractSocket::*QAbstractSocketErrorSignal)(QAbstractSocket::SocketError);
-	connect(m_tcpSocket, static_cast<QAbstractSocketErrorSignal>(&QAbstractSocket::error), this, &AbstractRemoteJoystickClient::slotError);
+	connect(m_tcpSocket, static_cast<QAbstractSocketErrorSignal>(&QAbstractSocket::error), this, &RemoteJoystickClient::slotError);
 	
 	// configuration du client
 	QNetworkConfigurationManager manager;
@@ -56,20 +75,74 @@ AbstractRemoteJoystickClient::AbstractRemoteJoystickClient(QObject *parent) : QO
 			config = manager.defaultConfiguration();
 		
 		m_networkSession = new QNetworkSession(config, this);
-		connect(m_networkSession, &QNetworkSession::opened, this, &AbstractRemoteJoystickClient::slotSessionOpened);
+		connect(m_networkSession, &QNetworkSession::opened, this, &RemoteJoystickClient::slotSessionOpened);
 		m_networkSession->open();
 	}
 }
 
+
+
+
+
+
+
+// DESCRIPTION ////////////////////////////////////////////////////////////////
+QString RemoteJoystickClient::description() const
+{
+	return m_description;
+}
+
+// BUTTONS COUNT //////////////////////////////////////////////////////////////
+quint8 RemoteJoystickClient::buttonsCount() const
+{
+	return m_buttonsNames.size();
+}
+
+// BUTTONS NAMES //////////////////////////////////////////////////////////////
+QStringList RemoteJoystickClient::buttonsNames() const
+{
+	return m_buttonsNames;
+}
+
+// AXES COUNT /////////////////////////////////////////////////////////////////
+quint8 RemoteJoystickClient::axesCount() const
+{
+	return m_axesNames.size();
+}
+
+// AXES NAMES /////////////////////////////////////////////////////////////////
+QStringList RemoteJoystickClient::axesNames() const
+{
+	return m_axesNames;
+}
+
+// POVS COUNT /////////////////////////////////////////////////////////////////
+quint8 RemoteJoystickClient::povsCount() const
+{
+	return m_povsNames.size();
+}
+
+// POVS NAMES /////////////////////////////////////////////////////////////////
+QStringList RemoteJoystickClient::povsNames() const
+{
+	return m_povsNames;
+}
+
+// SET DATA ///////////////////////////////////////////////////////////////////
+void RemoteJoystickClient::setData(const QString &prop, QVariant v)
+{
+	emit signalSetData(prop,v);
+}
+
 // SET STATE //////////////////////////////////////////////////////////////////
-void AbstractRemoteJoystickClient::setState(AbstractRemoteJoystickClient::State s)
+void RemoteJoystickClient::setState(RemoteJoystickClient::State s)
 {
 	m_state = s;
 	emit stateChanged(m_state);
 }
 
 // STATE //////////////////////////////////////////////////////////////////////
-AbstractRemoteJoystickClient::State AbstractRemoteJoystickClient::state() const
+RemoteJoystickClient::State RemoteJoystickClient::state() const
 {
 	return m_state;
 }
@@ -80,7 +153,7 @@ AbstractRemoteJoystickClient::State AbstractRemoteJoystickClient::state() const
 
 
 // SLOT CONNECT ///////////////////////////////////////////////////////////////
-void AbstractRemoteJoystickClient::slotConnect(const QString &hostName, quint16 port)
+void RemoteJoystickClient::slotConnect(const QString &hostName, quint16 port)
 {
 	m_hostName = hostName;
 	m_port = port;
@@ -91,13 +164,13 @@ void AbstractRemoteJoystickClient::slotConnect(const QString &hostName, quint16 
 }
 
 // SLOT DISCONNECT ////////////////////////////////////////////////////////////
-void AbstractRemoteJoystickClient::slotDisconnect()
+void RemoteJoystickClient::slotDisconnect()
 {
 	m_tcpSocket->disconnectFromHost();
 }
 
 // SLOT SEND BUTTON INFO //////////////////////////////////////////////////////
-void AbstractRemoteJoystickClient::slotSendButtonInfo(quint8 button, bool bPressed)
+void RemoteJoystickClient::slotSendButtonInfo(quint8 button, bool bPressed)
 {
 	QByteArray ba;
 	QDataStream out{&ba, QIODevice::WriteOnly};
@@ -112,7 +185,7 @@ void AbstractRemoteJoystickClient::slotSendButtonInfo(quint8 button, bool bPress
 }
 
 // SLOT SEND AXIS INFO ////////////////////////////////////////////////////////
-void AbstractRemoteJoystickClient::slotSendAxisInfo(quint8 axis, float axisValue)
+void RemoteJoystickClient::slotSendAxisInfo(quint8 axis, float axisValue)
 {
 	QByteArray ba;
 	QDataStream out{&ba, QIODevice::WriteOnly};
@@ -127,7 +200,7 @@ void AbstractRemoteJoystickClient::slotSendAxisInfo(quint8 axis, float axisValue
 }
 
 // SLOT SEND POV INFO /////////////////////////////////////////////////////////
-void AbstractRemoteJoystickClient::slotSendPovInfo(quint8 pov, float povValue)
+void RemoteJoystickClient::slotSendPovInfo(quint8 pov, float povValue)
 {
 	QByteArray ba;
 	QDataStream out{&ba, QIODevice::WriteOnly};
@@ -149,7 +222,7 @@ void AbstractRemoteJoystickClient::slotSendPovInfo(quint8 pov, float povValue)
 
 
 // SLOT SESSION OPENED ////////////////////////////////////////////////////////
-void AbstractRemoteJoystickClient::slotSessionOpened()
+void RemoteJoystickClient::slotSessionOpened()
 {
 	// Save the used configuration
 	QNetworkConfiguration config = m_networkSession->configuration();
@@ -166,7 +239,7 @@ void AbstractRemoteJoystickClient::slotSessionOpened()
 }
 
 // SLOT CONNECTED /////////////////////////////////////////////////////////////
-void AbstractRemoteJoystickClient::slotConnected()
+void RemoteJoystickClient::slotConnected()
 {
 	QByteArray ba;
 	QDataStream out{&ba, QIODevice::WriteOnly};
@@ -186,14 +259,14 @@ void AbstractRemoteJoystickClient::slotConnected()
 }
 
 // SLOT DISCONNECTED //////////////////////////////////////////////////////////
-void AbstractRemoteJoystickClient::slotDisconnected()
+void RemoteJoystickClient::slotDisconnected()
 {
 	m_tcpSocket->abort();
 	this->setState(State::NotConnected);
 }
 
 // SLOT RECEIVE DATA //////////////////////////////////////////////////////////
-void AbstractRemoteJoystickClient::slotReceiveData()
+void RemoteJoystickClient::slotReceiveData()
 {
 	QDataStream in{m_tcpSocket};
 	in.setVersion(QDataStream::Qt_5_7);
@@ -208,7 +281,7 @@ void AbstractRemoteJoystickClient::slotReceiveData()
 }
 
 // SLOT ERROR /////////////////////////////////////////////////////////////////
-void AbstractRemoteJoystickClient::slotError(QAbstractSocket::SocketError socketError)
+void RemoteJoystickClient::slotError(QAbstractSocket::SocketError socketError)
 {
 	if (socketError == QAbstractSocket::RemoteHostClosedError)
 		return;
