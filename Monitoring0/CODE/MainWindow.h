@@ -21,7 +21,6 @@ class MainWindow : public QMainWindow
 	private:
 		QTabWidget *mainTabWidget;
 		QVector<QWidget*> joysticksWidgets;
-		QVector<GameController*> joysticks;
 };
 
 #endif

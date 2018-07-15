@@ -1,13 +1,10 @@
 #include "RealJoysticksManager.h"
 #include "RealJoystick.h"
 #include "AbstractRealJoystickFactory.h"
+#include "GameController.h"
 
-#include "GameControllerDirectInput.h"
-#include "GameControllerXInput.h"
 #include <QPluginLoader>
 #include <QDir>
-const int NB_JOYSTICKS_MAX_DIRECTINPUT = 16;
-const int NB_JOYSTICKS_MAX_XINPUT = 4;
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -59,30 +56,24 @@ void RealJoysticksManager::loadPlugins(const QString &path)
 // SEARCH FOR CONTROLLERS /////////////////////////////////////////////////////
 void RealJoysticksManager::searchForControllers()
 {
-	// search for DirectInput controllers
-	for (int i=0; i<NB_JOYSTICKS_MAX_DIRECTINPUT; ++i)
-	{
-		GameController *gameController = new GameControllerDirectInput(i);
-		if (gameController->isValid() && gameController->description() != "Controller (XBOX 360 For Windows)")
-		{
-			
-			if (AbstractRealJoystick *j = this->createJoystick(gameController))
-				m_joysticks << j;
-		}
-		else {delete gameController;}
-	}
+	// reset
+	qDeleteAll(m_joysticks);
+	m_joysticks.clear();
 	
-	// search for XInput controllers
-	for (int i=0; i<NB_JOYSTICKS_MAX_XINPUT; ++i)
+	// search for DirectInput and XInput controllers
+	QVector<GameController*> joysticks = GameController::enumerateControllers();
+	
+	// build RealJoysticks objects
+	for (GameController *gc : joysticks)
 	{
-		GameController *gameController = new GameControllerXInput(i);
-		if (gameController->isValid())
+		if (AbstractRealJoystick *j = this->createJoystick(gc))
 		{
-			
-			if (AbstractRealJoystick *j = this->createJoystick(gameController))
-				m_joysticks << j;
+			m_joysticks << j;
 		}
-		else {delete gameController;}
+		else
+		{
+			delete gc;
+		}
 	}
 }
 

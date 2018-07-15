@@ -4,6 +4,7 @@
 
 #include <QObject>
 #include <QString>
+#include <QVector>
 class GameControllerAxisEvent;
 class GameControllerButtonEvent;
 class GameControllerPovEvent;
@@ -14,7 +15,9 @@ class GameController : public QObject
 	Q_OBJECT
 	
 	public:
-		explicit GameController(QObject *parent = nullptr) : QObject{parent} {};
+		static QVector<GameController*> enumerateControllers(QObject *parent = nullptr);
+		
+		explicit GameController(QObject *parent = nullptr);
 		GameController(const GameController &other) = delete;
 		GameController(GameController &&other) = delete;
 		GameController& operator=(const GameController &other) = delete;

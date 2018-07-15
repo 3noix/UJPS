@@ -26,6 +26,7 @@ HEADERS +=  ../../INCLUDES/QtGameControllerModif/GameController.h \
 			../../INCLUDES/QtGameControllerModif/GameControllerXInput.h
 
 
-SOURCES +=  CODE/GameControllerDirectInput.cpp \
+SOURCES +=  CODE/GameController.cpp \
+			CODE/GameControllerDirectInput.cpp \
 			CODE/GameControllerXInput.cpp \
 			CODE/GameControllerEvents.cpp
