@@ -3,6 +3,7 @@
 
 
 #include "AbstractMapping.h"
+class AbstractAxisCurve;
 
 
 class MappingMergeAxes : public AbstractMapping
@@ -12,6 +13,7 @@ class MappingMergeAxes : public AbstractMapping
 						AbstractRealJoystick *rj2, uint rAxis2, float k2,
 						LayersCombo lc,
 						VirtualJoystick *vj, uint vAxis,
+						AbstractAxisCurve *curve,
 						VirtualEventsQueue &eventsQueue);
 						
 		MappingMergeAxes(const MappingMergeAxes &other) = delete;
@@ -40,6 +42,7 @@ class MappingMergeAxes : public AbstractMapping
 		float m_k1, m_k2;
 		VirtualJoystick *m_vj;
 		uint m_rAxis1, m_rAxis2, m_vAxis;
+		AbstractAxisCurve *m_curve;
 		
 		bool m_disable;
 };

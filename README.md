@@ -1,10 +1,10 @@
-# UJPS: Universal Joystick Programming Software (C++) V2.7.0
+# UJPS: Universal Joystick Programming Software (C++) V2.7.1
 
 
 This project allows the user to "program a set of real joysticks": events from the real joysticks are transformed into virtual joysticks and keyboard events. This transformation is defined in the "profile" defined by the user using C++ programming language. It is comparable to the proprietary "Thrustmaster TARGET scripts". But Thrustmaster TARGET scripts explicitly blocks non-Thrustmaster hardware. This tool works for any game controller recognized by Windows.
 
 
-![ScreenShot](https://i.imgur.com/LgGH8RU.png)
+![ScreenShot](https://i.imgur.com/ltP02P4.png)
 
 
 It does not use HMI to define the profile such as in "Thrustmaster TARGET GUI", "Univeral Control Remapper" or "Joystick Gremlin". All the profile is defined in C++ source code... but there is no need to have an accurate understanding of C++ to be able to use it, just like for Thrustmaster TARGET scripts with C language.
@@ -22,6 +22,6 @@ Installation: the whole procedure is discribed in the documentation:
 - install vJoy : http://vjoystick.sourceforge.net/site/index.php/download-a-install/download (the big arrow in the middle)
 - build the application using the bat file provided in this repository
 
-![ScreenShot](https://i.imgur.com/TIaYK8H.png)
+![ScreenShot](https://i.imgur.com/x8iTUqr.png)
 
-![ScreenShot](https://i.imgur.com/rbZOK0N.png)
+![ScreenShot](https://i.imgur.com/9m4suB5.png)

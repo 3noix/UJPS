@@ -66,11 +66,10 @@ class Profile : public AbstractProfile
 		uint m_targetsTypeToCycle;
 		
 		// curves parameters
-		const float k = 0.02f;
-		const float DeadZone_L  = k * 3.0f;
-		const float DeadZone_C  = k * 3.0f;
-		const float DeadZone_C2 = k * 15.0f;
-		const float DeadZone_R  = k * 3.0f;
+		const float DeadZone_L  = 3.0f;
+		const float DeadZone_C  = 3.0f;
+		const float DeadZone_C2 = 15.0f;
+		const float DeadZone_R  = 3.0f;
 		const float curveParam  = 3.0f;
 		
 		

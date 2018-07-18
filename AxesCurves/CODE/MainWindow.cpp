@@ -2,8 +2,11 @@
 #include "CurveChartView.h"
 #include "AbstractRealJoystick.h"
 
-#include "CURVES/JCurveGUI.h"
-#include "CURVES/SCurveGUI.h"
+#include "CURVES/GuiCurvePolynomial2.h"
+#include "CURVES/GuiCurvePolynomial3Centered.h"
+#include "CURVES/GuiCurvePolynomial3NotCentered.h"
+#include "CURVES/GuiCurveExpCentered.h"
+#include "CURVES/GuiCurveExpNotCentered.h"
 
 #include <QCoreApplication>
 #include <QGridLayout>
@@ -135,16 +138,30 @@ void MainWindow::setupWidget()
 // CURVES NAMES ///////////////////////////////////////////////////////////////
 QStringList MainWindow::curvesNames() const
 {
-	return {"No curve","J curve","S curve"};
+	QStringList list;
+	
+	list << "No curve";
+	list << "Polynomial 2 curve";
+	list << "Polynomial 3 curve (centered)";
+	list << "Polynomial 3 curve (not centered)";
+	list << "Exponential curve (centered)";
+	list << "Exponential curve (not centered)";
+	
+	return list;
+	
+	return {"No curve","J curve","Exponential curve (centered)","Exponential curve (not centered)"};
 }
 
 // CREATE CURVE ///////////////////////////////////////////////////////////////
 AbstractAxisCurve* MainWindow::createCurve(const QString &curveName) const
 {
-	if (curveName == "No curve")     {return nullptr;}
-	else if (curveName == "J curve") {return new JCurveGUI{};}
-	else if (curveName == "S curve") {return new SCurveGUI{};}
-	else                             {return nullptr;}
+	if (curveName == "No curve") {return nullptr;}
+	else if (curveName == "Polynomial 2 curve") {return new GuiCurvePolynomial2{};}
+	else if (curveName == "Polynomial 3 curve (centered)") {return new GuiCurvePolynomial3Centered{};}
+	else if (curveName == "Polynomial 3 curve (not centered)") {return new GuiCurvePolynomial3NotCentered{};}
+	else if (curveName == "Exponential curve (centered)") {return new GuiCurveExpCentered{};}
+	else if (curveName == "Exponential curve (not centered)") {return new GuiCurveExpNotCentered{};}
+	else {return nullptr;}
 }
 
 // SLOT RUN ONE LOOP //////////////////////////////////////////////////////////

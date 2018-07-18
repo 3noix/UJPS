@@ -56,9 +56,6 @@ class EnhancedJoystick : public AbstractRealJoystick
 		float axisRawValue(uint axis) const;
 		void setPovLocked(uint pov, bool locked);
 		
-		void setSCurve(uint axis, float lowerDZ, float centerDZ, float upperDZ, float curve, float zoom);
-		void setJCurve(uint axis, float zoom);
-		void setCustomCurve(uint axis, const std::vector<float> &points);
 		void setCurve(uint axis, AbstractAxisCurve *curve);
 		void removeCurve(uint axis);
 		

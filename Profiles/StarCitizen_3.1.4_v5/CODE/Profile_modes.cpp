@@ -271,14 +271,14 @@ void Profile::set_THR_for_cruise()
 void Profile::set_BRKRIGHT_for_groundForward()
 {
 	MapAxis(mfgx, MFGX::BRK_RIGHT, AllLayers, vj2, SC2::AxisGroundThrust, AxisDirection::Normal);
-	mfgx->setCustomCurve(MFGX::BRK_RIGHT, {-1.0f+2.0f*brkRight_LDZ,0.0f,  1.0f-2.0f*brkRight_RDZ,1.0f});
+	mfgx->setCurve(MFGX::BRK_RIGHT, new CustomCurve({-1.0f+2.0f*brkRight_LDZ,0.0f,  1.0f-2.0f*brkRight_RDZ,1.0f}));
 	vj2->setAxis(SC2::AxisGroundThrust, mfgx->axisValue(MFGX::BRK_RIGHT));
 }
 
 void Profile::set_BRKRIGHT_for_groundBackward()
 {
 	MapAxis(mfgx, MFGX::BRK_RIGHT, AllLayers, vj2, SC2::AxisGroundThrust, AxisDirection::Normal);
-	mfgx->setCustomCurve(MFGX::BRK_RIGHT, {-1.0f+2.0f*brkRight_LDZ,0.0f,  1.0f-2.0f*brkRight_RDZ,-1.0f});
+	mfgx->setCurve(MFGX::BRK_RIGHT, new CustomCurve({-1.0f+2.0f*brkRight_LDZ,0.0f,  1.0f-2.0f*brkRight_RDZ,-1.0f}));
 	vj2->setAxis(SC2::AxisGroundThrust, mfgx->axisValue(MFGX::BRK_RIGHT));
 }
 
@@ -286,7 +286,7 @@ void Profile::set_THRLEFT_for_verticalStrafe()
 {
 	MapAxis(tmwt, TMWT::THR_LEFT, AllLayers, vj1, SC1::AxisFlightStrafeVertical, AxisDirection::Reversed);
 	float reductionFactor = 0.2f;
-	tmwt->setCustomCurve(TMWT::THR_LEFT, {-1.0f,-reductionFactor,  1.0f,reductionFactor});
+	tmwt->setCurve(TMWT::THR_LEFT, new CustomCurve({-1.0f,-reductionFactor,  1.0f,reductionFactor}));
 	vj1->setAxis(SC1::AxisFlightStrafeVertical, 0.0f);
 	vj1->setAxisTrim(SC1::AxisFlightStrafeVertical, tmwt->axisValue(TMWT::THR_LEFT));
 }

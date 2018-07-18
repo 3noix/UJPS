@@ -2,6 +2,8 @@
 #include "MAPPINGS/Mappings.h"
 #include "TRIGGERS/Triggers.h"
 #include "ACTIONS/Actions.h"
+#include "CURVES/CurveExpCentered.h"
+#include "CURVES/CustomCurve.h"
 LayersCombo AllLayers{};
 
 #include "VirtualJoystick.h"
@@ -150,14 +152,14 @@ void Profile::runFirstStep()
 	// divers
 	MapAxis(mfgx, MFGX::RUDDER, AllLayers, vj1, SC1::AxisFlightYaw);
 	mfgx->setAxisTrim(MFGX::RUDDER,-0.0028f);
-	mfgx->setSCurve(MFGX::RUDDER, 0.035f, 0.012f, 0.035f, 1.0f, 0.0f);
-	mfgx->setSCurve(MFGX::BRK_LEFT, 0.04f, 0.00f, 0.06f, 0.0f, 0.0f);
-	//mfgx->setSCurve(MFGX::BRK_RIGHT, brkRight_LDZ, 0.00f, brkRight_RDZ, 0.0f, 0.0f);
+	mfgx->setCurve(MFGX::RUDDER, new CurveExpCentered{3.5f, 1.2f, 3.5f, 1.0f, 0.0f});
+	mfgx->setCurve(MFGX::BRK_LEFT, new CurveExpCentered{4.0f, 0.0f, 6.0f, 0.0f, 0.0f});
+	//mfgx->setCurve(MFGX::BRK_RIGHT, new CurveExpCentered{brkRight_LDZ, 0.00f, brkRight_RDZ, 0.0f, 0.0f});
 	
 	tmwj->setAxisTrim(TMWJ::JOYX,0.026f);
 	tmwj->setAxisTrim(TMWJ::JOYY,-0.006f);
-	tmwj->setSCurve(TMWJ::JOYX, 0.02f, 0.015f, 0.01f, 2.5f, 0.0f);
-	tmwj->setSCurve(TMWJ::JOYY, 0.01f, 0.015f, 0.015f, 2.5f, 0.0f);
+	tmwj->setCurve(TMWJ::JOYX, new CurveExpCentered{2.0f, 1.5f, 1.0f, 2.5f, 0.0f});
+	tmwj->setCurve(TMWJ::JOYY, new CurveExpCentered{1.0f, 1.5f, 1.5f, 2.5f, 0.0f});
 	
 	// CONTROL MODES AND LANDING
 	// initialisation of control modes
@@ -172,7 +174,7 @@ void Profile::runFirstStep()
 	MapButton(tmwt, TMWT::APENG, AllLayers, vj1, SC1::LandingSystemToggle);
 	
 	// throttle slider for power in relative (no axis provided for absolute power)
-	tmwt->setSCurve(TMWT::THR_FC, 0.02f, 0.02f, 0.02f, 0, 0);
+	tmwt->setCurve(TMWT::THR_FC, new CurveExpCentered{2.0f, 2.0f, 2.0f, 0, 0});
 	MapAxis2(tmwt, TMWT::THR_FC, AllLayers, {-0.95,0.95},{
 		new ActionButtonPress(vj1,SC1::IncreasePower),
 		new ActionChain({new ActionButtonRelease{vj1,SC1::IncreasePower}, new ActionButtonRelease{vj1,SC1::DecreasePower}}),

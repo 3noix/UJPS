@@ -1,15 +1,15 @@
-#include "CURVES/SCurve.h"
+#include "CURVES/CurveExpCentered.h"
 #include "Lim.h"
 #include <math.h>
 #include <QtGlobal>
 
 
 
-SCurve::SCurve(float leftDZ, float centerDZ, float rightDZ, float curveParam, float zoom) : AbstractAxisCurve()
+CurveExpCentered::CurveExpCentered(float leftDZ, float centerDZ, float rightDZ, float curveParam, float zoom) : AbstractAxisCurve()
 {
-	m_m = leftDZ + leftDZ - 1;
-	m_M = 1 - rightDZ - rightDZ;
-	m_cM = centerDZ;
+	m_m = 0.02f * leftDZ - 1.0f;
+	m_M = 1.0f - 0.02f * rightDZ;
+	m_cM = 0.01f * centerDZ;
 	m_cm = -m_cM;
 	
 	m_curveParam = curveParam;
@@ -20,7 +20,7 @@ SCurve::SCurve(float leftDZ, float centerDZ, float rightDZ, float curveParam, fl
 
 
 
-float SCurve::run(float in)
+float CurveExpCentered::run(float in)
 {
 	if (in < m_m)
 	{

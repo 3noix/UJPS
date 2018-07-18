@@ -1,4 +1,4 @@
-#include "JCurveGUI.h"
+#include "GuiCurvePolynomial2.h"
 #include "Lim.h"
 
 #include <math.h>
@@ -21,32 +21,32 @@
 
 
 // CONSTRUCTEUR ET DESTRUCTEUR ////////////////////////////////////////////////
-JCurveGUI::JCurveGUI(float zoom) : AbstractAxisCurve()
+GuiCurvePolynomial2::GuiCurvePolynomial2(float zoom) : AbstractAxisCurve()
 {
 	m_zoom = zoom;
-	m_widget = new JCurveWidget{};
+	m_widget = new CurvePolynomial2Widget{};
 	QObject::connect(m_widget,SIGNAL(zoomModified(double)),this,SLOT(slotZoomModified(double)));
 }
 
-JCurveGUI::~JCurveGUI()
+GuiCurvePolynomial2::~GuiCurvePolynomial2()
 {
 	delete m_widget;
 }
 
 // RUN ////////////////////////////////////////////////////////////////////////
-float JCurveGUI::run(float in)
+float GuiCurvePolynomial2::run(float in)
 {
 	return (-m_zoom*in*in + in + m_zoom*in);
 }
 
 // SETTINGS WIDGET ////////////////////////////////////////////////////////////
-QWidget* JCurveGUI::settingsWidget()
+QWidget* GuiCurvePolynomial2::settingsWidget()
 {
 	return m_widget;
 }
 
 // SLOT ZOOM MODIFIED /////////////////////////////////////////////////////////
-void JCurveGUI::slotZoomModified(double zoom)
+void GuiCurvePolynomial2::slotZoomModified(double zoom)
 {
 	m_zoom = zoom;
 	emit curveModified();
@@ -56,7 +56,7 @@ void JCurveGUI::slotZoomModified(double zoom)
 
 
 // CONSTRUCTEUR ///////////////////////////////////////////////////////////////
-JCurveWidget::JCurveWidget() : QGroupBox{"J curve parameters"}
+CurvePolynomial2Widget::CurvePolynomial2Widget() : QGroupBox{"Polynomial 2nd degree: parameters"}
 {
 	layout = new QHBoxLayout(this);
 	this->setLayout(layout);

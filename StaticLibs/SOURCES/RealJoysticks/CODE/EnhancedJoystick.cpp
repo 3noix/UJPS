@@ -1,8 +1,6 @@
 #include "EnhancedJoystick.h"
 #include "Lim.h"
-#include "CURVES/SCurve.h"
-#include "CURVES/JCurve.h"
-#include "CURVES/CustomCurve.h"
+#include "CURVES/AbstractAxisCurve.h"
 #include "ExceptionNoDecoratedJoystick.h"
 
 
@@ -42,9 +40,6 @@
 //  AXIS RAW VALUE
 //  SET POV LOCKED
 //
-//  SET S CURVE
-//  SET J CURVE
-//  SET CUSTOM CURVE
 //  SET CURVE
 //  REMOVE CURVE
 //  UPDATE AXIS
@@ -267,43 +262,12 @@ void EnhancedJoystick::setPovLocked(uint pov, bool locked)
 
 
 
-// SET S CURVE ////////////////////////////////////////////////////////////////
-void EnhancedJoystick::setSCurve(uint axis, float lowerDZ, float centerDZ, float upperDZ, float curve, float zoom)
-{
-	if (axis >= 8) {return;}
-	this->removeCurve(axis);
-	m_axesCurves[axis] = new SCurve(lowerDZ,centerDZ,upperDZ,curve,zoom);
-	this->updateAxis(axis);
-}
-
-// SET J CURVE ////////////////////////////////////////////////////////////////
-void EnhancedJoystick::setJCurve(uint axis, float zoom)
-{
-	if (axis >= 8) {return;}
-	this->removeCurve(axis);
-	m_axesCurves[axis] = new JCurve(zoom);
-	this->updateAxis(axis);
-}
-
-// SET CUSTOM CURVE ///////////////////////////////////////////////////////////
-void EnhancedJoystick::setCustomCurve(uint axis, const std::vector<float> &points)
-{
-	if (axis >= 8) {return;}
-	this->removeCurve(axis);
-	
-	int n = points.size();
-	if (n%2 == 0 && n > 0)
-	{
-		m_axesCurves[axis] = new CustomCurve(points);
-		this->updateAxis(axis);
-	}
-}
-
 // SET CURVE //////////////////////////////////////////////////////////////////
 void EnhancedJoystick::setCurve(uint axis, AbstractAxisCurve *curve)
 {
 	if (axis >= 8) {return;}
 	this->removeCurve(axis);
+	
 	if (curve) {m_axesCurves[axis] = curve;}
 	this->updateAxis(axis);
 }

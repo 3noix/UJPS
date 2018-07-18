@@ -27,15 +27,21 @@ INCLUDEPATH +=  ../StaticLibs/INCLUDES/QtGameControllerModif/ \
 HEADERS +=  CODE/MainWindow.h \
 			CODE/CurveChartView.h \
 			CODE/CURVES/AbstractAxisCurve.h \
-			CODE/CURVES/JCurveGUI.h \
-			CODE/CURVES/SCurveGUI.h
+			CODE/CURVES/GuiCurvePolynomial2.h \
+			CODE/CURVES/GuiCurvePolynomial3Centered.h \
+			CODE/CURVES/GuiCurvePolynomial3NotCentered.h \
+			CODE/CURVES/GuiCurveExpCentered.h \
+			CODE/CURVES/GuiCurveExpNotCentered.h
 
 
 SOURCES +=  CODE/main.cpp \
 			CODE/MainWindow.cpp \
 			CODE/CurveChartView.cpp \
-			CODE/CURVES/JCurveGUI.cpp \
-			CODE/CURVES/SCurveGUI.cpp
+			CODE/CURVES/GuiCurvePolynomial2.cpp \
+			CODE/CURVES/GuiCurvePolynomial3Centered.cpp \
+			CODE/CURVES/GuiCurvePolynomial3NotCentered.cpp \
+			CODE/CURVES/GuiCurveExpCentered.cpp \
+			CODE/CURVES/GuiCurveExpNotCentered.cpp
 
 
 RESOURCES += resources.qrc

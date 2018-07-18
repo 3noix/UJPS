@@ -1,22 +1,22 @@
-#ifndef S_CURVE_GUI
-#define S_CURVE_GUI
+#ifndef GUI_CURVE_EXP_CENTERED
+#define GUI_CURVE_EXP_CENTERED
 
 
 #include "AbstractAxisCurve.h"
-class SCurveWidget;
+class CurveExpCenteredWidget;
 
 
-class SCurveGUI : public AbstractAxisCurve
+class GuiCurveExpCentered : public AbstractAxisCurve
 {
 	Q_OBJECT
 	
 	public:
-		SCurveGUI(float leftDZ = 0.0f, float centerDZ = 0.0f, float rightDZ = 0.0f, float curve = 0.0f, float zoom = 0.0f);
-		SCurveGUI(const SCurveGUI &other) = delete;
-		SCurveGUI(SCurveGUI &&other) = delete;
-		SCurveGUI& operator=(const SCurveGUI &other) = delete;
-		SCurveGUI& operator=(SCurveGUI &&other) = delete;
-		virtual ~SCurveGUI();
+		GuiCurveExpCentered(float leftDZ = 0.0f, float centerDZ = 0.0f, float rightDZ = 0.0f, float curve = 0.0f, float zoom = 0.0f);
+		GuiCurveExpCentered(const GuiCurveExpCentered &other) = delete;
+		GuiCurveExpCentered(GuiCurveExpCentered &&other) = delete;
+		GuiCurveExpCentered& operator=(const GuiCurveExpCentered &other) = delete;
+		GuiCurveExpCentered& operator=(GuiCurveExpCentered &&other) = delete;
+		virtual ~GuiCurveExpCentered();
 		
 		virtual float run(float in) override final;
 		virtual QWidget* settingsWidget() override final;
@@ -31,13 +31,12 @@ class SCurveGUI : public AbstractAxisCurve
 		
 		
 	private:
-		//in=-1..1, lower=0..1, center=0..1, upper=0..1, trim=-1..1, curve=-32..32
 		float m_leftDZ;
 		float m_centerDZ;
 		float m_rightDZ;
 		float m_curveParam;
 		float m_zoom;
-		SCurveWidget *m_widget;
+		CurveExpCenteredWidget *m_widget;
 		
 		float m_m;
 		float m_M;
@@ -52,17 +51,17 @@ class QLabel;
 class QDoubleSpinBox;
 
 
-class SCurveWidget : public QGroupBox
+class CurveExpCenteredWidget : public QGroupBox
 {
 	Q_OBJECT
 	
 	public:
-		SCurveWidget();
-		SCurveWidget(const SCurveWidget &other) = delete;
-		SCurveWidget(SCurveWidget &&other) = delete;
-		SCurveWidget& operator=(const SCurveWidget &other) = delete;
-		SCurveWidget& operator=(SCurveWidget &&other) = delete;
-		virtual ~SCurveWidget() = default;
+		CurveExpCenteredWidget();
+		CurveExpCenteredWidget(const CurveExpCenteredWidget &other) = delete;
+		CurveExpCenteredWidget(CurveExpCenteredWidget &&other) = delete;
+		CurveExpCenteredWidget& operator=(const CurveExpCenteredWidget &other) = delete;
+		CurveExpCenteredWidget& operator=(CurveExpCenteredWidget &&other) = delete;
+		virtual ~CurveExpCenteredWidget() = default;
 		
 		
 	signals:

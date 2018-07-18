@@ -2,6 +2,7 @@
 #include "MAPPINGS/Mappings.h"
 #include "TRIGGERS/Triggers.h"
 #include "ACTIONS/Actions.h"
+#include "CURVES/CurveExpNotCentered.h"
 LayersCombo AllLayers{};
 
 #include "VirtualJoystick.h"
@@ -118,7 +119,9 @@ void Profile::runFirstStep()
 	
 	
 	MapAxis(mfgx, MFGX::RUDDER, AllLayers, vj1, VJOY::X);
-	MapMergeAxes(mfgx, MFGX::BRK_LEFT, 0.5f, mfgx, MFGX::BRK_RIGHT, -0.5f, AllLayers, vj1, VJOY::Y);
+	//mfgx->setCurve(MFGX::BRK_LEFT, new CurveExpNotCentered{0.0f,5.0f,3.0f,0.0f});
+	//mfgx->setCurve(MFGX::BRK_RIGHT, new CurveExpNotCentered{0.0f,5.0f,3.0f,0.0f});
+	MapMergeAxes(mfgx, MFGX::BRK_LEFT, 0.5f, mfgx, MFGX::BRK_RIGHT, -0.5f, AllLayers, vj1, VJOY::Y, new CurveExpNotCentered{0.0f,5.0f,3.0f,0.0f});
 	
 	//MapSplitAxis(tmwj, TMWJ::JOYY, AllLayers, vj1, VJOY::ROTX, vj1, VJOY::ROTY);
 	

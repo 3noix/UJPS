@@ -1,6 +1,7 @@
 #include "MAPPINGS/MappingMergeAxes.h"
 #include "AbstractRealJoystick.h"
 #include "Lim.h"
+#include "CURVES/AbstractAxisCurve.h"
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -25,6 +26,7 @@ MappingMergeAxes::MappingMergeAxes(AbstractRealJoystick *rj1, uint rAxis1, float
 	AbstractRealJoystick *rj2, uint rAxis2, float k2,
 	LayersCombo lc,
 	VirtualJoystick *vj, uint vAxis,
+	AbstractAxisCurve *curve,
 	VirtualEventsQueue &eventsQueue)
 		: AbstractMapping(lc,eventsQueue)
 {
@@ -37,11 +39,12 @@ MappingMergeAxes::MappingMergeAxes(AbstractRealJoystick *rj1, uint rAxis1, float
 	m_rAxis1 = rAxis1;
 	m_rAxis2 = rAxis2;
 	m_vAxis = vAxis;
+	m_curve = curve;
 }
 
 MappingMergeAxes::~MappingMergeAxes()
 {
-	
+	if (m_curve) {delete m_curve;}
 }
 
 
@@ -109,6 +112,7 @@ void MappingMergeAxes::performAction(const JoystickChange &ch)
 	if (m_disable) {return;}
 	
 	float value = m_k1 * m_rj1->axisValue(m_rAxis1) + m_k2 * m_rj2->axisValue(m_rAxis2);
+	if (m_curve) {value = m_curve->run(value);}
 	value = lim<float>(value,-1.0f,1.0f);
 	VirtualEvent ev{EventType::VJoy,VJoyEvent{m_vj,ControlType::Axis,m_vAxis,false,value},{},{},0};
 	this->postEvent(ev);
@@ -122,6 +126,7 @@ void MappingMergeAxes::activateByLayerChange()
 {
 	// we don't wait for a change in the real joystick position to update the virtual joystick position
 	float value = m_k1 * m_rj1->axisValue(m_rAxis1) + m_k2 * m_rj2->axisValue(m_rAxis2);
+	if (m_curve) {value = m_curve->run(value);}
 	value = lim<float>(value,-1.0f,1.0f);
 	VirtualEvent ev{EventType::VJoy,VJoyEvent{m_vj,ControlType::Axis,m_vAxis,false,value},{},{},0};
 	this->postEvent(ev);

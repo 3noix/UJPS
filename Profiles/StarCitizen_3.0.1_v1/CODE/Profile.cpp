@@ -2,6 +2,8 @@
 #include "MAPPINGS/Mappings.h"
 #include "TRIGGERS/Triggers.h"
 #include "ACTIONS/Actions.h"
+#include "CURVES/CurveExpCentered.h"
+#include "CURVES/CustomCurve.h"
 LayersCombo AllLayers{};
 
 #include "VirtualJoystick.h"
@@ -149,7 +151,7 @@ void Profile::runFirstStep()
 	MapButton(tmwt, TMWT::APENG, AllLayers, vj1, SC::LandingSystemToggle);
 	
 	// throttle slider for power in relative (no axis provided for absolute power)
-	tmwt->setSCurve(TMWT::THR_FC, DeadZone_L, DeadZone_C, DeadZone_R, 0, 0);
+	tmwt->setCurve(TMWT::THR_FC, new CurveExpCentered{DeadZone_L, DeadZone_C, DeadZone_R, 0, 0});
 	MapAxis2(tmwt, TMWT::THR_FC, AllLayers, {-0.95,0.95},{
 		new ActionButtonPress(vj1,SC::IncreasePower),
 		new ActionChain({new ActionButtonRelease{vj1,SC::IncreasePower}, new ActionButtonRelease{vj1,SC::DecreasePower}}),
@@ -402,8 +404,8 @@ void Profile::set_JOYXY_for_turnNthrottle()
 	
 	MapAxis(tmwj, TMWJ::JOYX, AllLayers, vj1, VJOY::X, AxisDirection::Normal);
 	MapAxis(tmwj, TMWJ::JOYY, AllLayers, vj1, VJOY::Z, AxisDirection::Normal);
-	tmwj->setSCurve(TMWJ::JOYX, DeadZone_L, DeadZone_C, DeadZone_R, curveParam, 0.0f);
-	tmwj->setSCurve(TMWJ::JOYY, DeadZone_L, DeadZone_C, DeadZone_R, curveParam, 0.0f);
+	tmwj->setCurve(TMWJ::JOYX, new CurveExpCentered{DeadZone_L, DeadZone_C, DeadZone_R, curveParam, 0.0f});
+	tmwj->setCurve(TMWJ::JOYY, new CurveExpCentered{DeadZone_L, DeadZone_C, DeadZone_R, curveParam, 0.0f});
 	
 	vj1->setAxis(VJOY::Y, 0.0f);
 	vj1->setAxis(VJOY::ROTX, 0.0f);
@@ -421,7 +423,7 @@ void Profile::set_JOYXY_for_turnNbrake()
 	
 	// joystick : turn et brake
 	MapAxis(tmwj, TMWJ::JOYX, AllLayers, vj1, VJOY::X, AxisDirection::Normal);
-	tmwj->setSCurve(TMWJ::JOYX, DeadZone_L, DeadZone_C, DeadZone_R, curveParam, 0.0f);
+	tmwj->setCurve(TMWJ::JOYX, new CurveExpCentered{DeadZone_L, DeadZone_C, DeadZone_R, curveParam, 0.0f});
 	
 	tmwj->removeCurve(TMWJ::JOYY);
 	MapAxis2(tmwj, TMWJ::JOYY, AllLayers, std::vector<float>{0.6f},{
@@ -457,8 +459,8 @@ void Profile::set_JOYXY_for_strafe()
 	// joystick -> strafe
 	MapAxis(tmwj, TMWJ::JOYX, AllLayers, vj1, VJOY::ROTX, AxisDirection::Normal);
 	MapAxis(tmwj, TMWJ::JOYY, AllLayers, vj1, VJOY::ROTY, AxisDirection::Reversed);
-	tmwj->setSCurve(TMWJ::JOYX, DeadZone_L, DeadZone_C, DeadZone_R, curveParam, 0.0f);
-	tmwj->setSCurve(TMWJ::JOYY, DeadZone_L, DeadZone_C, DeadZone_R, curveParam, 0.0f);
+	tmwj->setCurve(TMWJ::JOYX, new CurveExpCentered{DeadZone_L, DeadZone_C, DeadZone_R, curveParam, 0.0f});
+	tmwj->setCurve(TMWJ::JOYY, new CurveExpCentered{DeadZone_L, DeadZone_C, DeadZone_R, curveParam, 0.0f});
 	
 	// set roll and pitch axes at 0, otherwise they keep their last values
 	vj1->setAxis(VJOY::X, 0.0f);
@@ -477,8 +479,8 @@ void Profile::set_JOYXY_for_rollNpitch()
 	// joystick : roll and pitch
 	MapAxis(tmwj, TMWJ::JOYX, AllLayers, vj1, VJOY::X, AxisDirection::Normal);
 	MapAxis(tmwj, TMWJ::JOYY, AllLayers, vj1, VJOY::Y, AxisDirection::Normal);
-	tmwj->setSCurve(TMWJ::JOYX, DeadZone_L, DeadZone_C, DeadZone_R, curveParam, 0.0f);
-	tmwj->setSCurve(TMWJ::JOYY, DeadZone_L, DeadZone_C, DeadZone_R, curveParam, 0.0f);
+	tmwj->setCurve(TMWJ::JOYX, new CurveExpCentered{DeadZone_L, DeadZone_C, DeadZone_R, curveParam, 0.0f});
+	tmwj->setCurve(TMWJ::JOYY, new CurveExpCentered{DeadZone_L, DeadZone_C, DeadZone_R, curveParam, 0.0f});
 	
 	// set strafe axes at 0, otherwise they keep their last values
 	vj1->setAxis(VJOY::ROTX, 0.0f);
@@ -624,7 +626,7 @@ void Profile::set_THR_for_cruise()
 void Profile::set_THRLEFT_for_groundForward()
 {
 	MapAxis(tmwt, TMWT::THR_LEFT, AllLayers, vj1, VJOY::Z, AxisDirection::Normal);
-	tmwt->setCustomCurve(TMWT::THR_LEFT, {-1.0f,1.0f,  1.0f,0.0f});
+	tmwt->setCurve(TMWT::THR_LEFT, new CustomCurve({-1.0f,1.0f,  1.0f,0.0f}));
 	vj1->setAxis(VJOY::Z, -tmwt->axisValue(TMWT::THR_LEFT));
 	vj1->setAxis(VJOY::SLIDER0, 0.0f); // set vertical strafe axis at 0, otherwise they keep their last values
 }
@@ -632,7 +634,7 @@ void Profile::set_THRLEFT_for_groundForward()
 void Profile::set_THRLEFT_for_groundBackward()
 {
 	MapAxis(tmwt, TMWT::THR_LEFT, AllLayers, vj1, VJOY::Z, AxisDirection::Normal);
-	tmwt->setCustomCurve(TMWT::THR_LEFT, {-1.0f,-1.0f,  1.0f,0.0f});
+	tmwt->setCurve(TMWT::THR_LEFT, new CustomCurve({-1.0f,-1.0f,  1.0f,0.0f}));
 	vj1->setAxis(VJOY::Z, -tmwt->axisValue(TMWT::THR_LEFT));
 	vj1->setAxis(VJOY::SLIDER0, 0.0f); // set vertical strafe axis at 0, otherwise they keep their last values
 }
@@ -641,7 +643,7 @@ void Profile::set_THRLEFT_for_verticalStrafe()
 {
 	MapAxis(tmwt, TMWT::THR_LEFT, AllLayers, vj1, VJOY::SLIDER0, AxisDirection::Reversed);
 	float reductionFactor = 0.2f;
-	tmwt->setCustomCurve(TMWT::THR_LEFT, {-1.0f,-reductionFactor,  1.0f,reductionFactor});
+	tmwt->setCurve(TMWT::THR_LEFT, new CustomCurve({-1.0f,-reductionFactor,  1.0f,reductionFactor}));
 	vj1->setAxis(VJOY::SLIDER0, 0.0f);
 	vj1->setAxisTrim(VJOY::SLIDER0, tmwt->axisValue(TMWT::THR_LEFT));
 }

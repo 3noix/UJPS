@@ -359,9 +359,9 @@ void AbstractProfile::MapAxis2(AbstractRealJoystick *rj, uint rAxis, LayersCombo
 }
 
 // MAP MERGE AXES /////////////////////////////////////////////////////////////
-void AbstractProfile::MapMergeAxes(AbstractRealJoystick *rj1, uint rAxis1, float k1, AbstractRealJoystick *rj2, uint rAxis2, float k2, LayersCombo lc, VirtualJoystick *vj, uint vAxis)
+void AbstractProfile::MapMergeAxes(AbstractRealJoystick *rj1, uint rAxis1, float k1, AbstractRealJoystick *rj2, uint rAxis2, float k2, LayersCombo lc, VirtualJoystick *vj, uint vAxis, AbstractAxisCurve *curve)
 {
-	this->addMapping(new MappingMergeAxes(rj1, rAxis1, k1, rj2, rAxis2, k2, lc, vj, vAxis, m_eventsQueue));
+	this->addMapping(new MappingMergeAxes(rj1, rAxis1, k1, rj2, rAxis2, k2, lc, vj, vAxis, curve, m_eventsQueue));
 }
 
 // MAP SPLIT AXIS /////////////////////////////////////////////////////////////

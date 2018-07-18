@@ -31,7 +31,10 @@ SOURCES +=  CODE/RealJoysticksManager.cpp \
 			CODE/RemoteJoystickServer.cpp \
 			CODE/EnhancedJoystick.cpp \
 			CODE/AxesRotator.cpp \
-			CODE/CURVES/SCurve.cpp \
-			CODE/CURVES/JCurve.cpp \
+			CODE/CURVES/CurvePolynomial2.cpp \
+			CODE/CURVES/CurvePolynomial3Centered.cpp \
+			CODE/CURVES/CurvePolynomial3NotCentered.cpp \
+			CODE/CURVES/CurveExpCentered.cpp \
+			CODE/CURVES/CurveExpNotCentered.cpp \
 			CODE/CURVES/CustomCurve.cpp
 
