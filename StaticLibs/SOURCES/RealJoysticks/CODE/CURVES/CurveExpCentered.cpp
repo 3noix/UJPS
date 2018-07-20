@@ -20,6 +20,7 @@ CurveExpCentered::CurveExpCentered(float leftDZ, float centerDZ, float rightDZ, 
 
 
 
+
 float CurveExpCentered::run(float in)
 {
 	if (in < m_m)
@@ -31,7 +32,7 @@ float CurveExpCentered::run(float in)
 		if (qAbs(m_curveParam) < 0.01f)
 			in = (in-m_cm) / (m_cm-m_m);
 		else
-			in = (1.0f-exp((m_cm-in)*m_curveParam)) / (exp((m_cm-m_m)*m_curveParam)-1.0f);
+			in = (1.0f-exp(m_curveParam*(m_cm-in)/(m_cm-m_m))) / (exp(m_curveParam)-1.0f);
 	}
 	else if (in < m_cM)
 	{
@@ -45,7 +46,7 @@ float CurveExpCentered::run(float in)
 		}
 		else
 		{
-			in = (exp((in-m_cM)*m_curveParam)-1.0f) / (exp((m_M-m_cM)*m_curveParam)-1.0f);
+			in = (exp(m_curveParam*(in-m_cM)/(m_M-m_cM))-1.0f) / (exp(m_curveParam)-1.0f);
 		}
 	}
 	else

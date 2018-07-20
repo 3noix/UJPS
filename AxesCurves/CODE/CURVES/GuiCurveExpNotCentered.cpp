@@ -61,7 +61,7 @@ float GuiCurveExpNotCentered::run(float in)
 		}
 		else
 		{
-			in = (exp((in-m_m)*0.5*m_curveParam)-1.0f) / (exp((m_M-m_m)*0.5*m_curveParam)-1.0f);
+			in = (exp(m_curveParam*(in-m_m)/(m_M-m_m))-1.0f) / (exp(m_curveParam)-1.0f);
 		}
 		in = 2.0f * in - 1.0f;
 	}
