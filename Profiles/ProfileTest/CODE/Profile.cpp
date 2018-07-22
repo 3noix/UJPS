@@ -107,6 +107,14 @@ void Profile::runFirstStep()
 	tmwt->flush();
 	
 	
+	Map(tmwj, ControlType::Button, TMWJ::TG1, AllLayers, new TriggerButtonChange{}, new ActionKeySetChange{Key_N});
+	
+	Map(tmwj, ControlType::Button, TMWJ::H3L, AllLayers, new TriggerButtonPress{},  new ActionKeyPress{Key_A});
+	Map(tmwj, ControlType::Button, TMWJ::H3R, AllLayers, new TriggerButtonPress{},  new ActionKeyRelease{Key_A});
+	Map(tmwj, ControlType::Button, TMWJ::H3D, AllLayers, new TriggerButtonChange{}, new ActionKeySetChange{Key_B});
+	Map(tmwj, ControlType::Button, TMWJ::H3U, AllLayers, new TriggerButtonPress{},  new ActionKeyPulse{Key_C,0,ms2cycles(200)});
+	
+	/*
 	this->registerLayerDim2(Layers::Down,   tmwt, TMWT::BSB);
 	this->registerLayerDim2(Layers::Middle, tmwt, TMWT::BSM);
 	this->registerLayerDim2(Layers::Up,     tmwt, TMWT::BSF);
@@ -116,40 +124,26 @@ void Profile::runFirstStep()
 	vj1->setButton(VJOY::DX1, tmwj->buttonPressed(TMWJ::TG1) && tmwt->buttonPressed(TMWT::BSB));
 	vj1->setButton(VJOY::DX2, tmwj->buttonPressed(TMWJ::TG1) && tmwt->buttonPressed(TMWT::BSM));
 	vj1->setButton(VJOY::DX3, tmwj->buttonPressed(TMWJ::TG1) && tmwt->buttonPressed(TMWT::BSF));
-	
-	
+	*/
+	/*
 	MapAxis(mfgx, MFGX::RUDDER, AllLayers, vj1, VJOY::X);
 	//mfgx->setCurve(MFGX::BRK_LEFT, new CurveExpNotCentered{0.0f,5.0f,3.0f,0.0f});
 	//mfgx->setCurve(MFGX::BRK_RIGHT, new CurveExpNotCentered{0.0f,5.0f,3.0f,0.0f});
 	MapMergeAxes(mfgx, MFGX::BRK_LEFT, 0.5f, mfgx, MFGX::BRK_RIGHT, -0.5f, AllLayers, vj1, VJOY::Y, new CurveExpNotCentered{0.0f,5.0f,3.0f,0.0f});
+	*/
 	
-	//MapSplitAxis(tmwj, TMWJ::JOYY, AllLayers, vj1, VJOY::ROTX, vj1, VJOY::ROTY);
+	MapSplitAxis(tmwj, TMWJ::JOYY, AllLayers, vj1, VJOY::ROTX, vj1, VJOY::ROTY);
 	
+	/*
 	MapAxis(tmwj, TMWJ::JOYX, AllLayers, vj1, VJOY::ROTX);
 	MapAxis(tmwj, TMWJ::JOYY, AllLayers, vj1, VJOY::ROTY);
 	Map(tmwj, ControlType::Button, TMWJ::H2L, AllLayers, new TriggerButtonPress{}, new ActionCallback{[this](){tmwj->rotateAxes(TMWJ::JOYX, TMWJ::JOYY, 45.0);}});
 	Map(tmwj, ControlType::Button, TMWJ::H2R, AllLayers, new TriggerButtonPress{}, new ActionCallback{[this](){tmwj->removeAxisRotation(TMWJ::JOYX);}});
-	
-	//MapAxisRelative(tmwj, TMWJ::JOYY, AllLayers, vj1, VJOY::Z, 4000.0f);
-	//Map(tmwj, ControlType::Button, TMWJ::TG1, AllLayers, new TriggerButtonPress{},  new ActionAxisSetValue{vj1,VJOY::Z,0.5f});
-	//Map(tmwj, ControlType::Button, TMWJ::TG1, AllLayers, new TriggerButtonPress{},  new ActionCallback{[this](){vj1->setAxis(VJOY::Z,0.5f);}});
-	
-	/*MapButton(tmwj, TMWJ::H2U, AllLayers, vj1, VJOY::DX49);
-	MapButton(tmwj, TMWJ::H2R, AllLayers, vj1, VJOY::DX50);
-	MapButton(tmwj, TMWJ::H2D, AllLayers, vj1, VJOY::DX51);
-	MapButton(tmwj, TMWJ::H2L, AllLayers, vj1, VJOY::DX52);*/
-	
-	Map(tmwj, ControlType::Button, TMWJ::H3L, AllLayers, new TriggerButtonPress{},  new ActionKeyPress{Key_A});
-	Map(tmwj, ControlType::Button, TMWJ::H3R, AllLayers, new TriggerButtonPress{},  new ActionKeyRelease{Key_A});
-	Map(tmwj, ControlType::Button, TMWJ::H3D, AllLayers, new TriggerButtonChange{}, new ActionKeySetChange{Key_B});
-	Map(tmwj, ControlType::Button, TMWJ::H3U, AllLayers, new TriggerButtonPress{},  new ActionKeyPulse{Key_C,0,ms2cycles(200)});
-	
-	/*
-	Map(tmwj, ControlType::Button, TMWJ::H3L, AllLayers, new TriggerButtonPress{},  new ActionKeyPress{0x1C});
-	Map(tmwj, ControlType::Button, TMWJ::H3R, AllLayers, new TriggerButtonPress{},  new ActionKeyRelease{0x1C});
-	Map(tmwj, ControlType::Button, TMWJ::H3D, AllLayers, new TriggerButtonChange{}, new ActionKeySetChange{0x32});
-	Map(tmwj, ControlType::Button, TMWJ::H3U, AllLayers, new TriggerButtonPress{},  new ActionKeyPulse{0x21,0,ms2cycles(200)});
 	*/
+	
+	MapAxisRelative(tmwj, TMWJ::JOYY, AllLayers, vj1, VJOY::Z, 4000.0f);
+	Map(tmwj, ControlType::Button, TMWJ::TG1, AllLayers, new TriggerButtonPress{},  new ActionAxisSetValue{vj1,VJOY::Z,0.5f});
+	Map(tmwj, ControlType::Button, TMWJ::TG1, AllLayers, new TriggerButtonPress{},  new ActionCallback{[this](){vj1->setAxis(VJOY::Z,0.5f);}});
 	
 	/*MapAxis2(tmwj, TMWJ::JOYY, AllLayers, {-0.6,-0.2,0.2,0.6}, {
 		new ActionButtonPulse{vj2,VJOY::DX46,ms2cycles(100)},

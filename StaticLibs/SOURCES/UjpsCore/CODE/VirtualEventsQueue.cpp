@@ -51,8 +51,8 @@ void VirtualEventsQueue::processEvents()
 					INPUT ips[2];
 					ips[0].type = INPUT_KEYBOARD;
 					ips[1].type = INPUT_KEYBOARD;
-					ips[0].ki.wScan = 0;
-					ips[1].ki.wScan = 0;
+					ips[0].ki.wVk = 0;
+					ips[1].ki.wVk = 0;
 					ips[0].ki.time = 0;
 					ips[1].ki.time = 0;
 					ips[0].ki.dwExtraInfo = 0;
@@ -61,18 +61,18 @@ void VirtualEventsQueue::processEvents()
 					if (e.vkev.bPress)
 					{
 						// a press event
-						ips[0].ki.wVk = e.vkev.modifier;
-						ips[1].ki.wVk = e.vkev.key;
-						ips[0].ki.dwFlags = 0;
-						ips[1].ki.dwFlags = 0;
+						ips[0].ki.wScan = MapVirtualKey(e.vkev.modifier,MAPVK_VK_TO_VSC);
+						ips[1].ki.wScan = MapVirtualKey(e.vkev.key,MAPVK_VK_TO_VSC);
+						ips[0].ki.dwFlags = KEYEVENTF_SCANCODE;
+						ips[1].ki.dwFlags = KEYEVENTF_SCANCODE;
 					}
 					else
 					{
 						// a release event
-						ips[0].ki.wVk = e.vkev.key;
-						ips[1].ki.wVk = e.vkev.modifier;
-						ips[0].ki.dwFlags = KEYEVENTF_KEYUP;
-						ips[1].ki.dwFlags = KEYEVENTF_KEYUP;
+						ips[0].ki.wScan = MapVirtualKey(e.vkev.key,MAPVK_VK_TO_VSC);
+						ips[1].ki.wScan = MapVirtualKey(e.vkev.modifier,MAPVK_VK_TO_VSC);
+						ips[0].ki.dwFlags = KEYEVENTF_SCANCODE | KEYEVENTF_KEYUP;
+						ips[1].ki.dwFlags = KEYEVENTF_SCANCODE | KEYEVENTF_KEYUP;
 					}
 					SendInput(2, ips, sizeof(INPUT));
 				}
@@ -80,21 +80,21 @@ void VirtualEventsQueue::processEvents()
 				{
 					INPUT ip;
 					ip.type = INPUT_KEYBOARD;
-					ip.ki.wScan = 0;
+					ip.ki.wVk = 0;
 					ip.ki.time = 0;
 					ip.ki.dwExtraInfo = 0;
 					
 					if (e.vkev.bPress)
 					{
 						// a press event
-						ip.ki.wVk = e.vkev.key;
-						ip.ki.dwFlags = 0;
+						ip.ki.wScan = MapVirtualKey(e.vkev.key,MAPVK_VK_TO_VSC);
+						ip.ki.dwFlags = KEYEVENTF_SCANCODE;
 					}
 					else
 					{
 						// a release event
-						ip.ki.wVk = e.vkev.key;
-						ip.ki.dwFlags = KEYEVENTF_KEYUP;
+						ip.ki.wScan = MapVirtualKey(e.vkev.key,MAPVK_VK_TO_VSC);
+						ip.ki.dwFlags = KEYEVENTF_SCANCODE | KEYEVENTF_KEYUP;
 					}
 					SendInput(1, &ip, sizeof(INPUT));
 				}
