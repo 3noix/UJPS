@@ -1,26 +1,42 @@
 #include "VirtualEventsQueue.h"
 #include "VirtualJoystick.h"
+#include "AbstractProfile.h"
+#include "ACTIONS/Actions.h"
 #include <windows.h>
 
-
+VirtualEventsQueue::VirtualEventsQueue(AbstractProfile &profileRef) : m_profileRef(profileRef)
+{
+	m_repeaterEvent.type = EventType::Unused;
+	m_repeaterDtmsTotal = m_repeaterDtms = 0;
+}
 
 // POST EVENT /////////////////////////////////////////////////////////////////
 void VirtualEventsQueue::postEvent(const VirtualEvent &event)
 {
 	m_events << event;
+
+	if(m_profileRef.isMappingRepeater())
+		setMappingRepeaterEvent(event);
 }
 
 // POST EVENTS ////////////////////////////////////////////////////////////////
 void VirtualEventsQueue::postEvents(const QVector<VirtualEvent> &events)
 {
 	m_events << events;
-}
 
+	if(m_profileRef.isMappingRepeater())
+		setMappingRepeaterEvent(events.last());
+}
 
 // PROCESS EVENTS /////////////////////////////////////////////////////////////
 void VirtualEventsQueue::processEvents()
 {
 	int nbEvents = m_events.size();
+
+	if(m_profileRef.isMappingRepeater())
+		updateMappingRepeaterEvent();
+	else
+		m_repeaterEvent.type = EventType::Unused;
 	
 	for (VirtualEvent &e : m_events)
 	{
@@ -121,4 +137,65 @@ void VirtualEventsQueue::processEvents()
 	}
 }
 
+void VirtualEventsQueue::setMappingRepeaterEvent(const VirtualEvent &event)
+{
+	if(event.type != EventType::VJoy ||
+		(event.vjev.type == ControlType::Pov && event.vjev.axisOrPovValue == -1.0f))
+	{
+		return;
+	}
 
+	m_repeaterEvent = event;
+	m_repeaterDtmsTotal = m_repeaterDtms = 0;
+
+	if(m_repeaterEvent.vjev.type == ControlType::Axis)
+		m_repeaterOriginalAxisValue = m_repeaterEvent.vjev.axisOrPovValue;
+}
+
+void VirtualEventsQueue::updateMappingRepeaterEvent()
+{
+	if(m_repeaterEvent.type != EventType::VJoy)
+		return;
+
+	m_repeaterDtms += m_profileRef.getTimeStep();
+	m_repeaterDtmsTotal += m_profileRef.getTimeStep();
+
+	if(m_repeaterDtms >= 500)
+	{
+		switch(m_repeaterEvent.vjev.type)
+		{
+		case ControlType::Button: {
+			ActionButtonPulse action(m_repeaterEvent.vjev.joystick, m_repeaterEvent.vjev.numButtonAxisPov, m_profileRef.ms2cycles(50));
+			m_events << action.generateEvents();
+			break; }
+
+		case ControlType::Axis: {
+			m_repeaterEvent.vjev.axisOrPovValue = (m_repeaterEvent.vjev.axisOrPovValue >= 0) ? -0.5f : 0.5f;
+			ActionAxisSetValue action(m_repeaterEvent.vjev.joystick, m_repeaterEvent.vjev.numButtonAxisPov, m_repeaterEvent.vjev.axisOrPovValue);
+			m_events << action.generateEvents();
+			break; }
+
+		case ControlType::Pov: {
+			VirtualEvent ev1{ EventType::VJoy,VJoyEvent{ m_repeaterEvent.vjev.joystick, ControlType::Pov, m_repeaterEvent.vjev.numButtonAxisPov, false, m_repeaterEvent.vjev.axisOrPovValue },{},{},0 };
+			VirtualEvent ev2{ EventType::VJoy,VJoyEvent{ m_repeaterEvent.vjev.joystick, ControlType::Pov, m_repeaterEvent.vjev.numButtonAxisPov, false, -1.0f },{},{}, m_profileRef.ms2cycles(50) };
+			m_events << ev1;
+			m_events << ev2;
+			break; }
+		}
+
+		m_repeaterDtms = 0;
+	}
+
+	if(m_repeaterDtmsTotal >= g_MAPPING_REPEATER_DURATION * 1000)
+	{
+		// Return axis to its original value before the repeater started
+		if(m_repeaterEvent.vjev.type == ControlType::Axis)
+		{
+			ActionAxisSetValue action(m_repeaterEvent.vjev.joystick, m_repeaterEvent.vjev.numButtonAxisPov, m_repeaterOriginalAxisValue);
+			m_events << action.generateEvents();
+		}
+
+		m_repeaterEvent.type = EventType::Unused;
+		m_repeaterDtmsTotal = m_repeaterDtms = 0;
+	}
+}

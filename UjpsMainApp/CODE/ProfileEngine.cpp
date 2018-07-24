@@ -152,3 +152,9 @@ void ProfileEngine::slotOneLoop()
 	catch (std::exception &e) {emit message(e.what(),Qt::red);}
 }
 
+void ProfileEngine::slotMappingRepeaterChanged(int state)
+{
+	if(m_profile)
+		m_profile->setMappingRepeater(state == Qt::Checked);
+}
+

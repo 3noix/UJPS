@@ -6,6 +6,7 @@
 #include <QToolBar>
 #include <QLabel>
 #include <QSpinBox>
+#include <QCheckBox>
 #include <QThread>
 #include <QFileDialog>
 
@@ -62,6 +63,7 @@ MainWindow::MainWindow(QString proFilePath, int dtms, bool bPlay, QWidget *paren
 	this->setState(HmiState::WaitingForDll);
 	
 	// connections
+	QObject::connect(chkMappingRepeater, &QCheckBox::stateChanged, m_engine, &ProfileEngine::slotMappingRepeaterChanged);
 	QObject::connect(m_engine,&ProfileEngine::message,textEdit,&TextEdit::addMessage);
 	QObject::connect(actionCompilation,&QAction::triggered,this,&MainWindow::slotCompilation);
 	QObject::connect(actionSettings,&QAction::triggered,this,&MainWindow::slotSettings);
@@ -155,6 +157,12 @@ void MainWindow::setupWidget()
 	boxRefreshRate->setSingleStep(500);
 	boxRefreshRate->setSuffix(" ms");
 	
+	// mapping repeater
+	chkMappingRepeater = new QCheckBox("Mapping Repeater", this);
+	chkMappingRepeater->setChecked(Qt::CheckState::Unchecked);
+	chkMappingRepeater->setToolTip("Detected vJoy inputs are repeated for " + QString::number(g_MAPPING_REPEATER_DURATION) + " seconds, to help map actions in game without real joysticks interfering.");
+	chkMappingRepeater->setEnabled(false);
+	
 	// text edit
 	textEdit = new TextEdit(this);
 	
@@ -163,6 +171,7 @@ void MainWindow::setupWidget()
 	layoutDllChoice->addWidget(lineDllPath);
 	layoutRefreshRate->addWidget(labelRefreshRate);
 	layoutRefreshRate->addWidget(boxRefreshRate);
+	layoutRefreshRate->addWidget(chkMappingRepeater);
 	layoutRefreshRate->addStretch();
 	
 	layout->addLayout(layoutDllChoice);
@@ -189,6 +198,8 @@ void MainWindow::setState(HmiState s)
 		actionUnload->setEnabled(false);
 		boutonBrowse->setEnabled(true);
 		boxRefreshRate->setEnabled(false);
+		chkMappingRepeater->setChecked(false);
+		chkMappingRepeater->setEnabled(false);
 	}
 	else if (s == HmiState::ReadyToPlayNotLoaded)
 	{
@@ -199,6 +210,8 @@ void MainWindow::setState(HmiState s)
 		actionUnload->setEnabled(false);
 		boutonBrowse->setEnabled(true);
 		boxRefreshRate->setEnabled(true);
+		chkMappingRepeater->setChecked(false);
+		chkMappingRepeater->setEnabled(false);
 	}
 	else if (s == HmiState::ReadyToPlayLoaded)
 	{
@@ -209,6 +222,8 @@ void MainWindow::setState(HmiState s)
 		actionUnload->setEnabled(true);
 		boutonBrowse->setEnabled(true);
 		boxRefreshRate->setEnabled(true);
+		chkMappingRepeater->setChecked(false);
+		chkMappingRepeater->setEnabled(false);
 	}
 	else if (s == HmiState::Playing)
 	{
@@ -219,6 +234,7 @@ void MainWindow::setState(HmiState s)
 		actionUnload->setEnabled(false);
 		boutonBrowse->setEnabled(false);
 		boxRefreshRate->setEnabled(false);
+		chkMappingRepeater->setEnabled(true);
 	}
 	else if (s == HmiState::Quitting)
 	{
@@ -229,6 +245,7 @@ void MainWindow::setState(HmiState s)
 		actionUnload->setEnabled(false);
 		boutonBrowse->setEnabled(false);
 		boxRefreshRate->setEnabled(false);
+		chkMappingRepeater->setEnabled(false);
 	}
 }
 

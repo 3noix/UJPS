@@ -13,6 +13,7 @@ using uint = unsigned int;
 
 enum class EventType
 {
+	Unused,
 	VJoy,
 	Keyboard,
 	Callback
