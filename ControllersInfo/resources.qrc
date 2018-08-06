@@ -1,7 +1,7 @@
 <!DOCTYPE RCC><RCC version="1.0">
 <qresource>
 	<file>RESOURCES/ICONES/croixRouge.png</file>
-	<file>RESOURCES/ICONES/gamepad.png</file>
+	<file>RESOURCES/ICONES/info.png</file>
 	<file>RESOURCES/ICONES/update.png</file>
 </qresource>
 </RCC>

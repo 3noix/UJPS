@@ -69,7 +69,7 @@ void MainWindow::setupWidget()
 	
 	this->setCentralWidget(w);
 	this->resize(600,250);
-	this->setWindowIcon(QIcon{":/RESOURCES/ICONES/gamepad.png"});
+	this->setWindowIcon(QIcon{":/RESOURCES/ICONES/info.png"});
 	this->setWindowTitle("Controllers info");
 }
 

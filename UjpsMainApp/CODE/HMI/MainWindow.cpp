@@ -161,7 +161,7 @@ void MainWindow::createActions()
 	
 	actionRunControllersInfo = new QAction{"Start ControllersInfo.exe",this};
 	actionRunControllersInfo->setStatusTip("Start ControllersInfo.exe");
-	actionRunControllersInfo->setIcon(QIcon(":/RESOURCES/ICONES/gamepad.png"));
+	actionRunControllersInfo->setIcon(QIcon(":/RESOURCES/ICONES/info.png"));
 	
 	actionRunMonitoring = new QAction{"Start Monitoring.exe",this};
 	actionRunMonitoring->setStatusTip("Start Monitoring.exe");
