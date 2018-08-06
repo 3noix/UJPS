@@ -9,6 +9,8 @@ class QLabel;
 class QRadioButton;
 class QButtonGroup;
 class QLineEdit;
+class QCheckBox;
+class QPushButton;
 
 
 class GeneralSettingsWidget : public AbstractSettingsWidget
@@ -28,17 +30,29 @@ class GeneralSettingsWidget : public AbstractSettingsWidget
 		virtual void buttonCancelClicked() override;
 		
 		
+	private slots:
+		void slotStartingProfileStateChanged(int checkState);
+		void slotStartingProfileBrowse();
+		
+		
 	private:
 		void addDefaultDirWidgets();
+		void addStartingProfileWidgets();
 		
 		QVBoxLayout *layout1;
-		QHBoxLayout *layout2;
 		
 		// default directory
+		QHBoxLayout *layoutDefDir;
 		QLabel *labelDefDir;
 		QRadioButton *radioDefDirPrevious, *radioDefDirFixed;
 		QButtonGroup *radioDefDirGroup;
 		QLineEdit *lineDefDir;
+		
+		// starting profile
+		QHBoxLayout *layoutStartingProfile;
+		QCheckBox *boxUseStartingProfile;
+		QLineEdit *lineStartingProfile;
+		QPushButton *buttonStartingProfile;
 };
 
 

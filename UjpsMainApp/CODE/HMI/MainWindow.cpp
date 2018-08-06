@@ -48,6 +48,8 @@ MainWindow::MainWindow(QString proFilePath, int dtms, bool bPlay, QWidget *paren
 	bool bUseVJoyConfigBinary = settings.property("bUseVJoyConfigBinary").toBool();
 	QString vJoyConfigBinary = settings.property("vJoyConfigBinary").toString();
 	VirtualJoystick::setVJoyConfigOptions(bUseVJoyConfigBinary,vJoyConfigBinary);
+	bool bUseStartingProfilePath = settings.property("bUseStartingProfilePath").toBool();
+	QString startingProfile = settings.property("startingProfilePath").toString();
 	
 	// init
 	m_proFilePath = "";
@@ -84,6 +86,16 @@ MainWindow::MainWindow(QString proFilePath, int dtms, bool bPlay, QWidget *paren
 		boxRefreshRate->setValue(dtms);
 		
 		if (bPlay) {this->slotPlay();}
+	}
+	else if (bUseStartingProfilePath && !startingProfile.isEmpty())
+	{
+		m_proFilePath = startingProfile;
+		m_dllFilePath = "";
+		m_dllFileName = "";
+		
+		lineDllPath->setText(m_proFilePath);
+		textEdit->addMessage("Plugin path changed for " + m_proFilePath,Qt::black);
+		this->setState(HmiState::ReadyToPlayNotLoaded);
 	}
 }
 

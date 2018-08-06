@@ -5,7 +5,6 @@
 class QVBoxLayout;
 class QHBoxLayout;
 class QCheckBox;
-class QLabel;
 class QLineEdit;
 class QPushButton;
 
@@ -34,11 +33,10 @@ class VJoySettingsWidget : public AbstractSettingsWidget
 		
 	private:
 		QVBoxLayout *layout1;
-		QHBoxLayout *layout2;
-		QCheckBox *checkBox;
-		QLabel *label;
-		QLineEdit *line;
-		QPushButton *button;
+		QHBoxLayout *layoutVjoyConfigExe;
+		QCheckBox *boxVjoyConfigExe;
+		QLineEdit *lineVjoyConfigExe;
+		QPushButton *buttonVjoyConfigExe;
 };
 
 

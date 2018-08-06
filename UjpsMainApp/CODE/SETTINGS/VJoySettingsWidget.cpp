@@ -1,16 +1,15 @@
 #include "VJoySettingsWidget.h"
 #include "ApplicationSettings.h"
-#include "MyFileDialog.h"
 #include "../otherFunctions.h"
 #include "VirtualJoystick.h"
 
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QCheckBox>
-#include <QLabel>
 #include <QLineEdit>
 #include <QPushButton>
 #include <QCoreApplication>
+#include <QFileDialog>
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -32,28 +31,28 @@
 VJoySettingsWidget::VJoySettingsWidget(QWidget *parent) : AbstractSettingsWidget(parent)
 {
 	layout1 = new QVBoxLayout(this);
-	layout2 = new QHBoxLayout;
-	checkBox = new QCheckBox("Use vJoyConfig.exe",this);
-	label = new QLabel("vJoyConfig.exe : ",this);
-	line = new QLineEdit(this);
-	button = new QPushButton("Browse",this);
-	layout2->addWidget(label);
-	layout2->addWidget(line);
-	layout2->addWidget(button);
-	layout1->addWidget(checkBox);
-	layout1->addLayout(layout2);
+	layoutVjoyConfigExe = new QHBoxLayout;
+	
+	boxVjoyConfigExe = new QCheckBox("Use vJoyConfig.exe",this);
+	lineVjoyConfigExe = new QLineEdit(this);
+	buttonVjoyConfigExe = new QPushButton("Browse",this);
+	
+	layoutVjoyConfigExe->addWidget(boxVjoyConfigExe);
+	layoutVjoyConfigExe->addWidget(lineVjoyConfigExe);
+	layoutVjoyConfigExe->addWidget(buttonVjoyConfigExe);
+	layout1->addLayout(layoutVjoyConfigExe);
 	layout1->addStretch();
 	
 	ApplicationSettings& settings = ApplicationSettings::instance();
 	bool bUseVJoyConfigBinary = settings.property("bUseVJoyConfigBinary").toBool();
 	Qt::CheckState st = Qt::Checked;
 	if (!bUseVJoyConfigBinary) {st = Qt::Unchecked;}
-	checkBox->setCheckState(st);
+	boxVjoyConfigExe->setCheckState(st);
 	this->slotCheckBoxStateChanged(st);
-	line->setText(settings.property("vJoyConfigBinary").toString());
+	lineVjoyConfigExe->setText(settings.property("vJoyConfigBinary").toString());
 	
-	connect(checkBox,SIGNAL(stateChanged(int)),this,SLOT(slotCheckBoxStateChanged(int)));
-	connect(button,SIGNAL(clicked()),this,SLOT(slotBrowseButtonClicked()));
+	connect(boxVjoyConfigExe,SIGNAL(stateChanged(int)),this,SLOT(slotCheckBoxStateChanged(int)));
+	connect(buttonVjoyConfigExe,SIGNAL(clicked()),this,SLOT(slotBrowseButtonClicked()));
 }
 
 
@@ -70,8 +69,8 @@ QString VJoySettingsWidget::tabName() const
 void VJoySettingsWidget::buttonOkClicked()
 {
 	ApplicationSettings& settings = ApplicationSettings::instance();
-	bool bUseVJoyConfigBinary = (checkBox->checkState() == Qt::Checked);
-	QString exeFilePath = line->text();
+	bool bUseVJoyConfigBinary = (boxVjoyConfigExe->checkState() == Qt::Checked);
+	QString exeFilePath = lineVjoyConfigExe->text();
 	
 	settings.setProperty("bUseVJoyConfigBinary",bUseVJoyConfigBinary);
 	settings.setProperty("vJoyConfigBinary",exeFilePath);
@@ -92,9 +91,8 @@ void VJoySettingsWidget::buttonCancelClicked()
 void VJoySettingsWidget::slotCheckBoxStateChanged(int state)
 {
 	bool bEnable = (state == Qt::Checked);
-	label->setEnabled(bEnable);
-	line->setEnabled(bEnable);
-	button->setEnabled(bEnable);
+	lineVjoyConfigExe->setEnabled(bEnable);
+	buttonVjoyConfigExe->setEnabled(bEnable);
 	
 }
 
@@ -104,9 +102,9 @@ void VJoySettingsWidget::slotBrowseButtonClicked()
 	ApplicationSettings& settings = ApplicationSettings::instance();
 	QString dir = dirName(settings.property("vJoyConfigBinary").toString());
 	
-	QString fileSelected = MyFileDialog::getOpenFileName(this,"vJoyConfig",dir,"*.exe");
+	QString fileSelected = QFileDialog::getOpenFileName(this,"vJoyConfig",dir,"*.exe");
 	if (fileSelected == "") {return;}
-	line->setText(fileSelected);
+	lineVjoyConfigExe->setText(fileSelected);
 }
 
 

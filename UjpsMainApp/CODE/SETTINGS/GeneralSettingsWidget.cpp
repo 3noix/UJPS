@@ -1,5 +1,6 @@
 #include "GeneralSettingsWidget.h"
 #include "ApplicationSettings.h"
+#include "../otherFunctions.h"
 #include "../XML/GenericPropertiesInfo.h"
 
 #include <QVBoxLayout>
@@ -8,6 +9,9 @@
 #include <QRadioButton>
 #include <QButtonGroup>
 #include <QLineEdit>
+#include <QCheckBox>
+#include <QPushButton>
+#include <QFileDialog>
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -17,10 +21,14 @@
 //  DESTRUCTEUR
 //
 //  ADD DEFAULT DIR WIDGETS
+//  ADD STARTING PROFILE WIDGETS
 //
 //  TAB NAME
 //  BUTTON OK CLICKED
 //  BUTTON CANCEL CLICKED
+//
+//  SLOT STARTING PROFILE STATE CHANGED
+//  SLOT STARTING PROFILE BROWSE
 ///////////////////////////////////////////////////////////////////////////////
 
 
@@ -28,17 +36,21 @@
 GeneralSettingsWidget::GeneralSettingsWidget(QWidget *parent) : AbstractSettingsWidget(parent)
 {
 	layout1 = new QVBoxLayout(this);
-	layout2 = new QHBoxLayout();
+	layoutDefDir = new QHBoxLayout();
+	layoutStartingProfile = new QHBoxLayout();
 	this->setLayout(layout1);
-	layout1->addLayout(layout2);
+	layout1->addLayout(layoutDefDir);
+	layout1->addLayout(layoutStartingProfile);
 	layout1->addStretch();
 	
 	this->addDefaultDirWidgets();
+	this->addStartingProfileWidgets();
 }
 
 GeneralSettingsWidget::~GeneralSettingsWidget()
 {
-	delete layout2;
+	delete layoutDefDir;
+	delete layoutStartingProfile;
 }
 
 
@@ -48,18 +60,18 @@ GeneralSettingsWidget::~GeneralSettingsWidget()
 // ADD DEFAULT DIR WIDGETS ////////////////////////////////////////////////////
 void GeneralSettingsWidget::addDefaultDirWidgets()
 {
-	labelDefDir = new QLabel("Profiles default directory:",this);
-	radioDefDirPrevious = new QRadioButton("Previous",this);
-	radioDefDirFixed = new QRadioButton("Fixed",this);
-	radioDefDirGroup = new QButtonGroup(this);
+	labelDefDir = new QLabel{"Profiles default directory:",this};
+	radioDefDirPrevious = new QRadioButton{"Previous",this};
+	radioDefDirFixed = new QRadioButton{"Fixed",this};
+	radioDefDirGroup = new QButtonGroup{this};
 	radioDefDirGroup->addButton(radioDefDirPrevious);
 	radioDefDirGroup->addButton(radioDefDirFixed);
-	lineDefDir = new QLineEdit(this);
+	lineDefDir = new QLineEdit{this};
 	
-	layout2->addWidget(labelDefDir);
-	layout2->addWidget(radioDefDirPrevious);
-	layout2->addWidget(radioDefDirFixed);
-	layout2->addWidget(lineDefDir);
+	layoutDefDir->addWidget(labelDefDir);
+	layoutDefDir->addWidget(radioDefDirPrevious);
+	layoutDefDir->addWidget(radioDefDirFixed);
+	layoutDefDir->addWidget(lineDefDir);
 	
 	ApplicationSettings& settings = ApplicationSettings::instance();
 	QStringList list = GenericPropertiesInfo::qvariant2qstringlist(settings.property("defaultDirectory"));
@@ -75,6 +87,33 @@ void GeneralSettingsWidget::addDefaultDirWidgets()
 		radioDefDirFixed->setChecked(true);
 	}
 }
+
+// ADD STARTING PROFILE WIDGETS ///////////////////////////////////////////////
+void GeneralSettingsWidget::addStartingProfileWidgets()
+{
+	boxUseStartingProfile = new QCheckBox{"Define a starting profile: ",this};
+	lineStartingProfile = new QLineEdit{this};
+	buttonStartingProfile = new QPushButton{"Browse",this};
+	
+	QObject::connect(boxUseStartingProfile,&QCheckBox::stateChanged,this,&GeneralSettingsWidget::slotStartingProfileStateChanged);
+	QObject::connect(buttonStartingProfile,&QPushButton::clicked,this,&GeneralSettingsWidget::slotStartingProfileBrowse);
+	
+	layoutStartingProfile->addWidget(boxUseStartingProfile);
+	layoutStartingProfile->addWidget(lineStartingProfile);
+	layoutStartingProfile->addWidget(buttonStartingProfile);
+	
+	ApplicationSettings& settings = ApplicationSettings::instance();
+	bool bEnable = settings.property("bUseStartingProfilePath").toBool();
+	QString startingProfile = settings.property("startingProfilePath").toString();
+	
+	if (bEnable) {boxUseStartingProfile->setCheckState(Qt::Checked);}
+	else {boxUseStartingProfile->setCheckState(Qt::Unchecked);}
+	lineStartingProfile->setText(startingProfile);
+	lineStartingProfile->setEnabled(bEnable);
+	buttonStartingProfile->setEnabled(bEnable);
+}
+
+
 
 
 
@@ -96,11 +135,38 @@ void GeneralSettingsWidget::buttonOkClicked()
 	QList<QVariant> vlist;
 	vlist << mode << path;
 	settings.setProperty("defaultDirectory",QVariant(vlist));
+	
+	// starting profile
+	settings.setProperty("bUseStartingProfilePath",boxUseStartingProfile->checkState()==Qt::Checked);
+	settings.setProperty("startingProfilePath",lineStartingProfile->text());
 }
 
 // BUTTON CANCEL CLICKED //////////////////////////////////////////////////////
 void GeneralSettingsWidget::buttonCancelClicked()
 {
 	
+}
+
+
+
+
+
+// SLOT STARTING PROFILE STATE CHANGED ////////////////////////////////////////
+void GeneralSettingsWidget::slotStartingProfileStateChanged(int checkState)
+{
+	bool bEnable = (checkState == Qt::Checked);
+	lineStartingProfile->setEnabled(bEnable);
+	buttonStartingProfile->setEnabled(bEnable);
+}
+
+// SLOT STARTING PROFILE BROWSE ///////////////////////////////////////////////
+void GeneralSettingsWidget::slotStartingProfileBrowse()
+{
+	ApplicationSettings& settings = ApplicationSettings::instance();
+	QString dir = dirName(settings.property("startingProfilePath").toString());
+	
+	QString fileSelected = QFileDialog::getOpenFileName(this,"Starting profile path",dir,"*.pro");
+	if (fileSelected == "") {return;}
+	lineStartingProfile->setText(fileSelected);
 }
 
