@@ -7,8 +7,8 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 //  CONSTRUCTEUR ET DESTRUCTEUR
-//
 //  SETUP WIDGET
+//
 //  INIT STATE
 //  JOYSTICK BUTTON STATE CHANGED
 //  JOYSTICK AXIS VALUE CHANGED
@@ -18,7 +18,7 @@
 
 
 // CONSTRUCTEUR ET DESTRUCTEUR ////////////////////////////////////////////////
-StandardJoystickWidget::StandardJoystickWidget(AbstractRealJoystick *j, bool own)
+StandardJoystickWidget::StandardJoystickWidget(AbstractRealJoystick *j, bool own, QWidget *parent) : QWidget{parent}
 {
 	Q_ASSERT(j);
 	m_joystick = j;
@@ -83,17 +83,25 @@ void StandardJoystickWidget::setupWidget()
 		buttonsLayout->addWidget(b,i/8,i%8,1,1);
 		buttonsWidgets << b;
 	}
-	
-	// fin
 	layout1->addWidget(boxButtons);
 }
+
+
+
+
+
 
 // INIT STATE /////////////////////////////////////////////////////////////////
 void StandardJoystickWidget::initState()
 {
-	for (uint i=0; i<m_joystick->buttonsCount(); ++i) {this->joystickButtonStateChanged(i,m_joystick->buttonPressed(i));}
-	for (uint i=0; i<m_joystick->axesCount(); ++i)    {this->joystickAxisValueChanged(i,m_joystick->axisValue(i));}
-	for (uint i=0; i<m_joystick->povsCount(); ++i)    {this->joystickPovAngleChanged(i,m_joystick->povValue(i));}
+	for (uint i=0; i<m_joystick->buttonsCount(); ++i)
+		this->joystickButtonStateChanged(i,m_joystick->buttonPressed(i));
+	
+	for (uint i=0; i<m_joystick->axesCount(); ++i)
+		this->joystickAxisValueChanged(i,m_joystick->axisValue(i));
+	
+	for (uint i=0; i<m_joystick->povsCount(); ++i)
+		this->joystickPovAngleChanged(i,m_joystick->povValue(i));
 }
 
 // JOYSTICK BUTTON STATE CHANGED //////////////////////////////////////////////

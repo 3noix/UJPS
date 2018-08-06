@@ -2,12 +2,8 @@
 #define STANDARD_JOYSTICK_WIDGET
 
 
-class GameController;
-class GameControllerAxisEvent;
-class GameControllerButtonEvent;
-class GameControllerPovEvent;
-
 #include <QtWidgets>
+class AbstractRealJoystick;
 class AxesWidget;
 class ButtonWidget;
 class PovWidgetDecorated;
@@ -18,22 +14,24 @@ class StandardJoystickWidget : public QWidget
 	Q_OBJECT
 	
 	public:
-		StandardJoystickWidget(GameController *j, bool own = true);
+		StandardJoystickWidget(AbstractRealJoystick *j, bool own = true, QWidget *parent = nullptr);
 		StandardJoystickWidget(const StandardJoystickWidget &other) = delete;
 		StandardJoystickWidget(StandardJoystickWidget &&other) = delete;
 		StandardJoystickWidget& operator=(const StandardJoystickWidget &other) = delete;
 		StandardJoystickWidget& operator=(StandardJoystickWidget &&other) = delete;
 		virtual ~StandardJoystickWidget();
 		
+		void joystickButtonStateChanged(uint button, bool bPressed);
+		void joystickAxisValueChanged(uint axis, float value);
+		void joystickPovAngleChanged(uint pov, float value);
+		
 		
 	private slots:
-		void slotJoystickAxisValueChanged(GameControllerAxisEvent *event);
-		void slotJoystickButtonStateChanged(GameControllerButtonEvent *event);
-		void slotJoystickPovAngleChanged(GameControllerPovEvent *event);
+		void slotRunOneLoop();
 		
 		
 	private:
-		GameController *m_joystick;
+		AbstractRealJoystick *m_joystick;
 		QTimer *m_timer;
 		bool m_own;
 		

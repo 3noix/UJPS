@@ -163,8 +163,8 @@ void MainWindow::createActions()
 	actionRunControllersInfo->setStatusTip("Start ControllersInfo.exe");
 	actionRunControllersInfo->setIcon(QIcon(":/RESOURCES/ICONES/gamepad.png"));
 	
-	actionRunMonitoring = new QAction{"Start Monitoring2.exe",this};
-	actionRunMonitoring->setStatusTip("Start Monitoring2.exe");
+	actionRunMonitoring = new QAction{"Start Monitoring.exe",this};
+	actionRunMonitoring->setStatusTip("Start Monitoring.exe");
 	actionRunMonitoring->setIcon(QIcon(":/RESOURCES/ICONES/eyes.png"));
 	
 	actionRunAxesCurves = new QAction{"Start AxesCurves.exe",this};
@@ -461,9 +461,9 @@ void MainWindow::slotRunControllersInfo()
 // SLOT RUN MONITORING ////////////////////////////////////////////////////////
 void MainWindow::slotRunMonitoring()
 {
-	QString monitoringExe = QCoreApplication::applicationDirPath() + "/../../Monitoring2/release/Monitoring2.exe";
+	QString monitoringExe = QCoreApplication::applicationDirPath() + "/../../Monitoring/release/Monitoring.exe";
 	if (!QProcess::startDetached(monitoringExe))
-		textEdit->addMessage("Failed to start Monitoring2.exe",Qt::red);
+		textEdit->addMessage("Failed to start Monitoring.exe",Qt::red);
 }
 
 // SLOT RUN AXES CURVES ///////////////////////////////////////////////////////

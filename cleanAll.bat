@@ -13,11 +13,7 @@ CleanQtProjects.exe %~dp0\StaticLibs
 echo.
 CleanQtProjects.exe %~dp0\UjpsMainApp
 echo.
-CleanQtProjects.exe %~dp0\Monitoring0
-echo.
-CleanQtProjects.exe %~dp0\Monitoring1
-echo.
-CleanQtProjects.exe %~dp0\Monitoring2
+CleanQtProjects.exe %~dp0\Monitoring
 echo.
 CleanQtProjects.exe %~dp0\ControllersInfo
 echo.
@@ -47,9 +43,7 @@ rmdir /S /Q %~dp0\CleanQtProjects\release
 
 echo cleaning up shortcuts
 del %~dp0\UJPS.lnk
-del %~dp0\Monitoring0.lnk
-del %~dp0\Monitoring1.lnk
-del %~dp0\Monitoring2.lnk
+del %~dp0\Monitoring.lnk
 del %~dp0\ControllersInfo.lnk
 del %~dp0\AxesCurves.lnk
 echo.

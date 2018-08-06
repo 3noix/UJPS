@@ -1,11 +1,11 @@
 #ifndef MAIN_WINDOW
 #define MAIN_WINDOW
 
+
 #include <QtWidgets>
-class AbstractRealJoystick;
 
 
-class MainWindow : public QMainWindow
+class MainWindow : public QWidget
 {
 	Q_OBJECT
 	
@@ -18,10 +18,19 @@ class MainWindow : public QMainWindow
 		virtual ~MainWindow();
 		
 		
+	private slots:
+		void slotModeChanged(int index);
+		
+		
 	private:
-		QTabWidget *mainTabWidget;
-		QVector<QWidget*> joysticksWidgets;
-		QVector<AbstractRealJoystick*> joysticks;
+		void setupWidget();
+		void clearTabs();
+		
+		QVBoxLayout *layout;
+		QHBoxLayout *layoutUp;
+		QLabel *labelMode;
+		QComboBox *boxMode;
+		QTabWidget *tabs;
 };
 
 #endif

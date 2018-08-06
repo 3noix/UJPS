@@ -82,51 +82,19 @@ echo.
 echo.
 
 
-REM COMPILATION AND DEPLOYMENT OF MONITORING0
-echo compiling Monitoring0
+REM COMPILATION AND DEPLOYMENT OF MONITORING
+echo compiling Monitoring
 echo.
-cd Monitoring0
+cd Monitoring
 qmake
 mingw32-make release
 echo.
 cd release
-windeployqt Monitoring0.exe
+windeployqt Monitoring.exe
 cd ../..
-copy /Y StaticLibs\SOURCES\QtGameControllerModif\release\QtGameControllerModif.dll Monitoring0\release
-echo.
-echo.
-
-
-REM COMPILATION AND DEPLOYMENT OF MONITORING1
-echo compiling Monitoring1
-echo.
-cd Monitoring1
-qmake
-mingw32-make release
-echo.
-cd release
-windeployqt Monitoring1.exe
-cd ../..
-copy /Y StaticLibs\SOURCES\QtGameControllerModif\release\QtGameControllerModif.dll Monitoring1\release
-copy /Y StaticLibs\SOURCES\RealJoysticks\release\realJoysticks.dll Monitoring1\release
-copy /Y UjpsMainApp\release\Qt5Network.dll Monitoring1\release
-echo.
-echo.
-
-
-REM COMPILATION AND DEPLOYMENT OF MONITORING2
-echo compiling Monitoring2
-echo.
-cd Monitoring2
-qmake
-mingw32-make release
-echo.
-cd release
-windeployqt Monitoring2.exe
-cd ../..
-copy /Y StaticLibs\SOURCES\QtGameControllerModif\release\QtGameControllerModif.dll Monitoring2\release
-copy /Y StaticLibs\SOURCES\RealJoysticks\release\realJoysticks.dll Monitoring2\release
-copy /Y UjpsMainApp\release\Qt5Network.dll Monitoring2\release
+copy /Y StaticLibs\SOURCES\QtGameControllerModif\release\QtGameControllerModif.dll Monitoring\release
+copy /Y StaticLibs\SOURCES\RealJoysticks\release\realJoysticks.dll Monitoring\release
+copy /Y UjpsMainApp\release\Qt5Network.dll Monitoring\release
 echo.
 echo.
 
@@ -176,32 +144,12 @@ echo oLink.Save >> %SCRIPT%
 cscript /nologo %SCRIPT%
 del %SCRIPT%
 
-REM create shortcut to Monitoring0
+REM create shortcut to Monitoring
 set SCRIPT="%~dp0\createShorcuts.vbs"
 echo Set oWS = WScript.CreateObject("WScript.Shell") >> %SCRIPT%
-echo sLinkFile = "%~dp0\Monitoring0.lnk" >> %SCRIPT%
+echo sLinkFile = "%~dp0\Monitoring.lnk" >> %SCRIPT%
 echo Set oLink = oWS.CreateShortcut(sLinkFile) >> %SCRIPT%
-echo oLink.TargetPath = "%~dp0\Monitoring0\release\Monitoring0.exe" >> %SCRIPT%
-echo oLink.Save >> %SCRIPT%
-cscript /nologo %SCRIPT%
-del %SCRIPT%
-
-REM create shortcut to Monitoring1
-set SCRIPT="%~dp0\createShorcuts.vbs"
-echo Set oWS = WScript.CreateObject("WScript.Shell") >> %SCRIPT%
-echo sLinkFile = "%~dp0\Monitoring1.lnk" >> %SCRIPT%
-echo Set oLink = oWS.CreateShortcut(sLinkFile) >> %SCRIPT%
-echo oLink.TargetPath = "%~dp0\Monitoring1\release\Monitoring1.exe" >> %SCRIPT%
-echo oLink.Save >> %SCRIPT%
-cscript /nologo %SCRIPT%
-del %SCRIPT%
-
-REM create shortcut to Monitoring2
-set SCRIPT="%~dp0\createShorcuts.vbs"
-echo Set oWS = WScript.CreateObject("WScript.Shell") >> %SCRIPT%
-echo sLinkFile = "%~dp0\Monitoring2.lnk" >> %SCRIPT%
-echo Set oLink = oWS.CreateShortcut(sLinkFile) >> %SCRIPT%
-echo oLink.TargetPath = "%~dp0\Monitoring2\release\Monitoring2.exe" >> %SCRIPT%
+echo oLink.TargetPath = "%~dp0\Monitoring\release\Monitoring.exe" >> %SCRIPT%
 echo oLink.Save >> %SCRIPT%
 cscript /nologo %SCRIPT%
 del %SCRIPT%
