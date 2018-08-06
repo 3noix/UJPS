@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE genericProperties SYSTEM "genericProperties.xsd">
 <PROPERTIES>
+	<PROPERTY name="bUseDefaultTimeStep" type="bool" value="false"/>
 	<PROPERTY name="bUseStartingProfilePath" type="bool" value="false"/>
 	<PROPERTY name="bUseVJoyConfigBinary" type="bool" value="false"/>
 	<PROPERTY name="defaultDirectory" type="QStringList" value="Fixed|$APPDIR/../../Profiles/"/>
+	<PROPERTY name="defaultTimeStep" type="int" value="15"/>
 	<PROPERTY name="startingProfilePath" type="QString" value=""/>
 	<PROPERTY name="vJoyConfigBinary" type="QString" value="C:/Program Files/vJoy/x64/vJoyConfig.exe"/>
 </PROPERTIES>

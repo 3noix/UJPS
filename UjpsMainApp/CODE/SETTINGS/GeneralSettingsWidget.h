@@ -11,6 +11,7 @@ class QButtonGroup;
 class QLineEdit;
 class QCheckBox;
 class QPushButton;
+class QSpinBox;
 
 
 class GeneralSettingsWidget : public AbstractSettingsWidget
@@ -33,11 +34,13 @@ class GeneralSettingsWidget : public AbstractSettingsWidget
 	private slots:
 		void slotStartingProfileStateChanged(int checkState);
 		void slotStartingProfileBrowse();
+		void slotDefaultTimeStepStateChanged(int checkState);
 		
 		
 	private:
 		void addDefaultDirWidgets();
 		void addStartingProfileWidgets();
+		void addDefaultTimeStepWidget();
 		
 		QVBoxLayout *layout1;
 		
@@ -53,6 +56,11 @@ class GeneralSettingsWidget : public AbstractSettingsWidget
 		QCheckBox *boxUseStartingProfile;
 		QLineEdit *lineStartingProfile;
 		QPushButton *buttonStartingProfile;
+		
+		// default time step
+		QHBoxLayout *layoutDefTimeStep;
+		QCheckBox *checkboxDefTimeStep;
+		QSpinBox *spinboxDefTimeStep;
 };
 
 

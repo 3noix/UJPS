@@ -2,18 +2,21 @@
 #define MAIN_WINDOW
 
 
-#include <QWidget>
+#include <QMainWindow>
 #include <QCloseEvent>
-class TextEdit;
+class QMenu;
+class QToolBar;
+class QStatusBar;
+class QAction;
 class QVBoxLayout;
 class QHBoxLayout;
-class QAction;
 class QPushButton;
 class QLineEdit;
 class QToolBar;
 class QLabel;
 class QSpinBox;
 
+class TextEdit;
 class CompilationWidget;
 class ProfileEngine;
 
@@ -29,7 +32,7 @@ enum class HmiState
 };
 
 
-class MainWindow : public QWidget
+class MainWindow : public QMainWindow
 {
 	Q_OBJECT
 	
@@ -45,10 +48,15 @@ class MainWindow : public QWidget
 	private slots:
 		void slotBrowseButtonClicked();
 		void slotSettings();
+		void slotClose();
 		void slotCompilation();
 		void slotPlay();
 		void slotStop();
 		void slotUnload();
+		
+		void slotRunControllersInfo();
+		void slotRunMonitoring();
+		void slotRunAxesCurves();
 		
 		
 	protected:
@@ -58,17 +66,24 @@ class MainWindow : public QWidget
 	private:
 		void setState(HmiState s);
 		void createActions();
+		void createMenus();
+		void createToolBar();
 		void setupWidget();
 		
-		QAction *actionSettings, *actionCompilation;
-		QAction *actionPlay, *actionStop, *actionUnload;
+		QAction *actionQuit, *actionSettings;
+		QAction *actionCompilation, *actionPlay, *actionStop, *actionUnload;
+		QAction *actionRunControllersInfo, *actionRunMonitoring, *actionRunAxesCurves;
 		
+		QMenu *fileMenu, *profileMenu, *toolsMenu;
+		QToolBar *toolbar;
+		QStatusBar *statusbar;
+		
+		QWidget *mainWidget;
 		TextEdit *textEdit;
 		QVBoxLayout *layout;
 		QHBoxLayout *layoutDllChoice, *layoutRefreshRate;
 		QPushButton *boutonBrowse;
 		QLineEdit *lineDllPath;
-		QToolBar *toolbar;
 		QLabel *labelRefreshRate;
 		QSpinBox *boxRefreshRate;
 		

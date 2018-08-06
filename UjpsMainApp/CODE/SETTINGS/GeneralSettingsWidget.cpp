@@ -11,6 +11,7 @@
 #include <QLineEdit>
 #include <QCheckBox>
 #include <QPushButton>
+#include <QSpinBox>
 #include <QFileDialog>
 
 
@@ -22,6 +23,7 @@
 //
 //  ADD DEFAULT DIR WIDGETS
 //  ADD STARTING PROFILE WIDGETS
+//  ADD DEFAULT TIME STEP WIDGETS
 //
 //  TAB NAME
 //  BUTTON OK CLICKED
@@ -29,28 +31,33 @@
 //
 //  SLOT STARTING PROFILE STATE CHANGED
 //  SLOT STARTING PROFILE BROWSE
+//  SLOT DEFAULT TIME STEP STATE CHANGED
 ///////////////////////////////////////////////////////////////////////////////
 
 
 // CONSTRUCTEUR ET DESTRUCTEUR ////////////////////////////////////////////////
 GeneralSettingsWidget::GeneralSettingsWidget(QWidget *parent) : AbstractSettingsWidget(parent)
 {
-	layout1 = new QVBoxLayout(this);
-	layoutDefDir = new QHBoxLayout();
-	layoutStartingProfile = new QHBoxLayout();
+	layout1 = new QVBoxLayout{this};
+	layoutDefDir = new QHBoxLayout{};
+	layoutStartingProfile = new QHBoxLayout{};
+	layoutDefTimeStep = new QHBoxLayout{};
 	this->setLayout(layout1);
 	layout1->addLayout(layoutDefDir);
 	layout1->addLayout(layoutStartingProfile);
+	layout1->addLayout(layoutDefTimeStep);
 	layout1->addStretch();
 	
 	this->addDefaultDirWidgets();
 	this->addStartingProfileWidgets();
+	this->addDefaultTimeStepWidget();
 }
 
 GeneralSettingsWidget::~GeneralSettingsWidget()
 {
 	delete layoutDefDir;
 	delete layoutStartingProfile;
+	delete layoutDefTimeStep;
 }
 
 
@@ -113,6 +120,34 @@ void GeneralSettingsWidget::addStartingProfileWidgets()
 	buttonStartingProfile->setEnabled(bEnable);
 }
 
+// ADD DEFAULT TIME STEP WIDGETS //////////////////////////////////////////////
+void GeneralSettingsWidget::addDefaultTimeStepWidget()
+{
+	checkboxDefTimeStep = new QCheckBox{"Default time step:",this};
+	spinboxDefTimeStep = new QSpinBox{this};
+	spinboxDefTimeStep->setMinimum(5);
+	spinboxDefTimeStep->setMaximum(500);
+	spinboxDefTimeStep->setValue(15);
+	spinboxDefTimeStep->setSingleStep(1);
+	spinboxDefTimeStep->setSuffix(" ms");
+	
+	QObject::connect(checkboxDefTimeStep,&QCheckBox::stateChanged,this,&GeneralSettingsWidget::slotDefaultTimeStepStateChanged);
+	
+	layoutDefTimeStep->addWidget(checkboxDefTimeStep);
+	layoutDefTimeStep->addWidget(spinboxDefTimeStep);
+	layoutDefTimeStep->addStretch();
+	
+	ApplicationSettings& settings = ApplicationSettings::instance();
+	bool bEnable = settings.property("bUseDefaultTimeStep").toBool();
+	int defaultTimeStep = settings.property("defaultTimeStep").toInt();
+	
+	if (bEnable) {checkboxDefTimeStep->setCheckState(Qt::Checked);}
+	else {checkboxDefTimeStep->setCheckState(Qt::Unchecked);}
+	if (defaultTimeStep < 5 || defaultTimeStep > 500) {spinboxDefTimeStep->setValue(15);}
+	else {spinboxDefTimeStep->setValue(defaultTimeStep);}
+	spinboxDefTimeStep->setEnabled(bEnable);
+}
+
 
 
 
@@ -139,6 +174,10 @@ void GeneralSettingsWidget::buttonOkClicked()
 	// starting profile
 	settings.setProperty("bUseStartingProfilePath",boxUseStartingProfile->checkState()==Qt::Checked);
 	settings.setProperty("startingProfilePath",lineStartingProfile->text());
+	
+	// default time step
+	settings.setProperty("bUseDefaultTimeStep",checkboxDefTimeStep->checkState()==Qt::Checked);
+	settings.setProperty("defaultTimeStep",spinboxDefTimeStep->value());
 }
 
 // BUTTON CANCEL CLICKED //////////////////////////////////////////////////////
@@ -169,4 +208,12 @@ void GeneralSettingsWidget::slotStartingProfileBrowse()
 	if (fileSelected == "") {return;}
 	lineStartingProfile->setText(fileSelected);
 }
+
+// SLOT DEFAULT TIME STEP STATE CHANGED ///////////////////////////////////////
+void GeneralSettingsWidget::slotDefaultTimeStepStateChanged(int checkState)
+{
+	bool bEnable = (checkState == Qt::Checked);
+	spinboxDefTimeStep->setEnabled(bEnable);
+}
+
 
