@@ -19,6 +19,8 @@ CleanQtProjects.exe %~dp0\Monitoring1
 echo.
 CleanQtProjects.exe %~dp0\Monitoring2
 echo.
+CleanQtProjects.exe %~dp0\ControllersInfo
+echo.
 CleanQtProjects.exe %~dp0\AxesCurves
 echo.
 CleanQtProjects.exe %~dp0\Profiles
@@ -48,6 +50,7 @@ del %~dp0\UJPS.lnk
 del %~dp0\Monitoring0.lnk
 del %~dp0\Monitoring1.lnk
 del %~dp0\Monitoring2.lnk
+del %~dp0\ControllersInfo.lnk
 del %~dp0\AxesCurves.lnk
 echo.
 echo cleaning finished

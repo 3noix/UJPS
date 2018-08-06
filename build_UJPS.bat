@@ -131,6 +131,21 @@ echo.
 echo.
 
 
+REM COMPILATION AND DEPLOYMENT OF CONTROLLERS INFO
+echo compiling ControllersInfo
+echo.
+cd ControllersInfo
+qmake
+mingw32-make release
+echo.
+cd release
+windeployqt ControllersInfo.exe
+cd ../..
+copy /Y StaticLibs\SOURCES\QtGameControllerModif\release\QtGameControllerModif.dll ControllersInfo\release
+echo.
+echo.
+
+
 REM COMPILATION AND DEPLOYMENT OF AXES_CURVES
 echo compiling AxesCurves
 echo.
@@ -187,6 +202,16 @@ echo Set oWS = WScript.CreateObject("WScript.Shell") >> %SCRIPT%
 echo sLinkFile = "%~dp0\Monitoring2.lnk" >> %SCRIPT%
 echo Set oLink = oWS.CreateShortcut(sLinkFile) >> %SCRIPT%
 echo oLink.TargetPath = "%~dp0\Monitoring2\release\Monitoring2.exe" >> %SCRIPT%
+echo oLink.Save >> %SCRIPT%
+cscript /nologo %SCRIPT%
+del %SCRIPT%
+
+REM create shortcut to ControllersInfo
+set SCRIPT="%~dp0\createShorcuts.vbs"
+echo Set oWS = WScript.CreateObject("WScript.Shell") >> %SCRIPT%
+echo sLinkFile = "%~dp0\ControllersInfo.lnk" >> %SCRIPT%
+echo Set oLink = oWS.CreateShortcut(sLinkFile) >> %SCRIPT%
+echo oLink.TargetPath = "%~dp0\ControllersInfo\release\ControllersInfo.exe" >> %SCRIPT%
 echo oLink.Save >> %SCRIPT%
 cscript /nologo %SCRIPT%
 del %SCRIPT%
