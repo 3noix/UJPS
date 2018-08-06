@@ -30,7 +30,9 @@ class MainWindow : public QWidget
 		QHBoxLayout *layoutUp;
 		QLabel *labelMode;
 		QComboBox *boxMode;
+		
 		QTabWidget *tabs;
+		QLabel *labelNoController;
 };
 
 #endif

@@ -19,6 +19,8 @@
 MainWindow::MainWindow(QWidget *parent) : QWidget{parent}
 {
 	tabs = nullptr;
+	labelNoController = nullptr;
+	
 	this->setupWidget();
 	QObject::connect(boxMode,SIGNAL(currentIndexChanged(int)),this,SLOT(slotModeChanged(int)));
 	this->slotModeChanged(2);
@@ -63,6 +65,13 @@ void MainWindow::clearTabs()
 		delete tabs;
 		tabs = nullptr;
 	}
+	
+	if (labelNoController)
+	{
+		layout->removeWidget(labelNoController);
+		delete labelNoController;
+		labelNoController = nullptr;
+	}
 }
 
 // SLOT MODE CHANGED //////////////////////////////////////////////////////////
@@ -70,15 +79,22 @@ void MainWindow::slotModeChanged(int index)
 {
 	this->clearTabs();
 	
-	tabs = new QTabWidget{this};
-	layout->addWidget(tabs);
-	
 	if (index == 0) // raw, i.e. using QtGameControllerModif
 	{
 		// search for DirectInput and XInput controllers
 		QVector<GameController*> joysticks = GameController::enumerateControllers(this);
 		
+		// case there is no controller
+		if (joysticks.size() == 0)
+		{
+			labelNoController = new QLabel{"No controller detected",this};
+			labelNoController->setAlignment(Qt::AlignCenter);
+			layout->addWidget(labelNoController);
+			return;
+		}
+		
 		// add a tab for each controller
+		tabs = new QTabWidget{this};
 		for (GameController *j : joysticks)
 		{
 			QWidget *temp = new QWidget{tabs};
@@ -90,13 +106,27 @@ void MainWindow::slotModeChanged(int index)
 			int index = tabs->addTab(temp,j->description());
 			tabs->setTabToolTip(index,j->hardwareId());
 		}
+		layout->addWidget(tabs);
 	}
 	else if (index == 1 || index == 2)
 	{
+		// search controllers
 		RealJoysticksManager jm;
 		if (index == 2) {jm.loadPlugins(QCoreApplication::applicationDirPath() + "/../../ControllersPlugins/PLUGINS/");}
 		jm.searchForControllers();
 		int nbOtherJoy = jm.nbJoysticks();
+		
+		// case there is no controller
+		if (nbOtherJoy == 0)
+		{
+			labelNoController = new QLabel{"No controller detected",this};
+			labelNoController->setAlignment(Qt::AlignCenter);
+			layout->addWidget(labelNoController);
+			return;
+		}
+		
+		// add a tab for each controller
+		tabs = new QTabWidget{this};
 		for (int i=0; i<nbOtherJoy; ++i)
 		{
 			AbstractRealJoystick *j = jm.releaseJoystick(0);
@@ -112,6 +142,7 @@ void MainWindow::slotModeChanged(int index)
 				tabs->setTabToolTip(index,j->hardwareId());
 			}
 		}
+		layout->addWidget(tabs);
 	}
 }
 
