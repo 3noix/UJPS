@@ -5,7 +5,7 @@
 #include <QtWidgets>
 
 
-class MainWindow : public QWidget
+class MainWindow : public QMainWindow
 {
 	Q_OBJECT
 	
@@ -20,12 +20,19 @@ class MainWindow : public QWidget
 		
 	private slots:
 		void slotModeChanged(int index);
+		void slotUpdate();
 		
 		
 	private:
+		void createActions();
+		void createMenus();
 		void setupWidget();
 		void clearTabs();
 		
+		QAction *actionUpdate, *actionQuit;
+		QMenu *fileMenu;
+		
+		QWidget *mainWidget;
 		QVBoxLayout *layout;
 		QHBoxLayout *layoutUp;
 		QLabel *labelMode;

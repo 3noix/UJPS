@@ -9,20 +9,30 @@
 ///////////////////////////////////////////////////////////////////////////////
 //  CONSTRUCTEUR ET DESTRUCTEUR
 //
+//  CREATE ACTIONS
+//  CREATE MENUS
 //  SETUP WIDGET
 //  CLEAR TABS
+//
 //  SLOT MODE CHANGED
+//  SLOT UPDATE
 ///////////////////////////////////////////////////////////////////////////////
 
 
 // CONSTRUCTEUR ET DESTRUCTEUR ////////////////////////////////////////////////
-MainWindow::MainWindow(QWidget *parent) : QWidget{parent}
+MainWindow::MainWindow(QWidget *parent) : QMainWindow{parent}
 {
 	tabs = nullptr;
 	labelNoController = nullptr;
 	
+	this->createActions();
+	this->createMenus();
 	this->setupWidget();
+	
 	QObject::connect(boxMode,SIGNAL(currentIndexChanged(int)),this,SLOT(slotModeChanged(int)));
+	QObject::connect(actionUpdate,&QAction::triggered,this,&MainWindow::slotUpdate);
+	QObject::connect(actionQuit,&QAction::triggered,qApp,&QCoreApplication::quit);
+	
 	this->slotModeChanged(2);
 }
 
@@ -33,16 +43,43 @@ MainWindow::~MainWindow()
 
 
 
+
+// CREATE ACTIONS /////////////////////////////////////////////////////////////
+void MainWindow::createActions()
+{
+	actionUpdate = new QAction("Update controllers list",this);
+	actionUpdate->setStatusTip("Update controllers list");
+	actionUpdate->setShortcut(QKeySequence{"F5"});
+	actionUpdate->setShortcutContext(Qt::WindowShortcut);
+	actionUpdate->setIcon(QIcon(":/RESOURCES/ICONES/update.png"));
+	
+	actionQuit = new QAction("Quit",this);
+	actionQuit->setStatusTip("Quit");
+	actionQuit->setShortcut(QKeySequence{"Ctrl+Q"});
+	actionQuit->setShortcutContext(Qt::WindowShortcut);
+	actionQuit->setIcon(QIcon(":/RESOURCES/ICONES/croixRouge.png"));
+}
+
+// CREATE MENUS ///////////////////////////////////////////////////////////////
+void MainWindow::createMenus()
+{
+	fileMenu = this->menuBar()->addMenu("File");
+	fileMenu->addAction(actionUpdate);
+	fileMenu->addSeparator();
+	fileMenu->addAction(actionQuit);
+}
+
 // SETUP WIDGET ///////////////////////////////////////////////////////////////
 void MainWindow::setupWidget()
 {
-	layout = new QVBoxLayout{this};
+	mainWidget = new QWidget{this};
+	layout = new QVBoxLayout{mainWidget};
 	layout->setSpacing(10);
-	this->setLayout(layout);
+	mainWidget->setLayout(layout);
 	
 	layoutUp = new QHBoxLayout{};
-	labelMode = new QLabel{"Mode:",this};
-	boxMode = new QComboBox{this};
+	labelMode = new QLabel{"Mode:",mainWidget};
+	boxMode = new QComboBox{mainWidget};
 	boxMode->addItem("Using DirectInput / XInput");
 	boxMode->addItem("Using RealJoystick class with no plugin");
 	boxMode->addItem("Using RealJoystick class with plugins");
@@ -52,6 +89,7 @@ void MainWindow::setupWidget()
 	layoutUp->addStretch();
 	layout->addLayout(layoutUp);
 	
+	this->setCentralWidget(mainWidget);
 	this->setWindowIcon(QIcon(":/RESOURCES/ICONES/eyes.png"));
 	this->setMinimumWidth(700.0);
 }
@@ -145,5 +183,12 @@ void MainWindow::slotModeChanged(int index)
 		layout->addWidget(tabs);
 	}
 }
+
+// SLOT UPDATE ////////////////////////////////////////////////////////////////
+void MainWindow::slotUpdate()
+{
+	this->slotModeChanged(boxMode->currentIndex());
+}
+
 
 
