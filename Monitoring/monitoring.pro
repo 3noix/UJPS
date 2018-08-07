@@ -16,7 +16,7 @@ INCLUDEPATH += .
 OBJECTS_DIR = $$DESTDIR/objects
 MOC_DIR = $$DESTDIR/moc
 CONFIG += c++11
-QT += core gui widgets
+QT += core gui widgets charts
 
 		
 INCLUDEPATH +=  ../StaticLibs/INCLUDES/QtGameControllerModif/ \
@@ -28,7 +28,9 @@ HEADERS +=  CODE/MainWindow.h \
 			CODE/WIDGETS/AxesWidget.h \
 			CODE/WIDGETS/ButtonWidget.h \
 			CODE/WIDGETS/PovWidgetDecorated.h \
-			CODE/WIDGETS/PovWidget.h
+			CODE/WIDGETS/PovWidget.h \
+			CODE/WIDGETS/MyChartWidget.h \
+			CODE/WIDGETS/MyCheckBox.h
 
 SOURCES +=  CODE/main.cpp \
 			CODE/MainWindow.cpp \
@@ -37,7 +39,9 @@ SOURCES +=  CODE/main.cpp \
 			CODE/WIDGETS/AxesWidget.cpp \
 			CODE/WIDGETS/ButtonWidget.cpp \
 			CODE/WIDGETS/PovWidgetDecorated.cpp \
-			CODE/WIDGETS/PovWidget.cpp
+			CODE/WIDGETS/PovWidget.cpp \
+			CODE/WIDGETS/MyChartWidget.cpp \
+			CODE/WIDGETS/MyCheckBox.cpp
 
 RESOURCES += resources.qrc
 RC_FILE += icone.rc

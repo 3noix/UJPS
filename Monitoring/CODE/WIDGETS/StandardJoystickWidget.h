@@ -7,6 +7,7 @@ class AbstractRealJoystick;
 class AxesWidget;
 class ButtonWidget;
 class PovWidgetDecorated;
+class MyChartWidget;
 
 
 class StandardJoystickWidget : public QWidget
@@ -28,6 +29,7 @@ class StandardJoystickWidget : public QWidget
 		
 	private slots:
 		void slotRunOneLoop();
+		void slotUpdateTempoCurves(uint axis, bool bDisplay);
 		
 		
 	private:
@@ -38,14 +40,16 @@ class StandardJoystickWidget : public QWidget
 		void setupWidget();
 		void initState();
 		
-		QHBoxLayout *layout1;
-		QVBoxLayout *layout2;
-		QHBoxLayout *layout3;
+		QVBoxLayout *layout1;
+		QHBoxLayout *layout2;
+		QVBoxLayout *layout3;
+		QHBoxLayout *layout4;
 		QGridLayout *buttonsLayout;
 		AxesWidget *boxAxes;
 		QGroupBox *boxButtons, *boxPov;
 		QVector<ButtonWidget*> buttonsWidgets;
 		QVector<PovWidgetDecorated*> povWidgets;
+		MyChartWidget *tempoChart;
 };
 
 #endif

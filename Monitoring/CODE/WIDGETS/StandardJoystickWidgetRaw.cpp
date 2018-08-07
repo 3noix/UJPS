@@ -4,6 +4,7 @@
 #include "AxesWidget.h"
 #include "ButtonWidget.h"
 #include "PovWidgetDecorated.h"
+#include "MyChartWidget.h"
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -11,9 +12,12 @@
 //  SETUP WIDGET
 //
 //  INIT STATE
+//  SLOT RUN ONE LOOP
 //  SLOT JOYSTICK BUTTON STATE CHANGED
 //  SLOT JOYSTICK AXIS VALUE CHANGED
 //  SLOT JOYSTICK POV ANGLE CHANGED
+//
+//  SLOT UPDATE TEMPO CURVES
 ///////////////////////////////////////////////////////////////////////////////
 
 
@@ -29,7 +33,9 @@ StandardJoystickWidgetRaw::StandardJoystickWidgetRaw(GameController *j, bool own
 	
 	m_timer = new QTimer(this);
 	m_timer->setInterval(15);
-	connect(m_timer, &QTimer::timeout, m_joystick, &GameController::readGameController);
+	
+	QObject::connect(boxAxes, SIGNAL(axisDisplayChanged(uint,bool)), this, SLOT(slotUpdateTempoCurves(uint,bool)));
+	QObject::connect(m_timer, &QTimer::timeout, this, &StandardJoystickWidgetRaw::slotRunOneLoop);
 	m_timer->start();
 	
 	QObject::connect(j, SIGNAL(gameControllerAxisEvent(GameControllerAxisEvent*)),     this, SLOT(slotJoystickAxisValueChanged(GameControllerAxisEvent*)));
@@ -44,6 +50,7 @@ StandardJoystickWidgetRaw::~StandardJoystickWidgetRaw()
 {
 	//delete layout2;
 	//delete layout3;
+	//delete layout4;
 	
 	if (m_own && m_joystick)
 	{
@@ -58,41 +65,48 @@ StandardJoystickWidgetRaw::~StandardJoystickWidgetRaw()
 // SETUP WIDGET ///////////////////////////////////////////////////////////////
 void StandardJoystickWidgetRaw::setupWidget()
 {
-	layout1 = new QHBoxLayout(this);
+	layout1 = new QVBoxLayout{this};
 	this->setLayout(layout1);
-	layout2 = new QVBoxLayout();
+	layout2 = new QHBoxLayout{};
+	layout3 = new QVBoxLayout{};
 	
 	// axes
 	QStringList names;
 	for (uint i=0; i<m_joystick->axesCount(); ++i) {names << "Axis "+QString::number(i+1);}
-	boxAxes = new AxesWidget(names,this);
-	layout2->addWidget(boxAxes);
+	boxAxes = new AxesWidget{names,this};
+	layout3->addWidget(boxAxes);
 	
 	// pov
-	layout3 = new QHBoxLayout();
+	layout4 = new QHBoxLayout{};
 	for (uint i=0; i<m_joystick->povsCount(); ++i)
 	{
 		PovWidgetDecorated *p = new PovWidgetDecorated{"POV"+QString::number(i+1),this};
-		layout3->addWidget(p);
+		layout4->addWidget(p);
 		povWidgets << p;
 	}
-	layout3->addStretch();
+	layout4->addStretch();
+	layout3->addLayout(layout4);
 	layout2->addLayout(layout3);
-	layout1->addLayout(layout2);
 	
 	// buttons
-	boxButtons = new QGroupBox("Buttons",this);
-	buttonsLayout = new QGridLayout(boxButtons);
+	boxButtons = new QGroupBox{"Buttons",this};
+	buttonsLayout = new QGridLayout{boxButtons};
 	buttonsLayout->setVerticalSpacing(5);
 	boxButtons->setLayout(buttonsLayout);
 	int nbButtons = m_joystick->buttonsCount();
 	for (int i=0; i<qMax(32,nbButtons); ++i)
 	{
-		ButtonWidget *b = new ButtonWidget(i+1,i<nbButtons,this);
+		ButtonWidget *b = new ButtonWidget{i+1,i<nbButtons,this};
 		buttonsLayout->addWidget(b,i/8,i%8,1,1);
 		buttonsWidgets << b;
 	}
-	layout1->addWidget(boxButtons);
+	layout2->addWidget(boxButtons);
+	layout1->addLayout(layout2);
+	
+	// temporal chart
+	tempoChart = new MyChartWidget{1000,15,this};
+	layout1->addWidget(tempoChart);
+	tempoChart->hide();
 }
 
 
@@ -113,6 +127,17 @@ void StandardJoystickWidgetRaw::initState()
 		povWidgets[pov]->slotSetAngle(m_joystick->povValue(pov));
 }
 
+// SLOT RUN ONE LOOP //////////////////////////////////////////////////////////
+void StandardJoystickWidgetRaw::slotRunOneLoop()
+{
+	// read controller state, signals will be emited, they are connected to the 3 following slots
+	m_joystick->readGameController();
+	
+	// feed tempo chart (even if no change)
+	QVector<uint> axes = boxAxes->axesToDisplay();
+	for (uint axis : axes) {tempoChart->slotPushValue(axis,m_joystick->axisValue(axis));}
+}
+
 // SLOT JOYSTICK BUTTON STATE CHANGED /////////////////////////////////////////
 void StandardJoystickWidgetRaw::slotJoystickButtonStateChanged(GameControllerButtonEvent *event)
 {
@@ -131,4 +156,17 @@ void StandardJoystickWidgetRaw::slotJoystickPovAngleChanged(GameControllerPovEve
 	povWidgets[event->pov()]->slotSetAngle(event->angle());
 }
 
+
+
+// SLOT UPDATE TEMPO CURVES ///////////////////////////////////////////////////
+void StandardJoystickWidgetRaw::slotUpdateTempoCurves(uint axis, bool bDisplay)
+{
+	QVector<uint> axes = boxAxes->axesToDisplay();
+	
+	if (bDisplay) {tempoChart->slotAddCurve(axis,"Axis"+QString::number(axis+1));}
+	else {tempoChart->slotRemoveCurve(axis);}
+	
+	if (axes.size() == 0) {tempoChart->hide();}
+	else {tempoChart->show();}
+}
 

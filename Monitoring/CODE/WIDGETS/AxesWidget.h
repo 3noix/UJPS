@@ -4,6 +4,7 @@
 
 #include <QGroupBox>
 class QGridLayout;
+class MyCheckBox;
 class QSlider;
 class QLabel;
 
@@ -21,16 +22,22 @@ class AxesWidget : public QGroupBox
 		virtual ~AxesWidget() = default;
 		
 		float value(int i) const;
+		QVector<uint> axesToDisplay() const;
 		
 		
 	public slots:
 		void slotSetValue(int i, float value);
 		
 		
+	signals:
+		void axisDisplayChanged(uint axis, bool bDisplay);
+		
+		
 	private:
 		float m_value;
 		
 		QGridLayout *layout;
+		QVector<MyCheckBox*> m_boxes;
 		QVector<QSlider*> m_sliders;
 		QVector<QLabel*> m_labels2;
 };

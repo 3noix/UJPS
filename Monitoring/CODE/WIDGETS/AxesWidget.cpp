@@ -1,5 +1,6 @@
 #include "AxesWidget.h"
 #include <QGridLayout>
+#include "MyCheckBox.h"
 #include <QSlider>
 #include <QLabel>
 
@@ -8,6 +9,7 @@
 //  CONSTRUCTEUR ET DESTRUCTEUR
 //
 //  VALUE
+//  AXES TO DISPLAY
 //  SLOT SET VALUE
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -18,9 +20,12 @@ AxesWidget::AxesWidget(const QStringList &names, QWidget *parent) : QGroupBox("A
 	layout = new QGridLayout{this};
 	this->setLayout(layout);
 	
-	int i = 0;
+	uint i = 0;
 	for (const QString &name : names)
 	{
+		MyCheckBox *boxTem = new MyCheckBox{i,this};
+		boxTem->setCheckState(Qt::Unchecked);
+		
 		QLabel *label1 = new QLabel{name,this};
 		label1->setMinimumWidth(20);
 		
@@ -37,12 +42,16 @@ AxesWidget::AxesWidget(const QStringList &names, QWidget *parent) : QGroupBox("A
 		label2->setFixedWidth(50);
 		label2->setAlignment(Qt::AlignCenter);
 		
-		layout->addWidget(label1,i,0,1,1);
-		layout->addWidget(slider,i,1,1,1);
-		layout->addWidget(label2,i,2,1,1);
+		layout->addWidget(boxTem,i,0,1,1);
+		layout->addWidget(label1,i,1,1,1);
+		layout->addWidget(slider,i,2,1,1);
+		layout->addWidget(label2,i,3,1,1);
 		
+		m_boxes   << boxTem;
 		m_sliders << slider;
 		m_labels2 << label2;
+		
+		QObject::connect(boxTem,&MyCheckBox::axisDisplayChanged,this,&AxesWidget::axisDisplayChanged);
 		++i;
 	}
 }
@@ -51,6 +60,19 @@ AxesWidget::AxesWidget(const QStringList &names, QWidget *parent) : QGroupBox("A
 float AxesWidget::value(int i) const
 {
 	return m_sliders[i]->value();
+}
+
+// AXES TO DISPLAY ////////////////////////////////////////////////////////////
+QVector<uint> AxesWidget::axesToDisplay() const
+{
+	QVector<uint> v;
+	uint i = 0u;
+	for (MyCheckBox *box : m_boxes)
+	{
+		if (box->checkState() == Qt::Checked) {v << i;}
+		++i;
+	}
+	return v;
 }
 
 // SLOT SET VALUE /////////////////////////////////////////////////////////////

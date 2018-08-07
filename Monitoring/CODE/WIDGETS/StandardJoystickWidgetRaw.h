@@ -11,6 +11,7 @@ class GameControllerPovEvent;
 class AxesWidget;
 class ButtonWidget;
 class PovWidgetDecorated;
+class MyChartWidget;
 
 
 class StandardJoystickWidgetRaw : public QWidget
@@ -27,9 +28,11 @@ class StandardJoystickWidgetRaw : public QWidget
 		
 		
 	private slots:
+		void slotRunOneLoop();
 		void slotJoystickAxisValueChanged(GameControllerAxisEvent *event);
 		void slotJoystickButtonStateChanged(GameControllerButtonEvent *event);
 		void slotJoystickPovAngleChanged(GameControllerPovEvent *event);
+		void slotUpdateTempoCurves(uint axis, bool bDisplay);
 		
 		
 	private:
@@ -40,14 +43,16 @@ class StandardJoystickWidgetRaw : public QWidget
 		void setupWidget();
 		void initState();
 		
-		QHBoxLayout *layout1;
-		QVBoxLayout *layout2;
-		QHBoxLayout *layout3;
+		QVBoxLayout *layout1;
+		QHBoxLayout *layout2;
+		QVBoxLayout *layout3;
+		QHBoxLayout *layout4;
 		QGridLayout *buttonsLayout;
 		AxesWidget *boxAxes;
 		QGroupBox *boxButtons, *boxPov;
 		QVector<ButtonWidget*> buttonsWidgets;
 		QVector<PovWidgetDecorated*> povWidgets;
+		MyChartWidget *tempoChart;
 };
 
 #endif
