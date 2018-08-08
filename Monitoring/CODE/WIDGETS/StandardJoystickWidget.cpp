@@ -26,6 +26,7 @@ StandardJoystickWidget::StandardJoystickWidget(AbstractRealJoystick *j, bool own
 	Q_ASSERT(j);
 	m_joystick = j;
 	m_own = own;
+	compteur = -1;
 	
 	this->setupWidget();
 	this->initState();
@@ -97,7 +98,7 @@ void StandardJoystickWidget::setupWidget()
 	layout1->addLayout(layout2);
 	
 	// temporal chart
-	tempoChart = new MyChartWidget{1000,15,this};
+	tempoChart = new MyChartWidget{1+1000/ratioTempoChart,15*ratioTempoChart,this};
 	layout1->addWidget(tempoChart);
 	tempoChart->hide();
 }
@@ -139,8 +140,12 @@ void StandardJoystickWidget::slotRunOneLoop()
 	}
 	
 	// feed tempo chart (even if no change)
-	QVector<uint> axes = boxAxes->axesToDisplay();
-	for (uint axis : axes) {tempoChart->slotPushValue(axis,m_joystick->axisValue(axis));}
+	++compteur;
+	if (compteur % ratioTempoChart == 0)
+	{
+		QVector<uint> axes = boxAxes->axesToDisplay();
+		for (uint axis : axes) {tempoChart->slotPushValue(axis,m_joystick->axisValue(axis));}
+	}
 }
 
 // JOYSTICK BUTTON STATE CHANGED //////////////////////////////////////////////

@@ -91,7 +91,7 @@ void MyChartWidget::slotAddCurve(uint index, const QString &label)
 	QPen pen;
 	pen.setStyle(Qt::SolidLine);
 	pen.setWidth(1);
-	pen.setColor(m_colors[m_seriesMap.size()%m_colors.size()]);
+	pen.setColor(m_colors[index%m_colors.size()]);
 	pen.setCapStyle(Qt::RoundCap);
 	pen.setJoinStyle(Qt::RoundJoin);
 	

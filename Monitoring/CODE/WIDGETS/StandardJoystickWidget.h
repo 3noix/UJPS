@@ -50,6 +50,9 @@ class StandardJoystickWidget : public QWidget
 		QVector<ButtonWidget*> buttonsWidgets;
 		QVector<PovWidgetDecorated*> povWidgets;
 		MyChartWidget *tempoChart;
+		
+		const int ratioTempoChart = 4;
+		int compteur;
 };
 
 #endif
