@@ -24,4 +24,4 @@ Installation: the whole procedure is discribed in the documentation:
 
 ![ScreenShot](https://i.imgur.com/BEu2NbG.png)
 
-![ScreenShot](https://i.imgur.com/9m4suB5.png)
+![ScreenShot](https://i.imgur.com/680nJwt.png)
