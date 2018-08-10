@@ -22,6 +22,6 @@ Installation: the whole procedure is discribed in the documentation:
 - install vJoy : http://vjoystick.sourceforge.net/site/index.php/download-a-install/download (the big arrow in the middle)
 - build the application using the bat file provided in this repository
 
-![ScreenShot](https://i.imgur.com/JHBBpGS.png)
+![ScreenShot](https://i.imgur.com/4Mm6XqP.png)
 
 ![ScreenShot](https://i.imgur.com/680nJwt.png)
