@@ -9,9 +9,9 @@ using uint = unsigned int;
 
 namespace StarCitizenControls_Keyboard
 {
-	const uint TrackIR_Precision = Key_F13;
-	const uint TrackIR_Center    = Key_F14;
-	const uint TrackIR_Pause     = Key_F15;
+	const uint TrackIR_Precision = Key_F1;
+	const uint TrackIR_Center    = Key_F2;
+	const uint TrackIR_Pause     = Key_F3;
 }
 
 namespace StarCitizenControls_vJoy1
