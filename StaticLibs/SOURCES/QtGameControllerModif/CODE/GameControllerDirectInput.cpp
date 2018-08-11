@@ -356,7 +356,7 @@ QString GameControllerDirectInput::hexaString(DWORD value)
 {
 	QString str = QString("%1").arg(QString::number(value,16).toUpper(),8,'0');
 	if (str.size() != 8) {return QString();}
-	return "VID_" + str.right(4) + "\\&PID_" + str.left(4);
+	return "VID_" + str.right(4) + "&PID_" + str.left(4);
 }
 
 

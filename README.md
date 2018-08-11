@@ -17,7 +17,7 @@ Under the hood this tool uses:
 - the non-official module QtGameController: https://github.com/openforeveryone/QGameController (not needed)
 
 
-Installation: the whole procedure is discribed in the documentation:
+Installation: the whole procedure is described in the documentation:
 - install Qt: https://www.qt.io/download-qt-installer/
 - install vJoy : http://vjoystick.sourceforge.net/site/index.php/download-a-install/download (the big arrow in the middle)
 - build the application using the bat file provided in this repository
