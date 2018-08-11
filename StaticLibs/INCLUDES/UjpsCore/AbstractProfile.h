@@ -73,6 +73,9 @@ class AbstractProfile : public QObject
 		void UnmapPov(AbstractRealJoystick *rj, uint rPov);
 		
 		void DoAction(AbstractAction *action, bool deleteWhenDone = true);
+		bool startRexec(uint id, uint cycles, AbstractAction *action);
+		bool startRexec(uint id, uint cycles, std::function<void()> fct);
+		bool stopRexec(uint id);
 		
 		
 	protected:
@@ -90,6 +93,7 @@ class AbstractProfile : public QObject
 		virtual void runFirstStep() = 0;	// executed at the first run (called by "run")
 		
 		void addMapping(AbstractMapping *m);
+		void UnmapRexec(uint id);
 		
 		// the following 3 are used to manage mapping modifications requests while they are being processed
 		void processPendingMappingsRequests();
@@ -106,6 +110,7 @@ class AbstractProfile : public QObject
 		std::vector<AbstractRealJoystick*> m_realJoysticks;
 		std::vector<VirtualJoystick*> m_virtualJoysticks;
 		VirtualEventsQueue m_eventsQueue;
+		QVector<uint> m_rexecIds;
 };
 
 

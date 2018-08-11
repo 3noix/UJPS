@@ -28,6 +28,9 @@
 //  MS 2 CYCLES
 //
 //  DO ACTION
+//  START REXEC
+//  STOP REXEC
+//
 //  ADD MAPPING
 //  MAP
 //  MAP BUTTON
@@ -44,6 +47,7 @@
 //  UNMAP BUTTON
 //  UNMAP AXIS
 //  UNMAP POV
+//  UNMAP REXEC
 ///////////////////////////////////////////////////////////////////////////////
 
 
@@ -221,6 +225,7 @@ void AbstractProfile::processPendingMappingsRequests()
 		else if (r.type == MappingModifRequestType::RequestUnmapButton) {this->UnmapButton(r.rj,r.rnum);}
 		else if (r.type == MappingModifRequestType::RequestUnmapAxis)   {this->UnmapAxis(r.rj,r.rnum);}
 		else if (r.type == MappingModifRequestType::RequestUnmapPov)    {this->UnmapPov(r.rj,r.rnum);}
+		else if (r.type == MappingModifRequestType::RequestUnmapRexec)  {this->UnmapRexec(r.rnum);}
 		else if (r.type == MappingModifRequestType::RequestAddMapping)  {this->addMapping(r.mapping);}
 	}
 	
@@ -255,6 +260,45 @@ void AbstractProfile::DoAction(AbstractAction *action, bool deleteWhenDone)
 	if (deleteWhenDone) {delete action;}
 }
 
+// START REXEC ////////////////////////////////////////////////////////////////
+bool AbstractProfile::startRexec(uint id, uint cycles, AbstractAction *action)
+{
+	if (id == -1u) {return false;}					// this id is reserved
+	if (m_rexecIds.contains(id)) {return false;}	// only one rexec per id
+	
+	this->addMapping(new MappingRexec(id,cycles,action,m_eventsQueue));
+	m_rexecIds << id;
+	return true;
+}
+
+bool AbstractProfile::startRexec(uint id, uint cycles, std::function<void()> fct)
+{
+	if (id == -1u) {return false;}					// this id is reserved
+	if (m_rexecIds.contains(id)) {return false;}	// only one rexec per id
+	
+	ActionCallback *action = new ActionCallback{fct};
+	this->addMapping(new MappingRexec(id,cycles,action,m_eventsQueue));
+	m_rexecIds << id;
+	return true;
+}
+
+// STOP REXEC /////////////////////////////////////////////////////////////////
+bool AbstractProfile::stopRexec(uint id)
+{
+	if (id == -1u) {return false;}					// this id is reserved
+	if (!m_rexecIds.contains(id)) {return false;}	// no rexec mapping with this id
+	
+	this->UnmapRexec(id);
+	m_rexecIds.removeAll(id);
+	return true;
+}
+
+
+
+
+
+
+
 // ADD MAPPING ////////////////////////////////////////////////////////////////
 void AbstractProfile::addMapping(AbstractMapping *m)
 {
@@ -263,9 +307,14 @@ void AbstractProfile::addMapping(AbstractMapping *m)
 	try
 	{
 		if (!m_isProcessingEvents)
+		{
 			m_mappings << m; // add it directly
+			if (m->isMappingRexec(-1u)) {m->performAction();} // if it comes from a rexec, we execute it right away (we don't wait next step)
+		}
 		else
+		{
 			m_mappingsRequests << MappingModifRequest{MappingModifRequestType::RequestAddMapping,nullptr,0,m}; // add it in a queue, waiting for the current loop to end
+		}
 	}
 	catch (std::exception &e) {emit message(e.what(),Qt::red);}
 }
@@ -464,6 +513,29 @@ void AbstractProfile::UnmapPov(AbstractRealJoystick *rj, uint rPov)
 		for (AbstractMapping *m : m_mappings)
 		{
 			if (m->isMappingPov(rj,rPov))
+				m->aboutToBeDeleted();
+		}
+	}
+}
+
+// UNMAP REXEC ////////////////////////////////////////////////////////////////
+void AbstractProfile::UnmapRexec(uint id)
+{
+	if (!m_isProcessingEvents)
+	{
+		int n = m_mappings.size();
+		for (int i=n-1; i>=0; --i)
+		{
+			if (m_mappings[i]->isMappingRexec(id))
+			{delete m_mappings.takeAt(i);}
+		}
+	}
+	else
+	{
+		m_mappingsRequests << MappingModifRequest{MappingModifRequestType::RequestUnmapRexec,nullptr,id,nullptr}; // add it in a queue, waiting for the current loop to end
+		for (AbstractMapping *m : m_mappings)
+		{
+			if (m->isMappingRexec(id))
 				m->aboutToBeDeleted();
 		}
 	}

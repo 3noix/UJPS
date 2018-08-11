@@ -13,6 +13,7 @@
 //  IS MAPPING BUTTON
 //  IS MAPPING AXIS
 //  IS MAPPING POV
+//  IS MAPPING REXEC
 //  PERFORM ACTION
 //
 //  ACTIVATE BY LAYER CHANGE
@@ -121,6 +122,13 @@ bool MappingAxis2::isMappingPov(AbstractRealJoystick *rj, uint rPov) const
 {
 	Q_UNUSED(rj)
 	Q_UNUSED(rPov)
+	return false;
+}
+
+// IS MAPPING REXEC ///////////////////////////////////////////////////////////
+bool MappingAxis2::isMappingRexec(uint id) const
+{
+	Q_UNUSED(id)
 	return false;
 }
 

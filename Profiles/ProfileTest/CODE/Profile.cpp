@@ -42,6 +42,7 @@ Profile::Profile() : AbstractProfile()
 Profile::~Profile()
 {
 	this->stop();
+	delete actionTestRexec;
 }
 
 
@@ -108,6 +109,18 @@ void Profile::runFirstStep()
 	
 	
 	Map(tmwj, ControlType::Button, TMWJ::TG1, AllLayers, new TriggerButtonChange{}, new ActionKeySetChange{Key_N});
+	
+	actionTestRexec = new ActionButtonPulse{vj2,VJOY::DX1,ms2cycles(100)};
+	Map(tmwj, ControlType::Button, TMWJ::H2L, AllLayers, new TriggerButtonPress{},  new ActionSequence{{
+		new ActionCallback{[this](){this->startRexec(0,ms2cycles(1000),actionTestRexec);}},
+		new ActionCallback{[this](){this->stopRexec(0);}}
+	}});
+	
+	auto sendMessage = [this](){emit message("Test Rexec",Qt::cyan);};
+	Map(tmwj, ControlType::Button, TMWJ::H2R, AllLayers, new TriggerButtonPress{},  new ActionSequence{{
+		new ActionCallback{[this,sendMessage](){this->startRexec(1,ms2cycles(1000),sendMessage);}},
+		new ActionCallback{[this](){this->stopRexec(1);}}
+	}});
 	
 	Map(tmwj, ControlType::Button, TMWJ::H3L, AllLayers, new TriggerButtonPress{},  new ActionKeyPress{Key_A});
 	Map(tmwj, ControlType::Button, TMWJ::H3R, AllLayers, new TriggerButtonPress{},  new ActionKeyRelease{Key_A});

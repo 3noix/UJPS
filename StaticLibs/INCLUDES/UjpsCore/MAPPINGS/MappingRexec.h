@@ -1,24 +1,20 @@
-#ifndef MAPPING_SPLIT_AXIS
-#define MAPPING_SPLIT_AXIS
+#ifndef MAPPING_REXEC
+#define MAPPING_REXEC
 
 
 #include "AbstractMapping.h"
+class AbstractAction;
 
 
-class MappingSplitAxis : public AbstractMapping
+class MappingRexec : public AbstractMapping
 {
 	public:
-		MappingSplitAxis(AbstractRealJoystick *rj, uint rAxis1,
-						LayersCombo lc,
-						VirtualJoystick *vj1, uint vAxis1,
-						VirtualJoystick *vj2, uint vAxis2,
-						VirtualEventsQueue &eventsQueue);
-						
-		MappingSplitAxis(const MappingSplitAxis &other) = delete;
-		MappingSplitAxis(MappingSplitAxis &&other) = delete;
-		MappingSplitAxis& operator=(const MappingSplitAxis &other) = delete;
-		MappingSplitAxis& operator=(MappingSplitAxis &&other) = delete;
-		virtual ~MappingSplitAxis();
+		MappingRexec(uint id, uint cycles, AbstractAction *action, VirtualEventsQueue &eventsQueue);
+		MappingRexec(const MappingRexec &other) = delete;
+		MappingRexec(MappingRexec &&other) = delete;
+		MappingRexec& operator=(const MappingRexec &other) = delete;
+		MappingRexec& operator=(MappingRexec &&other) = delete;
+		virtual ~MappingRexec();
 		
 		virtual bool reactsToChanges() const override final;
 		virtual bool reactsToStates() const override final;
@@ -37,10 +33,10 @@ class MappingSplitAxis : public AbstractMapping
 		
 		
 	private:
-		AbstractRealJoystick *m_rj;
-		VirtualJoystick *m_vj1, *m_vj2;
-		uint m_rAxis, m_vAxis1, m_vAxis2;
-		
+		uint m_id;
+		uint m_cycles;
+		uint m_compteur;
+		AbstractAction *m_action;
 		bool m_disable;
 };
 

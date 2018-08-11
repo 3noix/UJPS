@@ -36,5 +36,6 @@ SOURCES +=  CODE/AbstractProfile.cpp \
 			CODE/MAPPINGS/MappingAxis1.cpp \
 			CODE/MAPPINGS/MappingAxis2.cpp \
 			CODE/MAPPINGS/MappingMergeAxes.cpp \
-			CODE/MAPPINGS/MappingSplitAxis.cpp
+			CODE/MAPPINGS/MappingSplitAxis.cpp \
+			CODE/MAPPINGS/MappingRexec.cpp
 

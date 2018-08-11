@@ -4,6 +4,7 @@
 
 #include "AbstractProfile.h"
 class EnhancedJoystick;
+class AbstractAction;
 
 
 class Profile : public AbstractProfile
@@ -33,6 +34,8 @@ class Profile : public AbstractProfile
 		EnhancedJoystick *mfgx; // for MFG Crosswind V2 rudder pedals
 		VirtualJoystick  *vj1;  // virtual joystick #1
 		VirtualJoystick  *vj2;  // virtual joystick #2
+		
+		AbstractAction *actionTestRexec;
 };
 
 #endif
