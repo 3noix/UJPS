@@ -1,11 +1,21 @@
-CONFIG(debug, debug|release) {
+win32-g++:CONFIG(debug, debug|release) {
 	DESTDIR = debug
 	LIBS += ../StaticLibs/SOURCES/QtGameControllerModif/debug/libQtGameControllerModif.a
 }
-CONFIG(release, debug|release) {
+win32-g++:CONFIG(release, debug|release) {
 	DESTDIR = release
 	LIBS += ../StaticLibs/SOURCES/QtGameControllerModif/release/libQtGameControllerModif.a
 }
+
+win32-msvc*:CONFIG(debug, debug|release) {
+	DESTDIR = debug
+	LIBS += ../StaticLibs/SOURCES/QtGameControllerModif/debug/QtGameControllerModif.lib
+}
+win32-msvc*:CONFIG(release, debug|release) {
+	DESTDIR = release
+	LIBS += ../StaticLibs/SOURCES/QtGameControllerModif/release/QtGameControllerModif.lib
+}
+
 
 TEMPLATE = app
 TARGET = ControllersInfo

@@ -13,7 +13,8 @@ MOC_DIR = $$DESTDIR/moc
 CONFIG += c++11
 
 
-LIBS += ../../../vJoy218SDK-291116/SDK/lib/vJoyInterface.lib
+win32-g++:LIBS += ../../../vJoy218SDK-291116/SDK/lib/vJoyInterface.lib
+win32-msvc*:LIBS += ../../../vJoy218SDK-291116/SDK/lib/amd64/vJoyInterface.lib
 
 INCLUDEPATH +=  ../../INCLUDES/Other/ \
 				../../INCLUDES/VirtualJoysticks/

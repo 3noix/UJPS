@@ -9,6 +9,5 @@ windeployqt AxesCurves.exe
 cd ..
 copy /Y ..\StaticLibs\SOURCES\QtGameControllerModif\release\QtGameControllerModif.dll release
 copy /Y ..\StaticLibs\SOURCES\RealJoysticks\release\realJoysticks.dll release
-copy /Y ..\CleanQtProjects\release\Qt5Network.dll release
 echo.
 echo.

@@ -1,12 +1,23 @@
-CONFIG(debug, debug|release) {
+win32-g++:CONFIG(debug, debug|release) {
 	DESTDIR = debug
 	LIBS += ../StaticLibs/SOURCES/QtGameControllerModif/debug/libQtGameControllerModif.a
 	LIBS += ../StaticLibs/SOURCES/RealJoysticks/debug/libRealJoysticks.a
 }
-CONFIG(release, debug|release) {
+win32-g++:CONFIG(release, debug|release) {
 	DESTDIR = release
 	LIBS += ../StaticLibs/SOURCES/QtGameControllerModif/release/libQtGameControllerModif.a
 	LIBS += ../StaticLibs/SOURCES/RealJoysticks/release/libRealJoysticks.a
+}
+
+win32-msvc*:CONFIG(debug, debug|release) {
+	DESTDIR = debug
+	LIBS += ../StaticLibs/SOURCES/QtGameControllerModif/debug/QtGameControllerModif.lib
+	LIBS += ../StaticLibs/SOURCES/RealJoysticks/debug/RealJoysticks.lib
+}
+win32-msvc*:CONFIG(release, debug|release) {
+	DESTDIR = release
+	LIBS += ../StaticLibs/SOURCES/QtGameControllerModif/release/QtGameControllerModif.lib
+	LIBS += ../StaticLibs/SOURCES/RealJoysticks/release/RealJoysticks.lib
 }
 
 
