@@ -6,6 +6,7 @@
 #include <QString>
 #include <QColor>
 #include <QVector>
+#include <QMap>
 #include "JoystickChange.h"
 #include "MappingModifRequest.h"
 #include "LAYERS/LayersCombo.h"
@@ -110,7 +111,10 @@ class AbstractProfile : public QObject
 		std::vector<AbstractRealJoystick*> m_realJoysticks;
 		std::vector<VirtualJoystick*> m_virtualJoysticks;
 		VirtualEventsQueue m_eventsQueue;
+		
+		// for rexec
 		QVector<uint> m_rexecIds;
+		QMap<uint,AbstractAction*> m_rexecFunctionsActionsToDelete;
 };
 
 

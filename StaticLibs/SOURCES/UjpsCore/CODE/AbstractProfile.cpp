@@ -266,6 +266,7 @@ bool AbstractProfile::startRexec(uint id, uint cycles, AbstractAction *action)
 	if (id == -1u) {return false;}					// this id is reserved
 	if (m_rexecIds.contains(id)) {return false;}	// only one rexec per id
 	
+	// the user (profile programmer) must be careful to delete this action in his profile to avoid a memory leak
 	this->addMapping(new MappingRexec(id,cycles,action,m_eventsQueue));
 	m_rexecIds << id;
 	return true;
@@ -276,8 +277,10 @@ bool AbstractProfile::startRexec(uint id, uint cycles, std::function<void()> fct
 	if (id == -1u) {return false;}					// this id is reserved
 	if (m_rexecIds.contains(id)) {return false;}	// only one rexec per id
 	
+	// this action (created below from the functor) is deleted when stopRexec is called with this id
 	ActionCallback *action = new ActionCallback{fct};
 	this->addMapping(new MappingRexec(id,cycles,action,m_eventsQueue));
+	m_rexecFunctionsActionsToDelete.insert(id,action);
 	m_rexecIds << id;
 	return true;
 }
@@ -290,6 +293,7 @@ bool AbstractProfile::stopRexec(uint id)
 	
 	this->UnmapRexec(id);
 	m_rexecIds.removeAll(id);
+	if (m_rexecFunctionsActionsToDelete.contains(id)) {delete m_rexecFunctionsActionsToDelete.take(id);}
 	return true;
 }
 

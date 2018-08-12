@@ -35,7 +35,6 @@ MappingRexec::~MappingRexec()
 {
 	// this mapping is deleted when stopRexec is called
 	// but the action must not be deleted here, otherwise it will be impossible to recall startRexec with the same action in argument
-	// so the user (profile programmer) must be careful to delete it in his profile to avoid memory leaks
 }
 
 
