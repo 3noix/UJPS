@@ -108,7 +108,7 @@ void VigemSettingsWidget::addStartAutoWhiteListerWidgets()
 // ADD WHITE LIST WIDGETS /////////////////////////////////////////////////////
 void VigemSettingsWidget::addWhiteListWidgets()
 {
-	boxWhiteList = new QCheckBox{"White-list th application",this};
+	boxWhiteList = new QCheckBox{"White-list the application",this};
 	layoutWhiteList->addWidget(boxWhiteList);
 	layoutWhiteList->addStretch();
 	
