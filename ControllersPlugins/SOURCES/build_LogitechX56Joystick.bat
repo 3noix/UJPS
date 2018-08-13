@@ -15,5 +15,5 @@ echo.
 
 
 echo finished
-pause
+REM pause
 
