@@ -45,11 +45,13 @@ INCLUDEPATH +=  ../StaticLibs/INCLUDES/QtGameControllerModif/ \
 
 
 HEADERS +=  CODE/ProfileEngine.h \
+			CODE/VigemPidWhiteLister.h \
 			CODE/MessagesDirector.h
 			
 			
 SOURCES +=  CODE/main_console.cpp \
 			CODE/ProfileEngine.cpp \
+			CODE/VigemPidWhiteListerConsole.cpp \
 			CODE/otherFunctions.cpp \
 			CODE/MessagesDirector.cpp
 

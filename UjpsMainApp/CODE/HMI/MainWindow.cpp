@@ -26,6 +26,7 @@
 #include "../SETTINGS/ApplicationSettings.h"
 #include "../SETTINGS/GeneralSettingsWidget.h"
 #include "../SETTINGS/VJoySettingsWidget.h"
+#include "../SETTINGS/VigemSettingsWidget.h"
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -65,12 +66,13 @@ MainWindow::MainWindow(QString proFilePath, int dtms, bool bPlay, QWidget *paren
 	QString startingProfile = settings.property("startingProfilePath").toString();
 	bool bUseDefaultTimeStep = settings.property("bUseDefaultTimeStep").toBool();
 	int defaultTimeStep = settings.property("defaultTimeStep").toInt();
+	bool bWhiteList = settings.property("bWhiteListPid").toBool();
 	
 	// init
 	m_proFilePath = "";
 	m_dllFilePath = "";
 	m_dllFileName = "";
-	m_engine = new ProfileEngine{this};
+	m_engine = new ProfileEngine{bWhiteList,this};
 	
 	m_compilWidget = new CompilationWidget{this};
 	
@@ -379,6 +381,7 @@ void MainWindow::slotSettings()
 	SettingsDialog settingsDialog(this);
 	settingsDialog.addSettingsWidget(new GeneralSettingsWidget(&settingsDialog));
 	settingsDialog.addSettingsWidget(new VJoySettingsWidget(&settingsDialog));
+	settingsDialog.addSettingsWidget(new VigemSettingsWidget(&settingsDialog));
 	
 	int result = settingsDialog.exec();
 	if (result == QDialog::Rejected) {return;}

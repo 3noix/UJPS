@@ -38,12 +38,22 @@ int main(int argc, char *argv[])
 	debugFile.remove();
 	#endif
 	
+	QCoreApplication app(argc,argv);
+	QStringList args = app.arguments();
+	args.removeFirst();
+	
+	// default arguments values
+	bool bWhiteList = false;
+	
+	// white-list option
+	if (args.contains("-whitelist"))
+	{
+		bWhiteList = true;
+		args.removeAll("-whitelist");
+	}
+	
 	if (argc == 2 || argc == 3) // to run profile from command line
 	{
-		QCoreApplication app(argc,argv);
-		QStringList args = app.arguments();
-		args.removeFirst();
-		
 		// first argument: the profile dll
 		QString profileDllFilePath = QFileInfo{args[0]}.absoluteFilePath();
 		if (!QFile::exists(profileDllFilePath))
@@ -65,7 +75,7 @@ int main(int argc, char *argv[])
 			}
 		}
 		
-		ProfileEngine engine;
+		ProfileEngine engine{bWhiteList};
 		MessagesDirector messenger;
 		messenger.startsListeningTo(&engine);
 		if (!engine.loadProfile(profileDllFilePath)) {return 1;}

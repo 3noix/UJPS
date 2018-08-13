@@ -4,6 +4,7 @@
 
 #include <QObject>
 #include <QColor>
+#include "VigemPidWhiteLister.h"
 class QTimer;
 class QPluginLoader;
 class AbstractProfile;
@@ -14,7 +15,7 @@ class ProfileEngine : public QObject
 	Q_OBJECT
 	
 	public:
-		ProfileEngine(QObject *parent = nullptr);
+		ProfileEngine(bool bWhiteList, QObject *parent = nullptr);
 		ProfileEngine(const ProfileEngine &other) = delete;
 		ProfileEngine(ProfileEngine &&other) = delete;
 		ProfileEngine& operator=(const ProfileEngine &other) = delete;
@@ -43,6 +44,8 @@ class ProfileEngine : public QObject
 		QString m_dllFileName;
 		AbstractProfile *m_profile;
 		QPluginLoader *m_loader;
+		
+		VigemPidWhiteLister m_vigemInterface;
 };
 
 #endif

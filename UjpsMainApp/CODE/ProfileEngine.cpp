@@ -1,5 +1,6 @@
 #include "ProfileEngine.h"
 #include "otherFunctions.h"
+#include <QCoreApplication>
 #include <QTimer>
 #include <QPluginLoader>
 #include "AbstractProfile.h"
@@ -21,7 +22,7 @@
 
 
 // CONSTRUCTEUR ET DESTRUCTEUR ////////////////////////////////////////////////
-ProfileEngine::ProfileEngine(QObject *parent) : QObject(parent)
+ProfileEngine::ProfileEngine(bool bWhiteList, QObject *parent) : QObject(parent)
 {
 	m_timer = new QTimer{this};
 	QObject::connect(m_timer, &QTimer::timeout, this, &ProfileEngine::slotOneLoop);
@@ -29,12 +30,20 @@ ProfileEngine::ProfileEngine(QObject *parent) : QObject(parent)
 	m_dllFileName = "";
 	m_profile = nullptr;
 	m_loader = nullptr;
+	
+	if (bWhiteList && m_vigemInterface.vigemIsReady())
+		m_vigemInterface.whiteList(QCoreApplication::applicationPid());
 }
 
 ProfileEngine::~ProfileEngine()
 {
 	m_timer->stop();
 	this->unloadProfile();
+	
+	// remove this application from the white list
+	// (to avoid to pollute the white list with many invalid pids)
+	if (m_vigemInterface.vigemIsReady())
+		m_vigemInterface.blackList(QCoreApplication::applicationPid());
 }
 
 

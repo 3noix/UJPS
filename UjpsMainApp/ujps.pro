@@ -45,6 +45,7 @@ INCLUDEPATH +=  ../StaticLibs/INCLUDES/QtGameControllerModif/ \
 
 
 HEADERS +=  CODE/ProfileEngine.h \
+			CODE/VigemPidWhiteLister.h \
 			CODE/HMI/MainWindow.h \
 			CODE/HMI/TextEdit.h \
 			CODE/COMPILER/AbstractCompiler.h \
@@ -57,12 +58,14 @@ HEADERS +=  CODE/ProfileEngine.h \
 			CODE/SETTINGS/MyFileDialog.h \
 			CODE/SETTINGS/GeneralSettingsWidget.h \
 			CODE/SETTINGS/VJoySettingsWidget.h \
+			CODE/SETTINGS/VigemSettingsWidget.h \
 			CODE/XML/AbstractXmlInfo.h \
 			CODE/XML/XmlValidationMessageHandler.h \
 			CODE/XML/GenericPropertiesInfo.h
 			
 			
 SOURCES +=  CODE/main.cpp \
+			CODE/VigemPidWhiteLister.cpp \
 			CODE/ProfileEngine.cpp \
 			CODE/otherFunctions.cpp \
 			CODE/HMI/MainWindow.cpp \
@@ -75,6 +78,7 @@ SOURCES +=  CODE/main.cpp \
 			CODE/SETTINGS/MyFileDialog.cpp \
 			CODE/SETTINGS/GeneralSettingsWidget.cpp \
 			CODE/SETTINGS/VJoySettingsWidget.cpp \
+			CODE/SETTINGS/VigemSettingsWidget.cpp \
 			CODE/XML/AbstractXmlInfo.cpp \
 			CODE/XML/XmlValidationMessageHandler.cpp \
 			CODE/XML/GenericPropertiesInfo.cpp
