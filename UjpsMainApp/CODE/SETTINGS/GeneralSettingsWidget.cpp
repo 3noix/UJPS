@@ -39,9 +39,12 @@
 GeneralSettingsWidget::GeneralSettingsWidget(QWidget *parent) : AbstractSettingsWidget(parent)
 {
 	layout1 = new QVBoxLayout{this};
+	layout1->setSpacing(10);
+	
 	layoutDefDir = new QHBoxLayout{};
 	layoutStartingProfile = new QHBoxLayout{};
 	layoutDefTimeStep = new QHBoxLayout{};
+	
 	this->setLayout(layout1);
 	layout1->addLayout(layoutDefDir);
 	layout1->addLayout(layoutStartingProfile);

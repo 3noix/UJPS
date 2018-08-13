@@ -31,6 +31,7 @@
 VJoySettingsWidget::VJoySettingsWidget(QWidget *parent) : AbstractSettingsWidget(parent)
 {
 	layout1 = new QVBoxLayout(this);
+	layout1->setSpacing(10);
 	layoutVjoyConfigExe = new QHBoxLayout;
 	
 	boxVjoyConfigExe = new QCheckBox("Use vJoyConfig.exe",this);

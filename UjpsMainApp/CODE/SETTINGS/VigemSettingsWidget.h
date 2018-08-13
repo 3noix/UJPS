@@ -7,6 +7,7 @@
 class QVBoxLayout;
 class QHBoxLayout;
 class QLabel;
+class QPushButton;
 class QCheckBox;
 
 
@@ -28,13 +29,14 @@ class VigemSettingsWidget : public AbstractSettingsWidget
 		
 		
 	private slots:
+		void slotRefreshStatus();
 		void slotStartAutoWhiteLister();
 		
 		
 	private:
 		void addStatusWidgets();
-		void addVigemConfPageWidgets();
 		void addStartAutoWhiteListerWidgets();
+		void addVigemConfPageWidgets();
 		void addWhiteListWidgets();
 		
 		QVBoxLayout *layout1;
@@ -43,14 +45,15 @@ class VigemSettingsWidget : public AbstractSettingsWidget
 		QHBoxLayout *layoutStatus;
 		QLabel *label1;
 		QLabel *label2;
-		
-		// open ViGEm configuration page
-		QHBoxLayout *layoutVigemConfPage;
-		QLabel *labelVigemConfPage;
+		QPushButton *buttonRefreshStatus;
 		
 		// start auto white lister
 		QHBoxLayout *layoutStartAutoWhiteLister;
 		QLabel *labelStartAutoWhiteLister;
+		
+		// open ViGEm configuration page
+		QHBoxLayout *layoutVigemConfPage;
+		QLabel *labelVigemConfPage;
 		
 		// white list
 		QHBoxLayout *layoutWhiteList;

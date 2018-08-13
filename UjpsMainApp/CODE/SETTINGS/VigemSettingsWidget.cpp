@@ -4,6 +4,7 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QLabel>
+#include <QPushButton>
 #include <QCheckBox>
 #include <QProcess>
 
@@ -15,14 +16,15 @@
 //  DESTRUCTEUR
 //
 //  ADD STATUS WIDGETS
-//  ADD VIGEM CONF PAGE WIDGETS
 //  ADD START AUTO WHITE LISTER WIDGETS
+//  ADD VIGEM CONF PAGE WIDGETS
 //  ADD WHITE LIST WIDGETS
 //
 //  TAB NAME
 //  BUTTON OK CLICKED
 //  BUTTON CANCEL CLICKED
 //
+//  SLOT REFRESH STATUS
 //  SLOT START AUTO WHITE LISTER
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -31,29 +33,31 @@
 VigemSettingsWidget::VigemSettingsWidget(QWidget *parent) : AbstractSettingsWidget(parent)
 {
 	layout1 = new QVBoxLayout{this};
+	layout1->setSpacing(10);
+	
 	layoutStatus = new QHBoxLayout{};
-	layoutVigemConfPage = new QHBoxLayout{};
 	layoutStartAutoWhiteLister = new QHBoxLayout{};
+	layoutVigemConfPage = new QHBoxLayout{};
 	layoutWhiteList = new QHBoxLayout{};
 	
 	this->setLayout(layout1);
 	layout1->addLayout(layoutStatus);
-	layout1->addLayout(layoutVigemConfPage);
 	layout1->addLayout(layoutStartAutoWhiteLister);
+	layout1->addLayout(layoutVigemConfPage);
 	layout1->addLayout(layoutWhiteList);
 	layout1->addStretch();
 	
 	this->addStatusWidgets();
-	this->addVigemConfPageWidgets();
 	this->addStartAutoWhiteListerWidgets();
+	this->addVigemConfPageWidgets();
 	this->addWhiteListWidgets();
 }
 
 VigemSettingsWidget::~VigemSettingsWidget()
 {
 	delete layoutStatus;
-	delete layoutVigemConfPage;
 	delete layoutStartAutoWhiteLister;
+	delete layoutVigemConfPage;
 	delete layoutWhiteList;
 }
 
@@ -64,17 +68,36 @@ VigemSettingsWidget::~VigemSettingsWidget()
 //  ADD STATUS WIDGETS ////////////////////////////////////////////////////////
 void VigemSettingsWidget::addStatusWidgets()
 {
-	QString strOk = "<b><font color=\"#009900\">OK</font></b>" ;
+	QString strOk = "<b><font color=\"#009900\">Ready</font></b>" ;
 	QString strKo = "<b><font color=\"red\">Not ready</font></b>" ;
 	QString label2str = m_vigemInterface.vigemIsReady() ? strOk : strKo;
 	
 	label1 = new QLabel{"ViGEm status:",this};
 	label2 = new QLabel{label2str,this};
 	label2->setTextFormat(Qt::RichText);
+	buttonRefreshStatus = new QPushButton{"Refresh",this};
 	
 	layoutStatus->addWidget(label1);
 	layoutStatus->addWidget(label2);
+	layoutStatus->addWidget(buttonRefreshStatus);
 	layoutStatus->addStretch();
+	
+	QObject::connect(buttonRefreshStatus,&QPushButton::clicked,this,&VigemSettingsWidget::slotRefreshStatus);
+}
+
+// ADD START AUTO WHITE LISTER WIDGETS ////////////////////////////////////////
+void VigemSettingsWidget::addStartAutoWhiteListerWidgets()
+{
+	QString labelText = "<a href=\"rien\">Start AutoWhitelister.exe</a>";
+	labelStartAutoWhiteLister = new QLabel{labelText,this};
+	labelStartAutoWhiteLister->setTextFormat(Qt::RichText);
+	labelStartAutoWhiteLister->setTextInteractionFlags(Qt::TextBrowserInteraction);
+	labelStartAutoWhiteLister->setOpenExternalLinks(false);
+	
+	layoutStartAutoWhiteLister->addWidget(labelStartAutoWhiteLister);
+	layoutStartAutoWhiteLister->addStretch();
+	
+	QObject::connect(labelStartAutoWhiteLister,SIGNAL(linkActivated(QString)),this,SLOT(slotStartAutoWhiteLister()));
 }
 
 // ADD VIGEM CONF PAGE WIDGETS ////////////////////////////////////////////////
@@ -88,21 +111,6 @@ void VigemSettingsWidget::addVigemConfPageWidgets()
 	
 	layoutVigemConfPage->addWidget(labelVigemConfPage);
 	layoutVigemConfPage->addStretch();
-}
-
-// ADD START AUTO WHITE LISTER WIDGETS ////////////////////////////////////////
-void VigemSettingsWidget::addStartAutoWhiteListerWidgets()
-{
-	QString labelText = "<a href=\"rien\">Start AutoWhiteLister.exe</a>";
-	labelStartAutoWhiteLister = new QLabel{labelText,this};
-	labelStartAutoWhiteLister->setTextFormat(Qt::RichText);
-	labelStartAutoWhiteLister->setTextInteractionFlags(Qt::TextBrowserInteraction);
-	labelStartAutoWhiteLister->setOpenExternalLinks(false);
-	
-	layoutStartAutoWhiteLister->addWidget(labelStartAutoWhiteLister);
-	layoutStartAutoWhiteLister->addStretch();
-	
-	QObject::connect(labelStartAutoWhiteLister,SIGNAL(linkActivated(QString)),this,SLOT(slotStartAutoWhiteLister()));
 }
 
 // ADD WHITE LIST WIDGETS /////////////////////////////////////////////////////
@@ -156,6 +164,15 @@ void VigemSettingsWidget::buttonCancelClicked()
 
 
 
+
+// SLOT REFRESH STATUS ////////////////////////////////////////////////////////
+void VigemSettingsWidget::slotRefreshStatus()
+{
+	QString strOk = "<b><font color=\"#009900\">Ready</font></b>" ;
+	QString strKo = "<b><font color=\"red\">Not ready</font></b>" ;
+	QString label2str = m_vigemInterface.vigemIsReady() ? strOk : strKo;
+	label2->setText(label2str);
+}
 
 // SLOT START AUTO WHITE LISTER ///////////////////////////////////////////////
 void VigemSettingsWidget::slotStartAutoWhiteLister()
