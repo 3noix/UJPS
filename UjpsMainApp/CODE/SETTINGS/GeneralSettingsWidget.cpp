@@ -101,7 +101,7 @@ void GeneralSettingsWidget::addDefaultDirWidgets()
 // ADD STARTING PROFILE WIDGETS ///////////////////////////////////////////////
 void GeneralSettingsWidget::addStartingProfileWidgets()
 {
-	boxUseStartingProfile = new QCheckBox{"Define a starting profile: ",this};
+	boxUseStartingProfile = new QCheckBox{"Default profile: ",this};
 	lineStartingProfile = new QLineEdit{this};
 	buttonStartingProfile = new QPushButton{"Browse",this};
 	

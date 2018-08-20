@@ -59,9 +59,9 @@ MainWindow::MainWindow(QString proFilePath, int dtms, bool bPlay, QWidget *paren
 	// read settings
 	ApplicationSettings& settings = ApplicationSettings::instance();
 	settings.readFile();
-	bool bUseVJoyConfigBinary = settings.property("bUseVJoyConfigBinary").toBool();
-	QString vJoyConfigBinary = settings.property("vJoyConfigBinary").toString();
-	VirtualJoystick::setVJoyConfigOptions(bUseVJoyConfigBinary,vJoyConfigBinary);
+	//bool bUseVJoyConfigBinary = settings.property("bUseVJoyConfigBinary").toBool();
+	//QString vJoyConfigBinary = settings.property("vJoyConfigBinary").toString();
+	//VirtualJoystick::setVJoyConfigOptions(bUseVJoyConfigBinary,vJoyConfigBinary);
 	bool bUseStartingProfilePath = settings.property("bUseStartingProfilePath").toBool();
 	QString startingProfile = settings.property("startingProfilePath").toString();
 	bool bUseDefaultTimeStep = settings.property("bUseDefaultTimeStep").toBool();
@@ -380,7 +380,7 @@ void MainWindow::slotSettings()
 {
 	SettingsDialog settingsDialog(this);
 	settingsDialog.addSettingsWidget(new GeneralSettingsWidget(&settingsDialog));
-	settingsDialog.addSettingsWidget(new VJoySettingsWidget(&settingsDialog));
+	//settingsDialog.addSettingsWidget(new VJoySettingsWidget(&settingsDialog));
 	settingsDialog.addSettingsWidget(new VigemSettingsWidget(&settingsDialog));
 	
 	int result = settingsDialog.exec();
