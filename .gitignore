@@ -1,0 +1,14 @@
+*moc_*.h
+*moc_*.cpp
+qrc_resources.cpp
+object_script.*
+*.o
+*.exe
+*.dll
+*.lnk
+*.qm
+lib*.a
+Makefile
+Makefile.Debug
+Makefile.Release
+.qmake.stash
