@@ -1,16 +1,18 @@
 CONFIG(debug, debug|release) {
-	DESTDIR = debug
+	MODE = debug
 }
 CONFIG(release, debug|release) {
-	DESTDIR = release
+	MODE = release
 }
+
 
 TEMPLATE = app
 TARGET = CleanQtProjects
-DEPENDPATH += .
-INCLUDEPATH += .
+CONFIG += c++11 console
+DESTDIR = $$MODE
 OBJECTS_DIR = $$DESTDIR/objects
 MOC_DIR = $$DESTDIR/moc
-CONFIG += console
+
 
 SOURCES += main.cpp
+

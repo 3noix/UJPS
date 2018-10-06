@@ -1,38 +1,34 @@
-win32-g++:CONFIG(debug, debug|release) {
-	DESTDIR = debug
-	LIBS += ../StaticLibs/SOURCES/QtGameControllerModif/debug/libQtGameControllerModif.a
+CONFIG(debug, debug|release) {
+	MODE = debug
 }
-win32-g++:CONFIG(release, debug|release) {
-	DESTDIR = release
-	LIBS += ../StaticLibs/SOURCES/QtGameControllerModif/release/libQtGameControllerModif.a
-}
-
-win32-msvc*:CONFIG(debug, debug|release) {
-	DESTDIR = debug
-	LIBS += ../StaticLibs/SOURCES/QtGameControllerModif/debug/QtGameControllerModif.lib
-}
-win32-msvc*:CONFIG(release, debug|release) {
-	DESTDIR = release
-	LIBS += ../StaticLibs/SOURCES/QtGameControllerModif/release/QtGameControllerModif.lib
+CONFIG(release, debug|release) {
+	MODE = release
 }
 
 
 TEMPLATE = app
 TARGET = ControllersInfo
-DEPENDPATH += .
-INCLUDEPATH += .
+CONFIG += c++11
+DESTDIR = $$MODE
 OBJECTS_DIR = $$DESTDIR/objects
 MOC_DIR = $$DESTDIR/moc
-CONFIG += c++11
 QT += core gui widgets
+
+
+win32-g++:LIBS += ../StaticLibs/SOURCES/QtGameControllerModif/$$MODE/libQtGameControllerModif.a
+win32-msvc*:LIBS += ../StaticLibs/SOURCES/QtGameControllerModif/$$MODE/QtGameControllerModif.lib
 
 		
 INCLUDEPATH +=  ../StaticLibs/INCLUDES/QtGameControllerModif/
 
+
 HEADERS +=  CODE/MainWindow.h
+
 
 SOURCES +=  CODE/main.cpp \
 			CODE/MainWindow.cpp
 
+
 RESOURCES += resources.qrc
 RC_FILE += icone.rc
+

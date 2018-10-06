@@ -1,16 +1,17 @@
 CONFIG(debug, debug|release) {
-	DESTDIR = debug
+	MODE = debug
 }
 CONFIG(release, debug|release) {
-	DESTDIR = release
+	MODE = release
 }
 
 
 TEMPLATE = lib
 TARGET = QtGameControllerModif
+CONFIG += c++11
+DESTDIR = $$MODE
 OBJECTS_DIR = $$DESTDIR/objects
 MOC_DIR = $$DESTDIR/moc
-CONFIG += c++11
 QT = core
 
 
@@ -30,3 +31,4 @@ SOURCES +=  CODE/GameController.cpp \
 			CODE/GameControllerDirectInput.cpp \
 			CODE/GameControllerXInput.cpp \
 			CODE/GameControllerEvents.cpp
+

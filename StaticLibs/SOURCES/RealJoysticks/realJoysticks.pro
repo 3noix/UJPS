@@ -1,28 +1,23 @@
-win32-g++:CONFIG(debug, debug|release) {
-	DESTDIR = debug
-	LIBS += ../QtGameControllerModif/debug/libQtGameControllerModif.a
+CONFIG(debug, debug|release) {
+	MODE = debug
 }
-win32-g++:CONFIG(release, debug|release) {
-	DESTDIR = release
-	LIBS += ../QtGameControllerModif/release/libQtGameControllerModif.a
-}
-
-win32-msvc*:CONFIG(debug, debug|release) {
-	DESTDIR = debug
-	LIBS += ../QtGameControllerModif/debug/QtGameControllerModif.lib
-}
-win32-msvc*:CONFIG(release, debug|release) {
-	DESTDIR = release
-	LIBS += ../QtGameControllerModif/release/QtGameControllerModif.lib
+CONFIG(release, debug|release) {
+	MODE = release
 }
 
 
 TEMPLATE = lib
 TARGET = realJoysticks
+CONFIG += c++11
+DESTDIR = $$MODE
 OBJECTS_DIR = $$DESTDIR/objects
 MOC_DIR = $$DESTDIR/moc
-CONFIG += c++11
 QT += network
+
+
+win32-g++:LIBS += ../QtGameControllerModif/$$MODE/libQtGameControllerModif.a
+win32-msvc*:LIBS += ../QtGameControllerModif/$$MODE/QtGameControllerModif.lib
+
 
 INCLUDEPATH +=  ../../INCLUDES/QtGameControllerModif/ \
 				../../INCLUDES/Other/ \

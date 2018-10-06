@@ -1,38 +1,30 @@
-win32-g++:CONFIG(debug, debug|release) {
-	DESTDIR = debug
-	LIBS += ../StaticLibs/SOURCES/QtGameControllerModif/debug/libQtGameControllerModif.a
-	LIBS += ../StaticLibs/SOURCES/RealJoysticks/debug/libRealJoysticks.a
+CONFIG(debug, debug|release) {
+	MODE = debug
 }
-win32-g++:CONFIG(release, debug|release) {
-	DESTDIR = release
-	LIBS += ../StaticLibs/SOURCES/QtGameControllerModif/release/libQtGameControllerModif.a
-	LIBS += ../StaticLibs/SOURCES/RealJoysticks/release/libRealJoysticks.a
-}
-
-win32-msvc*:CONFIG(debug, debug|release) {
-	DESTDIR = debug
-	LIBS += ../StaticLibs/SOURCES/QtGameControllerModif/debug/QtGameControllerModif.lib
-	LIBS += ../StaticLibs/SOURCES/RealJoysticks/debug/RealJoysticks.lib
-}
-win32-msvc*:CONFIG(release, debug|release) {
-	DESTDIR = release
-	LIBS += ../StaticLibs/SOURCES/QtGameControllerModif/release/QtGameControllerModif.lib
-	LIBS += ../StaticLibs/SOURCES/RealJoysticks/release/RealJoysticks.lib
+CONFIG(release, debug|release) {
+	MODE = release
 }
 
 
 TEMPLATE = app
 TARGET = Monitoring
-DEPENDPATH += .
-INCLUDEPATH += .
+CONFIG += c++11
+DESTDIR = $$MODE
 OBJECTS_DIR = $$DESTDIR/objects
 MOC_DIR = $$DESTDIR/moc
-CONFIG += c++11
 QT += core gui widgets charts
 
-		
+
+win32-g++:LIBS += ../StaticLibs/SOURCES/QtGameControllerModif/$$MODE/libQtGameControllerModif.a
+win32-g++:LIBS += ../StaticLibs/SOURCES/RealJoysticks/$$MODE/libRealJoysticks.a
+
+win32-msvc*:LIBS += ../StaticLibs/SOURCES/QtGameControllerModif/$$MODE/QtGameControllerModif.lib
+win32-msvc*:LIBS += ../StaticLibs/SOURCES/RealJoysticks/$$MODE/RealJoysticks.lib
+
+
 INCLUDEPATH +=  ../StaticLibs/INCLUDES/QtGameControllerModif/ \
 				../StaticLibs/INCLUDES/RealJoysticks/
+
 
 HEADERS +=  CODE/MainWindow.h \
 			CODE/WIDGETS/StandardJoystickWidget.h \
@@ -43,6 +35,7 @@ HEADERS +=  CODE/MainWindow.h \
 			CODE/WIDGETS/PovWidget.h \
 			CODE/WIDGETS/MyChartWidget.h \
 			CODE/WIDGETS/MyCheckBox.h
+
 
 SOURCES +=  CODE/main.cpp \
 			CODE/MainWindow.cpp \
@@ -55,5 +48,7 @@ SOURCES +=  CODE/main.cpp \
 			CODE/WIDGETS/MyChartWidget.cpp \
 			CODE/WIDGETS/MyCheckBox.cpp
 
+
 RESOURCES += resources.qrc
 RC_FILE += icone.rc
+
