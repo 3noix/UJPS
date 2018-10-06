@@ -30,7 +30,7 @@
 
 
 // CONSTRUCTEUR ET DESTRUCTEUR ////////////////////////////////////////////////
-VigemSettingsWidget::VigemSettingsWidget(QWidget *parent) : AbstractSettingsWidget(parent)
+VigemSettingsWidget::VigemSettingsWidget(QWidget *parent) : AbstractSettingsWidget{parent}
 {
 	layout1 = new QVBoxLayout{this};
 	layout1->setSpacing(10);
@@ -65,6 +65,7 @@ VigemSettingsWidget::~VigemSettingsWidget()
 
 
 
+
 //  ADD STATUS WIDGETS ////////////////////////////////////////////////////////
 void VigemSettingsWidget::addStatusWidgets()
 {
@@ -82,7 +83,7 @@ void VigemSettingsWidget::addStatusWidgets()
 	layoutStatus->addWidget(buttonRefreshStatus);
 	layoutStatus->addStretch();
 	
-	QObject::connect(buttonRefreshStatus,&QPushButton::clicked,this,&VigemSettingsWidget::slotRefreshStatus);
+	QObject::connect(buttonRefreshStatus, &QPushButton::clicked, this, &VigemSettingsWidget::slotRefreshStatus);
 }
 
 // ADD START AUTO WHITE LISTER WIDGETS ////////////////////////////////////////
@@ -97,7 +98,7 @@ void VigemSettingsWidget::addStartAutoWhiteListerWidgets()
 	layoutStartAutoWhiteLister->addWidget(labelStartAutoWhiteLister);
 	layoutStartAutoWhiteLister->addStretch();
 	
-	QObject::connect(labelStartAutoWhiteLister,SIGNAL(linkActivated(QString)),this,SLOT(slotStartAutoWhiteLister()));
+	QObject::connect(labelStartAutoWhiteLister, SIGNAL(linkActivated(QString)), this, SLOT(slotStartAutoWhiteLister()));
 }
 
 // ADD VIGEM CONF PAGE WIDGETS ////////////////////////////////////////////////
@@ -131,6 +132,7 @@ void VigemSettingsWidget::addWhiteListWidgets()
 
 
 
+
 // TAB NAME ///////////////////////////////////////////////////////////////////
 QString VigemSettingsWidget::tabName() const
 {
@@ -140,7 +142,7 @@ QString VigemSettingsWidget::tabName() const
 // BUTTON OK CLICKED //////////////////////////////////////////////////////////
 void VigemSettingsWidget::buttonOkClicked()
 {
-	bool bWhiteList = (boxWhiteList->checkState()==Qt::Checked);
+	bool bWhiteList = (boxWhiteList->checkState() == Qt::Checked);
 	
 	// settings
 	ApplicationSettings& settings = ApplicationSettings::instance();
@@ -180,5 +182,4 @@ void VigemSettingsWidget::slotStartAutoWhiteLister()
 	QString autoWhiteListerExe = QCoreApplication::applicationDirPath() + "/../../HidingJoysticks/ViGEm/AutoWhitelister.exe";
 	QProcess::startDetached(autoWhiteListerExe);
 }
-
 

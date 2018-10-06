@@ -49,5 +49,6 @@ class ActionButtonRelease : public AbstractAction
 		uint m_vButton;
 };
 
+
 #endif
 

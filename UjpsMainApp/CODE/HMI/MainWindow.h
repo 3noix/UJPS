@@ -94,5 +94,6 @@ class MainWindow : public QMainWindow
 		ProfileEngine *m_engine;
 };
 
+
 #endif
 

@@ -63,3 +63,4 @@ class CurvePolynomial2Widget : public QGroupBox
 
 
 #endif
+

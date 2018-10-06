@@ -49,4 +49,6 @@ class LogitechX56Joystick : public RealJoystick
 		QStringList m_povsNames;
 };
 
+
 #endif
+

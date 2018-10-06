@@ -48,5 +48,6 @@ class GameController : public QObject
 		void gameControllerPovEvent(GameControllerPovEvent *event);
 };
 
+
 #endif
 

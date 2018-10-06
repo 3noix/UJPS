@@ -48,5 +48,6 @@ class MappingMergeAxes : public AbstractMapping
 		bool m_disable;
 };
 
+
 #endif
 

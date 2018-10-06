@@ -32,4 +32,6 @@ class RealJoystickFactory : public QObject, public AbstractRealJoystickFactory
 		};
 };
 
+
 #endif
+

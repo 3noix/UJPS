@@ -42,4 +42,6 @@ class MainWindow : public QMainWindow
 		QLabel *labelNoController;
 };
 
+
 #endif
+

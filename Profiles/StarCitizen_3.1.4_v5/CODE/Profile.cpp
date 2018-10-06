@@ -41,7 +41,7 @@ namespace SC2 = StarCitizenControls_vJoy2;
 
 
 // CONSTRUCTEUR ET DESTRUCTEUR ////////////////////////////////////////////////
-Profile::Profile() : AbstractProfile()
+Profile::Profile() : AbstractProfile{}
 {
 	tmwj = nullptr;
 	tmwt = nullptr;
@@ -61,8 +61,6 @@ Profile::~Profile()
 {
 	this->stop();
 }
-
-
 
 
 
@@ -167,18 +165,18 @@ void Profile::runFirstStep()
 	else if (tmwt->buttonPressed(TMWT::APAH))  {this->setControlsFlightLanding();}
 	else if (tmwt->buttonPressed(TMWT::APATT)) {this->setControlsFlightCruise();}
 	// set transitions between control modes
-	Map(tmwt, ControlType::Button, TMWT::APALT, AllLayers, new TriggerButtonPress{}, new ActionCallback([this](){this->setControlsGround();}));
-	Map(tmwt, ControlType::Button, TMWT::APAH,  AllLayers, new TriggerButtonPress{}, new ActionCallback([this](){this->setControlsFlightLanding();}));
-	Map(tmwt, ControlType::Button, TMWT::APATT, AllLayers, new TriggerButtonPress{}, new ActionCallback([this](){this->setControlsFlightCruise();}));
+	Map(tmwt, ControlType::Button, TMWT::APALT, AllLayers, new TriggerButtonPress{}, new ActionCallback{[this](){this->setControlsGround();}});
+	Map(tmwt, ControlType::Button, TMWT::APAH,  AllLayers, new TriggerButtonPress{}, new ActionCallback{[this](){this->setControlsFlightLanding();}});
+	Map(tmwt, ControlType::Button, TMWT::APATT, AllLayers, new TriggerButtonPress{}, new ActionCallback{[this](){this->setControlsFlightCruise();}});
 	// landing
 	MapButton(tmwt, TMWT::APENG, AllLayers, vj1, SC1::LandingSystemToggle);
 	
 	// throttle slider for power in relative (no axis provided for absolute power)
 	tmwt->setCurve(TMWT::THR_FC, new CurveExpCentered{2.0f, 2.0f, 2.0f, 0, 0});
 	MapAxis2(tmwt, TMWT::THR_FC, AllLayers, {-0.95,0.95},{
-		new ActionButtonPress(vj1,SC1::IncreasePower),
-		new ActionChain({new ActionButtonRelease{vj1,SC1::IncreasePower}, new ActionButtonRelease{vj1,SC1::DecreasePower}}),
-		new ActionButtonPress(vj1,SC1::DecreasePower)
+		new ActionButtonPress{vj1,SC1::IncreasePower},
+		new ActionChain{{new ActionButtonRelease{vj1,SC1::IncreasePower}, new ActionButtonRelease{vj1,SC1::DecreasePower}}},
+		new ActionButtonPress{vj1,SC1::DecreasePower}
 	});
 	
 	// brakes, boost, modes, radar, quantum drive
@@ -192,7 +190,7 @@ void Profile::runFirstStep()
 	auto callbackDecoupledTogglePulse = [this]()
 	{
 		if (!tmwt->buttonPressed(TMWT::LDGH))
-			DoAction(new ActionButtonPulse(vj1,SC1::DecoupledModeToggle,ncPulse));
+			DoAction(new ActionButtonPulse{vj1,SC1::DecoupledModeToggle,ncPulse});
 	};
 	Map(tmwt, ControlType::Button, TMWT::BSF, AllLayers, new TriggerButtonChange{}, new ActionCallback{callbackDecoupledTogglePulse});
 	MapButton(tmwt, TMWT::CHB, AllLayers, vj1, SC1::Autoland);
@@ -258,9 +256,9 @@ void Profile::runFirstStep()
 		new ActionButtonPulse{vj2, SC2::ResetShieldsLevels, ncPulse}
 	);
 	MapAxis2(tmwt, TMWT::SCX, AllLayers, {-0.84,0.84},{
-		new ActionButtonPress(vj2,SC2::ShieldRaiseLeft),
-		new ActionChain({new ActionButtonRelease{vj2,SC2::ShieldRaiseLeft}, new ActionButtonRelease{vj2,SC2::ShieldRaiseRight}}),
-		new ActionButtonPress(vj2,SC2::ShieldRaiseRight)
+		new ActionButtonPress{vj2,SC2::ShieldRaiseLeft},
+		new ActionChain{{new ActionButtonRelease{vj2,SC2::ShieldRaiseLeft}, new ActionButtonRelease{vj2,SC2::ShieldRaiseRight}}},
+		new ActionButtonPress{vj2,SC2::ShieldRaiseRight}
 	});
 	MapAxis2(tmwt, TMWT::SCY, AllLayers, {-0.84,0.84},{
 		new ActionCallback{[this]() {this->shieldsDownArrow();}},

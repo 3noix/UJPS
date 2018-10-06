@@ -2,6 +2,9 @@
 #include "GameControllerEvents.h"
 #include <QtDebug>
 
+GameControllerDirectInput *joysticktoenume; //TODO: Dispense with this global pointer.
+LPDIRECTINPUT8 g_pDI = nullptr;
+
 
 ///////////////////////////////////////////////////////////////////////////////
 // RESUME
@@ -25,10 +28,6 @@
 //  READ GAME CONTROLLER
 //  HEXA STRING
 ///////////////////////////////////////////////////////////////////////////////
-
-
-GameControllerDirectInput *joysticktoenume; //TODO: Dispense with this global pointer.
-LPDIRECTINPUT8 g_pDI = nullptr;
 
 
 // CONSTRUCTEUR ///////////////////////////////////////////////////////////////
@@ -102,6 +101,9 @@ GameControllerDirectInput::GameControllerDirectInput(uint id, QObject *parent) :
 
 
 
+
+
+
 // DESCRIPTION ////////////////////////////////////////////////////////////////
 QString GameControllerDirectInput::description() {return m_description;}
 // HARDWARE ID ////////////////////////////////////////////////////////////////
@@ -110,6 +112,9 @@ QString GameControllerDirectInput::hardwareId() {return m_hardwareId;}
 uint GameControllerDirectInput::id() {return m_id;}
 // IS VALID ///////////////////////////////////////////////////////////////////
 bool GameControllerDirectInput::isValid() {return m_valid;}
+
+
+
 
 
 
@@ -140,6 +145,8 @@ float GameControllerDirectInput::povValue(uint pov)
 	if (pov >= m_nbPovs) {return 0.0f;}
 	return m_povsValues[pov];
 }
+
+
 
 
 
@@ -261,7 +268,6 @@ BOOL CALLBACK EnumObjectsCallback(const DIDEVICEOBJECTINSTANCE* pdidoi, VOID* pC
 	return DIENUM_CONTINUE;
 }
 
-
 // READ GAME CONTROLLER ///////////////////////////////////////////////////////
 void GameControllerDirectInput::readGameController()
 {
@@ -355,8 +361,7 @@ void GameControllerDirectInput::readGameController()
 QString GameControllerDirectInput::hexaString(DWORD value)
 {
 	QString str = QString("%1").arg(QString::number(value,16).toUpper(),8,'0');
-	if (str.size() != 8) {return QString();}
+	if (str.size() != 8) {return {};}
 	return "VID_" + str.right(4) + "&PID_" + str.left(4);
 }
-
 

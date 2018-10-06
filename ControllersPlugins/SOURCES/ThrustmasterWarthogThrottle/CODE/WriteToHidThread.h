@@ -37,5 +37,6 @@ class WriteToHidThread : public QThread
 		HidDevice *m_hidDevice;
 };
 
+
 #endif
 

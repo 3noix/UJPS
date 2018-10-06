@@ -4,8 +4,14 @@
 #include <QtGlobal>
 
 
+///////////////////////////////////////////////////////////////////////////////
+//  CONSTRUCTEUR
+//  RUN
+///////////////////////////////////////////////////////////////////////////////
 
-CurveExpCentered::CurveExpCentered(float leftDZ, float centerDZ, float rightDZ, float curveParam, float zoom) : AbstractAxisCurve()
+
+// CONSTRUCTEUR ///////////////////////////////////////////////////////////////
+CurveExpCentered::CurveExpCentered(float leftDZ, float centerDZ, float rightDZ, float curveParam, float zoom) : AbstractAxisCurve{}
 {
 	m_m = 0.02f * leftDZ - 1.0f;
 	m_M = 1.0f - 0.02f * rightDZ;
@@ -16,11 +22,7 @@ CurveExpCentered::CurveExpCentered(float leftDZ, float centerDZ, float rightDZ, 
 	m_zoom = zoom;
 }
 
-
-
-
-
-
+// RUN ////////////////////////////////////////////////////////////////////////
 float CurveExpCentered::run(float in)
 {
 	if (in < m_m)

@@ -37,5 +37,6 @@ class TriggerPovChange : public AbstractTrigger
 		};
 };
 
+
 #endif
 

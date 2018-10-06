@@ -20,7 +20,7 @@
 
 
 // CONSTRUCTEUR ET DESTRUCTEUR ////////////////////////////////////////////////
-QtCompilationProcess::QtCompilationProcess() : QProcess(nullptr)
+QtCompilationProcess::QtCompilationProcess() : QProcess{nullptr}
 {
 	B_QMAKE_PASS = false;
 	B_MAKE_DEBUG_PASS = false;
@@ -32,9 +32,9 @@ QtCompilationProcess::QtCompilationProcess() : QProcess(nullptr)
 	m_killed = false;
 	
 	connect(this, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(slotContinueCompilation(int,QProcess::ExitStatus)));
-	connect(this, SIGNAL(error(QProcess::ProcessError)), this, SLOT(slotError(QProcess::ProcessError)));
-	connect(this, SIGNAL(readyReadStandardOutput()), this, SLOT(slotAddTextStdout()));
-	connect(this, SIGNAL(readyReadStandardError()), this, SLOT(slotAddTextStderr()));
+	connect(this, SIGNAL(error(QProcess::ProcessError)),      this, SLOT(slotError(QProcess::ProcessError)));
+	connect(this, SIGNAL(readyReadStandardOutput()),          this, SLOT(slotAddTextStdout()));
+	connect(this, SIGNAL(readyReadStandardError()),           this, SLOT(slotAddTextStderr()));
 }
 
 QtCompilationProcess::~QtCompilationProcess()
@@ -42,6 +42,9 @@ QtCompilationProcess::~QtCompilationProcess()
 	if (this->state() != QProcess::NotRunning)
 	{this->killCompilation();}
 }
+
+
+
 
 
 
@@ -56,7 +59,6 @@ void QtCompilationProcess::setupEnvironmentForQtUsage(const QString &qtDir, cons
 	this->setProcessEnvironment(myEnvt);
 }
 
-
 // BEGIN COMPILATION //////////////////////////////////////////////////////////
 void QtCompilationProcess::beginCompilation(const QString &directory, const QString &projectFile, bool debugMode, bool releaseMode)
 {
@@ -68,7 +70,7 @@ void QtCompilationProcess::beginCompilation(const QString &directory, const QStr
 	}
 	
 	// vérification de l'existence du répertoire du modèle
-	QDir modelDir(directory);
+	QDir modelDir{directory};
 	if (!modelDir.exists())
 	{
 		emit compilationMessage("The following directory does not exists : " + directory, Qt::red);
@@ -91,10 +93,9 @@ void QtCompilationProcess::beginCompilation(const QString &directory, const QStr
 	// lancer qmake
 	m_killed = false;
 	emit compilationMessage("Command : qmake " + projectFile, Qt::blue);
-	QStringList args = QStringList() << projectFile;
-	this->start(m_qtDir + "/qmake", args);
+	QStringList args = {projectFile};
+	this->start(m_qtDir + "/qmake", {projectFile});
 }
-
 
 // KILL COMPILATION ///////////////////////////////////////////////////////////
 void QtCompilationProcess::killCompilation()
@@ -111,7 +112,6 @@ void QtCompilationProcess::killCompilation()
 		emit compilationMessage("The compilation process is not running !", Qt::black);
 	}
 }
-
 
 // SLOT CONTINUE COMPILATION //////////////////////////////////////////////////
 void QtCompilationProcess::slotContinueCompilation(int exitCode, QProcess::ExitStatus exitStatus)
@@ -141,7 +141,7 @@ void QtCompilationProcess::slotContinueCompilation(int exitCode, QProcess::ExitS
 		B_MAKE_DEBUG_PASS = true;
 		
 		emit compilationMessage("Command : mingw32-make debug", Qt::blue);
-		QStringList args = QStringList() << "debug";
+		QStringList args = {"debug"};
 		this->start(m_mingwDir + "/mingw32-make", args);
 	}
 	
@@ -152,7 +152,7 @@ void QtCompilationProcess::slotContinueCompilation(int exitCode, QProcess::ExitS
 		B_MAKE_RELEASE_PASS = true;
 		
 		emit compilationMessage("Command : mingw32-make release", Qt::blue);
-		QStringList args = QStringList() << "release";
+		QStringList args = {"release"};
 		this->start(m_mingwDir + "/mingw32-make", args);
 	}
 	
@@ -179,6 +179,10 @@ void QtCompilationProcess::slotContinueCompilation(int exitCode, QProcess::ExitS
 }
 
 
+
+
+
+
 // SLOT ERROR /////////////////////////////////////////////////////////////////
 void QtCompilationProcess::slotError(QProcess::ProcessError processError)
 {
@@ -200,26 +204,22 @@ void QtCompilationProcess::slotError(QProcess::ProcessError processError)
 	emit compilationFinished();
 }
 
-
 // SLOT ADD TEXT STDOUT ///////////////////////////////////////////////////////
 void QtCompilationProcess::slotAddTextStdout()
 {
-	QString data = (QString) this->readAllStandardOutput();
+	QString data = this->readAllStandardOutput();
 	data = data.trimmed();
 	if (data.size() == 0) {return;}
-	emit compilationMessage(QString(data), Qt::black);
+	emit compilationMessage(data,Qt::black);
 }
-
 
 // SLOT ADD TEXT STDERR ///////////////////////////////////////////////////////
 void QtCompilationProcess::slotAddTextStderr()
 {
 	B_ERROR = true;
-	QString data = (QString) this->readAllStandardError();
+	QString data = this->readAllStandardError();
 	data = data.trimmed();
 	if (data.size() == 0) {return;}
-	emit compilationMessage(data, Qt::red);
+	emit compilationMessage(data,Qt::red);
 }
-
-
 

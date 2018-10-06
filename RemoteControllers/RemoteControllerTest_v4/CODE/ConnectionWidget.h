@@ -50,5 +50,6 @@ class ConnectionWidget : public QWidget
 		QPushButton *m_connectButton;
 };
 
+
 #endif
 

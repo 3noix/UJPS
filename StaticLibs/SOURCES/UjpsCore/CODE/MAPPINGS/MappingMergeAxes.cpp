@@ -29,7 +29,7 @@ MappingMergeAxes::MappingMergeAxes(AbstractRealJoystick *rj1, uint rAxis1, float
 	VirtualJoystick *vj, uint vAxis,
 	AbstractAxisCurve *curve,
 	VirtualEventsQueue &eventsQueue)
-		: AbstractMapping(lc,eventsQueue)
+		: AbstractMapping{lc,eventsQueue}
 {
 	m_disable = false;
 	m_rj1 = rj1;
@@ -47,6 +47,8 @@ MappingMergeAxes::~MappingMergeAxes()
 {
 	if (m_curve) {delete m_curve;}
 }
+
+
 
 
 
@@ -129,6 +131,8 @@ void MappingMergeAxes::performAction(const JoystickChange &ch)
 
 
 
+
+
 // ACTIVATE BY LAYER CHANGE ///////////////////////////////////////////////////
 void MappingMergeAxes::activateByLayerChange()
 {
@@ -151,5 +155,4 @@ void MappingMergeAxes::aboutToBeDeleted()
 {
 	m_disable = true;
 }
-
 

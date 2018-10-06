@@ -1,6 +1,7 @@
 #ifndef REAL_JOYSTICKS_MANAGER
 #define REAL_JOYSTICKS_MANAGER
 
+
 #include <QObject>
 #include <QVector>
 #include <QStringList>
@@ -47,4 +48,6 @@ class RealJoysticksManager : public QObject
 		QVector<AbstractRealJoystickFactory*> m_factories;
 };
 
+
 #endif
+

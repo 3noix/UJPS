@@ -53,7 +53,7 @@ namespace SC = StarCitizenControls;
 
 
 // CONSTRUCTEUR ET DESTRUCTEUR ////////////////////////////////////////////////
-Profile::Profile() : AbstractProfile()
+Profile::Profile() : AbstractProfile{}
 {
 	tmwj = nullptr;
 	tmwt = nullptr;
@@ -69,8 +69,6 @@ Profile::~Profile()
 {
 	this->stop();
 }
-
-
 
 
 
@@ -144,18 +142,18 @@ void Profile::runFirstStep()
 	else if (tmwt->buttonPressed(TMWT::APAH))  {this->setControlsFlightLanding();}
 	else if (tmwt->buttonPressed(TMWT::APATT)) {this->setControlsFlightCruise();}
 	// set transitions between control modes
-	Map(tmwt, ControlType::Button, TMWT::APALT, AllLayers, new TriggerButtonPress{}, new ActionCallback([this](){this->setControlsGround();}));
-	Map(tmwt, ControlType::Button, TMWT::APAH,  AllLayers, new TriggerButtonPress{}, new ActionCallback([this](){this->setControlsFlightLanding();}));
-	Map(tmwt, ControlType::Button, TMWT::APATT, AllLayers, new TriggerButtonPress{}, new ActionCallback([this](){this->setControlsFlightCruise();}));
+	Map(tmwt, ControlType::Button, TMWT::APALT, AllLayers, new TriggerButtonPress{}, new ActionCallback{[this](){this->setControlsGround();}});
+	Map(tmwt, ControlType::Button, TMWT::APAH,  AllLayers, new TriggerButtonPress{}, new ActionCallback{[this](){this->setControlsFlightLanding();}});
+	Map(tmwt, ControlType::Button, TMWT::APATT, AllLayers, new TriggerButtonPress{}, new ActionCallback{[this](){this->setControlsFlightCruise();}});
 	// landing
 	MapButton(tmwt, TMWT::APENG, AllLayers, vj1, SC::LandingSystemToggle);
 	
 	// throttle slider for power in relative (no axis provided for absolute power)
 	tmwt->setCurve(TMWT::THR_FC, new CurveExpCentered{DeadZone_L, DeadZone_C, DeadZone_R, 0, 0});
 	MapAxis2(tmwt, TMWT::THR_FC, AllLayers, {-0.95,0.95},{
-		new ActionButtonPress(vj1,SC::IncreasePower),
-		new ActionChain({new ActionButtonRelease{vj1,SC::IncreasePower}, new ActionButtonRelease{vj1,SC::DecreasePower}}),
-		new ActionButtonPress(vj1,SC::DecreasePower)
+		new ActionButtonPress{vj1,SC::IncreasePower},
+		new ActionChain{{new ActionButtonRelease{vj1,SC::IncreasePower}, new ActionButtonRelease{vj1,SC::DecreasePower}}},
+		new ActionButtonPress{vj1,SC::DecreasePower}
 	});
 	
 	// brakes, boost, modes, radar, quantum drive
@@ -169,9 +167,9 @@ void Profile::runFirstStep()
 	auto callbackDecoupledTogglePulse = [this]()
 	{
 		if (!tmwt->buttonPressed(TMWT::LDGH))
-			DoAction(new ActionButtonPulse(vj1,SC::DecoupledModeToggle,ncPulse));
+			DoAction(new ActionButtonPulse{vj1,SC::DecoupledModeToggle,ncPulse});
 	};
-	Map(tmwt, ControlType::Button, TMWT::BSF, AllLayers, new TriggerButtonChange{}, new ActionCallback(callbackDecoupledTogglePulse));
+	Map(tmwt, ControlType::Button, TMWT::BSF, AllLayers, new TriggerButtonChange{}, new ActionCallback{callbackDecoupledTogglePulse});
 	MapButton(tmwt, TMWT::CHB, AllLayers, vj1, SC::Autoland);
 	MapButton(tmwt, TMWT::CHF, AllLayers, vj1, SC::QuantumDriveToggle);
 	
@@ -228,9 +226,9 @@ void Profile::runFirstStep()
 		new ActionButtonPulse{vj1, SC::ResetShieldsLevels, ncPulse}
 	);
 	MapAxis2(tmwt, TMWT::SCX, AllLayers, {-0.84,0.84},{
-		new ActionButtonPress(vj1,SC::ShieldRaiseLeft),
-		new ActionChain({new ActionButtonRelease{vj1,SC::ShieldRaiseLeft}, new ActionButtonRelease{vj1,SC::ShieldRaiseRight}}),
-		new ActionButtonPress(vj1,SC::ShieldRaiseRight)
+		new ActionButtonPress{vj1,SC::ShieldRaiseLeft},
+		new ActionChain{{new ActionButtonRelease{vj1,SC::ShieldRaiseLeft}, new ActionButtonRelease{vj1,SC::ShieldRaiseRight}}},
+		new ActionButtonPress{vj1,SC::ShieldRaiseRight}
 	});
 	MapAxis2(tmwt, TMWT::SCY, AllLayers, {-0.84,0.84},{
 		new ActionCallback{[this]() {this->shieldsDownArrow();}},
@@ -255,6 +253,7 @@ void Profile::runFirstStep()
 	// we send the report
 	vj1->flush();
 }
+
 
 
 
@@ -296,7 +295,6 @@ void Profile::nextTarget()
 
 
 
-
 // SWITCH SHIELDS MODES ///////////////////////////////////////////////////////
 void Profile::switchShieldsMode()
 {
@@ -330,6 +328,7 @@ void Profile::releaseLongiShieldsButtons()
 
 
 
+
 // RESET DXXY TRIMS ///////////////////////////////////////////////////////////
 void Profile::reset_dxxy_trims()
 {
@@ -347,7 +346,6 @@ void Profile::set_dxxy_trims()
 	vj1->setAxis(VJOY::ROTX,0.0f);
 	vj1->setAxis(VJOY::ROTY,0.0f);
 }
-
 
 
 
@@ -626,7 +624,7 @@ void Profile::set_THR_for_cruise()
 void Profile::set_THRLEFT_for_groundForward()
 {
 	MapAxis(tmwt, TMWT::THR_LEFT, AllLayers, vj1, VJOY::Z, AxisDirection::Normal);
-	tmwt->setCurve(TMWT::THR_LEFT, new CustomCurve({-1.0f,1.0f,  1.0f,0.0f}));
+	tmwt->setCurve(TMWT::THR_LEFT, new CustomCurve{{-1.0f,1.0f,  1.0f,0.0f}});
 	vj1->setAxis(VJOY::Z, -tmwt->axisValue(TMWT::THR_LEFT));
 	vj1->setAxis(VJOY::SLIDER0, 0.0f); // set vertical strafe axis at 0, otherwise they keep their last values
 }
@@ -634,7 +632,7 @@ void Profile::set_THRLEFT_for_groundForward()
 void Profile::set_THRLEFT_for_groundBackward()
 {
 	MapAxis(tmwt, TMWT::THR_LEFT, AllLayers, vj1, VJOY::Z, AxisDirection::Normal);
-	tmwt->setCurve(TMWT::THR_LEFT, new CustomCurve({-1.0f,-1.0f,  1.0f,0.0f}));
+	tmwt->setCurve(TMWT::THR_LEFT, new CustomCurve{{-1.0f,-1.0f,  1.0f,0.0f}});
 	vj1->setAxis(VJOY::Z, -tmwt->axisValue(TMWT::THR_LEFT));
 	vj1->setAxis(VJOY::SLIDER0, 0.0f); // set vertical strafe axis at 0, otherwise they keep their last values
 }
@@ -643,7 +641,7 @@ void Profile::set_THRLEFT_for_verticalStrafe()
 {
 	MapAxis(tmwt, TMWT::THR_LEFT, AllLayers, vj1, VJOY::SLIDER0, AxisDirection::Reversed);
 	float reductionFactor = 0.2f;
-	tmwt->setCurve(TMWT::THR_LEFT, new CustomCurve({-1.0f,-reductionFactor,  1.0f,reductionFactor}));
+	tmwt->setCurve(TMWT::THR_LEFT, new CustomCurve{{-1.0f,-reductionFactor,  1.0f,reductionFactor}});
 	vj1->setAxis(VJOY::SLIDER0, 0.0f);
 	vj1->setAxisTrim(VJOY::SLIDER0, tmwt->axisValue(TMWT::THR_LEFT));
 }
@@ -659,5 +657,4 @@ void Profile::set_THRRIGHT_for_flightThrottle()
 	MapAxis(tmwt, TMWT::THR_RIGHT, AllLayers, vj1, VJOY::Z, AxisDirection::Normal); // THR_RIGHT mapped to thrust
 	vj1->setAxis(VJOY::Z, tmwt->axisValue(TMWT::THR_RIGHT)); // set axis at correct value, otherwise it is necessary to wait for a movement of the throttle
 }
-
 

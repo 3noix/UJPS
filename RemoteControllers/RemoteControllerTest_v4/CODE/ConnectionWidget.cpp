@@ -20,7 +20,7 @@
 
 
 // CONSTRUCTEUR ///////////////////////////////////////////////////////////////
-ConnectionWidget::ConnectionWidget(QWidget *parent) : QWidget(parent)
+ConnectionWidget::ConnectionWidget(QWidget *parent) : QWidget{parent}
 {
 	this->setupWidget();
 	connect(m_connectButton, &QAbstractButton::clicked, this, &ConnectionWidget::slotConnect);
@@ -32,18 +32,18 @@ void ConnectionWidget::setupWidget()
 	QStringList hosts = ConnectionWidget::findClassicalHosts();
 	
 	// create widgets
-	m_hostCombo = new QComboBox(this);
+	m_hostCombo = new QComboBox{this};
 	m_hostCombo->setEditable(true);
 	m_hostCombo->addItems(hosts);
-	m_portLineEdit = new QLineEdit(this);
-	m_portLineEdit->setValidator(new QIntValidator(1,65535,this));
+	m_portLineEdit = new QLineEdit{this};
+	m_portLineEdit->setValidator(new QIntValidator{1,65535,this});
 	m_portLineEdit->setText("32241");
-	m_hostLabel = new QLabel("Server name:",this);
-	m_portLabel = new QLabel("Server port:",this);
-	m_connectButton = new QPushButton("Connect",this);
+	m_hostLabel = new QLabel{"Server name:",this};
+	m_portLabel = new QLabel{"Server port:",this};
+	m_connectButton = new QPushButton{"Connect",this};
 	
 	// add widgets in the layout
-	m_layout = new QHBoxLayout(this);
+	m_layout = new QHBoxLayout{this};
 	m_layout->addWidget(m_hostLabel);
 	m_layout->addWidget(m_hostCombo);
 	m_layout->addWidget(m_portLabel);
@@ -64,7 +64,7 @@ QStringList ConnectionWidget::findClassicalHosts()
 		QString domain = QHostInfo::localDomainName();
 		if (!domain.isEmpty()) {hosts << name + "." + domain;}
 	}
-	if (name != QLatin1String("localhost")) {hosts << "localhost";}
+	if (name != QLatin1String{"localhost"}) {hosts << "localhost";}
 	// find out IP addresses of this machine
 	QList<QHostAddress> ipAddressesList = QNetworkInterface::allAddresses();
 	for (const QHostAddress &ha : ipAddressesList) {if (!ha.isLoopback()) {hosts << ha.toString();}} // add non-localhost addresses first
@@ -72,6 +72,7 @@ QStringList ConnectionWidget::findClassicalHosts()
 	
 	return hosts;
 }
+
 
 
 

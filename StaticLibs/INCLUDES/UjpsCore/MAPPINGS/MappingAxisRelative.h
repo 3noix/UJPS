@@ -45,5 +45,6 @@ class MappingAxisRelative : public AbstractMapping
 		bool m_disable;
 };
 
+
 #endif
 

@@ -49,4 +49,6 @@ class LogitechX56Throttle : public RealJoystick
 		QStringList m_povsNames;
 };
 
+
 #endif
+

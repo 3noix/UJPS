@@ -43,5 +43,6 @@ class TriggerAxisChangeComparison : public AbstractTrigger
 		float m_thr;
 };
 
+
 #endif
 

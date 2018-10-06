@@ -34,6 +34,8 @@ VirtualEventsQueue::VirtualEventsQueue(AbstractProfile *p) : m_profile{p}
 
 
 
+
+
 // POST EVENT /////////////////////////////////////////////////////////////////
 void VirtualEventsQueue::postEvent(const VirtualEvent &event)
 {
@@ -157,6 +159,8 @@ void VirtualEventsQueue::processEvents()
 		}
 	}
 }
+
+
 
 
 

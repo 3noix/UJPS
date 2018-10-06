@@ -28,15 +28,15 @@
 
 
 // CONSTRUCTEUR ET DESTRUCTEUR ////////////////////////////////////////////////
-VJoySettingsWidget::VJoySettingsWidget(QWidget *parent) : AbstractSettingsWidget(parent)
+VJoySettingsWidget::VJoySettingsWidget(QWidget *parent) : AbstractSettingsWidget{parent}
 {
-	layout1 = new QVBoxLayout(this);
+	layout1 = new QVBoxLayout{this};
 	layout1->setSpacing(10);
-	layoutVjoyConfigExe = new QHBoxLayout;
+	layoutVjoyConfigExe = new QHBoxLayout{};
 	
-	boxVjoyConfigExe = new QCheckBox("Use vJoyConfig.exe",this);
-	lineVjoyConfigExe = new QLineEdit(this);
-	buttonVjoyConfigExe = new QPushButton("Browse",this);
+	boxVjoyConfigExe = new QCheckBox{"Use vJoyConfig.exe",this};
+	lineVjoyConfigExe = new QLineEdit{this};
+	buttonVjoyConfigExe = new QPushButton{"Browse",this};
 	
 	layoutVjoyConfigExe->addWidget(boxVjoyConfigExe);
 	layoutVjoyConfigExe->addWidget(lineVjoyConfigExe);
@@ -52,9 +52,10 @@ VJoySettingsWidget::VJoySettingsWidget(QWidget *parent) : AbstractSettingsWidget
 	this->slotCheckBoxStateChanged(st);
 	lineVjoyConfigExe->setText(settings.property("vJoyConfigBinary").toString());
 	
-	connect(boxVjoyConfigExe,SIGNAL(stateChanged(int)),this,SLOT(slotCheckBoxStateChanged(int)));
-	connect(buttonVjoyConfigExe,SIGNAL(clicked()),this,SLOT(slotBrowseButtonClicked()));
+	QObject::connect(boxVjoyConfigExe,    SIGNAL(stateChanged(int)), this, SLOT(slotCheckBoxStateChanged(int)));
+	QObject::connect(buttonVjoyConfigExe, SIGNAL(clicked()),         this, SLOT(slotBrowseButtonClicked()));
 }
+
 
 
 
@@ -88,6 +89,7 @@ void VJoySettingsWidget::buttonCancelClicked()
 
 
 
+
 // SLOT CHECK BOX STATE CHANGED ///////////////////////////////////////////////
 void VJoySettingsWidget::slotCheckBoxStateChanged(int state)
 {
@@ -107,6 +109,4 @@ void VJoySettingsWidget::slotBrowseButtonClicked()
 	if (fileSelected == "") {return;}
 	lineVjoyConfigExe->setText(fileSelected);
 }
-
-
 

@@ -13,7 +13,7 @@
 
 
 // CONSTRUCTEUR ET DESTRUCTEUR ////////////////////////////////////////////////
-PovWidgetDecorated::PovWidgetDecorated(const QString &name, QWidget *parent) : QWidget(parent)
+PovWidgetDecorated::PovWidgetDecorated(const QString &name, QWidget *parent) : QWidget{parent}
 {
 	layout = new QVBoxLayout{this};
 	layout->setContentsMargins(0,0,0,0);

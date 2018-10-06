@@ -22,4 +22,6 @@ class CurvePolynomial2 : public AbstractAxisCurve
 		float m_zoom;
 };
 
+
 #endif
+

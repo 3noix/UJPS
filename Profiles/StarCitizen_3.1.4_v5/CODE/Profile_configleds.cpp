@@ -25,5 +25,3 @@ void Profile::toggleBacklit()
 	tmwt->setData("BACKLIT",m_bBacklit);
 }
 
-
-

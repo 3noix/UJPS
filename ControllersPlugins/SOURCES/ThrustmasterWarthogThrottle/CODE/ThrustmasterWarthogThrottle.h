@@ -68,4 +68,6 @@ class ThrustmasterWarthogThrottle : public RealJoystick
 		quint8 bitChar(uint i);
 };
 
+
 #endif
+

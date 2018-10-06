@@ -26,5 +26,6 @@ class AbstractAction
 		virtual QVector<VirtualEvent> aboutToBeDeleted() = 0;
 };
 
+
 #endif
 

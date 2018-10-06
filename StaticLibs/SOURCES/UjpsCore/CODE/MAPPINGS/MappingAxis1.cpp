@@ -29,7 +29,7 @@ MappingAxis1::MappingAxis1(AbstractRealJoystick *rj, uint rAxis, LayersCombo lc,
 	AbstractAction *actionPlus,
 	AbstractAction *actionMoins,
 	VirtualEventsQueue &eventsQueue)
-		: AbstractMapping(lc,eventsQueue)
+		: AbstractMapping{lc,eventsQueue}
 {
 	if (points.size() == 0) {throw ExceptionBadMapAxis1{};}
 	
@@ -57,6 +57,8 @@ MappingAxis1::~MappingAxis1()
 		m_actionMoins = nullptr;
 	}
 }
+
+
 
 
 
@@ -159,6 +161,8 @@ void MappingAxis1::performAction(const JoystickChange &ch)
 
 
 
+
+
 // ACTIVATE BY LAYER CHANGE ///////////////////////////////////////////////////
 void MappingAxis1::activateByLayerChange()
 {
@@ -192,6 +196,7 @@ void MappingAxis1::aboutToBeDeleted()
 
 
 
+
 // COMPUTE ZONE ///////////////////////////////////////////////////////////////
 uint MappingAxis1::computeZone(float axisValue)
 {
@@ -213,5 +218,4 @@ uint MappingAxis1::computeZone(float axisValue)
 		return max;
 	}
 }
-
 

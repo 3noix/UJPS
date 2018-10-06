@@ -10,7 +10,6 @@
 //
 //  SLOT GAME CONTROLLER BUTTON EVENT
 //  SLOT GAME CONTROLLER AXIS EVENT
-//
 //  DESCRIPTION
 //
 //  BUTTONS COUNT
@@ -56,7 +55,7 @@ ThrustmasterWarthogThrottle::ThrustmasterWarthogThrottle(GameController *c) : Re
 						"MS");
 	
 	// led support
-	m_thread = new WriteToHidThread(this);
+	m_thread = new WriteToHidThread{this};
 	m_flags = 0;
 	m_brightness = 0;
 	m_dataModified = false;
@@ -67,6 +66,7 @@ ThrustmasterWarthogThrottle::ThrustmasterWarthogThrottle(GameController *c) : Re
 	m_bLed5 = false;
 	m_bBackLit = false;
 }
+
 
 
 
@@ -230,15 +230,13 @@ void ThrustmasterWarthogThrottle::slotGameControllerAxisEvent(GameControllerAxis
 	else if (axis == 4) {m_changes << JoystickChange{this, ControlType::Axis, ThrustmasterWarthogThrottle_::THR_LEFT,  false, event->value()};}
 }
 
-
-
-
-
 // DESCRIPTION ////////////////////////////////////////////////////////////////
 QString ThrustmasterWarthogThrottle::description() const
 {
 	return ThrustmasterWarthogThrottle_::Description;
 }
+
+
 
 
 
@@ -284,7 +282,7 @@ QString ThrustmasterWarthogThrottle::buttonName(uint button) const
 	if (button < 52)
 		return m_buttonsNames[button];
 	else
-		return QString();
+		return {};
 }
 
 // BUTTONS NAMES //////////////////////////////////////////////////////////////
@@ -292,6 +290,7 @@ QStringList ThrustmasterWarthogThrottle::buttonsNames() const
 {
 	return m_buttonsNames;
 }
+
 
 
 
@@ -320,7 +319,7 @@ QString ThrustmasterWarthogThrottle::axisName(uint axis) const
 	if (axis < 5)
 		return m_axesNames[axis];
 	else
-		return QString();
+		return {};
 }
 
 // AXES NAMES /////////////////////////////////////////////////////////////////
@@ -328,6 +327,8 @@ QStringList ThrustmasterWarthogThrottle::axesNames() const
 {
 	return m_axesNames;
 }
+
+
 
 
 
@@ -344,7 +345,7 @@ QString ThrustmasterWarthogThrottle::povName(uint pov) const
 	if (pov < 2)
 		return m_povsNames[pov];
 	else
-		return QString();
+		return {};
 }
 
 // POVS NAMES /////////////////////////////////////////////////////////////////
@@ -457,6 +458,4 @@ quint8 ThrustmasterWarthogThrottle::bitChar(uint i)
 	quint8 one = 1;
 	return (one << i%8);
 }
-
-
 

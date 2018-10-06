@@ -12,3 +12,4 @@ start cmd.exe /c build_ThrustmasterWarthogJoystick.bat
 start cmd.exe /c build_ThrustmasterWarthogThrottle.bat
 start cmd.exe /c build_vJoyDevice.bat
 cd ..
+

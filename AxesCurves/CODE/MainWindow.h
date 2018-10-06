@@ -29,7 +29,7 @@ class MainWindow : public QWidget
 		MainWindow(MainWindow &&other) = delete;
 		MainWindow& operator=(const MainWindow &other) = delete;
 		MainWindow& operator=(MainWindow &&other) = delete;
-		virtual ~MainWindow();
+		virtual ~MainWindow() = default;
 		
 		
 	private slots:
@@ -64,6 +64,7 @@ class MainWindow : public QWidget
 		AbstractAxisCurve *m_curve;
 		QWidget *m_settingsWidget;
 };
+
 
 #endif
 

@@ -1,7 +1,9 @@
 #ifndef POV_WIDGET
 #define POV_WIDGET
 
+
 #include <QWidget>
+
 
 class PovWidget : public QWidget
 {
@@ -30,4 +32,6 @@ class PovWidget : public QWidget
 		float m_angle;
 };
 
+
 #endif
+

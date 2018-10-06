@@ -55,4 +55,6 @@ class StandardJoystickWidget : public QWidget
 		int compteur;
 };
 
+
 #endif
+

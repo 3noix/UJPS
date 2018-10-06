@@ -21,7 +21,7 @@
 
 // CONSTRUCTEUR ET DESTRUCTEUR ////////////////////////////////////////////////
 MappingRexec::MappingRexec(uint id, uint cycles, AbstractAction *action, VirtualEventsQueue &eventsQueue)
-	: AbstractMapping(LayersCombo{},eventsQueue)
+	: AbstractMapping{LayersCombo{},eventsQueue}
 {
 	m_disable = false;
 	
@@ -36,6 +36,8 @@ MappingRexec::~MappingRexec()
 	// this mapping is deleted when stopRexec is called
 	// but the action must not be deleted here, otherwise it will be impossible to recall startRexec with the same action in argument
 }
+
+
 
 
 
@@ -109,6 +111,8 @@ void MappingRexec::performAction(const JoystickChange &ch)
 {
 	Q_UNUSED(ch)
 }
+
+
 
 
 

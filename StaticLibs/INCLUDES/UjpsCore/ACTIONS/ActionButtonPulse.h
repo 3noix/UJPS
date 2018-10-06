@@ -65,5 +65,6 @@ class ActionButtonPulse : public AbstractAction
 		uint m_cycles;
 };
 
+
 #endif
 

@@ -43,4 +43,6 @@ namespace ThrustmasterT16000MJoystick_
 	const uint HAT1 = 0;	// HAT1 POV
 };
 
+
 #endif
+

@@ -32,5 +32,6 @@ class MessagesDirector : public QObject
 		QVector<QObject*> m_objectsListened;
 };
 
+
 #endif
 

@@ -55,5 +55,6 @@ class MainWindow : public QWidget
 		float povValue;
 };
 
+
 #endif
 

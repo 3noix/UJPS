@@ -12,7 +12,6 @@
 // RESUME :
 //
 //  CONSTRUCTEUR
-//  DESTRUCTEUR
 //
 //  SLOT BOUTON OK
 //  SLOT BOUTON CANCEL
@@ -22,21 +21,20 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 
-
-// CONSTRUCTEUR ET DESTRUCTEUR ////////////////////////////////////////////////
-SettingsDialog::SettingsDialog(QWidget *parent) :
-	QDialog{parent}
+// CONSTRUCTEUR ///////////////////////////////////////////////////////////////
+SettingsDialog::SettingsDialog(QWidget *parent) : QDialog{parent}
 {
 	this->setWindowTitle("Application settings");
-	this->setWindowIcon(QIcon(":/RESOURCES/ICONES/outils.png"));
+	this->setWindowIcon(QIcon{":/RESOURCES/ICONES/outils.png"});
 	this->setWindowModality(Qt::WindowModal);
 	
 	this->setupWidget();
 	this->resize(500,350);
 	
-	connect(boutonOk,SIGNAL(clicked()),this,SLOT(slotBoutonOk()));
-	connect(boutonCancel,SIGNAL(clicked()),this,SLOT(slotBoutonCancel()));
+	QObject::connect(boutonOk,     SIGNAL(clicked()), this, SLOT(slotBoutonOk()));
+	QObject::connect(boutonCancel, SIGNAL(clicked()), this, SLOT(slotBoutonCancel()));
 }
+
 
 
 
@@ -61,12 +59,12 @@ void SettingsDialog::slotBoutonCancel()
 // SETUP WIDGET ///////////////////////////////////////////////////////////////
 void SettingsDialog::setupWidget()
 {
-	layout = new QGridLayout(this);
+	layout = new QGridLayout{this};
 	this->setLayout(layout);
 	
-	tabs = new QTabWidget(this);
-	boutonOk = new QPushButton("Ok",this);
-	boutonCancel = new QPushButton("Cancel",this);
+	tabs = new QTabWidget{this};
+	boutonOk = new QPushButton{"Ok",this};
+	boutonCancel = new QPushButton{"Cancel",this};
 	
 	layout->addWidget(tabs,0,0,1,2);
 	layout->addWidget(boutonOk,1,0,1,1);
@@ -104,5 +102,4 @@ void SettingsDialog::keyPressEvent(QKeyEvent *event)
 		QWidget::keyPressEvent(event);
 	}
 }
-
 

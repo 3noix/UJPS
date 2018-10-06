@@ -14,8 +14,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 
-
-
 // GET EXISTING DIRECTORY /////////////////////////////////////////////////////
 QString MyFileDialog::getExistingDirectory(QWidget *parent, const QString &caption, const QString &dirProp, QFileDialog::Options options)
 {
@@ -35,7 +33,7 @@ QString MyFileDialog::getExistingDirectory(QWidget *parent, const QString &capti
 	QString str = QFileDialog::getExistingDirectory(parent,caption,path,options);
 	if (mode == "Previous")
 	{
-		vlist[1] = QVariant(str);
+		vlist[1] = QVariant{str};
 		settings.setProperty(dirProp,vlist);
 	}
 	
@@ -61,7 +59,7 @@ QString MyFileDialog::getOpenFileName(QWidget *parent, const QString &caption, c
 	QString str = QFileDialog::getOpenFileName(parent,caption,path,filter,selectedFilter,options);
 	if (mode == "Previous")
 	{
-		vlist[1] = QVariant(dirName(str));
+		vlist[1] = QVariant{dirName(str)};
 		settings.setProperty(dirProp,vlist);
 	}
 	
@@ -89,7 +87,7 @@ QStringList MyFileDialog::getOpenFileNames(QWidget *parent, const QString &capti
 	for (const QString &str : list) {list2 << dirName(str);}
 	if (mode == "Previous")
 	{
-		vlist[1] = QVariant(list2);
+		vlist[1] = QVariant{list2};
 		settings.setProperty(dirProp,vlist);
 	}
 	
@@ -115,13 +113,10 @@ QString MyFileDialog::getSaveFileName(QWidget *parent, const QString &caption, c
 	QString str = QFileDialog::getSaveFileName(parent,caption,path,filter,selectedFilter,options);
 	if (mode == "Previous")
 	{
-		vlist[1] = QVariant(dirName(str));
+		vlist[1] = QVariant{dirName(str)};
 		settings.setProperty(dirProp,vlist);
 	}
 	
 	return str;
 }
-
-
-
 

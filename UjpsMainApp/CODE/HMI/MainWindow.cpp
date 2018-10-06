@@ -83,17 +83,17 @@ MainWindow::MainWindow(QString proFilePath, int dtms, bool bPlay, QWidget *paren
 	this->setState(HmiState::WaitingForDll);
 	
 	// connections
-	QObject::connect(actionSettings,&QAction::triggered,this,&MainWindow::slotSettings);
-	QObject::connect(actionQuit,&QAction::triggered,qApp,&QCoreApplication::quit);
-	QObject::connect(actionCompilation,&QAction::triggered,this,&MainWindow::slotCompilation);
-	QObject::connect(actionPlay,&QAction::triggered,this,&MainWindow::slotPlay);
-	QObject::connect(actionStop,&QAction::triggered,this,&MainWindow::slotStop);
-	QObject::connect(actionUnload,&QAction::triggered,this,&MainWindow::slotUnload);
-	QObject::connect(actionRunControllersInfo,&QAction::triggered,this,&MainWindow::slotRunControllersInfo);
-	QObject::connect(actionRunMonitoring,&QAction::triggered,this,&MainWindow::slotRunMonitoring);
-	QObject::connect(actionRunAxesCurves,&QAction::triggered,this,&MainWindow::slotRunAxesCurves);
-	QObject::connect(m_engine,&ProfileEngine::message,textEdit,&TextEdit::addMessage);
-	QObject::connect(boutonBrowse,&QPushButton::clicked,this,&MainWindow::slotBrowseButtonClicked);
+	QObject::connect(actionSettings,          &QAction::triggered,     this,     &MainWindow::slotSettings);
+	QObject::connect(actionQuit,              &QAction::triggered,     qApp,     &QCoreApplication::quit);
+	QObject::connect(actionCompilation,       &QAction::triggered,     this,     &MainWindow::slotCompilation);
+	QObject::connect(actionPlay,              &QAction::triggered,     this,     &MainWindow::slotPlay);
+	QObject::connect(actionStop,              &QAction::triggered,     this,     &MainWindow::slotStop);
+	QObject::connect(actionUnload,            &QAction::triggered,     this,     &MainWindow::slotUnload);
+	QObject::connect(actionRunControllersInfo,&QAction::triggered,     this,     &MainWindow::slotRunControllersInfo);
+	QObject::connect(actionRunMonitoring,     &QAction::triggered,     this,     &MainWindow::slotRunMonitoring);
+	QObject::connect(actionRunAxesCurves,     &QAction::triggered,     this,     &MainWindow::slotRunAxesCurves);
+	QObject::connect(m_engine,                &ProfileEngine::message, textEdit, &TextEdit::addMessage);
+	QObject::connect(boutonBrowse,            &QPushButton::clicked,   this,     &MainWindow::slotBrowseButtonClicked);
 	
 	// arguments supplémentaires et valeurs par défaut
 	if (bUseDefaultTimeStep) {boxRefreshRate->setValue(defaultTimeStep);}
@@ -134,44 +134,45 @@ MainWindow::~MainWindow()
 
 
 
+
 // CREATE ACTIONS /////////////////////////////////////////////////////////////
 void MainWindow::createActions()
 {
 	actionQuit = new QAction{"Quit",this};
 	actionQuit->setStatusTip("Quit");
-	actionQuit->setIcon(QIcon(":/RESOURCES/ICONES/croixRouge.png"));
+	actionQuit->setIcon(QIcon{":/RESOURCES/ICONES/croixRouge.png"});
 	
 	actionSettings = new QAction{"Settings",this};
 	actionSettings->setStatusTip("Application settings");
-	actionSettings->setIcon(QIcon(":/RESOURCES/ICONES/outils.png"));
+	actionSettings->setIcon(QIcon{":/RESOURCES/ICONES/outils.png"});
 	
 	actionCompilation = new QAction{"Compilation",this};
 	actionCompilation->setStatusTip("Compile profile");
-	actionCompilation->setIcon(QIcon(":/RESOURCES/ICONES/compilation.png"));
+	actionCompilation->setIcon(QIcon{":/RESOURCES/ICONES/compilation.png"});
 	
 	actionPlay = new QAction{"Run",this};
 	actionPlay->setStatusTip("Load and run profile");
-	actionPlay->setIcon(QIcon(":/RESOURCES/ICONES/play.png"));
+	actionPlay->setIcon(QIcon{":/RESOURCES/ICONES/play.png"});
 	
 	actionStop = new QAction{"Stop",this};
 	actionStop->setStatusTip("Stop profile");
-	actionStop->setIcon(QIcon(":/RESOURCES/ICONES/stop.png"));
+	actionStop->setIcon(QIcon{":/RESOURCES/ICONES/stop.png"});
 	
 	actionUnload = new QAction{"Unload",this};
 	actionUnload->setStatusTip("Unload profile");
-	actionUnload->setIcon(QIcon(":/RESOURCES/ICONES/eject.png"));
+	actionUnload->setIcon(QIcon{":/RESOURCES/ICONES/eject.png"});
 	
 	actionRunControllersInfo = new QAction{"Start ControllersInfo.exe",this};
 	actionRunControllersInfo->setStatusTip("Start ControllersInfo.exe");
-	actionRunControllersInfo->setIcon(QIcon(":/RESOURCES/ICONES/info.png"));
+	actionRunControllersInfo->setIcon(QIcon{":/RESOURCES/ICONES/info.png"});
 	
 	actionRunMonitoring = new QAction{"Start Monitoring.exe",this};
 	actionRunMonitoring->setStatusTip("Start Monitoring.exe");
-	actionRunMonitoring->setIcon(QIcon(":/RESOURCES/ICONES/eyes.png"));
+	actionRunMonitoring->setIcon(QIcon{":/RESOURCES/ICONES/eyes.png"});
 	
 	actionRunAxesCurves = new QAction{"Start AxesCurves.exe",this};
 	actionRunAxesCurves->setStatusTip("Start AxesCurves.exe");
-	actionRunAxesCurves->setIcon(QIcon(":/RESOURCES/ICONES/curve.png"));
+	actionRunAxesCurves->setIcon(QIcon{":/RESOURCES/ICONES/curve.png"});
 }
 
 // CREATE MENUS ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -260,7 +261,7 @@ void MainWindow::setupWidget()
 	
 	// end
 	this->resize(500,500);
-	this->setWindowIcon(QIcon(":/RESOURCES/ICONES/gamepad.png"));
+	this->setWindowIcon(QIcon{":/RESOURCES/ICONES/gamepad.png"});
 }
 
 // SET STATE //////////////////////////////////////////////////////////////////
@@ -355,10 +356,6 @@ void MainWindow::slotClose()
 
 
 
-
-
-
-
 // SLOT BROWSE BUTTON CLICKED /////////////////////////////////////////////////
 void MainWindow::slotBrowseButtonClicked()
 {
@@ -378,10 +375,10 @@ void MainWindow::slotBrowseButtonClicked()
 // SLOT SETTINGS //////////////////////////////////////////////////////////////
 void MainWindow::slotSettings()
 {
-	SettingsDialog settingsDialog(this);
-	settingsDialog.addSettingsWidget(new GeneralSettingsWidget(&settingsDialog));
-	//settingsDialog.addSettingsWidget(new VJoySettingsWidget(&settingsDialog));
-	settingsDialog.addSettingsWidget(new VigemSettingsWidget(&settingsDialog));
+	SettingsDialog settingsDialog{this};
+	settingsDialog.addSettingsWidget(new GeneralSettingsWidget{&settingsDialog});
+	//settingsDialog.addSettingsWidget(new VJoySettingsWidget{&settingsDialog});
+	settingsDialog.addSettingsWidget(new VigemSettingsWidget{&settingsDialog});
 	
 	int result = settingsDialog.exec();
 	if (result == QDialog::Rejected) {return;}
@@ -448,6 +445,7 @@ void MainWindow::slotUnload()
 	m_engine->unloadProfile();
 	this->setState(HmiState::ReadyToPlayNotLoaded);
 }
+
 
 
 

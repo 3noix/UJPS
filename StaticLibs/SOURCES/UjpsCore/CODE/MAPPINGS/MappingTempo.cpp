@@ -26,7 +26,7 @@ MappingTempo::MappingTempo(AbstractRealJoystick *rj, uint rButton, LayersCombo l
 	AbstractAction *action1,
 	AbstractAction *action2,
 	VirtualEventsQueue &eventsQueue)
-		: AbstractMapping(lc,eventsQueue)
+		: AbstractMapping{lc,eventsQueue}
 {
 	m_disable = false;
 	m_rj = rj;
@@ -53,6 +53,8 @@ MappingTempo::~MappingTempo()
 		m_action2 = nullptr;
 	}
 }
+
+
 
 
 
@@ -175,5 +177,4 @@ void MappingTempo::aboutToBeDeleted()
 	else if (!m_useAction1 && m_action2)
 		this->postEvents(m_action2->aboutToBeDeleted());
 }
-
 

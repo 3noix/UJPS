@@ -47,7 +47,3 @@ class SettingsDialog : public QDialog
 
 #endif
 
-
-
-
-

@@ -7,7 +7,15 @@
 const float EPSILON = 1E-6;
 
 
-CustomCurve::CustomCurve(const std::vector<float> &points) : AbstractAxisCurve()
+///////////////////////////////////////////////////////////////////////////////
+//  CONSTRUCTEUR
+//  RUN
+//  LINEAR INTERPOLATION
+///////////////////////////////////////////////////////////////////////////////
+
+
+// CONSTRUCTEUR ///////////////////////////////////////////////////////////////
+CustomCurve::CustomCurve(const std::vector<float> &points) : AbstractAxisCurve{}
 {
 	int m = points.size();
 	if (m%2 != 0 || m == 0) {throw ExceptionBadCustomCurve{};}
@@ -24,14 +32,14 @@ CustomCurve::CustomCurve(const std::vector<float> &points) : AbstractAxisCurve()
 	}
 }
 
-
-
+// RUN ////////////////////////////////////////////////////////////////////////
 float CustomCurve::run(float in)
 {
 	float a = linear_interpolation(in,m_x,m_y);
 	return lim<float>(a,-1.0f,1.0f);
 }
 
+// LINEAR INTERPOLATION ///////////////////////////////////////////////////////
 float CustomCurve::linear_interpolation(float in, const std::vector<float> &x, const std::vector<float> &y)
 {
 	int n = x.size();

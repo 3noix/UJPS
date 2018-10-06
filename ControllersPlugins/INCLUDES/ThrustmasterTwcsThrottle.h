@@ -47,4 +47,6 @@ namespace ThrustmasterTwcsThrottle_
 	const uint HAT3 = 2;	// lower hat
 };
 
+
 #endif
+

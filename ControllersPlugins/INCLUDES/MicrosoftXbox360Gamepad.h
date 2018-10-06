@@ -39,4 +39,6 @@ namespace MicrosoftXbox360Gamepad_
 	const uint DPAD = 0;		// the only pov (and virtual... for XInput)
 };
 
+
 #endif
+

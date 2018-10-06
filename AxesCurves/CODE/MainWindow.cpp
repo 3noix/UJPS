@@ -20,15 +20,14 @@
 #include <QTimer>
 
 
-
 ///////////////////////////////////////////////////////////////////////////////
-//  CONSTRUCTEUR ET DESTRUCTEUR
+//  CONSTRUCTEUR
 //
 //  SETUP WIDGET
 //  CURVES NAMES
 //  CREATE CURVE
 //  SLOT RUN ONE LOOP
-
+//
 //  SLOT JOYSTICK CHANGED
 //  SLOT AXIS CHANGED
 //  SLOT DIRECTION CHANGED
@@ -38,9 +37,8 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 
-// CONSTRUCTEUR ET DESTRUCTEUR ////////////////////////////////////////////////
-MainWindow::MainWindow(QWidget *parent) :
-	QWidget{parent}
+// CONSTRUCTEUR ///////////////////////////////////////////////////////////////
+MainWindow::MainWindow(QWidget *parent) : QWidget{parent}
 {
 	m_joyManager.loadPlugins(QCoreApplication::applicationDirPath() + "/../../ControllersPlugins/PLUGINS/");
 	m_joyManager.searchForControllers();
@@ -53,16 +51,12 @@ MainWindow::MainWindow(QWidget *parent) :
 	this->setupWidget();
 	this->resize(600,700);
 	
-	m_timer = new QTimer(this);
+	m_timer = new QTimer{this};
 	m_timer->setInterval(15);
 	QObject::connect(m_timer, &QTimer::timeout, this, &MainWindow::slotRunOneLoop);
 	m_timer->start();
 }
 
-MainWindow::~MainWindow()
-{
-	
-}
 
 
 
@@ -102,7 +96,7 @@ void MainWindow::setupWidget()
 	boxTrim2->setValue(0.0);
 	
 	// chart view
-	chartView = new CurveChartView(this);
+	chartView = new CurveChartView{this};
 	
 	// addition in layout
 	layout->addWidget(labelJoystick, 0,0,1,1);
@@ -123,16 +117,16 @@ void MainWindow::setupWidget()
 	
 	
 	// connections
-	QObject::connect(boxJoystick,SIGNAL(currentIndexChanged(int)),this,SLOT(slotJoystickChanged(int)));
-	QObject::connect(boxAxis,SIGNAL(currentIndexChanged(int)),this,SLOT(slotAxisChanged(int)));
-	QObject::connect(boxDirection,SIGNAL(currentIndexChanged(int)),this,SLOT(slotDirectionChanged(int)));
-	QObject::connect(boxTrim1,SIGNAL(valueChanged(double)),this,SLOT(slotTrim1Changed(double)));
-	QObject::connect(boxTrim2,SIGNAL(valueChanged(double)),this,SLOT(slotTrim2Changed(double)));
-	QObject::connect(boxCurve,SIGNAL(currentIndexChanged(int)),this,SLOT(slotCurveChanged(int)));
+	QObject::connect(boxJoystick,  SIGNAL(currentIndexChanged(int)), this, SLOT(slotJoystickChanged(int)));
+	QObject::connect(boxAxis,      SIGNAL(currentIndexChanged(int)), this, SLOT(slotAxisChanged(int)));
+	QObject::connect(boxDirection, SIGNAL(currentIndexChanged(int)), this, SLOT(slotDirectionChanged(int)));
+	QObject::connect(boxTrim1,     SIGNAL(valueChanged(double)),     this, SLOT(slotTrim1Changed(double)));
+	QObject::connect(boxTrim2,     SIGNAL(valueChanged(double)),     this, SLOT(slotTrim2Changed(double)));
+	QObject::connect(boxCurve,     SIGNAL(currentIndexChanged(int)), this, SLOT(slotCurveChanged(int)));
 	boxJoystick->addItems(m_joyManager.joysticksNames());
 	
 	// end
-	this->setWindowIcon(QIcon(":/RESOURCES/ICONES/curve.png"));
+	this->setWindowIcon(QIcon{":/RESOURCES/ICONES/curve.png"});
 }
 
 // CURVES NAMES ///////////////////////////////////////////////////////////////
@@ -148,19 +142,17 @@ QStringList MainWindow::curvesNames() const
 	list << "Exponential curve (not centered)";
 	
 	return list;
-	
-	return {"No curve","J curve","Exponential curve (centered)","Exponential curve (not centered)"};
 }
 
 // CREATE CURVE ///////////////////////////////////////////////////////////////
 AbstractAxisCurve* MainWindow::createCurve(const QString &curveName) const
 {
-	if (curveName == "No curve") {return nullptr;}
-	else if (curveName == "Polynomial 2 curve") {return new GuiCurvePolynomial2{};}
-	else if (curveName == "Polynomial 3 curve (centered)") {return new GuiCurvePolynomial3Centered{};}
+	if (curveName == "No curve")                               {return nullptr;}
+	else if (curveName == "Polynomial 2 curve")                {return new GuiCurvePolynomial2{};}
+	else if (curveName == "Polynomial 3 curve (centered)")     {return new GuiCurvePolynomial3Centered{};}
 	else if (curveName == "Polynomial 3 curve (not centered)") {return new GuiCurvePolynomial3NotCentered{};}
-	else if (curveName == "Exponential curve (centered)") {return new GuiCurveExpCentered{};}
-	else if (curveName == "Exponential curve (not centered)") {return new GuiCurveExpNotCentered{};}
+	else if (curveName == "Exponential curve (centered)")      {return new GuiCurveExpCentered{};}
+	else if (curveName == "Exponential curve (not centered)")  {return new GuiCurveExpNotCentered{};}
 	else {return nullptr;}
 }
 
@@ -182,24 +174,19 @@ void MainWindow::slotRunOneLoop()
 
 
 
-
-
-
-
 // SLOT JOYSTICK CHANGED //////////////////////////////////////////////////////
 void MainWindow::slotJoystickChanged(int index)
 {
-	QObject::disconnect(boxAxis,SIGNAL(currentIndexChanged(int)),this,SLOT(slotAxisChanged(int)));
+	QObject::disconnect(boxAxis, SIGNAL(currentIndexChanged(int)), this, SLOT(slotAxisChanged(int)));
 	
 	boxAxis->clear();
-	AbstractRealJoystick *joystick = m_joyManager.joystick(index);
-	if (joystick)
+	if (AbstractRealJoystick *joystick = m_joyManager.joystick(index))
 	{
 		m_currentJoystick = joystick;
 		boxAxis->addItems(m_currentJoystick->axesNames());
 	}
 	
-	QObject::connect(boxAxis,SIGNAL(currentIndexChanged(int)),this,SLOT(slotAxisChanged(int)));
+	QObject::connect(boxAxis, SIGNAL(currentIndexChanged(int)), this, SLOT(slotAxisChanged(int)));
 	chartView->changeJoystickOrAxis(m_currentJoystick,0);
 }
 
@@ -256,5 +243,4 @@ void MainWindow::slotCurveChanged(int index)
 	
 	chartView->changeCurve(m_curve);
 }
-
 

@@ -58,7 +58,3 @@ class GenericPropertiesInfo : public AbstractXmlInfo
 
 #endif
 
-
-
-
-

@@ -43,6 +43,9 @@ class AbstractRealJoystick
 		virtual void flush() = 0;
 };
 
+
 Q_DECLARE_INTERFACE(AbstractRealJoystick,"AbstractRealJoystick")
 
+
 #endif
+

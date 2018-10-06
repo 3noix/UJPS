@@ -16,10 +16,7 @@ const uint NB_JOYSTICKS_MAX_XINPUT = 4;
 // CONSTRUCTEUR ///////////////////////////////////////////////////////////////
 GameController::GameController(QObject *parent) : QObject{parent}
 {
-	
 }
-
-
 
 // ENUMERATE CONTROLLERS //////////////////////////////////////////////////////
 QVector<GameController*> GameController::enumerateControllers(QObject *parent)

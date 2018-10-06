@@ -49,4 +49,6 @@ class ThrustmasterTwcsThrottle : public RealJoystick
 		QStringList m_povsNames;
 };
 
+
 #endif
+

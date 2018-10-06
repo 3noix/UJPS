@@ -2,7 +2,6 @@
 #include "AbstractRealJoystick.h"
 
 
-
 ///////////////////////////////////////////////////////////////////////////////
 //  CONSTRUCTEUR
 //
@@ -20,12 +19,13 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 
-
 // CONSTRUCTEUR ///////////////////////////////////////////////////////////////
 LayerCalculator::LayerCalculator() : m_layer{std::make_pair(Layers::Out,Layers::Middle)}
 {
 	m_layerChanged = false;
 }
+
+
 
 
 
@@ -58,6 +58,7 @@ void LayerCalculator::clear()
 	m_dim1.clear();
 	m_dim2.clear();
 }
+
 
 
 
@@ -107,7 +108,6 @@ Layer LayerCalculator::layer() const
 {
 	return m_layer;
 }
-
 
 
 

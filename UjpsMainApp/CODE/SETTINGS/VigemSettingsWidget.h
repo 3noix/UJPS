@@ -64,7 +64,3 @@ class VigemSettingsWidget : public AbstractSettingsWidget
 
 #endif
 
-
-
-
-

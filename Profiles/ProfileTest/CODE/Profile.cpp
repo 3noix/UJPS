@@ -31,7 +31,7 @@ namespace MFGX = MfgCrosswindRudderPedals;
 
 
 // CONSTRUCTEUR ET DESTRUCTEUR ////////////////////////////////////////////////
-Profile::Profile() : AbstractProfile()
+Profile::Profile() : AbstractProfile{}
 {
 	tmwj = nullptr;
 	tmwt = nullptr;
@@ -44,8 +44,6 @@ Profile::~Profile()
 	this->stop();
 	delete actionTestRexec;
 }
-
-
 
 
 
@@ -169,5 +167,4 @@ void Profile::runFirstStep()
 	MapPov(tmwj, TMWJ::HAT1, AllLayers, vj1, VJOY::POV1);
 	Map(tmwj, ControlType::Button, TMWJ::S3,  AllLayers, new TriggerButtonPress{},  new ActionPovSetValue{vj1,VJOY::POV1,20.0f});
 }
-
 

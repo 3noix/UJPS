@@ -7,7 +7,6 @@
 //  CONSTRUCTEUR
 //
 //  SLOT GAME CONTROLLER AXIS EVENT
-//
 //  DESCRIPTION
 //
 //  BUTTONS COUNT
@@ -54,6 +53,7 @@ ThrustmasterTwcsThrottle::ThrustmasterTwcsThrottle(GameController *c) : RealJoys
 
 
 
+
 // SLOT GAME CONTROLLER AXIS EVENT ////////////////////////////////////////////
 void ThrustmasterTwcsThrottle::slotGameControllerAxisEvent(GameControllerAxisEvent *event)
 {
@@ -70,15 +70,13 @@ void ThrustmasterTwcsThrottle::slotGameControllerAxisEvent(GameControllerAxisEve
 	else if (axis == 3) {m_changes << JoystickChange{this, ControlType::Axis, ThrustmasterTwcsThrottle_::TFRP3, false, event->value()};}
 }
 
-
-
-
-
 // DESCRIPTION ////////////////////////////////////////////////////////////////
 QString ThrustmasterTwcsThrottle::description() const
 {
 	return ThrustmasterTwcsThrottle_::Description;
 }
+
+
 
 
 
@@ -95,7 +93,7 @@ QString ThrustmasterTwcsThrottle::buttonName(uint button) const
 	if (button < 18)
 		return m_buttonsNames[button];
 	else
-		return QString();
+		return {};
 }
 
 // BUTTONS NAMES //////////////////////////////////////////////////////////////
@@ -103,6 +101,7 @@ QStringList ThrustmasterTwcsThrottle::buttonsNames() const
 {
 	return m_buttonsNames;
 }
+
 
 
 
@@ -134,7 +133,7 @@ QString ThrustmasterTwcsThrottle::axisName(uint axis) const
 	if (axis < 8)
 		return m_axesNames[axis];
 	else
-		return QString();
+		return {};
 }
 
 // AXES NAMES /////////////////////////////////////////////////////////////////
@@ -142,6 +141,8 @@ QStringList ThrustmasterTwcsThrottle::axesNames() const
 {
 	return m_axesNames;
 }
+
+
 
 
 
@@ -158,7 +159,7 @@ QString ThrustmasterTwcsThrottle::povName(uint pov) const
 	if (pov < 3)
 		return m_povsNames[pov];
 	else
-		return QString();
+		return {};
 }
 
 // POVS NAMES /////////////////////////////////////////////////////////////////
@@ -166,5 +167,4 @@ QStringList ThrustmasterTwcsThrottle::povsNames() const
 {
 	return m_povsNames;
 }
-
 

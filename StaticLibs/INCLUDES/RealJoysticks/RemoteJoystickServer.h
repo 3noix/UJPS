@@ -91,4 +91,6 @@ class RemoteJoystickServer : public QObject, public AbstractRealJoystick
 		QTcpSocket *m_tcpSocket;
 };
 
+
 #endif
+

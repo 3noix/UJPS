@@ -35,4 +35,6 @@ class AxesRotator
 		const float piSur180 = 3.14159265f / 180.0f;
 };
 
+
 #endif
+

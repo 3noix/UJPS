@@ -79,5 +79,6 @@ namespace Keys
 	const uint Key_F12 = 0x7B;
 }
 
+
 #endif
 

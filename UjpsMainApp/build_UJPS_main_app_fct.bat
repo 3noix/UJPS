@@ -16,3 +16,4 @@ copy /Y ..\StaticLibs\SOURCES\UjpsCore\release\ujpsCore.dll release
 copy /Y ..\vJoy218SDK-291116\SDK\lib\vJoyInterface.dll release
 echo.
 echo.
+

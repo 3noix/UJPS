@@ -70,16 +70,16 @@ RemoteJoystickServer::RemoteJoystickServer(const QString &name, int portNumber, 
 	if (manager.capabilities() & QNetworkConfigurationManager::NetworkSessionRequired)
 	{
 		// Get saved network configuration
-		QSettings settings(QSettings::UserScope, QLatin1String("QtProject"));
-		settings.beginGroup(QLatin1String("QtNetwork"));
-		const QString id = settings.value(QLatin1String("DefaultNetworkConfiguration")).toString();
+		QSettings settings{QSettings::UserScope, QLatin1String{"QtProject"}};
+		settings.beginGroup(QLatin1String{"QtNetwork"});
+		const QString id = settings.value(QLatin1String{"DefaultNetworkConfiguration"}).toString();
 		settings.endGroup();
 		
 		// If the saved network configuration is not currently discovered use the system default
 		QNetworkConfiguration config = manager.configurationFromIdentifier(id);
 		if ((config.state() & QNetworkConfiguration::Discovered) != QNetworkConfiguration::Discovered) {config = manager.defaultConfiguration();}
 		
-		m_networkSession = new QNetworkSession(config, this);
+		m_networkSession = new QNetworkSession{config,this};
 		connect(m_networkSession, &QNetworkSession::opened, this, &RemoteJoystickServer::slotSessionOpened);
 		m_networkSession->open();
 	}
@@ -98,6 +98,8 @@ RemoteJoystickServer::~RemoteJoystickServer()
 	delete m_tcpServer;
 	//m_tcpServer->deleteLater();
 }
+
+
 
 
 
@@ -137,6 +139,8 @@ QVector<JoystickChange> RemoteJoystickServer::changes()
 
 
 
+
+
 // BUTTONS COUNT //////////////////////////////////////////////////////////////
 uint RemoteJoystickServer::buttonsCount() const {return m_nbButtons;}
 
@@ -156,6 +160,7 @@ QString RemoteJoystickServer::buttonName(uint button) const
 
 // BUTTONS NAMES //////////////////////////////////////////////////////////////
 QStringList RemoteJoystickServer::buttonsNames() const {return m_buttonsNames;}
+
 
 
 
@@ -211,7 +216,6 @@ QStringList RemoteJoystickServer::povsNames() const {return m_povsNames;}
 
 
 
-
 // SET DATA ///////////////////////////////////////////////////////////////////
 void RemoteJoystickServer::setData(const QString &str, QVariant v)
 {
@@ -234,6 +238,8 @@ void RemoteJoystickServer::flush()
 
 
 
+
+
 // SLOT SESSION OPENED ////////////////////////////////////////////////////////
 void RemoteJoystickServer::slotSessionOpened()
 {
@@ -247,9 +253,9 @@ void RemoteJoystickServer::slotSessionOpened()
 		else
 			id = config.identifier();
 		
-		QSettings settings(QSettings::UserScope, QLatin1String("QtProject"));
-		settings.beginGroup(QLatin1String("QtNetwork"));
-		settings.setValue(QLatin1String("DefaultNetworkConfiguration"), id);
+		QSettings settings{QSettings::UserScope, QLatin1String{"QtProject"}};
+		settings.beginGroup(QLatin1String{"QtNetwork"});
+		settings.setValue(QLatin1String{"DefaultNetworkConfiguration"}, id);
 		settings.endGroup();
 	}
 	
@@ -275,7 +281,7 @@ void RemoteJoystickServer::slotSessionOpened()
 		}
 	}
 	// if we did not find one, use IPv4 localhost
-	if (ipAddress == "") {ipAddress = QHostAddress(QHostAddress::LocalHost).toString();}
+	if (ipAddress == "") {ipAddress = QHostAddress{QHostAddress::LocalHost}.toString();}
 	QString message = "IP: " + ipAddress + ", port: " + QString::number(m_tcpServer->serverPort());
 	*/
 }
@@ -422,5 +428,4 @@ void RemoteJoystickServer::slotRemoveConnection()
 	m_tcpSocket->deleteLater();
 	m_tcpSocket = nullptr;
 }
-
 

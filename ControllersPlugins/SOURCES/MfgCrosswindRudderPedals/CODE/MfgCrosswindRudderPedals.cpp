@@ -8,7 +8,6 @@
 //
 //  SLOT GAME CONTROLLER BUTTON EVENT
 //  SLOT GAME CONTROLLER AXIS EVENT
-//
 //  DESCRIPTION
 //
 //  BUTTONS COUNT
@@ -51,14 +50,13 @@ void MfgCrosswindRudderPedals::slotGameControllerAxisEvent(GameControllerAxisEve
 	else if (axis == MfgCrosswindRudderPedals_::BRK_RIGHT) {m_changes << JoystickChange{this,ControlType::Axis,1,false,event->value()};}
 }
 
-
-
-
 // DESCRIPTION ////////////////////////////////////////////////////////////////
 QString MfgCrosswindRudderPedals::description() const
 {
 	return MfgCrosswindRudderPedals_::Description;
 }
+
+
 
 
 
@@ -80,14 +78,16 @@ bool MfgCrosswindRudderPedals::buttonPressed(uint button) const
 QString MfgCrosswindRudderPedals::buttonName(uint button) const
 {
 	Q_UNUSED(button)
-	return QString();
+	return {};
 }
 
 // BUTTONS NAMES //////////////////////////////////////////////////////////////
 QStringList MfgCrosswindRudderPedals::buttonsNames() const
 {
-	return QStringList();
+	return {};
 }
+
+
 
 
 
@@ -113,7 +113,7 @@ QString MfgCrosswindRudderPedals::axisName(uint axis) const
 	if (axis < 3)
 		return m_axesNames[axis];
 	else
-		return QString();
+		return {};
 }
 
 // AXES NAMES /////////////////////////////////////////////////////////////////
@@ -121,5 +121,4 @@ QStringList MfgCrosswindRudderPedals::axesNames() const
 {
 	return m_axesNames;
 }
-
 

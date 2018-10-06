@@ -24,7 +24,7 @@ class CurveChartView : public QChartView
 		CurveChartView(CurveChartView &&other) = delete;
 		CurveChartView& operator=(const CurveChartView &other) = delete;
 		CurveChartView& operator=(CurveChartView &&other) = delete;
-		virtual ~CurveChartView();
+		virtual ~CurveChartView() = default;
 		
 		void changeJoystickOrAxis(AbstractRealJoystick *j, uint axis);
 		void changeDirection(double kdirection);
@@ -58,6 +58,7 @@ class CurveChartView : public QChartView
 		qreal m_trim2;
 		AbstractAxisCurve *m_curve;
 };
+
 
 #endif
 

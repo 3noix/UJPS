@@ -38,5 +38,6 @@ class TriggerButtonPress : public AbstractTrigger
 		};
 };
 
+
 #endif
 

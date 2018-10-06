@@ -51,7 +51,3 @@ class QtCompilationProcess : public QProcess
 
 #endif
 
-
-
-
-

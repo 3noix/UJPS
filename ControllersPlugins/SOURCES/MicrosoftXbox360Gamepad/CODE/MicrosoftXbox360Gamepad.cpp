@@ -62,11 +62,14 @@ MicrosoftXbox360Gamepad::~MicrosoftXbox360Gamepad()
 
 
 
+
+
 // DESCRIPTION ////////////////////////////////////////////////////////////////
 QString MicrosoftXbox360Gamepad::description() const
 {
 	return MicrosoftXbox360Gamepad_::Description;
 }
+
 
 
 
@@ -84,7 +87,7 @@ QString MicrosoftXbox360Gamepad::buttonName(uint button) const
 	if (button < 14)
 		return m_buttonsNames[button];
 	else
-		return QString();
+		return {};
 }
 
 // BUTTONS NAMES //////////////////////////////////////////////////////////////
@@ -92,6 +95,8 @@ QStringList MicrosoftXbox360Gamepad::buttonsNames() const
 {
 	return m_buttonsNames;
 }
+
+
 
 
 
@@ -108,7 +113,7 @@ QString MicrosoftXbox360Gamepad::axisName(uint axis) const
 	if (axis < 6)
 		return m_axesNames[axis];
 	else
-		return QString();
+		return {};
 }
 
 // AXES NAMES /////////////////////////////////////////////////////////////////
@@ -116,6 +121,8 @@ QStringList MicrosoftXbox360Gamepad::axesNames() const
 {
 	return m_axesNames;
 }
+
+
 
 
 
@@ -132,7 +139,7 @@ QString MicrosoftXbox360Gamepad::povName(uint pov) const
 	if (pov < 1)
 		return m_povsNames[pov];
 	else
-		return QString();
+		return {};
 }
 
 // POVS NAMES /////////////////////////////////////////////////////////////////
@@ -140,6 +147,7 @@ QStringList MicrosoftXbox360Gamepad::povsNames() const
 {
 	return m_povsNames;
 }
+
 
 
 

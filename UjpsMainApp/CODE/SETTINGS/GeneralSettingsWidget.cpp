@@ -38,7 +38,7 @@
 
 
 // CONSTRUCTEUR ET DESTRUCTEUR ////////////////////////////////////////////////
-GeneralSettingsWidget::GeneralSettingsWidget(QWidget *parent) : AbstractSettingsWidget(parent)
+GeneralSettingsWidget::GeneralSettingsWidget(QWidget *parent) : AbstractSettingsWidget{parent}
 {
 	layout1 = new QVBoxLayout{this};
 	layout1->setSpacing(10);
@@ -111,8 +111,8 @@ void GeneralSettingsWidget::addStartingProfileWidgets()
 	lineStartingProfile = new QLineEdit{this};
 	buttonStartingProfile = new QPushButton{"Browse",this};
 	
-	QObject::connect(boxUseStartingProfile,&QCheckBox::stateChanged,this,&GeneralSettingsWidget::slotStartingProfileStateChanged);
-	QObject::connect(buttonStartingProfile,&QPushButton::clicked,this,&GeneralSettingsWidget::slotStartingProfileBrowse);
+	QObject::connect(boxUseStartingProfile, &QCheckBox::stateChanged, this, &GeneralSettingsWidget::slotStartingProfileStateChanged);
+	QObject::connect(buttonStartingProfile, &QPushButton::clicked,    this, &GeneralSettingsWidget::slotStartingProfileBrowse);
 	
 	layoutStartingProfile->addWidget(boxUseStartingProfile);
 	layoutStartingProfile->addWidget(lineStartingProfile);
@@ -140,7 +140,7 @@ void GeneralSettingsWidget::addDefaultTimeStepWidget()
 	spinboxDefTimeStep->setSingleStep(1);
 	spinboxDefTimeStep->setSuffix(" ms");
 	
-	QObject::connect(checkboxDefTimeStep,&QCheckBox::stateChanged,this,&GeneralSettingsWidget::slotDefaultTimeStepStateChanged);
+	QObject::connect(checkboxDefTimeStep, &QCheckBox::stateChanged, this, &GeneralSettingsWidget::slotDefaultTimeStepStateChanged);
 	
 	layoutDefTimeStep->addWidget(checkboxDefTimeStep);
 	layoutDefTimeStep->addWidget(spinboxDefTimeStep);
@@ -187,7 +187,7 @@ void GeneralSettingsWidget::buttonOkClicked()
 	ApplicationSettings& settings = ApplicationSettings::instance();
 	
 	// default directory
-	QVariant mode = QString("Fixed");
+	QVariant mode = QString{"Fixed"};
 	if (radioDefDirPrevious->isChecked()) {mode = QString("Previous");}
 	QVariant path = lineDefDir->text().replace("\\","/");
 	QList<QVariant> vlist;
@@ -211,6 +211,7 @@ void GeneralSettingsWidget::buttonCancelClicked()
 {
 	
 }
+
 
 
 
@@ -241,5 +242,4 @@ void GeneralSettingsWidget::slotDefaultTimeStepStateChanged(int checkState)
 	bool bEnable = (checkState == Qt::Checked);
 	spinboxDefTimeStep->setEnabled(bEnable);
 }
-
 

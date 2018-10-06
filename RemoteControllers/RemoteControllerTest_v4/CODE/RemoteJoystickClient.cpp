@@ -64,9 +64,9 @@ RemoteJoystickClient::RemoteJoystickClient(
 	if (manager.capabilities() & QNetworkConfigurationManager::NetworkSessionRequired)
 	{
 		// Get saved network configuration
-		QSettings settings(QSettings::UserScope, QLatin1String("QtProject"));
-		settings.beginGroup(QLatin1String("QtNetwork"));
-		const QString id = settings.value(QLatin1String("DefaultNetworkConfiguration")).toString();
+		QSettings settings{QSettings::UserScope, QLatin1String{"QtProject"}};
+		settings.beginGroup(QLatin1String{"QtNetwork"});
+		const QString id = settings.value(QLatin1String{"DefaultNetworkConfiguration"}).toString();
 		settings.endGroup();
 		
 		// If the saved network configuration is not currently discovered use the system default
@@ -74,12 +74,11 @@ RemoteJoystickClient::RemoteJoystickClient(
 		if ((config.state() & QNetworkConfiguration::Discovered) != QNetworkConfiguration::Discovered)
 			config = manager.defaultConfiguration();
 		
-		m_networkSession = new QNetworkSession(config, this);
+		m_networkSession = new QNetworkSession{config,this};
 		connect(m_networkSession, &QNetworkSession::opened, this, &RemoteJoystickClient::slotSessionOpened);
 		m_networkSession->open();
 	}
 }
-
 
 
 
@@ -219,8 +218,6 @@ void RemoteJoystickClient::slotSendPovInfo(quint8 pov, float povValue)
 
 
 
-
-
 // SLOT SESSION OPENED ////////////////////////////////////////////////////////
 void RemoteJoystickClient::slotSessionOpened()
 {
@@ -228,13 +225,13 @@ void RemoteJoystickClient::slotSessionOpened()
 	QNetworkConfiguration config = m_networkSession->configuration();
 	QString id;
 	if (config.type() == QNetworkConfiguration::UserChoice)
-		id = m_networkSession->sessionProperty(QLatin1String("UserChoiceConfiguration")).toString();
+		id = m_networkSession->sessionProperty(QLatin1String{"UserChoiceConfiguration"}).toString();
 	else
 		id = config.identifier();
 	
-	QSettings settings(QSettings::UserScope, QLatin1String("QtProject"));
-	settings.beginGroup(QLatin1String("QtNetwork"));
-	settings.setValue(QLatin1String("DefaultNetworkConfiguration"), id);
+	QSettings settings{QSettings::UserScope, QLatin1String{"QtProject"}};
+	settings.beginGroup(QLatin1String{"QtNetwork"});
+	settings.setValue(QLatin1String{"DefaultNetworkConfiguration"}, id);
 	settings.endGroup();
 }
 
@@ -248,8 +245,8 @@ void RemoteJoystickClient::slotConnected()
 	out << quint16{0} << RemoteJoystickMessageType::Init;
 	out << this->description();
 	out << this->buttonsCount() << this->buttonsNames();
-	out << this->axesCount() << this->axesNames();
-	out << this->povsCount() << this->povsNames();
+	out << this->axesCount()    << this->axesNames();
+	out << this->povsCount()    << this->povsNames();
 	out.device()->seek(0);
 	quint16 dataSize = ba.size()-sizeof(quint16);
 	out << dataSize;
@@ -294,5 +291,4 @@ void RemoteJoystickClient::slotError(QAbstractSocket::SocketError socketError)
 	
 	this->setState(State::Error);
 }
-
 

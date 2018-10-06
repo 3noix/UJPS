@@ -84,6 +84,7 @@ bool VigemPidWhiteLister::sendRequest(const QUrl &url)
 
 
 
+
 // VIGEM IS READY /////////////////////////////////////////////////////////////
 bool VigemPidWhiteLister::vigemIsReady() const
 {

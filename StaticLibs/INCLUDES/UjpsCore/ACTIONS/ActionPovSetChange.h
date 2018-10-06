@@ -54,5 +54,6 @@ class ActionPovSetChange : public AbstractAction
 		uint m_vPov;
 };
 
+
 #endif
 

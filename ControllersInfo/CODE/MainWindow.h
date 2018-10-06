@@ -37,5 +37,6 @@ class MainWindow : public QMainWindow
 		QGridLayout *layout;
 };
 
+
 #endif
 

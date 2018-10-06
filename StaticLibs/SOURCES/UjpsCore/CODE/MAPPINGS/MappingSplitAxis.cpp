@@ -27,7 +27,7 @@ MappingSplitAxis::MappingSplitAxis(AbstractRealJoystick *rj, uint rAxis,
 	VirtualJoystick *vj1, uint vAxis1,
 	VirtualJoystick *vj2, uint vAxis2,
 	VirtualEventsQueue &eventsQueue)
-		: AbstractMapping(lc,eventsQueue)
+		: AbstractMapping{lc,eventsQueue}
 {
 	m_disable = false;
 	m_rj = rj;
@@ -42,6 +42,8 @@ MappingSplitAxis::~MappingSplitAxis()
 {
 	
 }
+
+
 
 
 
@@ -134,6 +136,8 @@ void MappingSplitAxis::performAction(const JoystickChange &ch)
 
 
 
+
+
 // ACTIVATE BY LAYER CHANGE ///////////////////////////////////////////////////
 void MappingSplitAxis::activateByLayerChange()
 {
@@ -168,5 +172,4 @@ void MappingSplitAxis::aboutToBeDeleted()
 {
 	m_disable = true;
 }
-
 

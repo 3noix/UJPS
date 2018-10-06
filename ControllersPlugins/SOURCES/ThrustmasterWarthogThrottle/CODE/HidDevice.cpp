@@ -180,4 +180,3 @@ QString ushortToHexaString(USHORT value)
 }
 */
 
-

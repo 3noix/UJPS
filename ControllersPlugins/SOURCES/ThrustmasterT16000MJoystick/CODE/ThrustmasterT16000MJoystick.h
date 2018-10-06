@@ -49,4 +49,6 @@ class ThrustmasterT16000MJoystick : public RealJoystick
 		QStringList m_povsNames;
 };
 
+
 #endif
+

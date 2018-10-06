@@ -47,4 +47,6 @@ namespace LogitechX56Joystick_
 	const uint HAT3 = 2;
 };
 
+
 #endif
+

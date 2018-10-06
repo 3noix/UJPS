@@ -59,5 +59,6 @@ class ActionKeySetChange : public AbstractAction
 		uint m_modifier;
 };
 
+
 #endif
 

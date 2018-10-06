@@ -7,7 +7,6 @@
 //  CONSTRUCTEUR
 //
 //  SLOT GAME CONTROLLER AXIS EVENT
-//
 //  DESCRIPTION
 //
 //  BUTTONS COUNT
@@ -42,6 +41,7 @@ LogitechExtreme3D::LogitechExtreme3D(GameController *c) : RealJoystick{c}
 
 
 
+
 // SLOT GAME CONTROLLER AXIS EVENT ////////////////////////////////////////////
 void LogitechExtreme3D::slotGameControllerAxisEvent(GameControllerAxisEvent *event)
 {
@@ -54,15 +54,13 @@ void LogitechExtreme3D::slotGameControllerAxisEvent(GameControllerAxisEvent *eve
 	else if (axis == 3) {m_changes << JoystickChange{this, ControlType::Axis, LogitechExtreme3D_::THR,  false, event->value()};}
 }
 
-
-
-
-
 // DESCRIPTION ////////////////////////////////////////////////////////////////
 QString LogitechExtreme3D::description() const
 {
 	return LogitechExtreme3D_::Description;
 }
+
+
 
 
 
@@ -79,7 +77,7 @@ QString LogitechExtreme3D::buttonName(uint button) const
 	if (button < 16)
 		return m_buttonsNames[button];
 	else
-		return QString();
+		return {};
 }
 
 // BUTTONS NAMES //////////////////////////////////////////////////////////////
@@ -87,6 +85,7 @@ QStringList LogitechExtreme3D::buttonsNames() const
 {
 	return m_buttonsNames;
 }
+
 
 
 
@@ -114,7 +113,7 @@ QString LogitechExtreme3D::axisName(uint axis) const
 	if (axis < 4)
 		return m_axesNames[axis];
 	else
-		return QString();
+		return {};
 }
 
 // AXES NAMES /////////////////////////////////////////////////////////////////
@@ -122,6 +121,8 @@ QStringList LogitechExtreme3D::axesNames() const
 {
 	return m_axesNames;
 }
+
+
 
 
 
@@ -138,7 +139,7 @@ QString LogitechExtreme3D::povName(uint pov) const
 	if (pov < 1)
 		return m_povsNames[pov];
 	else
-		return QString();
+		return {};
 }
 
 // POVS NAMES /////////////////////////////////////////////////////////////////
@@ -146,5 +147,4 @@ QStringList LogitechExtreme3D::povsNames() const
 {
 	return m_povsNames;
 }
-
 

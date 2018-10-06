@@ -22,7 +22,7 @@
 
 
 // CONSTRUCTEUR ET DESTRUCTEUR ////////////////////////////////////////////////
-ProfileEngine::ProfileEngine(bool bWhiteList, QObject *parent) : QObject(parent)
+ProfileEngine::ProfileEngine(bool bWhiteList, QObject *parent) : QObject{parent}
 {
 	m_timer = new QTimer{this};
 	QObject::connect(m_timer, &QTimer::timeout, this, &ProfileEngine::slotOneLoop);
@@ -50,21 +50,21 @@ ProfileEngine::~ProfileEngine()
 
 
 
+
 // LOAD PROFILE ///////////////////////////////////////////////////////////////
 bool ProfileEngine::loadProfile(const QString &dllFilePath)
 {
 	if (m_loader) {return false;}
 	
 	emit message("Loading profile " + m_dllFileName,Qt::black);
-	m_loader = new QPluginLoader(dllFilePath);
+	m_loader = new QPluginLoader{dllFilePath};
 	if (QObject *plugin = m_loader->instance())
 	{
-		AbstractProfile* profile = qobject_cast<AbstractProfile*>(plugin);
-		if (profile)
+		if (AbstractProfile* profile = qobject_cast<AbstractProfile*>(plugin))
 		{
 			m_dllFileName = shortName(dllFilePath);
 			m_profile = profile;
-			QObject::connect(m_profile,SIGNAL(message(QString,QColor)),this,SIGNAL(message(QString,QColor)));
+			QObject::connect(m_profile, SIGNAL(message(QString,QColor)), this, SIGNAL(message(QString,QColor)));
 			return true;
 		}
 	}
@@ -96,6 +96,7 @@ bool ProfileEngine::isLoaded() const
 {
 	return (m_loader != nullptr);
 }
+
 
 
 

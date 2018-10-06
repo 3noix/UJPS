@@ -24,7 +24,7 @@
 MappingAxisRelative::MappingAxisRelative(AbstractRealJoystick *rj, uint rAxis, LayersCombo lc,
 	VirtualJoystick *vj, uint vAxis, float factor,
 	VirtualEventsQueue &eventsQueue)
-		: AbstractMapping(lc,eventsQueue)
+		: AbstractMapping{lc,eventsQueue}
 {
 	m_disable = false;
 	
@@ -39,6 +39,8 @@ MappingAxisRelative::~MappingAxisRelative()
 {
 	
 }
+
+
 
 
 
@@ -112,6 +114,8 @@ void MappingAxisRelative::performAction(const JoystickChange &ch)
 {
 	Q_UNUSED(ch)
 }
+
+
 
 
 

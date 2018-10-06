@@ -49,5 +49,6 @@ class MappingAxis2 : public AbstractMapping
 		uint m_newZone;
 };
 
+
 #endif
 

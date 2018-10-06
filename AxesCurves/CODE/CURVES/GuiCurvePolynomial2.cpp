@@ -21,11 +21,11 @@
 
 
 // CONSTRUCTEUR ET DESTRUCTEUR ////////////////////////////////////////////////
-GuiCurvePolynomial2::GuiCurvePolynomial2(float zoom) : AbstractAxisCurve()
+GuiCurvePolynomial2::GuiCurvePolynomial2(float zoom) : AbstractAxisCurve{}
 {
 	m_zoom = zoom;
 	m_widget = new CurvePolynomial2Widget{};
-	QObject::connect(m_widget,SIGNAL(zoomModified(double)),this,SLOT(slotZoomModified(double)));
+	QObject::connect(m_widget, SIGNAL(zoomModified(double)), this, SLOT(slotZoomModified(double)));
 }
 
 GuiCurvePolynomial2::~GuiCurvePolynomial2()
@@ -55,14 +55,16 @@ void GuiCurvePolynomial2::slotZoomModified(double zoom)
 
 
 
+
+
 // CONSTRUCTEUR ///////////////////////////////////////////////////////////////
 CurvePolynomial2Widget::CurvePolynomial2Widget() : QGroupBox{"Polynomial 2nd degree: parameters"}
 {
-	layout = new QHBoxLayout(this);
+	layout = new QHBoxLayout{this};
 	this->setLayout(layout);
 	
-	labelZoom = new QLabel("Zoom:",this);
-	boxZoom = new QDoubleSpinBox(this);
+	labelZoom = new QLabel{"Zoom:",this};
+	boxZoom = new QDoubleSpinBox{this};
 	boxZoom->setRange(-10.0,10.0);
 	boxZoom->setDecimals(1);
 	boxZoom->setSingleStep(0.1);
@@ -72,7 +74,6 @@ CurvePolynomial2Widget::CurvePolynomial2Widget() : QGroupBox{"Polynomial 2nd deg
 	layout->addWidget(boxZoom);
 	layout->addStretch();
 	
-	QObject::connect(boxZoom,SIGNAL(valueChanged(double)),this,SIGNAL(zoomModified(double)));
+	QObject::connect(boxZoom, SIGNAL(valueChanged(double)), this, SIGNAL(zoomModified(double)));
 }
-
 

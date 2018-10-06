@@ -26,4 +26,6 @@ class CustomCurve : public AbstractAxisCurve
 		std::vector<float> m_y;
 };
 
+
 #endif
+

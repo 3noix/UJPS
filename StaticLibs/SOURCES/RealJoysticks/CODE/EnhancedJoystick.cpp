@@ -77,6 +77,8 @@ EnhancedJoystick::~EnhancedJoystick()
 
 
 
+
+
 // ID /////////////////////////////////////////////////////////////////////////
 uint EnhancedJoystick::id() const {return m_j->id();}
 // DESCRIPTION ////////////////////////////////////////////////////////////////
@@ -131,6 +133,9 @@ QVector<JoystickChange> EnhancedJoystick::changes()
 
 
 
+
+
+
 // BUTTONS COUNT //////////////////////////////////////////////////////////////
 uint EnhancedJoystick::buttonsCount() const {return m_j->buttonsCount();}
 // BUTTON PRESSED /////////////////////////////////////////////////////////////
@@ -144,6 +149,10 @@ bool EnhancedJoystick::buttonPressed(uint button) const
 QString EnhancedJoystick::buttonName(uint button) const {return m_j->buttonName(button);}
 // BUTTONS NAMES //////////////////////////////////////////////////////////////
 QStringList EnhancedJoystick::buttonsNames() const {return m_j->buttonsNames();}
+
+
+
+
 
 
 // AXES COUNT /////////////////////////////////////////////////////////////////
@@ -166,6 +175,9 @@ QStringList EnhancedJoystick::axesNames() const {return m_j->axesNames();}
 
 
 
+
+
+
 // POVS COUNT /////////////////////////////////////////////////////////////////
 uint EnhancedJoystick::povsCount() const {return m_j->povsCount();}
 // POV VALUE //////////////////////////////////////////////////////////////////
@@ -183,10 +195,16 @@ QStringList EnhancedJoystick::povsNames() const {return m_j->povsNames();}
 
 
 
+
+
 // SET DATA ///////////////////////////////////////////////////////////////////
 void EnhancedJoystick::setData(const QString &str, QVariant v) {m_j->setData(str,v);}
 // FLUSH //////////////////////////////////////////////////////////////////////
 void EnhancedJoystick::flush() {m_j->flush();}
+
+
+
+
 
 
 // ROTATE AXES ////////////////////////////////////////////////////////////////
@@ -206,6 +224,8 @@ bool EnhancedJoystick::removeAxisRotation(uint axis)
 	this->updateAxis(axis2);
 	return true;
 }
+
+
 
 
 
@@ -259,9 +279,6 @@ void EnhancedJoystick::setPovLocked(uint pov, bool locked)
 
 
 
-
-
-
 // SET CURVE //////////////////////////////////////////////////////////////////
 void EnhancedJoystick::setCurve(uint axis, AbstractAxisCurve *curve)
 {
@@ -290,6 +307,4 @@ void EnhancedJoystick::updateAxis(uint axis)
 	if (m_axesToUpdate.size() == 0 || m_axesToUpdate.back() != axis)
 		m_axesToUpdate.push_back(axis);
 }
-
-
 

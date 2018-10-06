@@ -12,6 +12,16 @@ Layer IM = std::make_pair(Layers::In,Layers::Middle);
 Layer IU = std::make_pair(Layers::In,Layers::Up);
 
 
+///////////////////////////////////////////////////////////////////////////////
+// TO STRING
+// LAYERS COMBO
+//  CONSTRUCTEURS
+//  CONTAINS
+//  TO STRING
+///////////////////////////////////////////////////////////////////////////////
+
+
+// TO STRING //////////////////////////////////////////////////////////////////
 QString toString(Layer layer)
 {
 	if (layer == OM)      {return "OM";}
@@ -24,6 +34,11 @@ QString toString(Layer layer)
 }
 
 
+
+
+
+
+// CONSTRUCTEURS //////////////////////////////////////////////////////////////
 LayersCombo::LayersCombo()
 {
 	m_layers.push_back(OD);
@@ -34,12 +49,10 @@ LayersCombo::LayersCombo()
 	m_layers.push_back(IU);
 }
 
-
 LayersCombo::LayersCombo(const std::vector<Layer> layers)
 {
 	m_layers = layers;
 }
-
 
 LayersCombo::LayersCombo(QString str)
 {
@@ -83,14 +96,14 @@ LayersCombo::LayersCombo(QString str)
 	}
 }
 
-
+// CONTAINS ///////////////////////////////////////////////////////////////////
 bool LayersCombo::contains(Layer layer) const
 {
 	auto result = std::find(m_layers.begin(),m_layers.end(),layer);
 	return (result != m_layers.end());
 }
 
-
+// TO STRING //////////////////////////////////////////////////////////////////
 QString LayersCombo::toString() const
 {
 	if (m_layers.size() == 0) {return "None";}

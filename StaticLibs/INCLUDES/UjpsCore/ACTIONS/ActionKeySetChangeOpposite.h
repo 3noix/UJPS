@@ -59,5 +59,6 @@ class ActionKeySetChangeOpposite : public AbstractAction
 		uint m_modifier;
 };
 
+
 #endif
 

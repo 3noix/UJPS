@@ -49,5 +49,6 @@ class MappingTempo : public AbstractMapping
 		bool m_useAction1;
 };
 
+
 #endif
 

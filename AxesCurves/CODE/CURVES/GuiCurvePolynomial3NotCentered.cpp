@@ -22,7 +22,7 @@
 
 
 // CONSTRUCTEUR ET DESTRUCTEUR ////////////////////////////////////////////////
-GuiCurvePolynomial3NotCentered::GuiCurvePolynomial3NotCentered(float leftDZ, float rightDZ, float curve) : AbstractAxisCurve()
+GuiCurvePolynomial3NotCentered::GuiCurvePolynomial3NotCentered(float leftDZ, float rightDZ, float curve) : AbstractAxisCurve{}
 {
 	m_leftDZ = leftDZ;
 	m_rightDZ = rightDZ;
@@ -33,9 +33,9 @@ GuiCurvePolynomial3NotCentered::GuiCurvePolynomial3NotCentered(float leftDZ, flo
 	m_curveParam = curve;
 	
 	m_widget = new CurvePolynomial3NotCenteredWidget{};
-	QObject::connect(m_widget,SIGNAL(leftDZModified(double)),this,SLOT(slotLeftDZModified(double)));
-	QObject::connect(m_widget,SIGNAL(rightDZModified(double)),this,SLOT(slotRightDZModified(double)));
-	QObject::connect(m_widget,SIGNAL(curveParamModified(double)),this,SLOT(slotCurveParamModified(double)));
+	QObject::connect(m_widget, SIGNAL(leftDZModified(double)),     this, SLOT(slotLeftDZModified(double)));
+	QObject::connect(m_widget, SIGNAL(rightDZModified(double)),    this, SLOT(slotRightDZModified(double)));
+	QObject::connect(m_widget, SIGNAL(curveParamModified(double)), this, SLOT(slotCurveParamModified(double)));
 }
 
 GuiCurvePolynomial3NotCentered::~GuiCurvePolynomial3NotCentered()
@@ -74,6 +74,7 @@ QWidget* GuiCurvePolynomial3NotCentered::settingsWidget()
 
 
 
+
 // SLOT LEFT DZ MODIFIED //////////////////////////////////////////////////////
 void GuiCurvePolynomial3NotCentered::slotLeftDZModified(double ldz)
 {
@@ -101,19 +102,20 @@ void GuiCurvePolynomial3NotCentered::slotCurveParamModified(double curveParam)
 
 
 
+
 // CONSTRUCTEUR ///////////////////////////////////////////////////////////////
 CurvePolynomial3NotCenteredWidget::CurvePolynomial3NotCenteredWidget() : QGroupBox{"Exponential curve (centered): parameters"}
 {
-	layout = new QGridLayout(this);
+	layout = new QGridLayout{this};
 	this->setLayout(layout);
 	
-	labelLDZ   = new QLabel("Left dead-zone:",this);
-	labelRDZ   = new QLabel("Right dead-zone:",this);
-	labelCurve = new QLabel("Curve:",this);
+	labelLDZ   = new QLabel{"Left dead-zone:",this};
+	labelRDZ   = new QLabel{"Right dead-zone:",this};
+	labelCurve = new QLabel{"Curve:",this};
 	
-	boxLDZ   = new QDoubleSpinBox(this);
-	boxRDZ   = new QDoubleSpinBox(this);
-	boxCurve = new QDoubleSpinBox(this);
+	boxLDZ   = new QDoubleSpinBox{this};
+	boxRDZ   = new QDoubleSpinBox{this};
+	boxCurve = new QDoubleSpinBox{this};
 	boxLDZ->setRange(0.0,20.0);
 	boxRDZ->setRange(0.0,20.0);
 	boxCurve->setRange(-0.5,1.0);
@@ -137,8 +139,8 @@ CurvePolynomial3NotCenteredWidget::CurvePolynomial3NotCenteredWidget() : QGroupB
 	layout->addWidget(boxCurve,2,1,1,1);
 	layout->addItem(new QSpacerItem{0,0,QSizePolicy::Expanding,QSizePolicy::Minimum},0,2,1,1);
 	
-	QObject::connect(boxLDZ,SIGNAL(valueChanged(double)),this,SIGNAL(leftDZModified(double)));
-	QObject::connect(boxRDZ,SIGNAL(valueChanged(double)),this,SIGNAL(rightDZModified(double)));
-	QObject::connect(boxCurve,SIGNAL(valueChanged(double)),this,SIGNAL(curveParamModified(double)));
+	QObject::connect(boxLDZ,   SIGNAL(valueChanged(double)), this, SIGNAL(leftDZModified(double)));
+	QObject::connect(boxRDZ,   SIGNAL(valueChanged(double)), this, SIGNAL(rightDZModified(double)));
+	QObject::connect(boxCurve, SIGNAL(valueChanged(double)), this, SIGNAL(curveParamModified(double)));
 }
 

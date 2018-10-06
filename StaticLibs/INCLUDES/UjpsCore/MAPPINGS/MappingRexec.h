@@ -40,5 +40,6 @@ class MappingRexec : public AbstractMapping
 		bool m_disable;
 };
 
+
 #endif
 

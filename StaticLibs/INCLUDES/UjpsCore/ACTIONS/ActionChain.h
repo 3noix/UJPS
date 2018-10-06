@@ -77,5 +77,6 @@ class ActionChain : public AbstractAction
 		uint m_delay;
 };
 
+
 #endif
 

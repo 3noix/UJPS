@@ -46,7 +46,3 @@ class AbstractCompiler : public QObject
 
 #endif
 
-
-
-
-

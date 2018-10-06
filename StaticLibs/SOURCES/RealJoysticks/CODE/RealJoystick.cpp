@@ -50,9 +50,9 @@ RealJoystick::RealJoystick(GameController *c) : QObject{}, AbstractRealJoystick{
 	QObject::connect(c, SIGNAL(gameControllerAxisEvent(GameControllerAxisEvent*)),     this, SLOT(slotGameControllerAxisEvent(GameControllerAxisEvent*)));
 	QObject::connect(c, SIGNAL(gameControllerButtonEvent(GameControllerButtonEvent*)), this, SLOT(slotGameControllerButtonEvent(GameControllerButtonEvent*)));
 	QObject::connect(c, SIGNAL(gameControllerPovEvent(GameControllerPovEvent*)),       this, SLOT(slotGameControllerPovEvent(GameControllerPovEvent*)));
-	//QObject::connect(c,&GameController::gameControllerAxisEvent,this,&RealJoystick::slotGameControllerAxisEvent);
-	//QObject::connect(c,&GameController::gameControllerButtonEvent,this,&RealJoystick::slotGameControllerButtonEvent);
-	//QObject::connect(c,&GameController::gameControllerPovEvent,this,&RealJoystick::slotGameControllerPovEvent);
+	//QObject::connect(c, &GameController::gameControllerAxisEvent,   this, &RealJoystick::slotGameControllerAxisEvent);
+	//QObject::connect(c, &GameController::gameControllerButtonEvent, this, &RealJoystick::slotGameControllerButtonEvent);
+	//QObject::connect(c, &GameController::gameControllerPovEvent,    this, &RealJoystick::slotGameControllerPovEvent);
 	
 	m_bTransformPovInto4Buttons = (m_controller->description() != "vJoy Device");
 	m_bTransform4ButtonsIntoPov = (m_controller->description() != "vJoy Device");
@@ -67,6 +67,8 @@ RealJoystick::~RealJoystick()
 		m_controller = nullptr;
 	}
 }
+
+
 
 
 
@@ -136,6 +138,7 @@ QVector<JoystickChange> RealJoystick::changes()
 
 
 
+
 // SLOT GAME CONTROLLER AXIS EVENT ////////////////////////////////////////////
 void RealJoystick::slotGameControllerAxisEvent(GameControllerAxisEvent *event)
 {
@@ -191,6 +194,7 @@ void RealJoystick::slotGameControllerPovEvent(GameControllerPovEvent *event)
 
 
 
+
 // BUTTONS COUNT //////////////////////////////////////////////////////////////
 uint RealJoystick::buttonsCount() const
 {
@@ -241,7 +245,7 @@ QString RealJoystick::buttonName(uint button) const
 		return "POV " + QString::number(pov+1) + " (" + directionStr + ")";
 	}
 	
-	return QString();
+	return {};
 }
 
 // BUTTONS NAMES //////////////////////////////////////////////////////////////
@@ -251,6 +255,10 @@ QStringList RealJoystick::buttonsNames() const
 	for (uint i=0; i<this->buttonsCount(); ++i) {list << this->buttonName(i);}
 	return list;
 }
+
+
+
+
 
 
 // AXES COUNT /////////////////////////////////////////////////////////////////
@@ -266,6 +274,10 @@ QStringList RealJoystick::axesNames() const
 	for (uint i=0; i<this->axesCount(); ++i) {list << this->axisName(i);}
 	return list;
 }
+
+
+
+
 
 
 // POVS COUNT /////////////////////////////////////////////////////////////////
@@ -312,7 +324,7 @@ QString RealJoystick::povName(uint pov) const
 		return m_virtualPovsDef[index].povName;
 	}
 	
-	return QString();
+	return {};
 }
 
 // POVS NAMES /////////////////////////////////////////////////////////////////
@@ -322,6 +334,7 @@ QStringList RealJoystick::povsNames() const
 	for (uint i=0; i<this->povsCount(); ++i) {list << this->povName(i);}
 	return list;
 }
+
 
 
 
@@ -393,7 +406,4 @@ uint RealJoystick::buttonMapsPov(uint button) const
 	
 	return -1u;
 }
-
-
-
 

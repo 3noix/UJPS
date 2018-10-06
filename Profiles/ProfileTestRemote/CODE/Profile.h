@@ -33,5 +33,6 @@ class Profile : public AbstractProfile
 		VirtualJoystick  *vj1;  // virtual joystick #1
 };
 
+
 #endif
 

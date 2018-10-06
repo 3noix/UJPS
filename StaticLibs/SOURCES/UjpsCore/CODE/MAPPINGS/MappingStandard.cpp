@@ -27,7 +27,7 @@ MappingStandard::MappingStandard(AbstractRealJoystick *rj, ControlType t, uint r
 	AbstractTrigger *trigger,
 	AbstractAction *action,
 	VirtualEventsQueue &eventsQueue)
-		: AbstractMapping(lc,eventsQueue)
+		: AbstractMapping{lc,eventsQueue}
 {
 	m_disable = false;
 	m_rj = rj;
@@ -51,6 +51,8 @@ MappingStandard::~MappingStandard()
 		m_action = nullptr;
 	}
 }
+
+
 
 
 
@@ -126,6 +128,8 @@ void MappingStandard::performAction(const JoystickChange &ch)
 
 
 
+
+
 // ACTIVATE BY LAYER CHANGE ///////////////////////////////////////////////////
 void MappingStandard::activateByLayerChange()
 {
@@ -148,5 +152,4 @@ void MappingStandard::aboutToBeDeleted()
 	if (m_action)
 		this->postEvents(m_action->aboutToBeDeleted());
 }
-
 

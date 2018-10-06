@@ -66,5 +66,6 @@ class AbstractMapping
 		VirtualEventsQueue &m_eventsQueue;
 };
 
+
 #endif
 

@@ -22,6 +22,9 @@ class AbstractRealJoystickFactory
 		virtual AbstractRealJoystick* createRealJoystick(GameController *c) = 0;
 };
 
+
 Q_DECLARE_INTERFACE(AbstractRealJoystickFactory,"AbstractRealJoystickFactory")
 
+
 #endif
+

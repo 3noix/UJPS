@@ -7,7 +7,6 @@
 //  CONSTRUCTEUR
 //
 //  SLOT GAME CONTROLLER AXIS EVENT
-//
 //  DESCRIPTION
 //
 //  BUTTONS COUNT
@@ -42,6 +41,7 @@ ThrustmasterT16000MJoystick::ThrustmasterT16000MJoystick(GameController *c) : Re
 
 
 
+
 // SLOT GAME CONTROLLER AXIS EVENT ////////////////////////////////////////////
 void ThrustmasterT16000MJoystick::slotGameControllerAxisEvent(GameControllerAxisEvent *event)
 {
@@ -54,15 +54,13 @@ void ThrustmasterT16000MJoystick::slotGameControllerAxisEvent(GameControllerAxis
 	else if (axis == 2) {m_changes << JoystickChange{this, ControlType::Axis, ThrustmasterT16000MJoystick_::THR,    false, event->value()};}
 }
 
-
-
-
-
 // DESCRIPTION ////////////////////////////////////////////////////////////////
 QString ThrustmasterT16000MJoystick::description() const
 {
 	return ThrustmasterT16000MJoystick_::Description;
 }
+
+
 
 
 
@@ -79,7 +77,7 @@ QString ThrustmasterT16000MJoystick::buttonName(uint button) const
 	if (button < 20)
 		return m_buttonsNames[button];
 	else
-		return QString();
+		return {};
 }
 
 // BUTTONS NAMES //////////////////////////////////////////////////////////////
@@ -87,6 +85,7 @@ QStringList ThrustmasterT16000MJoystick::buttonsNames() const
 {
 	return m_buttonsNames;
 }
+
 
 
 
@@ -114,7 +113,7 @@ QString ThrustmasterT16000MJoystick::axisName(uint axis) const
 	if (axis < 4)
 		return m_axesNames[axis];
 	else
-		return QString();
+		return {};
 }
 
 // AXES NAMES /////////////////////////////////////////////////////////////////
@@ -122,6 +121,8 @@ QStringList ThrustmasterT16000MJoystick::axesNames() const
 {
 	return m_axesNames;
 }
+
+
 
 
 
@@ -138,7 +139,7 @@ QString ThrustmasterT16000MJoystick::povName(uint pov) const
 	if (pov < 1)
 		return m_povsNames[pov];
 	else
-		return QString();
+		return {};
 }
 
 // POVS NAMES /////////////////////////////////////////////////////////////////

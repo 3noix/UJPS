@@ -7,7 +7,6 @@
 //  CONSTRUCTEUR
 //
 //  SLOT GAME CONTROLLER AXIS EVENT
-//
 //  DESCRIPTION
 //
 //  BUTTONS COUNT
@@ -54,6 +53,9 @@ LogitechX56Throttle::LogitechX56Throttle(GameController *c) : RealJoystick{c}
 
 
 
+
+
+
 // SLOT GAME CONTROLLER AXIS EVENT ////////////////////////////////////////////
 void LogitechX56Throttle::slotGameControllerAxisEvent(GameControllerAxisEvent *event)
 {
@@ -70,14 +72,12 @@ void LogitechX56Throttle::slotGameControllerAxisEvent(GameControllerAxisEvent *e
 	else if (axis == 3) {m_changes << JoystickChange{this, ControlType::Axis, LogitechX56Throttle_::RTY4,      false, event->value()};}
 }
 
-
-
-
 // DESCRIPTION ////////////////////////////////////////////////////////////////
 QString LogitechX56Throttle::description() const
 {
 	return LogitechX56Throttle_::Description;
 }
+
 
 
 
@@ -95,7 +95,7 @@ QString LogitechX56Throttle::buttonName(uint button) const
 	if (button < this->buttonsCount())
 		return m_buttonsNames[button];
 	else
-		return QString();
+		return {};
 }
 
 // BUTTONS NAMES //////////////////////////////////////////////////////////////
@@ -103,6 +103,8 @@ QStringList LogitechX56Throttle::buttonsNames() const
 {
 	return m_buttonsNames;
 }
+
+
 
 
 
@@ -133,7 +135,7 @@ QString LogitechX56Throttle::axisName(uint axis) const
 	if (axis < this->axesCount())
 		return m_axesNames[axis];
 	else
-		return QString();
+		return {};
 }
 
 // AXES NAMES /////////////////////////////////////////////////////////////////
@@ -141,6 +143,8 @@ QStringList LogitechX56Throttle::axesNames() const
 {
 	return m_axesNames;
 }
+
+
 
 
 
@@ -157,7 +161,7 @@ QString LogitechX56Throttle::povName(uint pov) const
 	if (pov < this->povsCount())
 		return m_povsNames[pov];
 	else
-		return QString();
+		return {};
 }
 
 // POVS NAMES /////////////////////////////////////////////////////////////////
@@ -165,5 +169,4 @@ QStringList LogitechX56Throttle::povsNames() const
 {
 	return m_povsNames;
 }
-
 

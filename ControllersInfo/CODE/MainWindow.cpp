@@ -25,9 +25,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow{parent}
 	this->slotUpdate();
 	
 	// connections
-	QObject::connect(actionUpdate,&QAction::triggered,this,&MainWindow::slotUpdate);
-	QObject::connect(actionQuit,&QAction::triggered,qApp,&QCoreApplication::quit);
+	QObject::connect(actionUpdate, &QAction::triggered, this, &MainWindow::slotUpdate);
+	QObject::connect(actionQuit,   &QAction::triggered, qApp, &QCoreApplication::quit);
 }
+
 
 
 
@@ -36,17 +37,17 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow{parent}
 // CREATE ACTIONS /////////////////////////////////////////////////////////////
 void MainWindow::createActions()
 {
-	actionUpdate = new QAction("Update",this);
+	actionUpdate = new QAction{"Update",this};
 	actionUpdate->setStatusTip("Update controllers info");
 	actionUpdate->setShortcut(QKeySequence{"F5"});
 	actionUpdate->setShortcutContext(Qt::WindowShortcut);
-	actionUpdate->setIcon(QIcon(":/RESOURCES/ICONES/update.png"));
+	actionUpdate->setIcon(QIcon{":/RESOURCES/ICONES/update.png"});
 	
-	actionQuit = new QAction("Quit",this);
+	actionQuit = new QAction{"Quit",this};
 	actionQuit->setStatusTip("Quit");
 	actionQuit->setShortcut(QKeySequence{"Ctrl+Q"});
 	actionQuit->setShortcutContext(Qt::WindowShortcut);
-	actionQuit->setIcon(QIcon(":/RESOURCES/ICONES/croixRouge.png"));
+	actionQuit->setIcon(QIcon{":/RESOURCES/ICONES/croixRouge.png"});
 }
 
 // CREATE MENUS ///////////////////////////////////////////////////////////////
@@ -77,11 +78,11 @@ void MainWindow::setupWidget()
 void MainWindow::createHeaders()
 {
 	QLabel *labelDescription = new QLabel{"Description",this};
-	QLabel *labelId = new QLabel{"ID",this};
-	QLabel *labelButtons = new QLabel{"Buttons",this};
-	QLabel *labelAxes = new QLabel{"Axes",this};
-	QLabel *labelPovs = new QLabel{"Povs",this};
-	QLabel *labelHardwareId = new QLabel{"Hardware ID",this};
+	QLabel *labelId          = new QLabel{"ID",this};
+	QLabel *labelButtons     = new QLabel{"Buttons",this};
+	QLabel *labelAxes        = new QLabel{"Axes",this};
+	QLabel *labelPovs        = new QLabel{"Povs",this};
+	QLabel *labelHardwareId  = new QLabel{"Hardware ID",this};
 	
 	labelDescription->setAlignment(Qt::AlignCenter);
 	labelId->setAlignment(Qt::AlignCenter);
@@ -154,11 +155,4 @@ void MainWindow::slotUpdate()
 	
 	layout->addItem(new QSpacerItem{0,0,QSizePolicy::Minimum,QSizePolicy::Expanding},iLine,0,1,1);
 }
-
-
-
-
-
-
-
 

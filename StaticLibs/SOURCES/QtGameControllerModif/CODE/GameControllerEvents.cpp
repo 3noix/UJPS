@@ -14,12 +14,12 @@ GameControllerAxisEvent::GameControllerAxisEvent(uint controllerId, uint axis, f
 	m_axis{axis},
 	m_value{value}
 {
-	
 }
 
 uint GameControllerAxisEvent::controllerId() const {return m_id;}
 uint GameControllerAxisEvent::axis() const {return m_axis;}
 float GameControllerAxisEvent::value() const {return m_value;}
+
 
 
 
@@ -29,12 +29,12 @@ GameControllerButtonEvent::GameControllerButtonEvent(uint controllerId, uint but
 	m_button{button},
 	m_pressed{pressed}
 {
-	
 }
 
 uint GameControllerButtonEvent::controllerId() const {return m_id;}
 uint GameControllerButtonEvent::button() const {return m_button;}
 bool GameControllerButtonEvent::pressed() const {return m_pressed;}
+
 
 
 
@@ -44,11 +44,9 @@ GameControllerPovEvent::GameControllerPovEvent(uint controllerId, uint pov, floa
 	m_pov{pov},
 	m_angle{angle}
 {
-	
 }
 
 uint GameControllerPovEvent::controllerId() const {return m_id;}
 uint GameControllerPovEvent::pov() const {return m_pov;}
 float GameControllerPovEvent::angle() const {return m_angle;}
-
 

@@ -65,6 +65,9 @@ float GameControllerXInput::shortToFloat(SHORT s)
 
 
 
+
+
+
 // DESCRIPTION ////////////////////////////////////////////////////////////////
 QString GameControllerXInput::description() {return "Controller (XBOX 360 For Windows)";}
 // HARDWARE ID ////////////////////////////////////////////////////////////////
@@ -117,6 +120,10 @@ float GameControllerXInput::povValue(uint pov)
 }
 
 
+
+
+
+
 // READ GAME CONTROLLER ///////////////////////////////////////////////////////
 void GameControllerXInput::readGameController()
 {
@@ -155,6 +162,4 @@ void GameControllerXInput::readGameController()
 	m_state = state;
 	m_bFirstRead = false;
 }
-
-
 

@@ -37,5 +37,6 @@ class TriggerButtonChange : public AbstractTrigger
 		};
 };
 
+
 #endif
 

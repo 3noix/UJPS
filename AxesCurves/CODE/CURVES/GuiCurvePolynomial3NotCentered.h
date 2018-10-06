@@ -70,4 +70,6 @@ class CurvePolynomial3NotCenteredWidget : public QGroupBox
 		QDoubleSpinBox *boxLDZ, *boxRDZ, *boxCurve;
 };
 
+
 #endif
+

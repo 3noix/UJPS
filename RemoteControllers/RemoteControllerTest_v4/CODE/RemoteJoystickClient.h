@@ -85,5 +85,6 @@ class RemoteJoystickClient : public QObject
 		QNetworkSession *m_networkSession;
 };
 
+
 #endif
 

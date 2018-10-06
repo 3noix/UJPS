@@ -23,5 +23,6 @@ class AbstractTrigger
 		virtual bool isTriggered(AbstractRealJoystick *rj, ControlType t, uint rnum, const JoystickChange &ch) const = 0;
 };
 
+
 #endif
 

@@ -38,5 +38,6 @@ class TriggerButtonState : public AbstractTrigger
 		bool m_bDown;
 };
 
+
 #endif
 

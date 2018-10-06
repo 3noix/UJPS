@@ -1,12 +1,10 @@
 #include "ApplicationSettings.h"
 #include <QCoreApplication>
-ApplicationSettings ApplicationSettings::m_instance = ApplicationSettings();
+ApplicationSettings ApplicationSettings::m_instance;
+
 
 ///////////////////////////////////////////////////////////////////////////////
 // RESUME :
-//
-//  CONSTRUCTEUR
-//  DESTRUCTEUR
 //
 //  INSTANCE
 //  READ FILE
@@ -16,9 +14,6 @@ ApplicationSettings ApplicationSettings::m_instance = ApplicationSettings();
 //  CONTAINS
 //  IS EMPTY
 ///////////////////////////////////////////////////////////////////////////////
-
-
-// CONSTRUCTEUR ET DESTRUCTEUR ////////////////////////////////////////////////
 
 
 // INSTANCE ///////////////////////////////////////////////////////////////////
@@ -64,7 +59,4 @@ bool ApplicationSettings::isEmpty() const
 {
 	return m_settings.isEmpty();
 }
-
-
-
 

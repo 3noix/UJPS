@@ -19,4 +19,6 @@ namespace MfgCrosswindRudderPedals_
 	const uint BRK_RIGHT = 2;
 };
 
+
 #endif
+

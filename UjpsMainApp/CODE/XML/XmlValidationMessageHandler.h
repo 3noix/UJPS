@@ -30,7 +30,3 @@ class XmlValidationMessageHandler : public QAbstractMessageHandler
 
 #endif
 
-
-
-
-

@@ -45,5 +45,6 @@ class MyChartWidget : public QChartView
 		QVector<QColor> m_colors;
 };
 
+
 #endif
 

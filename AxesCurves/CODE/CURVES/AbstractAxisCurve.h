@@ -26,4 +26,6 @@ class AbstractAxisCurve : public QObject
 		void curveModified();
 };
 
+
 #endif
+

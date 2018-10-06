@@ -1,7 +1,9 @@
 #ifndef BUTTON_WIDGET
 #define BUTTON_WIDGET
 
+
 #include <QWidget>
+
 
 class ButtonWidget : public QWidget
 {
@@ -32,4 +34,6 @@ class ButtonWidget : public QWidget
 		QString m_text;
 };
 
+
 #endif
+

@@ -49,4 +49,6 @@ class LogitechExtreme3D : public RealJoystick
 		QStringList m_povsNames;
 };
 
+
 #endif
+

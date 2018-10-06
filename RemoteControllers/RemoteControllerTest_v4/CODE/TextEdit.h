@@ -31,8 +31,6 @@ class TextEdit : public QTextEdit
 		QMenu *m_menu;
 };
 
+
 #endif
-
-
-
 

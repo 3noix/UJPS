@@ -14,6 +14,7 @@ namespace StarCitizenControls_Keyboard
 	const uint TrackIR_Pause     = Key_F3;
 }
 
+
 namespace StarCitizenControls_vJoy1
 {
 	const uint AxisFlightRoll            = VJOY::X;
@@ -81,6 +82,7 @@ namespace StarCitizenControls_vJoy1
 	const uint MatchTargetVelocity       = VJOY::DX50;
 }
 
+
 namespace StarCitizenControls_vJoy2
 {
 	const uint AxisGroundThrust   = VJOY::X;
@@ -100,6 +102,7 @@ namespace StarCitizenControls_vJoy2
 	const uint Brake              = VJOY::DX30;
 	const uint Horn               = VJOY::DX31;
 }
+
 
 #endif
 

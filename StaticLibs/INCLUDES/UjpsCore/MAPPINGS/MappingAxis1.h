@@ -51,5 +51,6 @@ class MappingAxis1 : public AbstractMapping
 		bool m_useActionPlus;
 };
 
+
 #endif
 

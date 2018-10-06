@@ -1,6 +1,7 @@
 #ifndef JOYSTICK_CHANGE
 #define JOYSTICK_CHANGE
 
+
 #include "../OTHER/ControlType.h"
 class AbstractRealJoystick;
 using uint = unsigned int;
@@ -23,5 +24,4 @@ struct JoystickChange
 
 
 #endif
-
 

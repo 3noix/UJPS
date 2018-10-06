@@ -19,7 +19,7 @@ QString shortName(QString path)
 {
 	path = path.replace('\\','/');
 	QStringList list = path.split('/',QString::SkipEmptyParts);
-	if (list.size() == 0) {return QString();}
+	if (list.size() == 0) {return {};}
 	return list.last();
 }
 
@@ -28,7 +28,8 @@ QString dirName(QString path)
 {
 	path = path.replace('\\','/');
 	QStringList list = path.split('/',QString::SkipEmptyParts);
-	if (list.size() == 0) {return QString();}
+	if (list.size() == 0) {return {};}
 	list.removeLast();
 	return list.join("/");
 }
+

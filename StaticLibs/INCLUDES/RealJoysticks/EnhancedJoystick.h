@@ -80,4 +80,6 @@ class EnhancedJoystick : public AbstractRealJoystick
 		std::array<float,4> m_povsValuesBeforeLock;
 };
 
+
 #endif
+

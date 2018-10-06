@@ -9,3 +9,4 @@ windeployqt CleanQtProjects.exe
 cd ..
 echo.
 echo.
+

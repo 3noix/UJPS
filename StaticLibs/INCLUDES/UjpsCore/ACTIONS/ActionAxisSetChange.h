@@ -66,5 +66,6 @@ class ActionAxisSetChange : public AbstractAction
 		AxisDirection m_direction;
 };
 
+
 #endif
 

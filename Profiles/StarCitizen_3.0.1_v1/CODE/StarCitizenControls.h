@@ -89,5 +89,6 @@ namespace StarCitizenControls
 	const uint LaunchMissile             = VJOY::DX58;
 }
 
+
 #endif
 

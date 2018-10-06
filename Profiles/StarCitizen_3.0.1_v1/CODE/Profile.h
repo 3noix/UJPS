@@ -100,5 +100,6 @@ class Profile : public AbstractProfile
 		void set_THRRIGHT_for_flightThrottle();
 };
 
+
 #endif
 

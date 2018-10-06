@@ -13,7 +13,7 @@ bool deleteDirectory(QString dirPath);
 
 int main(int argc, char **argv)
 {
-	QCoreApplication app(argc,argv);
+	QCoreApplication app{argc,argv};
 	QStringList args = app.arguments();
 	
 	if (args.size() == 2)
@@ -38,11 +38,9 @@ int main(int argc, char **argv)
 	return 0;
 }
 
-
-
 void cleanDirectory(QString dirPath)
 {
-	QDir dir(dirPath);
+	QDir dir{dirPath};
 	QStringList proFiles = dir.entryList({"*.pro"},QDir::Files);
 	
 	if (proFiles.size() > 0)
@@ -72,12 +70,12 @@ void cleanProject(QString modelPath)
 	deleteDirectory(modelPath + "/release");
 	
 	// suppression des makefiles
-	QDir dir(modelPath);
+	QDir dir{modelPath};
 	QStringList makefiles = dir.entryList({"Makefile*"},QDir::Files);
 	qDebug() << "    delete makefiles";
 	for (const QString &makefileName : makefiles)
 	{
-		QFile makefile(modelPath + "/" + makefileName);
+		QFile makefile{modelPath + "/" + makefileName};
 		makefile.remove();
 	}
 	
@@ -86,18 +84,18 @@ void cleanProject(QString modelPath)
 	qDebug() << "    delete qobjects files";
 	for (const QString &qObjectsFileName : qObjectsFiles)
 	{
-		QFile qObjectsFile(modelPath + "/" + qObjectsFileName);
+		QFile qObjectsFile{modelPath + "/" + qObjectsFileName};
 		qObjectsFile.remove();
 	}
 	
 	// suppression du .qmake.stash
-	QFile stashFile(modelPath + "/.qmake.stash");
+	QFile stashFile{modelPath + "/.qmake.stash"};
 	stashFile.remove();
 }
 
 bool deleteDirectory(QString dirPath)
 {
-	QDir dirToDelete(dirPath);
+	QDir dirToDelete{dirPath};
 	if (!dirToDelete.exists()) {return false;}
 	
 	QString shortDirName = dirToDelete.dirName();
@@ -107,7 +105,7 @@ bool deleteDirectory(QString dirPath)
 	{
 		if (info.isFile())
 		{
-			QFile file(info.absoluteFilePath());
+			QFile file{info.absoluteFilePath()};
 			if (!file.remove()) {return false;}
 		}
 		else if (info.isDir())
@@ -122,5 +120,4 @@ bool deleteDirectory(QString dirPath)
 	
 	return true;
 }
-
 

@@ -48,5 +48,6 @@ class ProfileEngine : public QObject
 		VigemPidWhiteLister m_vigemInterface;
 };
 
+
 #endif
 

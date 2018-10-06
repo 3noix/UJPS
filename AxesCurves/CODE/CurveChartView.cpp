@@ -6,7 +6,6 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 //  CONSTRUCTEUR
-//  DESTRUCTEUR
 //  MOUSE RELEASE EVENT
 //
 //  CHANGE JOYSTICK OR AXIS
@@ -20,7 +19,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 
-// CONSTRUCTEUR ET DESTRUCTEUR ////////////////////////////////////////////////
+// CONSTRUCTEUR ///////////////////////////////////////////////////////////////
 CurveChartView::CurveChartView(QWidget *parent) : QChartView{parent}
 {
 	m_joystick = nullptr;
@@ -87,11 +86,6 @@ CurveChartView::CurveChartView(QWidget *parent) : QChartView{parent}
 	this->setRubberBand(QChartView::RectangleRubberBand);
 }
 
-CurveChartView::~CurveChartView()
-{
-	
-}
-
 // MOUSE RELEASE EVENT ////////////////////////////////////////////////////////
 void CurveChartView::mouseReleaseEvent(QMouseEvent *event)
 {
@@ -104,8 +98,6 @@ void CurveChartView::mouseReleaseEvent(QMouseEvent *event)
 		QChartView::mouseReleaseEvent(event);
 	}
 }
-
-
 
 
 
@@ -147,7 +139,7 @@ void CurveChartView::changeCurve(AbstractAxisCurve *curve)
 {
 	m_curve = curve;
 	
-	if (m_curve) {QObject::connect(m_curve,SIGNAL(curveModified()),this,SLOT(slotUpdateCurve()));}
+	if (m_curve) {QObject::connect(m_curve, SIGNAL(curveModified()), this, SLOT(slotUpdateCurve()));}
 	this->slotUpdateCurve();
 }
 
@@ -189,6 +181,4 @@ void CurveChartView::slotUpdateCurve()
 	// le point courant
 	this->updateCurrent();
 }
-
-
 

@@ -15,7 +15,7 @@
 
 
 // CONSTRUCTEUR ET DESTRUCTEUR ////////////////////////////////////////////////
-AxesWidget::AxesWidget(const QStringList &names, QWidget *parent) : QGroupBox("Axes",parent)
+AxesWidget::AxesWidget(const QStringList &names, QWidget *parent) : QGroupBox{"Axes",parent}
 {
 	layout = new QGridLayout{this};
 	this->setLayout(layout);
@@ -38,7 +38,7 @@ AxesWidget::AxesWidget(const QStringList &names, QWidget *parent) : QGroupBox("A
 		slider->setValue(0);
 		slider->setMinimumWidth(150);
 		
-		QLabel *label2 = new QLabel("0",this);
+		QLabel *label2 = new QLabel{"0",this};
 		label2->setFixedWidth(50);
 		label2->setAlignment(Qt::AlignCenter);
 		
@@ -51,7 +51,7 @@ AxesWidget::AxesWidget(const QStringList &names, QWidget *parent) : QGroupBox("A
 		m_sliders << slider;
 		m_labels2 << label2;
 		
-		QObject::connect(boxTem,&MyCheckBox::axisDisplayChanged,this,&AxesWidget::axisDisplayChanged);
+		QObject::connect(boxTem, &MyCheckBox::axisDisplayChanged, this, &AxesWidget::axisDisplayChanged);
 		++i;
 	}
 }

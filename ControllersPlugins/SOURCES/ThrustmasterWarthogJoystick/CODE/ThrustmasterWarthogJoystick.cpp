@@ -7,7 +7,6 @@
 //  CONSTRUCTEUR
 //
 //  SLOT GAME CONTROLLER AXIS EVENT
-//
 //  DESCRIPTION
 //
 //  BUTTONS COUNT
@@ -57,6 +56,9 @@ ThrustmasterWarthogJoystick::ThrustmasterWarthogJoystick(GameController *c) : Re
 
 
 
+
+
+
 // SLOT GAME CONTROLLER AXIS EVENT ////////////////////////////////////////////
 void ThrustmasterWarthogJoystick::slotGameControllerAxisEvent(GameControllerAxisEvent *event)
 {
@@ -67,14 +69,12 @@ void ThrustmasterWarthogJoystick::slotGameControllerAxisEvent(GameControllerAxis
 	else if (axis == 0) {m_changes << JoystickChange{this, ControlType::Axis, ThrustmasterWarthogJoystick_::JOYY, false, event->value()};}
 }
 
-
-
-
 // DESCRIPTION ////////////////////////////////////////////////////////////////
 QString ThrustmasterWarthogJoystick::description() const
 {
 	return ThrustmasterWarthogJoystick_::Description;
 }
+
 
 
 
@@ -92,7 +92,7 @@ QString ThrustmasterWarthogJoystick::buttonName(uint button) const
 	if (button < 23)
 		return m_buttonsNames[button];
 	else
-		return QString();
+		return {};
 }
 
 // BUTTONS NAMES //////////////////////////////////////////////////////////////
@@ -100,6 +100,8 @@ QStringList ThrustmasterWarthogJoystick::buttonsNames() const
 {
 	return m_buttonsNames;
 }
+
+
 
 
 
@@ -124,7 +126,7 @@ QString ThrustmasterWarthogJoystick::axisName(uint axis) const
 	if (axis < 2)
 		return m_axesNames[axis];
 	else
-		return QString();
+		return {};
 }
 
 // AXES NAMES /////////////////////////////////////////////////////////////////
@@ -132,6 +134,8 @@ QStringList ThrustmasterWarthogJoystick::axesNames() const
 {
 	return m_axesNames;
 }
+
+
 
 
 
@@ -148,7 +152,7 @@ QString ThrustmasterWarthogJoystick::povName(uint pov) const
 	if (pov < 4)
 		return m_povsNames[pov];
 	else
-		return QString();
+		return {};
 }
 
 // POVS NAMES /////////////////////////////////////////////////////////////////
@@ -156,5 +160,4 @@ QStringList ThrustmasterWarthogJoystick::povsNames() const
 {
 	return m_povsNames;
 }
-
 

@@ -78,4 +78,6 @@ namespace ThrustmasterWarthogThrottle_
 	const uint MS        = 1;	// micro switch virtual pov
 };
 
+
 #endif
+

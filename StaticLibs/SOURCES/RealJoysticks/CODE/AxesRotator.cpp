@@ -139,4 +139,3 @@ int AxesRotator::searchAxis(uint axis) const
 	return -1;
 }
 
-

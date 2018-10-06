@@ -47,4 +47,6 @@ namespace ThrustmasterWarthogJoystick_
 	const uint HAT4 = 3;
 };
 
+
 #endif
+

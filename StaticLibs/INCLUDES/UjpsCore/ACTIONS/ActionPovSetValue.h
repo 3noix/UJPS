@@ -59,5 +59,6 @@ class ActionPovSetValue : public AbstractAction
 		float m_value;
 };
 
+
 #endif
 

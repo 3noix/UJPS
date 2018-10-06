@@ -68,8 +68,6 @@ void Profile::setControlsFlightCruise()
 
 
 
-
-
 // set_S4_for_horn
 // set_S4_for_landing
 // set_S4_for_nothing
@@ -82,7 +80,7 @@ void Profile::set_S4_for_horn()
 void Profile::set_S4_for_landing()
 {
 	UnmapButton(tmwj, TMWJ::S4);
-	Map(tmwj, ControlType::Button, TMWJ::S4, AllLayers, new TriggerButtonPress{}, new ActionCallback{[this]() {this->set_JOYXY_for_strafe();}});
+	Map(tmwj, ControlType::Button, TMWJ::S4, AllLayers, new TriggerButtonPress{},   new ActionCallback{[this]() {this->set_JOYXY_for_strafe();}});
 	Map(tmwj, ControlType::Button, TMWJ::S4, AllLayers, new TriggerButtonRelease{}, new ActionCallback{[this]() {this->set_JOYXY_for_rollNpitch();}});
 }
 
@@ -90,8 +88,6 @@ void Profile::set_S4_for_nothing()
 {
 	UnmapButton(tmwj, TMWJ::S4);
 }
-
-
 
 
 
@@ -156,6 +152,7 @@ void Profile::set_JOYXY_for_rollNpitch()
 	vj1->setAxis(SC1::AxisFlightPitch, tmwj->axisValue(TMWJ::JOYY));
 	vj2->setButton(SC2::Brake,false);
 }
+
 
 
 
@@ -251,7 +248,7 @@ void Profile::set_THR_for_landing()
 		this->set_THRLEFT_for_verticalStrafe();
 	
 	// mapping LTB (to switch the role of THR_LEFT)
-	Map(tmwt, ControlType::Button, TMWT::LTB, AllLayers, new TriggerButtonPress{}, new ActionCallback{[this]() {this->set_THRLEFT_for_nothing();}});
+	Map(tmwt, ControlType::Button, TMWT::LTB, AllLayers, new TriggerButtonPress{},   new ActionCallback{[this]() {this->set_THRLEFT_for_nothing();}});
 	Map(tmwt, ControlType::Button, TMWT::LTB, AllLayers, new TriggerButtonRelease{}, new ActionCallback{[this]() {this->set_THRLEFT_for_verticalStrafe();}});
 }
 
@@ -271,14 +268,14 @@ void Profile::set_THR_for_cruise()
 void Profile::set_BRKRIGHT_for_groundForward()
 {
 	MapAxis(mfgx, MFGX::BRK_RIGHT, AllLayers, vj2, SC2::AxisGroundThrust, AxisDirection::Normal);
-	mfgx->setCurve(MFGX::BRK_RIGHT, new CustomCurve({-1.0f+2.0f*brkRight_LDZ,0.0f,  1.0f-2.0f*brkRight_RDZ,1.0f}));
+	mfgx->setCurve(MFGX::BRK_RIGHT, new CustomCurve{{-1.0f+2.0f*brkRight_LDZ,0.0f,  1.0f-2.0f*brkRight_RDZ,1.0f}});
 	vj2->setAxis(SC2::AxisGroundThrust, mfgx->axisValue(MFGX::BRK_RIGHT));
 }
 
 void Profile::set_BRKRIGHT_for_groundBackward()
 {
 	MapAxis(mfgx, MFGX::BRK_RIGHT, AllLayers, vj2, SC2::AxisGroundThrust, AxisDirection::Normal);
-	mfgx->setCurve(MFGX::BRK_RIGHT, new CustomCurve({-1.0f+2.0f*brkRight_LDZ,0.0f,  1.0f-2.0f*brkRight_RDZ,-1.0f}));
+	mfgx->setCurve(MFGX::BRK_RIGHT, new CustomCurve{{-1.0f+2.0f*brkRight_LDZ,0.0f,  1.0f-2.0f*brkRight_RDZ,-1.0f}});
 	vj2->setAxis(SC2::AxisGroundThrust, mfgx->axisValue(MFGX::BRK_RIGHT));
 }
 
@@ -286,7 +283,7 @@ void Profile::set_THRLEFT_for_verticalStrafe()
 {
 	MapAxis(tmwt, TMWT::THR_LEFT, AllLayers, vj1, SC1::AxisFlightStrafeVertical, AxisDirection::Reversed);
 	float reductionFactor = 0.2f;
-	tmwt->setCurve(TMWT::THR_LEFT, new CustomCurve({-1.0f,-reductionFactor,  1.0f,reductionFactor}));
+	tmwt->setCurve(TMWT::THR_LEFT, new CustomCurve{{-1.0f,-reductionFactor,  1.0f,reductionFactor}});
 	vj1->setAxis(SC1::AxisFlightStrafeVertical, 0.0f);
 	vj1->setAxisTrim(SC1::AxisFlightStrafeVertical, tmwt->axisValue(TMWT::THR_LEFT));
 }
@@ -302,5 +299,4 @@ void Profile::set_THRRIGHT_for_flightThrottle()
 	MapAxis(tmwt, TMWT::THR_RIGHT, AllLayers, vj1, SC1::AxisFlightThrust, AxisDirection::Normal); // THR_RIGHT mapped to thrust
 	vj1->setAxis(SC1::AxisFlightThrust, tmwt->axisValue(TMWT::THR_RIGHT)); // set axis at correct value, otherwise it is necessary to wait for a movement of the throttle
 }
-
 

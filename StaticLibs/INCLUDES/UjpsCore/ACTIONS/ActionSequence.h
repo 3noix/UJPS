@@ -64,5 +64,6 @@ class ActionSequence : public AbstractAction
 		uint m_compteur;
 };
 
+
 #endif
 

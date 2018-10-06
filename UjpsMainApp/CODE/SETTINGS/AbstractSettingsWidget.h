@@ -24,7 +24,3 @@ class AbstractSettingsWidget : public QWidget
 
 #endif
 
-
-
-
-

@@ -51,4 +51,6 @@ class MicrosoftXbox360Gamepad : public RealJoystick
 		bool m_dataModified;
 };
 
+
 #endif
+

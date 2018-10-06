@@ -41,7 +41,3 @@ class VigemPidWhiteLister
 
 #endif
 
-
-
-
-

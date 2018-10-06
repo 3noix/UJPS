@@ -27,7 +27,7 @@ namespace TMWJ = ThrustmasterWarthogJoystick;
 
 
 // CONSTRUCTEUR ET DESTRUCTEUR ////////////////////////////////////////////////
-Profile::Profile() : AbstractProfile()
+Profile::Profile() : AbstractProfile{}
 {
 	tmwj = nullptr;
 	rjse = nullptr;
@@ -38,6 +38,7 @@ Profile::~Profile()
 {
 	this->stop();
 }
+
 
 
 
@@ -91,5 +92,4 @@ void Profile::runFirstStep()
 	MapAxis(rjse, 0, AllLayers, vj1, VJOY::X);
 	MapPov(rjse, 0, AllLayers, vj1, VJOY::POV1);
 }
-
 

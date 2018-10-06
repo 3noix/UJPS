@@ -49,4 +49,6 @@ class ThrustmasterWarthogJoystick : public RealJoystick
 		QStringList m_povsNames;
 };
 
+
 #endif
+

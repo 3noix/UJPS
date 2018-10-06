@@ -35,4 +35,6 @@ class vJoyDevice : public RealJoystick
 		QStringList m_axesNames;
 };
 
+
 #endif
+

@@ -64,4 +64,6 @@ namespace LogitechX56Throttle_
 	const uint HAT2 = 1;		// Lower 4-way Hat
 };
 
+
 #endif
+

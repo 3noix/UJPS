@@ -53,7 +53,7 @@
 
 
 // CONSTRUCTEUR ET DESTRUCTEUR ////////////////////////////////////////////////
-AbstractProfile::AbstractProfile() : QObject(), m_eventsQueue(this)
+AbstractProfile::AbstractProfile() : QObject{}, m_eventsQueue{this}
 {
 	m_isProcessingEvents = false;
 	m_dtms = 15;
@@ -168,8 +168,6 @@ void AbstractProfile::run()
 
 
 
-
-
 // REGISTER REAL JOYSTICK /////////////////////////////////////////////////////
 EnhancedJoystick* AbstractProfile::registerRealJoystick(const QString &description, int num)
 {
@@ -185,7 +183,7 @@ EnhancedJoystick* AbstractProfile::registerRealJoystick(RemoteJoystickServer *rj
 {
 	if (!rjs) {return nullptr;}
 	
-	QObject::connect(rjs,SIGNAL(message(QString,QColor)),this,SIGNAL(message(QString,QColor)));
+	QObject::connect(rjs, SIGNAL(message(QString,QColor)), this, SIGNAL(message(QString,QColor)));
 	EnhancedJoystick *erj = new EnhancedJoystick{rjs,true};
 	m_realJoysticks.push_back(erj);
 	return erj;
@@ -194,7 +192,7 @@ EnhancedJoystick* AbstractProfile::registerRealJoystick(RemoteJoystickServer *rj
 // REGISTER VIRTUAL JOYSTICK //////////////////////////////////////////////////
 void AbstractProfile::registerVirtualJoystick(VirtualJoystick *vj)
 {
-	QObject::connect(vj,SIGNAL(message(QString,QColor)),this,SIGNAL(message(QString,QColor)));
+	QObject::connect(vj, SIGNAL(message(QString,QColor)), this, SIGNAL(message(QString,QColor)));
 	m_virtualJoysticks.push_back(vj);
 }
 
@@ -209,8 +207,6 @@ void AbstractProfile::registerLayerDim2(Layers::LayerDim2 layer2, AbstractRealJo
 {
 	m_layerCalculator.registerLayerDim2(layer2,rj,rButton);
 }
-
-
 
 
 
@@ -258,7 +254,6 @@ uint AbstractProfile::ms2cycles(uint msecs) const
 
 
 
-
 // DO ACTION //////////////////////////////////////////////////////////////////
 void AbstractProfile::DoAction(AbstractAction *action, bool deleteWhenDone)
 {
@@ -274,7 +269,7 @@ bool AbstractProfile::startRexec(uint id, uint cycles, AbstractAction *action)
 	if (m_rexecIds.contains(id)) {return false;}	// only one rexec per id
 	
 	// the user (profile programmer) must be careful to delete this action in his profile to avoid a memory leak
-	this->addMapping(new MappingRexec(id,cycles,action,m_eventsQueue));
+	this->addMapping(new MappingRexec{id,cycles,action,m_eventsQueue});
 	m_rexecIds << id;
 	return true;
 }
@@ -286,7 +281,7 @@ bool AbstractProfile::startRexec(uint id, uint cycles, std::function<void()> fct
 	
 	// this action (created below from the functor) is deleted when stopRexec is called with this id
 	ActionCallback *action = new ActionCallback{fct};
-	this->addMapping(new MappingRexec(id,cycles,action,m_eventsQueue));
+	this->addMapping(new MappingRexec{id,cycles,action,m_eventsQueue});
 	m_rexecFunctionsActionsToDelete.insert(id,action);
 	m_rexecIds << id;
 	return true;
@@ -303,7 +298,6 @@ bool AbstractProfile::stopRexec(uint id)
 	if (m_rexecFunctionsActionsToDelete.contains(id)) {delete m_rexecFunctionsActionsToDelete.take(id);}
 	return true;
 }
-
 
 
 
@@ -333,37 +327,37 @@ void AbstractProfile::addMapping(AbstractMapping *m)
 // MAP ////////////////////////////////////////////////////////////////////////
 void AbstractProfile::Map(AbstractRealJoystick *rj, ControlType type, uint rnum, LayersCombo lc, AbstractTrigger *trig, AbstractAction *act)
 {
-	this->addMapping(new MappingStandard(rj,type,rnum,lc,trig,act,m_eventsQueue));
+	this->addMapping(new MappingStandard{rj,type,rnum,lc,trig,act,m_eventsQueue});
 }
 
 // MAP BUTTON /////////////////////////////////////////////////////////////////
 void AbstractProfile::MapButton(AbstractRealJoystick *rj, uint rButton, LayersCombo lc, VirtualJoystick *vj, uint vButton)
 {
-	this->addMapping(new MappingStandard(rj,ControlType::Button,rButton,lc,
+	this->addMapping(new MappingStandard{rj,ControlType::Button,rButton,lc,
 						new TriggerButtonChange{},
-						new ActionButtonSetChange(vj,vButton),
-						m_eventsQueue));
+						new ActionButtonSetChange{vj,vButton},
+						m_eventsQueue});
 }
 
 // MAP BUTTON TEMPO ///////////////////////////////////////////////////////////
 void AbstractProfile::MapButtonTempo(AbstractRealJoystick *rj, uint rButton, LayersCombo lc, uint cycles, AbstractAction *action1, AbstractAction *action2)
 {
-	this->addMapping(new MappingTempo(rj,rButton,lc,cycles,action1,action2,m_eventsQueue));
+	this->addMapping(new MappingTempo{rj,rButton,lc,cycles,action1,action2,m_eventsQueue});
 }
 
 // MAP AXIS ///////////////////////////////////////////////////////////////////
 void AbstractProfile::MapAxis(AbstractRealJoystick *rj, uint rAxis, LayersCombo lc, VirtualJoystick *vj, uint vAxis, AxisDirection d)
 {
-	this->addMapping(new MappingStandard(rj,ControlType::Axis,rAxis,lc,
+	this->addMapping(new MappingStandard{rj,ControlType::Axis,rAxis,lc,
 					new TriggerAxisChange{},
-					new ActionAxisSetChange(vj,vAxis,d),
-					m_eventsQueue));
+					new ActionAxisSetChange{vj,vAxis,d},
+					m_eventsQueue});
 }
 
 // MAP AXIS RELATIVE //////////////////////////////////////////////////////////
 void AbstractProfile::MapAxisRelative(AbstractRealJoystick *rj, uint rAxis, LayersCombo lc, VirtualJoystick *vj, uint vAxis, float timeMinToMax)
 {
-	this->addMapping(new MappingAxisRelative(rj,rAxis,lc,vj,vAxis,2*m_dtms/timeMinToMax,m_eventsQueue));
+	this->addMapping(new MappingAxisRelative{rj,rAxis,lc,vj,vAxis,2*m_dtms/timeMinToMax,m_eventsQueue});
 }
 
 // MAP AXIS 1 /////////////////////////////////////////////////////////////////
@@ -375,7 +369,7 @@ void AbstractProfile::MapAxis1(AbstractRealJoystick *rj, uint rAxis, LayersCombo
 		return;
 	}
 	
-	this->addMapping(new MappingAxis1(rj,rAxis,lc,points,actionPlus,actionMoins,m_eventsQueue));
+	this->addMapping(new MappingAxis1{rj,rAxis,lc,points,actionPlus,actionMoins,m_eventsQueue});
 }
 
 void AbstractProfile::MapAxis1(AbstractRealJoystick *rj, uint rAxis, LayersCombo lc, uint nbPoints, AbstractAction *actionPlus, AbstractAction *actionMoins)
@@ -389,7 +383,7 @@ void AbstractProfile::MapAxis1(AbstractRealJoystick *rj, uint rAxis, LayersCombo
 	float pas = 2.0 / (float)nbPoints;
 	std::vector<float> points(nbPoints);
 	for (uint i=0; i<nbPoints; ++i) {points[i] = -1.0f + 0.5f*pas + i*pas;}
-	this->addMapping(new MappingAxis1(rj,rAxis,lc,points,actionPlus,actionMoins,m_eventsQueue));
+	this->addMapping(new MappingAxis1{rj,rAxis,lc,points,actionPlus,actionMoins,m_eventsQueue});
 }
 
 // MAP AXIS 2 /////////////////////////////////////////////////////////////////
@@ -401,7 +395,7 @@ void AbstractProfile::MapAxis2(AbstractRealJoystick *rj, uint rAxis, LayersCombo
 		return;
 	}
 	
-	this->addMapping(new MappingAxis2(rj,rAxis,lc,points,actions,m_eventsQueue));
+	this->addMapping(new MappingAxis2{rj,rAxis,lc,points,actions,m_eventsQueue});
 }
 
 void AbstractProfile::MapAxis2(AbstractRealJoystick *rj, uint rAxis, LayersCombo lc, uint nbPoints, const std::vector<AbstractAction*> actions)
@@ -415,30 +409,29 @@ void AbstractProfile::MapAxis2(AbstractRealJoystick *rj, uint rAxis, LayersCombo
 	float pas = 2.0 / (float)nbPoints;
 	std::vector<float> points(nbPoints);
 	for (uint i=0; i<nbPoints; ++i) {points[i] = -1.0f + 0.5f*pas + i*pas;}
-	this->addMapping(new MappingAxis2(rj,rAxis,lc,points,actions,m_eventsQueue));
+	this->addMapping(new MappingAxis2{rj,rAxis,lc,points,actions,m_eventsQueue});
 }
 
 // MAP MERGE AXES /////////////////////////////////////////////////////////////
 void AbstractProfile::MapMergeAxes(AbstractRealJoystick *rj1, uint rAxis1, float k1, AbstractRealJoystick *rj2, uint rAxis2, float k2, LayersCombo lc, VirtualJoystick *vj, uint vAxis, AbstractAxisCurve *curve)
 {
-	this->addMapping(new MappingMergeAxes(rj1, rAxis1, k1, rj2, rAxis2, k2, lc, vj, vAxis, curve, m_eventsQueue));
+	this->addMapping(new MappingMergeAxes{rj1, rAxis1, k1, rj2, rAxis2, k2, lc, vj, vAxis, curve, m_eventsQueue});
 }
 
 // MAP SPLIT AXIS /////////////////////////////////////////////////////////////
 void AbstractProfile::MapSplitAxis(AbstractRealJoystick *rj, uint rAxis, LayersCombo lc, VirtualJoystick *vj1, uint vAxis1, VirtualJoystick *vj2, uint vAxis2)
 {
-	this->addMapping(new MappingSplitAxis(rj, rAxis, lc, vj1, vAxis1, vj2, vAxis2, m_eventsQueue));
+	this->addMapping(new MappingSplitAxis{rj, rAxis, lc, vj1, vAxis1, vj2, vAxis2, m_eventsQueue});
 }
 
 // MAP POV ////////////////////////////////////////////////////////////////////
 void AbstractProfile::MapPov(AbstractRealJoystick *rj, uint rPov, LayersCombo lc, VirtualJoystick *vj, uint vPov)
 {
-	this->addMapping(new MappingStandard(rj,ControlType::Pov,rPov,lc,
+	this->addMapping(new MappingStandard{rj,ControlType::Pov,rPov,lc,
 					new TriggerPovChange{},
-					new ActionPovSetChange(vj,vPov),
-					m_eventsQueue));
+					new ActionPovSetChange{vj,vPov},
+					m_eventsQueue});
 }
-
 
 
 
@@ -551,5 +544,4 @@ void AbstractProfile::UnmapRexec(uint id)
 		}
 	}
 }
-
 

@@ -29,7 +29,7 @@ MappingAxis2::MappingAxis2(AbstractRealJoystick *rj, uint rAxis, LayersCombo lc,
 	const std::vector<float> &points,
 	const std::vector<AbstractAction*> &actions,
 	VirtualEventsQueue &eventsQueue)
-		: AbstractMapping(lc,eventsQueue)
+		: AbstractMapping{lc,eventsQueue}
 {
 	if (points.size() == 0 || actions.size() != points.size()+1) {throw ExceptionBadMapAxis2{};}
 	
@@ -51,6 +51,8 @@ MappingAxis2::~MappingAxis2()
 			delete action;
 	}
 }
+
+
 
 
 
@@ -151,6 +153,8 @@ void MappingAxis2::performAction(const JoystickChange &ch)
 
 
 
+
+
 // ACTIVATE BY LAYER CHANGE ///////////////////////////////////////////////////
 void MappingAxis2::activateByLayerChange()
 {
@@ -177,6 +181,8 @@ void MappingAxis2::aboutToBeDeleted()
 
 
 
+
+
 // COMPUTE ZONE ///////////////////////////////////////////////////////////////
 uint MappingAxis2::computeZone(float axisValue)
 {
@@ -198,5 +204,4 @@ uint MappingAxis2::computeZone(float axisValue)
 		return max;
 	}
 }
-
 

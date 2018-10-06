@@ -1,6 +1,7 @@
 #ifndef COMPILATION_WIDGET
 #define COMPILATION_WIDGET
 
+
 #include <QWidget>
 class AbstractCompiler;
 class QGridLayout;
@@ -55,8 +56,4 @@ class CompilationWidget : public QWidget
 
 
 #endif
-
-
-
-
 

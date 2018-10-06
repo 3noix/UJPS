@@ -10,3 +10,4 @@ cd ..
 copy /Y ..\StaticLibs\SOURCES\QtGameControllerModif\release\QtGameControllerModif.dll release
 echo.
 echo.
+

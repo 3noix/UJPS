@@ -26,4 +26,6 @@ class CurvePolynomial3Centered : public AbstractAxisCurve
 		float m_curveParam;
 };
 
+
 #endif
+

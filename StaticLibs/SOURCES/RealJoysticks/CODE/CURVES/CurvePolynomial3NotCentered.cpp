@@ -2,8 +2,14 @@
 #include "Lim.h"
 
 
+///////////////////////////////////////////////////////////////////////////////
+//  CONSTRUCTEUR
+//  RUN
+///////////////////////////////////////////////////////////////////////////////
 
-CurvePolynomial3NotCentered::CurvePolynomial3NotCentered(float leftDZ, float rightDZ, float curve) : AbstractAxisCurve()
+
+// CONSTRUCTEUR ///////////////////////////////////////////////////////////////
+CurvePolynomial3NotCentered::CurvePolynomial3NotCentered(float leftDZ, float rightDZ, float curve) : AbstractAxisCurve{}
 {
 	m_m = 0.02f * leftDZ - 1.0f;
 	m_M = 1.0f - 0.02f * rightDZ;
@@ -11,10 +17,7 @@ CurvePolynomial3NotCentered::CurvePolynomial3NotCentered(float leftDZ, float rig
 	m_curveParam = curve;
 }
 
-
-
-
-
+// RUN ////////////////////////////////////////////////////////////////////////
 float CurvePolynomial3NotCentered::run(float in)
 {
 	if (in < m_m)
@@ -34,5 +37,4 @@ float CurvePolynomial3NotCentered::run(float in)
 	
 	return lim<float>(in,-1.0f,1.0f);
 }
-
 

@@ -35,8 +35,8 @@
 QtCompiler::QtCompiler() : AbstractCompiler{}
 {
 	m_process = new QtCompilationProcess{};
-	QObject::connect(m_process,SIGNAL(compilationMessage(QString,QColor)),this,SIGNAL(compilationMessage(QString,QColor)));
-	QObject::connect(m_process,SIGNAL(compilationFinished()),this,SIGNAL(compilationFinished()));
+	QObject::connect(m_process, SIGNAL(compilationMessage(QString,QColor)), this, SIGNAL(compilationMessage(QString,QColor)));
+	QObject::connect(m_process, SIGNAL(compilationFinished()),              this, SIGNAL(compilationFinished()));
 	
 	this->createWidget();
 	this->readSettings();
@@ -47,6 +47,7 @@ QtCompiler::~QtCompiler()
 	delete boxSettings;
 	delete m_process;
 }
+
 
 
 
@@ -120,19 +121,19 @@ bool QtCompiler::isRunning() const
 void QtCompiler::createWidget()
 {
 	// box settings
-	boxSettings = new QGroupBox("Qt MinGw compiler settings");
-	boxLayout = new QGridLayout(boxSettings);
+	boxSettings = new QGroupBox{"Qt MinGw compiler settings"};
+	boxLayout = new QGridLayout{boxSettings};
 	boxSettings->setLayout(boxLayout);
 	
 	// line edits
-	labelQtBinaryDirPath = new QLabel("Qt directory :",boxSettings);
-	labelMingwBinaryDirPath = new QLabel("Mingw directory :",boxSettings);
-	lineQtBinaryDirPath = new QLineEdit(boxSettings);
-	lineMingwBinaryDirPath = new QLineEdit(boxSettings);
+	labelQtBinaryDirPath = new QLabel{"Qt directory :",boxSettings};
+	labelMingwBinaryDirPath = new QLabel{"Mingw directory :",boxSettings};
+	lineQtBinaryDirPath = new QLineEdit{boxSettings};
+	lineMingwBinaryDirPath = new QLineEdit{boxSettings};
 	
 	// checkboxes
-	checkDebug = new QCheckBox("Debug",boxSettings);
-	checkRelease = new QCheckBox("Release",boxSettings);
+	checkDebug = new QCheckBox{"Debug",boxSettings};
+	checkRelease = new QCheckBox{"Release",boxSettings};
 	checkDebug->setChecked(true);
 	checkRelease->setChecked(true);
 	
@@ -150,7 +151,7 @@ bool QtCompiler::readSettings()
 {
 	// read settings
 	QString settingsFileName = QCoreApplication::applicationDirPath() + "/../SETTINGS/QtCompilerSettings.xml";
-	GenericPropertiesInfo settings(settingsFileName);
+	GenericPropertiesInfo settings{settingsFileName};
 	if (settings.fileError()) {return false;}
 	
 	// on vérifie que toutes les propriétés sont là

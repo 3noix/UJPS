@@ -52,5 +52,6 @@ class ActionAxisIncrement : public AbstractAction
 		float m_increment;
 };
 
+
 #endif
 

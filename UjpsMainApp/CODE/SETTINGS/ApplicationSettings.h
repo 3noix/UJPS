@@ -32,7 +32,5 @@ class ApplicationSettings
 };
 
 
-
 #endif
-
 

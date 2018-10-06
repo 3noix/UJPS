@@ -31,7 +31,7 @@ StandardJoystickWidget::StandardJoystickWidget(AbstractRealJoystick *j, bool own
 	this->setupWidget();
 	this->initState();
 	
-	m_timer = new QTimer(this);
+	m_timer = new QTimer{this};
 	m_timer->setInterval(15);
 	
 	QObject::connect(boxAxes, SIGNAL(axisDisplayChanged(uint,bool)), this, SLOT(slotUpdateTempoCurves(uint,bool)));
@@ -51,6 +51,8 @@ StandardJoystickWidget::~StandardJoystickWidget()
 		m_joystick = nullptr;
 	}
 }
+
+
 
 
 
@@ -168,6 +170,9 @@ void StandardJoystickWidget::joystickPovAngleChanged(uint pov, float value)
 
 
 
+
+
+
 // SLOT UPDATE TEMPO CURVES ///////////////////////////////////////////////////
 void StandardJoystickWidget::slotUpdateTempoCurves(uint axis, bool bDisplay)
 {
@@ -179,5 +184,4 @@ void StandardJoystickWidget::slotUpdateTempoCurves(uint axis, bool bDisplay)
 	if (axes.size() == 0) {tempoChart->hide();}
 	else {tempoChart->show();}
 }
-
 

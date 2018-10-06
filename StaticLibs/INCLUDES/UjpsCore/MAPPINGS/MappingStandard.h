@@ -47,5 +47,6 @@ class MappingStandard : public AbstractMapping
 		AbstractAction *m_action;
 };
 
+
 #endif
 

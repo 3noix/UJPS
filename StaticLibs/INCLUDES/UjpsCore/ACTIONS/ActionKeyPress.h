@@ -49,5 +49,6 @@ class ActionKeyPress : public AbstractAction
 		uint m_modifier;
 };
 
+
 #endif
 

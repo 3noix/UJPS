@@ -15,4 +15,6 @@ class AbstractAxisCurve
 		virtual float run(float in) = 0;
 };
 
+
 #endif
+

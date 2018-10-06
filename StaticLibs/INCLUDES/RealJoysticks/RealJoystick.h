@@ -76,4 +76,6 @@ class RealJoystick : public QObject, public AbstractRealJoystick
 		QVector<VirtualPovDefinition> m_virtualPovsDef;
 };
 
+
 #endif
+

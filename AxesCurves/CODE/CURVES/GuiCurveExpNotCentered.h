@@ -73,4 +73,6 @@ class CurveExpNotCenteredWidget : public QGroupBox
 		QDoubleSpinBox *boxLDZ, *boxRDZ, *boxCurve, *boxZoom;
 };
 
+
 #endif
+

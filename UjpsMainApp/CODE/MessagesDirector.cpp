@@ -11,7 +11,9 @@
 
 
 // CONSTRUCTEUR ET DESTRUCTEUR ////////////////////////////////////////////////
-MessagesDirector::MessagesDirector(QObject *parent) : QObject(parent) {}
+MessagesDirector::MessagesDirector(QObject *parent) : QObject{parent}
+{
+}
 
 
 // STARTS LISTENING TO ////////////////////////////////////////////////////////
@@ -20,7 +22,7 @@ void MessagesDirector::startsListeningTo(QObject *o)
 	if (!m_objectsListened.contains(o))
 	{
 		m_objectsListened << o;
-		QObject::connect(o,SIGNAL(message(QString,QColor)),this,SLOT(slotMessage(QString,QColor)));
+		QObject::connect(o, SIGNAL(message(QString,QColor)), this, SLOT(slotMessage(QString,QColor)));
 	}
 }
 
@@ -30,7 +32,7 @@ void MessagesDirector::stopsListeningTo(QObject *o)
 	if (m_objectsListened.contains(o))
 	{
 		m_objectsListened.removeAll(o);
-		QObject::disconnect(o,SIGNAL(message(QString,QColor)),this,SLOT(slotMessage(QString,QColor)));
+		QObject::disconnect(o, SIGNAL(message(QString,QColor)), this, SLOT(slotMessage(QString,QColor)));
 	}
 }
 

@@ -1,6 +1,7 @@
 #ifndef QT_COMPILER
 #define QT_COMPILER
 
+
 #include "AbstractCompiler.h"
 class QtCompilationProcess;
 
@@ -46,8 +47,4 @@ class QtCompiler : public AbstractCompiler
 
 
 #endif
-
-
-
-
 

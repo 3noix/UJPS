@@ -158,4 +158,6 @@ namespace vJoyDevice_
 	const uint DX128 = 127;
 };
 
+
 #endif
+

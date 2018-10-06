@@ -41,8 +41,7 @@ void RealJoysticksManager::loadPlugins(const QString &path)
 		QPluginLoader *loader = new QPluginLoader(path + "/" + name);
 		if (QObject *plugin = loader->instance())
 		{
-			AbstractRealJoystickFactory* factory = qobject_cast<AbstractRealJoystickFactory*>(plugin);
-			if (factory)
+			if (AbstractRealJoystickFactory* factory = qobject_cast<AbstractRealJoystickFactory*>(plugin))
 			{
 				m_loaders << loader;
 				m_factories << factory;
@@ -92,6 +91,7 @@ AbstractRealJoystick* RealJoysticksManager::createJoystick(GameController *c)
 	emit message("Warning: no plugin found for controller: " + d, QColor{255,127,0});
 	return new RealJoystick{c};
 }
+
 
 
 

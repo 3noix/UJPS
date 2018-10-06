@@ -60,5 +60,6 @@ class ActionAxisSetValue : public AbstractAction
 		float m_value;
 };
 
+
 #endif
 

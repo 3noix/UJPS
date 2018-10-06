@@ -39,4 +39,6 @@ namespace LogitechExtreme3D_
 	const uint POV1 = 0;	// the only pov
 };
 
+
 #endif
+

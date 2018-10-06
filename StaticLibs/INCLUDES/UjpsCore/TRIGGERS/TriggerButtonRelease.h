@@ -38,5 +38,6 @@ class TriggerButtonRelease : public AbstractTrigger
 		};
 };
 
+
 #endif
 

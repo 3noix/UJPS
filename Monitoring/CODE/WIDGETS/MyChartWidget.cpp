@@ -44,6 +44,10 @@ MyChartWidget::MyChartWidget(int n, int dtms, QWidget *parent) : QChartView{pare
 }
 
 
+
+
+
+
 // MOUSE RELEASE EVENT ////////////////////////////////////////////////////////
 void MyChartWidget::mouseReleaseEvent(QMouseEvent *event)
 {
@@ -130,5 +134,4 @@ void MyChartWidget::slotRemoveCurve(uint index)
 	m_chart->removeSeries(series);
 	delete series;
 }
-
 

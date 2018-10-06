@@ -50,5 +50,6 @@ class ActionButtonToggle : public AbstractAction
 		uint m_vButton;
 };
 
+
 #endif
 

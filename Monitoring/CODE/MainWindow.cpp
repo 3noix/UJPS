@@ -29,9 +29,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow{parent}
 	this->createMenus();
 	this->setupWidget();
 	
-	QObject::connect(boxMode,SIGNAL(currentIndexChanged(int)),this,SLOT(slotModeChanged(int)));
-	QObject::connect(actionUpdate,&QAction::triggered,this,&MainWindow::slotUpdate);
-	QObject::connect(actionQuit,&QAction::triggered,qApp,&QCoreApplication::quit);
+	QObject::connect(boxMode,      SIGNAL(currentIndexChanged(int)), this, SLOT(slotModeChanged(int)));
+	QObject::connect(actionUpdate, &QAction::triggered,              this, &MainWindow::slotUpdate);
+	QObject::connect(actionQuit,   &QAction::triggered,              qApp, &QCoreApplication::quit);
 	
 	this->slotModeChanged(2);
 }
@@ -44,20 +44,22 @@ MainWindow::~MainWindow()
 
 
 
+
+
 // CREATE ACTIONS /////////////////////////////////////////////////////////////
 void MainWindow::createActions()
 {
-	actionUpdate = new QAction("Update controllers list",this);
+	actionUpdate = new QAction{"Update controllers list",this};
 	actionUpdate->setStatusTip("Update controllers list");
 	actionUpdate->setShortcut(QKeySequence{"F5"});
 	actionUpdate->setShortcutContext(Qt::WindowShortcut);
-	actionUpdate->setIcon(QIcon(":/RESOURCES/ICONES/update.png"));
+	actionUpdate->setIcon(QIcon{":/RESOURCES/ICONES/update.png"});
 	
-	actionQuit = new QAction("Quit",this);
+	actionQuit = new QAction{"Quit",this};
 	actionQuit->setStatusTip("Quit");
 	actionQuit->setShortcut(QKeySequence{"Ctrl+Q"});
 	actionQuit->setShortcutContext(Qt::WindowShortcut);
-	actionQuit->setIcon(QIcon(":/RESOURCES/ICONES/croixRouge.png"));
+	actionQuit->setIcon(QIcon{":/RESOURCES/ICONES/croixRouge.png"});
 }
 
 // CREATE MENUS ///////////////////////////////////////////////////////////////
@@ -90,7 +92,7 @@ void MainWindow::setupWidget()
 	layout->addLayout(layoutUp);
 	
 	this->setCentralWidget(mainWidget);
-	this->setWindowIcon(QIcon(":/RESOURCES/ICONES/eyes.png"));
+	this->setWindowIcon(QIcon{":/RESOURCES/ICONES/eyes.png"});
 	this->setMinimumWidth(700.0);
 }
 
@@ -167,12 +169,11 @@ void MainWindow::slotModeChanged(int index)
 		tabs = new QTabWidget{this};
 		for (int i=0; i<nbOtherJoy; ++i)
 		{
-			AbstractRealJoystick *j = jm.releaseJoystick(0);
-			if (j)
+			if (AbstractRealJoystick *j = jm.releaseJoystick(0))
 			{
 				QWidget *temp = new QWidget{tabs};
 				QWidget *w = new StandardJoystickWidget{j,true,temp};
-				QVBoxLayout *layout = new QVBoxLayout(temp);
+				QVBoxLayout *layout = new QVBoxLayout{temp};
 				temp->setLayout(layout);
 				layout->addWidget(w);
 				layout->addStretch();
@@ -189,6 +190,4 @@ void MainWindow::slotUpdate()
 {
 	this->slotModeChanged(boxMode->currentIndex());
 }
-
-
 

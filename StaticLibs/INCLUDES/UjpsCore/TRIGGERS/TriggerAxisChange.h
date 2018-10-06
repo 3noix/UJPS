@@ -37,5 +37,6 @@ class TriggerAxisChange : public AbstractTrigger
 		};
 };
 
+
 #endif
 

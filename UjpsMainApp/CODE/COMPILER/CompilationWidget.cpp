@@ -27,24 +27,23 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 
-
 // CONSTRUCTEUR ET DESTRUCTEUR ////////////////////////////////////////////////
-CompilationWidget::CompilationWidget(QWidget *parent) : QWidget(parent)
+CompilationWidget::CompilationWidget(QWidget *parent) : QWidget{parent}
 {
 	// compiler
 	m_compiler = new QtCompiler{};
 	boxSettings = m_compiler->settingsWidget();
 	connect(m_compiler, SIGNAL(compilationMessage(QString,QColor)), this, SLOT(slotMessage(QString,QColor)));
-	connect(m_compiler, SIGNAL(compilationFinished()), this, SLOT(slotCompilationFinished()));
+	connect(m_compiler, SIGNAL(compilationFinished()),              this, SLOT(slotCompilationFinished()));
 	
 	// ihm
 	this->setupWidget();
 	this->resize(750,500);
 	
 	// connections
-	connect(boutonRun,SIGNAL(clicked()),this,SLOT(slotRun()));
-	connect(boutonStop,SIGNAL(clicked()),this,SLOT(slotStop()));
-	connect(boutonClose,SIGNAL(clicked()),this,SLOT(slotClose()));
+	connect(boutonRun,   SIGNAL(clicked()), this, SLOT(slotRun()));
+	connect(boutonStop,  SIGNAL(clicked()), this, SLOT(slotStop()));
+	connect(boutonClose, SIGNAL(clicked()), this, SLOT(slotClose()));
 }
 
 CompilationWidget::~CompilationWidget()
@@ -63,7 +62,6 @@ CompilationWidget::~CompilationWidget()
 
 
 
-
 // SET PROJECT DIRECTORY //////////////////////////////////////////////////////
 void CompilationWidget::setProjectDirectory(const QString &projectDir)
 {
@@ -73,21 +71,21 @@ void CompilationWidget::setProjectDirectory(const QString &projectDir)
 // SETUP WIDGET ///////////////////////////////////////////////////////////////
 void CompilationWidget::setupWidget()
 {
-	this->setWindowIcon(QIcon(":/RESOURCES/ICONES/compilation.png"));
+	this->setWindowIcon(QIcon{":/RESOURCES/ICONES/compilation.png"});
 	this->setWindowTitle("Compilator");
 	this->setWindowFlags(Qt::Window);
 	this->setWindowModality(Qt::ApplicationModal);
 	
 	// layout
-	layout = new QGridLayout(this);
+	layout = new QGridLayout{this};
 	this->setLayout(layout);
 	
 	// bas
-	textEdit = new TextEdit(this);
-	boutonRun = new QPushButton("Run",this);
-	boutonStop = new QPushButton("Stop",this);
+	textEdit = new TextEdit{this};
+	boutonRun = new QPushButton{"Run",this};
+	boutonStop = new QPushButton{"Stop",this};
 	boutonStop->setEnabled(false);
-	boutonClose = new QPushButton("Close",this);
+	boutonClose = new QPushButton{"Close",this};
 	
 	// ajout au layout
 	layout->addWidget(boxSettings,0,0,1,6);
@@ -176,11 +174,4 @@ void CompilationWidget::slotMessage(const QString &message, const QColor &color)
 	textEdit->append(message);
 	textEdit->repaint();
 }
-
-
-
-
-
-
-
 

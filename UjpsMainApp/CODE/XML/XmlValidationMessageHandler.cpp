@@ -5,7 +5,6 @@
 // RESUME :
 //
 //  CONSTRUCTEUR
-//  DESTRUCTEUR
 //
 //  MESSAGE CONTENT
 //  LINE
@@ -15,7 +14,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 
-// CONSTRUCTEUR ET DESTRUCTEUR ////////////////////////////////////////////////
+// CONSTRUCTEUR ///////////////////////////////////////////////////////////////
 XmlValidationMessageHandler::XmlValidationMessageHandler() :
 	QAbstractMessageHandler{},
 	m_messageContent{},
@@ -80,9 +79,4 @@ QString XmlValidationMessageHandler::removeHtmlTags(const QString &str)
 	
 	return str2;
 }
-
-
-
-
-
 

@@ -60,5 +60,6 @@ class ActionButtonSetChangeOpposite : public AbstractAction
 		uint m_vButton;
 };
 
+
 #endif
 

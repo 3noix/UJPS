@@ -15,13 +15,12 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 
-
 // CONSTRUCTEUR ET DESTRUCTEUR ////////////////////////////////////////////////
-WriteToHidThread::WriteToHidThread(QObject *parent) : QThread(parent)
+WriteToHidThread::WriteToHidThread(QObject *parent) : QThread{parent}
 {
 	m_abort = false;
 	
-	m_hidDevice = new HidDevice(0x044F,0x0404);
+	m_hidDevice = new HidDevice{0x044F,0x0404};
 	m_hidDevice->openHidDevice();
 }
 
@@ -31,6 +30,7 @@ WriteToHidThread::~WriteToHidThread()
 	this->wait();
 	delete m_hidDevice;
 }
+
 
 
 
@@ -53,6 +53,7 @@ void WriteToHidThread::stop()
 	QMutexLocker locker{&m_mutex};
 	m_abort = true;
 }
+
 
 
 

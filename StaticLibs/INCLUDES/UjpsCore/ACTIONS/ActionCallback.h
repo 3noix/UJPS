@@ -48,5 +48,6 @@ class ActionCallback : public AbstractAction
 		std::function<void()> m_function;
 };
 
+
 #endif
 

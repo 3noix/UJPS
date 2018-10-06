@@ -72,5 +72,6 @@ class GameControllerDirectInput : public GameController
 		bool m_bFirstRead;
 };
 
+
 #endif
 

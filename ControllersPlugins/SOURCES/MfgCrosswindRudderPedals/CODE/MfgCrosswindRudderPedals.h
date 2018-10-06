@@ -46,4 +46,6 @@ class MfgCrosswindRudderPedals : public RealJoystick
 		QStringList m_axesNames;
 };
 
+
 #endif
+

@@ -21,7 +21,7 @@
 
 // CONSTRUCTEUR ///////////////////////////////////////////////////////////////
 MainWindow::MainWindow(QWidget *parent) :
-	QWidget(parent),
+	QWidget{parent},
 	m_client{"TouchScreen2",{"B1","B2"},{"A1"},{"POV1"}}
 {
 	this->setupWidget();
@@ -34,9 +34,9 @@ MainWindow::MainWindow(QWidget *parent) :
 	QObject::connect(&m_client, &RemoteJoystickClient::stateChanged, this, &MainWindow::slotSetState);
 	QObject::connect(&m_client, &RemoteJoystickClient::error, m_connectionWidget, &ConnectionWidget::slotError);
 	
-	QObject::connect(m_slider, &QSlider::valueChanged, this, &MainWindow::slotSliderValueChanged);
-	QObject::connect(m_button1, &QPushButton::pressed, this, &MainWindow::slotButton1Pressed);
-	QObject::connect(m_button2, &QPushButton::pressed, this, &MainWindow::slotButton2Pressed);
+	QObject::connect(m_slider,  &QSlider::valueChanged, this, &MainWindow::slotSliderValueChanged);
+	QObject::connect(m_button1, &QPushButton::pressed,  this, &MainWindow::slotButton1Pressed);
+	QObject::connect(m_button2, &QPushButton::pressed,  this, &MainWindow::slotButton2Pressed);
 	QObject::connect(m_button1, &QPushButton::released, this, &MainWindow::slotButton1Released);
 	QObject::connect(m_button2, &QPushButton::released, this, &MainWindow::slotButton2Released);
 	
@@ -46,25 +46,25 @@ MainWindow::MainWindow(QWidget *parent) :
 // SETUP WIDGET ///////////////////////////////////////////////////////////////
 void MainWindow::setupWidget()
 {
-	m_connectionWidget = new ConnectionWidget(this);
+	m_connectionWidget = new ConnectionWidget{this};
 	
-	m_box = new QGroupBox("Controls",this);
-	m_layout2 = new QGridLayout(m_box);
+	m_box = new QGroupBox{"Controls",this};
+	m_layout2 = new QGridLayout{m_box};
 	m_box->setLayout(m_layout2);
-	m_slider = new QSlider(this);
+	m_slider = new QSlider{this};
 	m_slider->setMinimum(-10000);
 	m_slider->setMaximum(10000);
 	m_slider->setOrientation(Qt::Horizontal);
-	m_button1 = new QPushButton("Button 1",this);
-	m_button2 = new QPushButton("Button 2",this);
-	m_button3 = new QPushButton("Button 3",this);
+	m_button1 = new QPushButton{"Button 1",this};
+	m_button2 = new QPushButton{"Button 2",this};
+	m_button3 = new QPushButton{"Button 3",this};
 	m_layout2->addWidget(m_slider,0,0,1,3);
 	m_layout2->addWidget(m_button1,1,0,1,1);
 	m_layout2->addWidget(m_button2,1,1,1,1);
 	m_layout2->addWidget(m_button3,1,2,1,1);
 	
 	// add widgets in the layout
-	m_mainLayout = new QVBoxLayout(this);
+	m_mainLayout = new QVBoxLayout{this};
 	m_mainLayout->addWidget(m_connectionWidget);
 	m_mainLayout->addWidget(m_box);
 }
@@ -143,5 +143,4 @@ void MainWindow::slotButton2Released()
 {
 	//m_client.slotSendButtonInfo(1,false);
 }
-
 

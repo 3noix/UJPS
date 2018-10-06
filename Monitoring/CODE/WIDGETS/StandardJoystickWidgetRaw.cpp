@@ -32,7 +32,7 @@ StandardJoystickWidgetRaw::StandardJoystickWidgetRaw(GameController *j, bool own
 	this->setupWidget();
 	this->initState();
 	
-	m_timer = new QTimer(this);
+	m_timer = new QTimer{this};
 	m_timer->setInterval(15);
 	
 	QObject::connect(boxAxes, SIGNAL(axisDisplayChanged(uint,bool)), this, SLOT(slotUpdateTempoCurves(uint,bool)));
@@ -59,6 +59,8 @@ StandardJoystickWidgetRaw::~StandardJoystickWidgetRaw()
 		m_joystick = nullptr;
 	}
 }
+
+
 
 
 
@@ -160,6 +162,9 @@ void StandardJoystickWidgetRaw::slotJoystickPovAngleChanged(GameControllerPovEve
 {
 	povWidgets[event->pov()]->slotSetAngle(event->angle());
 }
+
+
+
 
 
 

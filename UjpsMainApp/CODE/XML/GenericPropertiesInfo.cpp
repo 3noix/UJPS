@@ -57,6 +57,7 @@ GenericPropertiesInfo::GenericPropertiesInfo(const QString &fileName) :
 
 
 
+
 // IS EMPTY ///////////////////////////////////////////////////////////////////
 bool GenericPropertiesInfo::isEmpty() const
 {
@@ -104,6 +105,7 @@ QMap<QString,QVariant> GenericPropertiesInfo::properties() const
 {
 	return m_properties;
 }
+
 
 
 
@@ -296,8 +298,8 @@ QList<QVariant> GenericPropertiesInfo::string2qlistbool(const QString &str)
 	QList<QVariant> list;
 	for (const QString &s : sl)
 	{
-		if (s == "true") {list.append(QVariant(true));}
-		else {list.append(QVariant(false));}
+		if (s == "true") {list << true;}
+		else {list << false;}
 	}
 	return list;
 }
@@ -307,7 +309,7 @@ QList<QVariant> GenericPropertiesInfo::string2qlistdouble(const QString &str)
 {
 	QStringList sl = str.split('|',QString::KeepEmptyParts);
 	QList<QVariant> list;
-	for (const QString &s : sl) {list.append(QVariant(s.toDouble()));}
+	for (const QString &s : sl) {list << s.toDouble();}
 	return list;
 }
 
@@ -316,7 +318,7 @@ QList<QVariant> GenericPropertiesInfo::string2qlistint(const QString &str)
 {
 	QStringList sl = str.split('|',QString::KeepEmptyParts);
 	QList<QVariant> list;
-	for (const QString &s : sl) {list.append(QVariant(s.toInt()));}
+	for (const QString &s : sl) {list << s.toInt();}
 	return list;
 }
 
@@ -325,9 +327,10 @@ QList<QVariant> GenericPropertiesInfo::string2qstringlist(const QString &str)
 {
 	QStringList sl = str.split('|',QString::KeepEmptyParts);
 	QList<QVariant> list;
-	for (const QString &s : sl) {list.append(QVariant(s));}
+	for (const QString &s : sl) {list << s;}
 	return list;
 }
+
 
 
 
@@ -340,7 +343,7 @@ QList<bool> GenericPropertiesInfo::qvariant2qlistbool(const QVariant &v)
 	QList<QVariant> vlist = v.toList();
 	if (vlist.size() == 0) {return list;}
 	
-	for (const QVariant &w : vlist) {list.append(w.toBool());}
+	for (const QVariant &w : vlist) {list << w.toBool();}
 	return list;
 }
 
@@ -351,7 +354,7 @@ QList<double> GenericPropertiesInfo::qvariant2qlistdouble(const QVariant &v)
 	QList<QVariant> vlist = v.toList();
 	if (vlist.size() == 0) {return list;}
 	
-	for (const QVariant &w : vlist) {list.append(w.toDouble());}
+	for (const QVariant &w : vlist) {list << w.toDouble();}
 	return list;
 }
 
@@ -362,7 +365,7 @@ QList<int> GenericPropertiesInfo::qvariant2qlistint(const QVariant &v)
 	QList<QVariant> vlist = v.toList();
 	if (vlist.size() == 0) {return list;}
 	
-	for (const QVariant &w : vlist) {list.append(w.toInt());}
+	for (const QVariant &w : vlist) {list << w.toInt();}
 	return list;
 }
 
@@ -373,11 +376,9 @@ QStringList GenericPropertiesInfo::qvariant2qstringlist(const QVariant &v)
 	QList<QVariant> vlist = v.toList();
 	if (vlist.size() == 0) {return list;}
 	
-	for (const QVariant &w : vlist) {list.append(w.toString());}
+	for (const QVariant &w : vlist) {list << w.toString();}
 	return list;
 }
-
-
 
 
 
@@ -435,36 +436,31 @@ QString GenericPropertiesInfo::qstringlist2string(const QList<QVariant> &list)
 QVariant GenericPropertiesInfo::qlistbool2qvariant(const QList<bool> &list)
 {
 	QList<QVariant> vlist;
-	for (bool b : list) {vlist.append(QVariant(b));}
-	return QVariant(vlist);
+	for (bool b : list) {vlist << b;}
+	return QVariant{vlist};
 }
 
 // QLISTDOUBLE 2 QVARIANT //////////////////////////////////////////////////////////////////////////////////////////////////////
 QVariant GenericPropertiesInfo::qlistdouble2qvariant(const QList<double> &list)
 {
 	QList<QVariant> vlist;
-	for (double d : list) {vlist.append(QVariant(d));}
-	return QVariant(vlist);
+	for (double d : list) {vlist << d;}
+	return QVariant{vlist};
 }
 
 // QLISTINT 2 QVARIANT /////////////////////////////////////////////////////////////////////////////////////////////////////////
 QVariant GenericPropertiesInfo::qlistint2qvariant(const QList<int> &list)
 {
 	QList<QVariant> vlist;
-	for (int i : list) {vlist.append(QVariant(i));}
-	return QVariant(vlist);
+	for (int i : list) {vlist << i;}
+	return QVariant{vlist};
 }
 
 // QSTRINGLIST 2 QVARIANT //////////////////////////////////////////////////////////////////////////////////////////////////////
 QVariant GenericPropertiesInfo::qstringlist2qvariant(const QStringList &list)
 {
 	QList<QVariant> vlist;
-	for (const QString &s : list) {vlist.append(QVariant(s));}
-	return QVariant(vlist);
+	for (const QString &s : list) {vlist << s;}
+	return QVariant{vlist};
 }
-
-
-
-
-
 

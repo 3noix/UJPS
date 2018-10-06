@@ -49,5 +49,6 @@ class GameControllerXInput : public GameController
 		QVector<WORD> m_buttonsMapping;
 };
 
+
 #endif
 

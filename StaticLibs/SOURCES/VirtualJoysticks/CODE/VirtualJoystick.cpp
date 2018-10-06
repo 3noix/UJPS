@@ -46,7 +46,7 @@ QString VirtualJoystick::m_vJoyConfigExeFileName{};
 
 
 // CONSTRUCTEUR ///////////////////////////////////////////////////////////////
-VirtualJoystick::VirtualJoystick(uint id, uint nbButtons, uint nbAxes, uint nbPovs, bool bForcedInit) : QObject()
+VirtualJoystick::VirtualJoystick(uint id, uint nbButtons, uint nbAxes, uint nbPovs, bool bForcedInit) : QObject{}
 {
 	if (id > NB_JOYSTICKS_MAX || nbButtons > 128 || nbAxes > 8 || nbPovs > 4)
 		throw ExceptionBadVirtualJoystickArgs{};
@@ -56,7 +56,7 @@ VirtualJoystick::VirtualJoystick(uint id, uint nbButtons, uint nbAxes, uint nbPo
 		if (QDir::currentPath() != m_vJoyConfigExeDirPath)
 		{
 			// change current directory
-			if (!QDir::setCurrent(m_vJoyConfigExeDirPath)) {throw ExceptionFailedToStartVJoy("FAILED to change current directory for vJoy directory");}
+			if (!QDir::setCurrent(m_vJoyConfigExeDirPath)) {throw ExceptionFailedToStartVJoy{"FAILED to change current directory for vJoy directory"};}
 			emit message("Current directory changed",Qt::black);
 		}
 		
@@ -85,17 +85,17 @@ VirtualJoystick::VirtualJoystick(uint id, uint nbButtons, uint nbAxes, uint nbPo
 	// get status
 	VjdStat status = GetVJDStatus(m_id);
 	if (status == VJD_STAT_OWN)
-		throw ExceptionFailedToAcquireVJoyDevice("vJoy device " + QString::number(m_id).toStdString() + " is already owned by this feeder");
+		throw ExceptionFailedToAcquireVJoyDevice{"vJoy device " + QString::number(m_id).toStdString() + " is already owned by this feeder"};
 	else if (status == VJD_STAT_BUSY)
-		throw ExceptionFailedToAcquireVJoyDevice("vJoy device " + QString::number(m_id).toStdString() + " is already owned by another feeder");
+		throw ExceptionFailedToAcquireVJoyDevice{"vJoy device " + QString::number(m_id).toStdString() + " is already owned by another feeder"};
 	else if (status == VJD_STAT_MISS)
-		throw ExceptionFailedToAcquireVJoyDevice("vJoy device " + QString::number(m_id).toStdString() + " is not installed or disabled");
+		throw ExceptionFailedToAcquireVJoyDevice{"vJoy device " + QString::number(m_id).toStdString() + " is not installed or disabled"};
 	else if (status != VJD_STAT_FREE)
-		throw ExceptionFailedToAcquireVJoyDevice("vJoy device " + QString::number(m_id).toStdString() + " could not be acquired for an unknown reason");
+		throw ExceptionFailedToAcquireVJoyDevice{"vJoy device " + QString::number(m_id).toStdString() + " could not be acquired for an unknown reason"};
 	
 	// acquire device
 	if (!AcquireVJD(m_id))
-		throw ExceptionFailedToAcquireVJoyDevice("Failed to acquire vJoy device " + QString::number(m_id).toStdString());
+		throw ExceptionFailedToAcquireVJoyDevice{"Failed to acquire vJoy device " + QString::number(m_id).toStdString()};
 	//ResetVJD(m_id);
 	m_bUseDiscretePovs = (GetVJDDiscPovNumber(m_id) > 0);
 	emit message("vJoy device " + QString::number(m_id) + " successfully configured",Qt::black);
@@ -137,8 +137,6 @@ VirtualJoystick::~VirtualJoystick()
 
 
 
-
-
 // ENABLE VJOY IF NOT /////////////////////////////////////////////////////////
 bool VirtualJoystick::enableVJoyIfNot()
 {
@@ -156,7 +154,7 @@ bool VirtualJoystick::enableVJoyIfNot()
 		}
 		else
 		{
-			throw ExceptionFailedToStartVJoy("FAILED to start vJoy (must be run as Administrator to do so)");
+			throw ExceptionFailedToStartVJoy{"FAILED to start vJoy (must be run as Administrator to do so)"};
 			return false;
 		}
 	}
@@ -166,7 +164,6 @@ bool VirtualJoystick::enableVJoyIfNot()
 		return true;
 	}
 }
-
 
 // DISABLE VJOY ///////////////////////////////////////////////////////////////
 void VirtualJoystick::disableVJoy()
@@ -203,12 +200,6 @@ void VirtualJoystick::setVJoyConfigOptions(bool bUseIt, QString exeFilePath)
 		m_vJoyConfigExeDirPath = list.join("/");
 	}
 }
-
-
-
-
-
-
 
 
 
@@ -383,8 +374,6 @@ DWORD VirtualJoystick::getPovPrivate(uint pov) const
 
 
 
-
-
 // SET BUTTON LOCKED //////////////////////////////////////////////////////////
 void VirtualJoystick::setButtonLocked(uint button, bool locked)
 {
@@ -432,7 +421,6 @@ void VirtualJoystick::setPovLocked(uint pov, bool locked)
 	if (pov >= 4) {return;}
 	m_povsLocked[pov] = locked;
 }
-
 
 
 

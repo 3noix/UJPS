@@ -21,7 +21,7 @@ void myMessageOutput(QtMsgType type, const QMessageLogContext &context, const QS
 		fprintf(stderr, "%s\r\n", localMsg1.constData());
 		
 		// in a file
-		QFile debugFile(QCoreApplication::applicationDirPath() + "/debug.txt");
+		QFile debugFile{QCoreApplication::applicationDirPath() + "/debug.txt"};
 		debugFile.open(QIODevice::Append);
 		debugFile.write(localMsg2.constData());
 		//debugFile.close();
@@ -35,11 +35,11 @@ int main(int argc, char **argv)
 {
 	#ifdef DEBUG_MODE
 	qInstallMessageHandler(myMessageOutput);
-	QFile debugFile(QCoreApplication::applicationDirPath() + "/debug.txt");
+	QFile debugFile{QCoreApplication::applicationDirPath() + "/debug.txt"};
 	debugFile.remove();
 	#endif
 	
-	QApplication app(argc,argv);
+	QApplication app{argc,argv};
 	MainWindow w;
 	w.show();
 	return app.exec();

@@ -11,3 +11,4 @@ copy /Y ..\StaticLibs\SOURCES\QtGameControllerModif\release\QtGameControllerModi
 copy /Y ..\StaticLibs\SOURCES\RealJoysticks\release\realJoysticks.dll release
 echo.
 echo.
+

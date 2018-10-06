@@ -55,7 +55,7 @@ bool AbstractXmlInfo::readDataMain(QIODevice &device)
 bool AbstractXmlInfo::readFile(const QString &fileName)
 {
 	m_fileName = fileName;
-	QFile file(fileName);
+	QFile file{fileName};
 	m_error = !this->readDataMain(file);
 	return !m_error;
 }
@@ -64,7 +64,7 @@ bool AbstractXmlInfo::readFile(const QString &fileName)
 bool AbstractXmlInfo::writeFile(const QString &fileName)
 {
 	m_fileName = fileName;
-	QFile file(fileName);
+	QFile file{fileName};
 	m_error = !this->writeData(file);
 	return !m_error;
 }
@@ -74,7 +74,7 @@ bool AbstractXmlInfo::fromString(const QString &str)
 {
 	m_fileName = "";
 	QByteArray ar = str.toUtf8();
-	QBuffer buf(&ar);
+	QBuffer buf{&ar};
 	m_error = !this->readDataMain(buf);
 	return !m_error;
 }
@@ -84,12 +84,11 @@ bool AbstractXmlInfo::toString(QString &str)
 {
 	m_fileName = "";
 	QByteArray ar;
-	QBuffer buf(&ar);
+	QBuffer buf{&ar};
 	m_error = !this->writeData(buf);
 	str = QString::fromUtf8(ar);
 	return !m_error;
 }
-
 
 
 
@@ -136,13 +135,14 @@ QString AbstractXmlInfo::fileName() const
 
 
 
+
 // CHECK DATA /////////////////////////////////////////////////////////////////
 bool AbstractXmlInfo::checkData(QIODevice &device)
 {
 	Q_INIT_RESOURCE(resources);
 	
 	// ouvrir le schéma
-	QFile fileSchema(":/RESOURCES/XSD/" + m_xsdFileName + ".xsd");
+	QFile fileSchema{":/RESOURCES/XSD/" + m_xsdFileName + ".xsd"};
 	if (!fileSchema.open(QIODevice::ReadOnly))
 	{
 		m_errorMessage = "The xml schema " + m_xsdFileName + ".xsd cannot be opened !";
@@ -172,7 +172,7 @@ bool AbstractXmlInfo::checkData(QIODevice &device)
 	}
 	
 	// vérifier que le fichier est conforme au schéma
-	QXmlSchemaValidator validator(schema);
+	QXmlSchemaValidator validator{schema};
 	if (!validator.validate(device.readAll()))
 	{
 		m_errorMessage = "The file is not coherent with " + m_xsdFileName + ".xsd : ";
@@ -184,6 +184,4 @@ bool AbstractXmlInfo::checkData(QIODevice &device)
 	device.seek(0);
 	return true;
 }
-
-
 

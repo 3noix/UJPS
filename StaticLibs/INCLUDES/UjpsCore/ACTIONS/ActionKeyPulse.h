@@ -64,5 +64,6 @@ class ActionKeyPulse : public AbstractAction
 		uint m_cycles;
 };
 
+
 #endif
 

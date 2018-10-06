@@ -1,6 +1,7 @@
 #ifndef VJOY_SETTINGS_WIDGET
 #define VJOY_SETTINGS_WIDGET
 
+
 #include "AbstractSettingsWidget.h"
 class QVBoxLayout;
 class QHBoxLayout;
@@ -41,8 +42,4 @@ class VJoySettingsWidget : public AbstractSettingsWidget
 
 
 #endif
-
-
-
-
 

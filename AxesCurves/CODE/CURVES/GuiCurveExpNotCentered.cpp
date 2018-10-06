@@ -23,7 +23,7 @@
 
 
 // CONSTRUCTEUR ET DESTRUCTEUR ////////////////////////////////////////////////
-GuiCurveExpNotCentered::GuiCurveExpNotCentered(float leftDZ, float rightDZ, float curve, float zoom) : AbstractAxisCurve()
+GuiCurveExpNotCentered::GuiCurveExpNotCentered(float leftDZ, float rightDZ, float curve, float zoom) : AbstractAxisCurve{}
 {
 	m_leftDZ = leftDZ;
 	m_rightDZ = rightDZ;
@@ -35,10 +35,10 @@ GuiCurveExpNotCentered::GuiCurveExpNotCentered(float leftDZ, float rightDZ, floa
 	m_zoom = zoom;
 	
 	m_widget = new CurveExpNotCenteredWidget{};
-	QObject::connect(m_widget,SIGNAL(leftDZModified(double)),this,SLOT(slotLeftDZModified(double)));
-	QObject::connect(m_widget,SIGNAL(rightDZModified(double)),this,SLOT(slotRightDZModified(double)));
-	QObject::connect(m_widget,SIGNAL(curveParamModified(double)),this,SLOT(slotCurveParamModified(double)));
-	QObject::connect(m_widget,SIGNAL(zoomModified(double)),this,SLOT(slotZoomModified(double)));
+	QObject::connect(m_widget, SIGNAL(leftDZModified(double)),     this, SLOT(slotLeftDZModified(double)));
+	QObject::connect(m_widget, SIGNAL(rightDZModified(double)),    this, SLOT(slotRightDZModified(double)));
+	QObject::connect(m_widget, SIGNAL(curveParamModified(double)), this, SLOT(slotCurveParamModified(double)));
+	QObject::connect(m_widget, SIGNAL(zoomModified(double)),       this, SLOT(slotZoomModified(double)));
 }
 
 GuiCurveExpNotCentered::~GuiCurveExpNotCentered()
@@ -83,6 +83,7 @@ QWidget* GuiCurveExpNotCentered::settingsWidget()
 
 
 
+
 // SLOT LEFT DZ MODIFIED //////////////////////////////////////////////////////
 void GuiCurveExpNotCentered::slotLeftDZModified(double ldz)
 {
@@ -117,21 +118,22 @@ void GuiCurveExpNotCentered::slotZoomModified(double zoom)
 
 
 
+
 // CONSTRUCTEUR ///////////////////////////////////////////////////////////////
 CurveExpNotCenteredWidget::CurveExpNotCenteredWidget() : QGroupBox{"Exponential curve (centered): parameters"}
 {
-	layout = new QGridLayout(this);
+	layout = new QGridLayout{this};
 	this->setLayout(layout);
 	
-	labelLDZ   = new QLabel("Left dead-zone:",this);
-	labelRDZ   = new QLabel("Right dead-zone:",this);
-	labelCurve = new QLabel("Curve:",this);
-	labelZoom  = new QLabel("Zoom:",this);
+	labelLDZ   = new QLabel{"Left dead-zone:",this};
+	labelRDZ   = new QLabel{"Right dead-zone:",this};
+	labelCurve = new QLabel{"Curve:",this};
+	labelZoom  = new QLabel{"Zoom:",this};
 	
-	boxLDZ   = new QDoubleSpinBox(this);
-	boxRDZ   = new QDoubleSpinBox(this);
-	boxCurve = new QDoubleSpinBox(this);
-	boxZoom  = new QDoubleSpinBox(this);
+	boxLDZ   = new QDoubleSpinBox{this};
+	boxRDZ   = new QDoubleSpinBox{this};
+	boxCurve = new QDoubleSpinBox{this};
+	boxZoom  = new QDoubleSpinBox{this};
 	boxLDZ->setRange(0.0,20.0);
 	boxRDZ->setRange(0.0,20.0);
 	boxCurve->setRange(-10.0,10.0);
@@ -161,9 +163,9 @@ CurveExpNotCenteredWidget::CurveExpNotCenteredWidget() : QGroupBox{"Exponential 
 	layout->addWidget(boxZoom,3,1,1,1);
 	layout->addItem(new QSpacerItem{0,0,QSizePolicy::Expanding,QSizePolicy::Minimum},0,2,1,1);
 	
-	QObject::connect(boxLDZ,SIGNAL(valueChanged(double)),this,SIGNAL(leftDZModified(double)));
-	QObject::connect(boxRDZ,SIGNAL(valueChanged(double)),this,SIGNAL(rightDZModified(double)));
-	QObject::connect(boxCurve,SIGNAL(valueChanged(double)),this,SIGNAL(curveParamModified(double)));
-	QObject::connect(boxZoom,SIGNAL(valueChanged(double)),this,SIGNAL(zoomModified(double)));
+	QObject::connect(boxLDZ,   SIGNAL(valueChanged(double)), this, SIGNAL(leftDZModified(double)));
+	QObject::connect(boxRDZ,   SIGNAL(valueChanged(double)), this, SIGNAL(rightDZModified(double)));
+	QObject::connect(boxCurve, SIGNAL(valueChanged(double)), this, SIGNAL(curveParamModified(double)));
+	QObject::connect(boxZoom,  SIGNAL(valueChanged(double)), this, SIGNAL(zoomModified(double)));
 }
 

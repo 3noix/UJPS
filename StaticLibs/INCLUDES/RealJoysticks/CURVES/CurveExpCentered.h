@@ -27,4 +27,6 @@ class CurveExpCentered : public AbstractAxisCurve
 		float m_zoom;
 };
 
+
 #endif
+

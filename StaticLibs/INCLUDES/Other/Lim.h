@@ -1,6 +1,7 @@
 #ifndef LIM
 #define LIM
 
+
 template <typename T>
 T lim(T x, T min, T max)
 {
@@ -12,4 +13,6 @@ T lim(T x, T min, T max)
 		return x;
 };
 
+
 #endif
+
