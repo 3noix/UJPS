@@ -44,6 +44,7 @@ class AbstractProfile : public QObject
 		
 		uint ms2cycles(uint msecs) const;
 		void setTimeStep(int dtms);			// useful to count the number of cycles for pulses and delays
+		int timeStep() const;
 		
 		
 	signals:

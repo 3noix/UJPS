@@ -41,6 +41,7 @@ class GeneralSettingsWidget : public AbstractSettingsWidget
 		void addDefaultDirWidgets();
 		void addStartingProfileWidgets();
 		void addDefaultTimeStepWidget();
+		void addInputRepeaterWidget();
 		
 		QVBoxLayout *layout1;
 		
@@ -61,12 +62,12 @@ class GeneralSettingsWidget : public AbstractSettingsWidget
 		QHBoxLayout *layoutDefTimeStep;
 		QCheckBox *checkboxDefTimeStep;
 		QSpinBox *spinboxDefTimeStep;
+		
+		// input repeater
+		QHBoxLayout *layoutInputRepeater;
+		QCheckBox *checkboxInputRepeater;
 };
 
 
 #endif
-
-
-
-
 

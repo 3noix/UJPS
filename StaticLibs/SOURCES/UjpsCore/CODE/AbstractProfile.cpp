@@ -25,6 +25,7 @@
 //
 //  PROCESS PENDING MAPPINGS REQUESTS
 //  SET TIME STEP
+//  TIME STEP
 //  MS 2 CYCLES
 //
 //  DO ACTION
@@ -52,7 +53,7 @@
 
 
 // CONSTRUCTEUR ET DESTRUCTEUR ////////////////////////////////////////////////
-AbstractProfile::AbstractProfile() : QObject()
+AbstractProfile::AbstractProfile() : QObject(), m_eventsQueue(this)
 {
 	m_isProcessingEvents = false;
 	m_dtms = 15;
@@ -237,6 +238,12 @@ void AbstractProfile::setTimeStep(int dtms)
 {
 	Q_ASSERT(dtms > 0);
 	m_dtms = dtms;
+}
+
+// TIME STEP //////////////////////////////////////////////////////////////////
+int AbstractProfile::timeStep() const
+{
+	return m_dtms;
 }
 
 // MS 2 CYCLES ////////////////////////////////////////////////////////////////

@@ -2,6 +2,7 @@
 #include "ApplicationSettings.h"
 #include "../otherFunctions.h"
 #include "../XML/GenericPropertiesInfo.h"
+#include "VirtualEventsQueue.h"
 
 #include <QVBoxLayout>
 #include <QHBoxLayout>
@@ -24,6 +25,7 @@
 //  ADD DEFAULT DIR WIDGETS
 //  ADD STARTING PROFILE WIDGETS
 //  ADD DEFAULT TIME STEP WIDGETS
+//  ADD INPUT REPEATER WIDGET
 //
 //  TAB NAME
 //  BUTTON OK CLICKED
@@ -44,16 +46,19 @@ GeneralSettingsWidget::GeneralSettingsWidget(QWidget *parent) : AbstractSettings
 	layoutDefDir = new QHBoxLayout{};
 	layoutStartingProfile = new QHBoxLayout{};
 	layoutDefTimeStep = new QHBoxLayout{};
+	layoutInputRepeater = new QHBoxLayout{};
 	
 	this->setLayout(layout1);
 	layout1->addLayout(layoutDefDir);
 	layout1->addLayout(layoutStartingProfile);
 	layout1->addLayout(layoutDefTimeStep);
+	layout1->addLayout(layoutInputRepeater);
 	layout1->addStretch();
 	
 	this->addDefaultDirWidgets();
 	this->addStartingProfileWidgets();
 	this->addDefaultTimeStepWidget();
+	this->addInputRepeaterWidget();
 }
 
 GeneralSettingsWidget::~GeneralSettingsWidget()
@@ -61,6 +66,7 @@ GeneralSettingsWidget::~GeneralSettingsWidget()
 	delete layoutDefDir;
 	delete layoutStartingProfile;
 	delete layoutDefTimeStep;
+	delete layoutInputRepeater;
 }
 
 
@@ -151,6 +157,20 @@ void GeneralSettingsWidget::addDefaultTimeStepWidget()
 	spinboxDefTimeStep->setEnabled(bEnable);
 }
 
+// ADD INPUT REPEATER WIDGET //////////////////////////////////////////////////
+void GeneralSettingsWidget::addInputRepeaterWidget()
+{
+	checkboxInputRepeater = new QCheckBox{"Enable input repeater",this};
+	
+	bool bEnable = VirtualEventsQueue::isInputRepeaterEnabled();
+	if (bEnable) {checkboxInputRepeater->setCheckState(Qt::Checked);}
+	else {checkboxInputRepeater->setCheckState(Qt::Unchecked);}
+	
+	layoutInputRepeater->addWidget(checkboxInputRepeater);
+	layoutInputRepeater->addStretch();
+}
+
+
 
 
 
@@ -181,6 +201,9 @@ void GeneralSettingsWidget::buttonOkClicked()
 	// default time step
 	settings.setProperty("bUseDefaultTimeStep",checkboxDefTimeStep->checkState()==Qt::Checked);
 	settings.setProperty("defaultTimeStep",spinboxDefTimeStep->value());
+	
+	// output repeater
+	VirtualEventsQueue::setInputRepeaterEnabled(checkboxInputRepeater->checkState()==Qt::Checked);
 }
 
 // BUTTON CANCEL CLICKED //////////////////////////////////////////////////////
