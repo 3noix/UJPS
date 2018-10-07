@@ -101,6 +101,8 @@ void StandardJoystickWidget::setupWidget()
 	
 	// temporal chart
 	tempoChart = new MyChartWidget{1+1000/ratioTempoChart,15*ratioTempoChart,this};
+	tempoChart->setMinimumHeight(200);
+	tempoChart->setSizePolicy(QSizePolicy{QSizePolicy::Preferred,QSizePolicy::MinimumExpanding});
 	layout1->addWidget(tempoChart);
 	tempoChart->hide();
 }
