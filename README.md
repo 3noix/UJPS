@@ -68,8 +68,16 @@ Around the main UJPS program, a few other ones are provided (see screenshots at 
 - AxesCurves: it helps you to find the good parameters for your axes curves
 - Monitoring: it shows the real and virtual joysticks events with different modes (what sees the system, what sees UJPS, ... see the documentation for more details)
 
-Moreover UJPS also provides classes to ease the creation of "remote controllers" (if you don't know what I am talking about, take a look at Roccat Power Grid or LEA extended input). A "remote controller" is an application that run on your PC or mobile devices and that can send joystick events to your profile and receive inputs from it. The provided classes take care of the network communication between the remote controller and the profile, but you have to program the GUI yourself... I do not provide a GUI editor like in Roccat Power Grid or LEA extended input.
-
 ![ScreenShot](https://i.imgur.com/4Mm6XqP.png)
 
 ![ScreenShot](https://i.imgur.com/680nJwt.png)
+
+
+##Remote controllers
+
+Moreover UJPS also provides classes to ease the creation of "remote controllers" (if you don't know what I am talking about, take a look at Roccat Power Grid or LEA extended input). A "remote controller" is an application that runs on your PC or mobile devices and that can send joystick events to your profile and receive inputs from it. The provided classes take care of the network communication between the remote controller and the profile, but you have to program the GUI yourself... I do not provide a GUI editor like in Roccat Power Grid or LEA extended input. I just provide 2 examples of "Thrustmaster MFD Cougar" implemented as remote controllers:
+- "MFD_dumb" which just simulates the bezel and sends the buttons changes to the profile
+- "MFD_smart" which is more evolved than the first one. It includes a few MFD pages with basic graphics (only text). It does not send button changes, but actions requests which can be different for the same button on different MFD pages
+These 2 examples can be run with the "ProfileMfd" profile provided.
+
+![ScreenShot](https://i.imgur.com/NuoG9RB.png)
