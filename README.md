@@ -73,7 +73,7 @@ Around the main UJPS program, a few other ones are provided (see screenshots at 
 ![ScreenShot](https://i.imgur.com/680nJwt.png)
 
 
-##Remote controllers
+## Remote controllers
 
 Moreover UJPS also provides classes to ease the creation of "remote controllers" (if you don't know what I am talking about, take a look at Roccat Power Grid or LEA extended input). A "remote controller" is an application that runs on your PC or mobile devices and that can send joystick events to your profile and receive inputs from it. The provided classes take care of the network communication between the remote controller and the profile, but you have to program the GUI yourself... I do not provide a GUI editor like in Roccat Power Grid or LEA extended input. I just provide 2 examples of "Thrustmaster MFD Cougar" implemented as remote controllers:
 - "MFD_dumb" which just simulates the bezel and sends the buttons changes to the profile
