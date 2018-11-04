@@ -80,7 +80,7 @@ RemoteJoystickServer::RemoteJoystickServer(const QString &name, int portNumber, 
 		if ((config.state() & QNetworkConfiguration::Discovered) != QNetworkConfiguration::Discovered) {config = manager.defaultConfiguration();}
 		
 		m_networkSession = new QNetworkSession{config,this};
-		connect(m_networkSession, &QNetworkSession::opened, this, &RemoteJoystickServer::slotSessionOpened);
+		QObject::connect(m_networkSession, &QNetworkSession::opened, this, &RemoteJoystickServer::slotSessionOpened);
 		m_networkSession->open();
 	}
 	else
@@ -88,8 +88,13 @@ RemoteJoystickServer::RemoteJoystickServer(const QString &name, int portNumber, 
 		this->slotSessionOpened();
 	}
 	
-	connect(m_tcpServer, &QTcpServer::newConnection, this, &RemoteJoystickServer::slotNewConnection);
-	if (!m_tcpServer->waitForNewConnection(m_msecTimeOut)) {throw ExceptionFailedToConnect{"Failed to connect to the remote controller"};}
+	QObject::connect(m_tcpServer, &QTcpServer::newConnection, this, &RemoteJoystickServer::slotNewConnection);
+	if (!m_tcpServer->waitForNewConnection(m_msecTimeOut))
+	{
+		m_tcpServer->close();
+		delete m_tcpServer;
+		throw ExceptionFailedToConnect{"Failed to connect to the remote controller"};
+	}
 }
 
 RemoteJoystickServer::~RemoteJoystickServer()
@@ -264,6 +269,7 @@ void RemoteJoystickServer::slotSessionOpened()
 	{
 		m_tcpServer->close();
 		QString message = "Unable to start the server " + m_name + ": " + m_tcpServer->errorString();
+		delete m_tcpServer;
 		throw ExceptionFailedToConnect{message.toStdString()};
 		return;
 	}
@@ -298,8 +304,8 @@ void RemoteJoystickServer::slotNewConnection()
 	}
 	
 	m_tcpSocket = newConnection;
-	connect(m_tcpSocket, &QIODevice::readyRead, this, &RemoteJoystickServer::slotReceiveData);
-	connect(m_tcpSocket, &QAbstractSocket::disconnected, this, &RemoteJoystickServer::slotRemoveConnection);
+	QObject::connect(m_tcpSocket, &QIODevice::readyRead, this, &RemoteJoystickServer::slotReceiveData);
+	QObject::connect(m_tcpSocket, &QAbstractSocket::disconnected, this, &RemoteJoystickServer::slotRemoveConnection);
 }
 
 // SLOT RECEIVE DATA //////////////////////////////////////////////////////////
