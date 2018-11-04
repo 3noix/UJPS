@@ -17,13 +17,11 @@ QT += network widgets
 
 HEADERS =   CODE/MainWindow.h \
 			CODE/ConnectionWidget.h \
-			CODE/TextEdit.h \
 			CODE/RemoteJoystickClient.h
 
 
 SOURCES =   CODE/main.cpp \
 			CODE/MainWindow.cpp \
 			CODE/ConnectionWidget.cpp \
-			CODE/TextEdit.cpp \
 			CODE/RemoteJoystickClient.cpp
 
