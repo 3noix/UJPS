@@ -54,14 +54,14 @@ void VirtualEventsQueue::postEvents(const QVector<VirtualEvent> &events)
 		this->setInputRepeaterEvent(events.last());
 }
 
-
 // PROCESS EVENTS /////////////////////////////////////////////////////////////
 void VirtualEventsQueue::processEvents()
 {
 	if (bInputRepeaterEnabled) {this->updateInputRepeaterEvent();}
 	
-	for (VirtualEvent &e : m_events)
+	for (int i=0; i<m_events.size(); ++i) // important to do like that because some callback called below can add events to run right away
 	{
+		VirtualEvent &e = m_events[i];
 		if (e.delay == 0) // we process the event whose delay elapsed
 		{
 			if (e.type == EventType::VJoy) // it is a VJoyEvent
@@ -144,8 +144,7 @@ void VirtualEventsQueue::processEvents()
 		}
 	}
 	
-	int nbEvents = m_events.size();
-	for (int i=nbEvents-1; i>=0; --i)
+	for (int i=m_events.size()-1; i>=0; --i)
 	{
 		if (m_events[i].delay == 0)
 		{
