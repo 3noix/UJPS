@@ -79,7 +79,7 @@ int main(int argc, char *argv[])
 		MessagesDirector messenger;
 		messenger.startsListeningTo(&engine);
 		if (!engine.loadProfile(profileDllFilePath)) {return 1;}
-		if (!engine.run(dtms)) {return 1;} // only 15 ms time step for now
+		if (!engine.start(dtms)) {return 1;} // only 15 ms time step for now
 		return app.exec();
 	}
 	else

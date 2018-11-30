@@ -26,7 +26,7 @@ class ProfileEngine : public QObject
 		bool unloadProfile();
 		bool isLoaded() const;
 		
-		bool run(int dtms);
+		bool start(int dtms);
 		void stop();
 		bool isActive() const;
 		

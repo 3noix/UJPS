@@ -13,7 +13,7 @@
 //  UNLOAD PROFILE
 //  IS LOADED
 //
-//  RUN
+//  START
 //  STOP
 //  IS ACTIVE
 //
@@ -102,8 +102,8 @@ bool ProfileEngine::isLoaded() const
 
 
 
-// RUN ////////////////////////////////////////////////////////////////////////
-bool ProfileEngine::run(int dtms)
+// START //////////////////////////////////////////////////////////////////////
+bool ProfileEngine::start(int dtms)
 {
 	if (!m_profile || m_timer->isActive()) {return false;}
 	

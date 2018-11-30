@@ -429,7 +429,7 @@ void MainWindow::slotPlay()
 	
 	// configuration and start
 	this->setState(HmiState::Playing);
-	if (!m_engine->run(boxRefreshRate->value())) {this->setState(HmiState::ReadyToPlayLoaded);}
+	if (!m_engine->start(boxRefreshRate->value())) {this->setState(HmiState::ReadyToPlayLoaded);}
 }
 
 // SLOT STOP //////////////////////////////////////////////////////////////////

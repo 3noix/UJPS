@@ -2,7 +2,6 @@
 #include <QFile>
 #include <QFileInfo>
 #include <iostream>
-#include "ProfileEngine.h"
 #include "HMI/MainWindow.h"
 
 //#define DEBUG_MODE
