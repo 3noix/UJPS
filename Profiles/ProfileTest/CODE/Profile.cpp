@@ -84,13 +84,13 @@ bool Profile::setupJoysticks()
 	
 	
 	// virtual joystick(s) setup
-	vj1 = new VirtualJoystick{1};
-	emit message("Virtual joystick 1 configured",Qt::black);
-	this->registerVirtualJoystick(vj1);
+	vj1 = this->registerVirtualJoystick(1);
+	if (vj1) {emit message("Virtual joystick 1 acquired",Qt::black);}
+	else {emit message("Virtual joystick 1 failed to configure",Qt::red);}
 	
-	vj2 = new VirtualJoystick{2};
-	emit message("Virtual joystick 2 configured",Qt::black);
-	this->registerVirtualJoystick(vj2);
+	vj2 = this->registerVirtualJoystick(2);
+	if (vj2) {emit message("Virtual joystick 2 acquired",Qt::black);}
+	else {emit message("Virtual joystick 2 failed to configure",Qt::red);}
 	
 	
 	return (tmwj && tmwt && mfgx && vj1 && vj2);

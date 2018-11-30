@@ -190,10 +190,20 @@ EnhancedJoystick* AbstractProfile::registerRealJoystick(RemoteJoystickServer *rj
 }
 
 // REGISTER VIRTUAL JOYSTICK //////////////////////////////////////////////////
-void AbstractProfile::registerVirtualJoystick(VirtualJoystick *vj)
+VirtualJoystick* AbstractProfile::registerVirtualJoystick(uint id)
 {
-	QObject::connect(vj, SIGNAL(message(QString,QColor)), this, SIGNAL(message(QString,QColor)));
-	m_virtualJoysticks.push_back(vj);
+	try
+	{
+		VirtualJoystick *vj = new VirtualJoystick{id};
+		QObject::connect(vj, SIGNAL(message(QString,QColor)), this, SIGNAL(message(QString,QColor)));
+		m_virtualJoysticks.push_back(vj);
+		return vj;
+	}
+	catch (std::exception &e)
+	{
+		emit message(e.what(),Qt::red);
+		return nullptr;
+	}
 }
 
 // REGISTER LAYER DIM 1 ///////////////////////////////////////////////////////

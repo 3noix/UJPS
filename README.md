@@ -1,4 +1,4 @@
-# UJPS: Universal Joystick Programming Software (C++) V2.10.4
+# UJPS: Universal Joystick Programming Software (C++) V2.11.0
 ## Overview
 
 This project allows the user to "program a set of real joysticks" events from the real joysticks are transformed into virtual joysticks and keyboard events. This transformation is defined in the "profile" defined by the user using C++ programming language. It is comparable to the proprietary "Thrustmaster TARGET scripts". But Thrustmaster TARGET scripts explicitly blocks non-Thrustmaster hardware. This tool works for any game controller recognized by Windows.
@@ -29,14 +29,13 @@ bool Profile::setupJoysticks()
 {
    // we retrieve pointers on real joysticks we are interested in
    tmwj = this->registerRealJoystick("Joystick - HOTAS Warthog");
-   
    if (tmwj) {emit message("Warthog joystick detected !",Qt::black);}
    else {emit message("Warthog joystick not detected !",Qt::red); return false;}
    
    // setup of 1 virtual joystick
-   vj1 = new VirtualJoystick{1};
-   emit message("Virtual joystick 1 configured",Qt::black);
-   this->registerVirtualJoystick(vj1);
+   vj1 = this->registerVirtualJoystick(1);
+   if (vj1) {emit message("Virtual joystick 1 acquired",Qt::black);}
+   else {emit message("Virtual joystick 1 failed to configure",Qt::red);}
    
    return (tmwj && vj1);
 }
