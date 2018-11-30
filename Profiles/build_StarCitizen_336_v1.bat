@@ -8,9 +8,9 @@ echo.
 
 
 REM COMPILATION OF TEST PLUGIN
-echo compiling StarCitizen_3.1.4_v5
+echo compiling StarCitizen_3.3.6_v1
 echo.
-cd %~dp0\StarCitizen_3.1.4_v5
+cd %~dp0\StarCitizen_3.3.6_v1
 qmake
 mingw32-make release
 cd ..

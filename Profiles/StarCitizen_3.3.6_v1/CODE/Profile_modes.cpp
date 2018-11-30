@@ -221,13 +221,13 @@ void Profile::set_THR_and_pedals()
 	
 	// mapping BRK_RIGHT function of THR_RIGHT position
 	MapAxis2(tmwt, TMWT::THR_RIGHT, AllLayers, 1, {
-		new ActionCallback{[this](){this->set_BRKRIGHT_for_groundForward();}},
-		new ActionCallback{[this](){this->set_BRKRIGHT_for_groundBackward();}}
+		new ActionCallback{[this](){this->set_BRKRIGHT_for_groundBackward();}},
+		new ActionCallback{[this](){this->set_BRKRIGHT_for_groundForward();}}
 	});
 	if (tmwt->axisValue(TMWT::THR_RIGHT) < 0)
-		this->set_BRKRIGHT_for_groundForward();
-	else
 		this->set_BRKRIGHT_for_groundBackward();
+	else
+		this->set_BRKRIGHT_for_groundForward();
 	
 	// mapping BRK_LEFT for brake
 	Map(mfgx, ControlType::Axis, MFGX::BRK_LEFT, AllLayers, new TriggerAxisChangeComparison{true,thrBreak}, new ActionButtonPress{vj2,SC2::Brake});

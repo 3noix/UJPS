@@ -133,6 +133,7 @@ void Profile::runFirstStep()
 	vj1->resetReport();
 	vj2->resetReport();
 	vj1->setAxis(SC1::AxisFlightStrafeVertical,0.0f); // vertical strafe at 0 to avoid bad surprises
+	vj1->setButton(SC1::Autoland,false);
 	
 	// leds initialisation
 	if (bUseLed) {m_brightness = 1;}
@@ -149,13 +150,12 @@ void Profile::runFirstStep()
 	
 	// divers
 	MapAxis(mfgx, MFGX::RUDDER, AllLayers, vj1, SC1::AxisFlightYaw);
-	mfgx->setAxisTrim(MFGX::RUDDER,-0.0028f);
-	mfgx->setCurve(MFGX::RUDDER, new CurveExpCentered{3.5f, 1.2f, 3.5f, 1.0f, 0.0f});
-	mfgx->setCurve(MFGX::BRK_LEFT, new CurveExpCentered{4.0f, 0.0f, 6.0f, 0.0f, 0.0f});
-	//mfgx->setCurve(MFGX::BRK_RIGHT, new CurveExpCentered{brkRight_LDZ, 0.00f, brkRight_RDZ, 0.0f, 0.0f});
+	mfgx->setCurve(MFGX::RUDDER,    new CurveExpCentered{3.5f, 1.3f, 3.5f, 1.0f, 0.0f});
+	mfgx->setCurve(MFGX::BRK_LEFT,  new CurveExpCentered{4.0f, 0.0f, 6.0f, 0.0f, 0.0f});
+	mfgx->setCurve(MFGX::BRK_RIGHT, new CurveExpCentered{4.0f, 0.0f, 6.0f, 0.0f, 0.0f});
 	
-	tmwj->setAxisTrim(TMWJ::JOYX,0.026f);
-	tmwj->setAxisTrim(TMWJ::JOYY,-0.006f);
+	tmwj->setAxisTrim(TMWJ::JOYX,0.034f);
+	tmwj->setAxisTrim(TMWJ::JOYY,0.008f);
 	tmwj->setCurve(TMWJ::JOYX, new CurveExpCentered{2.0f, 1.5f, 1.0f, 2.5f, 0.0f});
 	tmwj->setCurve(TMWJ::JOYY, new CurveExpCentered{1.0f, 1.5f, 1.5f, 2.5f, 0.0f});
 	
@@ -168,8 +168,6 @@ void Profile::runFirstStep()
 	Map(tmwt, ControlType::Button, TMWT::APALT, AllLayers, new TriggerButtonPress{}, new ActionCallback{[this](){this->setControlsGround();}});
 	Map(tmwt, ControlType::Button, TMWT::APAH,  AllLayers, new TriggerButtonPress{}, new ActionCallback{[this](){this->setControlsFlightLanding();}});
 	Map(tmwt, ControlType::Button, TMWT::APATT, AllLayers, new TriggerButtonPress{}, new ActionCallback{[this](){this->setControlsFlightCruise();}});
-	// landing
-	MapButton(tmwt, TMWT::APENG, AllLayers, vj1, SC1::LandingSystemToggle);
 	
 	// throttle slider for power in relative (no axis provided for absolute power)
 	tmwt->setCurve(TMWT::THR_FC, new CurveExpCentered{2.0f, 2.0f, 2.0f, 0, 0});
@@ -179,7 +177,7 @@ void Profile::runFirstStep()
 		new ActionButtonPress{vj1,SC1::DecreasePower}
 	});
 	
-	// brakes, boost, modes, radar, quantum drive
+	// brakes, boost, modes, radar
 	MapButton(tmwt, TMWT::MSL, AllLayers, vj1, SC1::CycleAmmoBack);
 	MapButton(tmwt, TMWT::MSR, AllLayers, vj1, SC1::CycleAmmo);
 	MapButton(tmwt, TMWT::MSU, AllLayers, vj1, SC1::CycleRadarRange);
@@ -193,8 +191,15 @@ void Profile::runFirstStep()
 			DoAction(new ActionButtonPulse{vj1,SC1::DecoupledModeToggle,ncPulse});
 	};
 	Map(tmwt, ControlType::Button, TMWT::BSF, AllLayers, new TriggerButtonChange{}, new ActionCallback{callbackDecoupledTogglePulse});
-	MapButton(tmwt, TMWT::CHB, AllLayers, vj1, SC1::Autoland);
-	MapButton(tmwt, TMWT::CHF, AllLayers, vj1, SC1::QuantumDriveToggle);
+	
+	// landing and quantum drive
+	MapButtonTempo(tmwt, TMWT::APENG, AllLayers, ms2cycles(500),
+		new ActionButtonPulse{vj1, SC1::LandingSystemToggle, ncPulse},
+		new ActionButtonPress{vj1, SC1::Autoland}
+	);
+	Map(tmwt, ControlType::Button, TMWT::APENG, AllLayers, new TriggerButtonRelease{}, new ActionButtonRelease{vj1, SC1::Autoland});
+	MapButton(tmwt, TMWT::CHB, AllLayers, vj1, SC1::QuantumTravelSystemToggle);
+	MapButton(tmwt, TMWT::CHF, AllLayers, vj2, SC2::QuantumDrive);
 	
 	// APU button for yaw / roll swap
 	auto swapYawRollToggle = [this]() {if (!tmwt->buttonPressed(TMWT::LDGH)) DoAction(new ActionButtonPulse{vj1,SC1::SwapYawRollToggle,ncPulse});};

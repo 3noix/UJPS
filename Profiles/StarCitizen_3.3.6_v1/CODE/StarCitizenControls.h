@@ -9,9 +9,9 @@ using uint = unsigned int;
 
 namespace StarCitizenControls_Keyboard
 {
-	const uint TrackIR_Precision = Key_F1;
-	const uint TrackIR_Center    = Key_F2;
-	const uint TrackIR_Pause     = Key_F3;
+	const uint TrackIR_Precision = Key_F7;
+	const uint TrackIR_Pause     = Key_F8;
+	const uint TrackIR_Center    = Key_F9;
 }
 
 
@@ -36,7 +36,7 @@ namespace StarCitizenControls_vJoy1
 	const uint SpaceBrake                = VJOY::DX9;
 	const uint DecoupledModeToggle       = VJOY::DX10;
 	const uint Autoland                  = VJOY::DX11;
-	const uint QuantumDriveToggle        = VJOY::DX12;
+	const uint QuantumTravelSystemToggle = VJOY::DX12;
 	const uint SwapYawRollToggle         = VJOY::DX13;
 	const uint FireGroup1                = VJOY::DX14;
 	const uint FireGroup2                = VJOY::DX15;
@@ -77,7 +77,7 @@ namespace StarCitizenControls_vJoy1
 	
 	const uint HeadlightsToggle          = VJOY::DX46;
 	const uint PersonalIdBroadCastToggle = VJOY::DX47;
-	const uint LandingTargetLockOnToggle = VJOY::DX48;
+	const uint LandingTargetLockOnToggle = VJOY::DX48; // do not exist anymore in 3.3?
 	const uint LaunchMissile             = VJOY::DX49;
 	const uint MatchTargetVelocity       = VJOY::DX50;
 }
@@ -98,6 +98,8 @@ namespace StarCitizenControls_vJoy2
 	
 	const uint FlightReady        = VJOY::DX8;
 	const uint PowerOff           = VJOY::DX9;
+	
+	const uint QuantumDrive       = VJOY::DX10;
 	
 	const uint Brake              = VJOY::DX30;
 	const uint Horn               = VJOY::DX31;
