@@ -29,6 +29,7 @@ INCLUDEPATH +=  ../StaticLibs/INCLUDES/QtGameControllerModif/ \
 
 
 HEADERS +=  CODE/MainWindow.h \
+			CODE/WorkerThread.h \
 			CODE/CurveChartView.h \
 			CODE/CURVES/AbstractAxisCurve.h \
 			CODE/CURVES/GuiCurvePolynomial2.h \
@@ -40,6 +41,7 @@ HEADERS +=  CODE/MainWindow.h \
 
 SOURCES +=  CODE/main.cpp \
 			CODE/MainWindow.cpp \
+			CODE/WorkerThread.cpp \
 			CODE/CurveChartView.cpp \
 			CODE/CURVES/GuiCurvePolynomial2.cpp \
 			CODE/CURVES/GuiCurvePolynomial3Centered.cpp \

@@ -63,7 +63,7 @@ AbstractProfile::AbstractProfile() : QObject{}, m_eventsQueue{this}
 	QString controllersPluginsDirPath = QCoreApplication::applicationDirPath() + "/../../ControllersPlugins/PLUGINS/";
 	m_rjm->loadPlugins(controllersPluginsDirPath);
 	QObject::connect(m_rjm, SIGNAL(message(QString,QColor)), this, SIGNAL(message(QString,QColor)));
-	m_rjm->searchForControllers();
+	m_rjm->searchForRealJoysticks();
 }
 
 AbstractProfile::~AbstractProfile()

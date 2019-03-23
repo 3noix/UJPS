@@ -25,7 +25,10 @@ class RealJoysticksManager : public QObject
 		virtual ~RealJoysticksManager();
 		
 		void loadPlugins(const QString &path);
-		void searchForControllers();
+		void unloadPlugins();
+		
+		void searchForRealJoysticks();
+		void fromGameControllers(QVector<GameController*> &gcv);
 		
 		int nbJoysticks() const;
 		QStringList joysticksNames() const;
@@ -34,6 +37,7 @@ class RealJoysticksManager : public QObject
 		AbstractRealJoystick* joystick(const QString &joystickName, int num = 0) const;
 		AbstractRealJoystick* releaseJoystick(int id);
 		AbstractRealJoystick* releaseJoystick(const QString &joystickName, int num = 0);
+		QVector<AbstractRealJoystick*> releaseAll();
 		
 		
 	signals:

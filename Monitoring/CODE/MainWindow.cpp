@@ -2,6 +2,7 @@
 #include "GameController.h"
 #include "AbstractRealJoystick.h"
 #include "RealJoysticksManager.h"
+#include "WorkerThread.h"
 #include "WIDGETS/StandardJoystickWidget.h"
 #include "WIDGETS/StandardJoystickWidgetRaw.h"
 
@@ -12,26 +13,32 @@
 //  CREATE ACTIONS
 //  CREATE MENUS
 //  SETUP WIDGET
-//  CLEAR TABS
 //
-//  SLOT MODE CHANGED
+//  CLEAR TABS
+//  SET DATA
+//
+//  SLOT QUIT
 //  SLOT UPDATE
+//  SLOT MODE CHANGED
+//  START UPDATE
+//  END UPDATE
 ///////////////////////////////////////////////////////////////////////////////
 
 
 // CONSTRUCTEUR ET DESTRUCTEUR ////////////////////////////////////////////////
 MainWindow::MainWindow(QWidget *parent) : QMainWindow{parent}
 {
-	tabs = nullptr;
-	labelNoController = nullptr;
-	
 	this->createActions();
 	this->createMenus();
 	this->setupWidget();
 	
+	m_thread = new WorkerThread{this};
+	m_index = 2;
+	
 	QObject::connect(boxMode,      SIGNAL(currentIndexChanged(int)), this, SLOT(slotModeChanged(int)));
 	QObject::connect(actionUpdate, &QAction::triggered,              this, &MainWindow::slotUpdate);
-	QObject::connect(actionQuit,   &QAction::triggered,              qApp, &QCoreApplication::quit);
+	QObject::connect(m_thread,     &QThread::finished,               this, &MainWindow::slotEndUpdate);
+	QObject::connect(actionQuit,   &QAction::triggered,              this, &MainWindow::slotQuit);
 	
 	this->slotModeChanged(2);
 }
@@ -74,11 +81,13 @@ void MainWindow::createMenus()
 // SETUP WIDGET ///////////////////////////////////////////////////////////////
 void MainWindow::setupWidget()
 {
+	// main widget and its vertical layout
 	mainWidget = new QWidget{this};
 	layout = new QVBoxLayout{mainWidget};
 	layout->setSpacing(10);
 	mainWidget->setLayout(layout);
 	
+	// combo box to choose the mode
 	layoutUp = new QHBoxLayout{};
 	labelMode = new QLabel{"Mode:",mainWidget};
 	boxMode = new QComboBox{mainWidget};
@@ -91,50 +100,65 @@ void MainWindow::setupWidget()
 	layoutUp->addStretch();
 	layout->addLayout(layoutUp);
 	
+	// stack and pages 1 (default) and 2 (no controller)
+	stack = new QStackedWidget{this};
+	tabs = new QTabWidget{this};
+	labelNoController = new QLabel{"No controller detected",this};
+	labelNoController->setAlignment(Qt::AlignCenter);
+	
+	// page 3 (loading)
+	widgetLoading = new QWidget{this};
+	layoutLoading = new QVBoxLayout{widgetLoading};
+	widgetLoading->setLayout(layoutLoading);
+	labelLoading = new QLabel{"Enumerating controllers...",this};
+	labelGif = new QLabel{this};
+	movieGif = new QMovie{":/RESOURCES/ICONES/loading.gif",{},this};
+	labelGif->setMovie(movieGif);
+	layoutLoading->addWidget(labelLoading);
+	layoutLoading->addWidget(labelGif);
+	layoutLoading->addStretch();
+	
+	// add pages
+	stack->addWidget(tabs);
+	stack->addWidget(labelNoController);
+	stack->addWidget(widgetLoading);
+	stack->setCurrentWidget(tabs);
+	layout->addWidget(stack);
+	
+	// end
 	this->setCentralWidget(mainWidget);
 	this->setWindowIcon(QIcon{":/RESOURCES/ICONES/eyes.png"});
 	this->setMinimumWidth(700.0);
 }
 
+
+
+
+
+
 // CLEAR TABS /////////////////////////////////////////////////////////////////
 void MainWindow::clearTabs()
 {
-	if (tabs)
+	int n = tabs->count();
+	for (int i=0; i<n; i++)
 	{
-		layout->removeWidget(tabs);
-		delete tabs;
-		tabs = nullptr;
-	}
-	
-	if (labelNoController)
-	{
-		layout->removeWidget(labelNoController);
-		delete labelNoController;
-		labelNoController = nullptr;
+		QWidget *w = tabs->widget(0);
+		tabs->removeTab(0);
+		delete w;
 	}
 }
 
-// SLOT MODE CHANGED //////////////////////////////////////////////////////////
-void MainWindow::slotModeChanged(int index)
+// SET DATA ///////////////////////////////////////////////////////////////////
+void MainWindow::setData(const QVector<GameController*> joysticks)
 {
-	this->clearTabs();
-	
-	if (index == 0) // raw, i.e. using QtGameControllerModif
+	// case there is no controller
+	if (joysticks.size() == 0)
 	{
-		// search for DirectInput and XInput controllers
-		QVector<GameController*> joysticks = GameController::enumerateControllers(this);
-		
-		// case there is no controller
-		if (joysticks.size() == 0)
-		{
-			labelNoController = new QLabel{"No controller detected",this};
-			labelNoController->setAlignment(Qt::AlignCenter);
-			layout->addWidget(labelNoController);
-			return;
-		}
-		
+		stack->setCurrentWidget(labelNoController);
+	}
+	else
+	{
 		// add a tab for each controller
-		tabs = new QTabWidget{this};
 		for (GameController *j : joysticks)
 		{
 			QWidget *temp = new QWidget{tabs};
@@ -146,48 +170,90 @@ void MainWindow::slotModeChanged(int index)
 			int index = tabs->addTab(temp,j->description());
 			tabs->setTabToolTip(index,j->hardwareId());
 		}
-		layout->addWidget(tabs);
+		stack->setCurrentWidget(tabs);
 	}
-	else if (index == 1 || index == 2)
+}
+
+void MainWindow::setData(const QVector<AbstractRealJoystick*> joysticks)
+{
+	// case there is no controller
+	if (joysticks.size() == 0)
 	{
-		// search controllers
-		RealJoysticksManager jm;
-		if (index == 2) {jm.loadPlugins(QCoreApplication::applicationDirPath() + "/../../ControllersPlugins/PLUGINS/");}
-		jm.searchForControllers();
-		int nbOtherJoy = jm.nbJoysticks();
-		
-		// case there is no controller
-		if (nbOtherJoy == 0)
-		{
-			labelNoController = new QLabel{"No controller detected",this};
-			labelNoController->setAlignment(Qt::AlignCenter);
-			layout->addWidget(labelNoController);
-			return;
-		}
-		
-		// add a tab for each controller
-		tabs = new QTabWidget{this};
-		for (int i=0; i<nbOtherJoy; ++i)
-		{
-			if (AbstractRealJoystick *j = jm.releaseJoystick(0))
-			{
-				QWidget *temp = new QWidget{tabs};
-				QWidget *w = new StandardJoystickWidget{j,true,temp};
-				QVBoxLayout *layout = new QVBoxLayout{temp};
-				temp->setLayout(layout);
-				layout->addWidget(w);
-				layout->addStretch();
-				int index = tabs->addTab(temp,j->description());
-				tabs->setTabToolTip(index,j->hardwareId());
-			}
-		}
-		layout->addWidget(tabs);
+		stack->setCurrentWidget(labelNoController);
 	}
+	else
+	{
+		// add a tab for each controller
+		for (AbstractRealJoystick *j : joysticks)
+		{
+			QWidget *temp = new QWidget{tabs};
+			QWidget *w = new StandardJoystickWidget{j,true,temp};
+			QVBoxLayout *layout = new QVBoxLayout{temp};
+			temp->setLayout(layout);
+			layout->addWidget(w);
+			layout->addStretch();
+			int index = tabs->addTab(temp,j->description());
+			tabs->setTabToolTip(index,j->hardwareId());
+		}
+		stack->setCurrentWidget(tabs);
+	}
+}
+
+
+
+
+
+
+// SLOT QUIT //////////////////////////////////////////////////////////////////
+void MainWindow::slotQuit()
+{
+	if (m_thread->isRunning()) {return;}
+	qApp->quit();
 }
 
 // SLOT UPDATE ////////////////////////////////////////////////////////////////
 void MainWindow::slotUpdate()
 {
 	this->slotModeChanged(boxMode->currentIndex());
+}
+
+// SLOT MODE CHANGED //////////////////////////////////////////////////////////
+void MainWindow::slotModeChanged(int index)
+{
+	if (m_thread->isRunning()) {return;}
+	
+	// widgets
+	this->clearTabs();
+	boxMode->setEnabled(false);
+	actionUpdate->setEnabled(false);
+	actionQuit->setEnabled(false);
+	stack->setCurrentWidget(widgetLoading);
+	movieGif->start();
+	
+	// search for DirectInput and XInput controllers
+	m_thread->enumerateControllers();
+	m_index = index;
+}
+
+// SLOT END UPDATE ////////////////////////////////////////////////////////////
+void MainWindow::slotEndUpdate()
+{
+	QVector<GameController*> gcv = m_thread->releaseGameControllers();
+	
+	if (m_index == 0) {this->setData(gcv);}
+	else if (m_index == 1 || m_index == 2)
+	{
+		RealJoysticksManager jm;
+		if (m_index == 2) {jm.loadPlugins(QCoreApplication::applicationDirPath() + "/../../ControllersPlugins/PLUGINS/");}
+		jm.fromGameControllers(gcv);
+		this->setData(jm.releaseAll());
+	}
+	
+	// widgets
+	movieGif->stop();
+	stack->setCurrentWidget(tabs);
+	actionUpdate->setEnabled(true);
+	actionQuit->setEnabled(true);
+	boxMode->setEnabled(true);
 }
 

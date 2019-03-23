@@ -2,8 +2,9 @@
 #define MAIN_WINDOW
 
 
-#include <QWidget>
+#include <QMainWindow>
 #include <QCloseEvent>
+#include "RealJoysticksManager.h"
 class QGridLayout;
 class QVBoxLayout;
 class QHBoxLayout;
@@ -12,14 +13,18 @@ class QLineEdit;
 class QLabel;
 class QDoubleSpinBox;
 class QComboBox;
+class QStackedWidget;
 class QTimer;
+class QMenu;
+class QMovie;
 
-#include "RealJoysticksManager.h"
+class WorkerThread;
 class CurveChartView;
 class AbstractAxisCurve;
+class AbstractRealJoystick;
 
 
-class MainWindow : public QWidget
+class MainWindow : public QMainWindow
 {
 	Q_OBJECT
 	
@@ -33,6 +38,10 @@ class MainWindow : public QWidget
 		
 		
 	private slots:
+		void slotUpdate();
+		void slotEndUpdate();
+		void slotQuit();
+		
 		void slotRunOneLoop();
 		
 		void slotJoystickChanged(int index);
@@ -44,11 +53,18 @@ class MainWindow : public QWidget
 		
 		
 	private:
+		void createActions();
+		void createMenus();
 		void setupWidget();
 		
 		QStringList curvesNames() const;
 		AbstractAxisCurve* createCurve(const QString &curveName) const;
 		
+		QAction *actionUpdate, *actionQuit;
+		QMenu *fileMenu;
+		
+		QStackedWidget *stack;
+		QWidget *mainWidget;
 		QGridLayout *layout;
 		QLabel *labelJoystick, *labelAxis, *labelDirection;
 		QLabel *labelTrim1, *labelTrim2, *labelCurve;
@@ -56,8 +72,14 @@ class MainWindow : public QWidget
 		QDoubleSpinBox *boxTrim1, *boxTrim2;
 		CurveChartView *chartView;
 		
+		QWidget *widgetLoading;
+		QVBoxLayout *layoutLoading;
+		QLabel *labelLoading, *labelGif;
+		QMovie *movieGif;
+		
 		QTimer *m_timer;
-		RealJoysticksManager m_joyManager;
+		WorkerThread *m_thread;
+		RealJoysticksManager m_jm;
 		AbstractRealJoystick *m_currentJoystick;
 		int m_axis;
 		

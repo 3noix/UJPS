@@ -22,11 +22,13 @@ win32-msvc*:LIBS += ../StaticLibs/SOURCES/QtGameControllerModif/$$MODE/QtGameCon
 INCLUDEPATH +=  ../StaticLibs/INCLUDES/QtGameControllerModif/
 
 
-HEADERS +=  CODE/MainWindow.h
+HEADERS +=  CODE/MainWindow.h \
+			CODE/WorkerThread.h
 
 
 SOURCES +=  CODE/main.cpp \
-			CODE/MainWindow.cpp
+			CODE/MainWindow.cpp \
+			CODE/WorkerThread.cpp
 
 
 RESOURCES += resources.qrc

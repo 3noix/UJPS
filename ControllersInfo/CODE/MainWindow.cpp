@@ -1,5 +1,6 @@
 #include "MainWindow.h"
 #include "GameController.h"
+#include "WorkerThread.h"
 #include <QCoreApplication>
 
 
@@ -11,8 +12,11 @@
 //  SETUP WIDGET
 //  CREATE HEADERS
 //  CLEAR LAYOUT
+//  SET DATA
 //
-//  SLOT UPDATE
+//  SLOT START UPDATE
+//  SLOT END UPDATE
+//  SLOT QUIT
 ///////////////////////////////////////////////////////////////////////////////
 
 
@@ -22,11 +26,15 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow{parent}
 	this->createActions();
 	this->createMenus();
 	this->setupWidget();
-	this->slotUpdate();
+	
+	m_thread = new WorkerThread{this};
 	
 	// connections
-	QObject::connect(actionUpdate, &QAction::triggered, this, &MainWindow::slotUpdate);
-	QObject::connect(actionQuit,   &QAction::triggered, qApp, &QCoreApplication::quit);
+	QObject::connect(actionUpdate, &QAction::triggered, this, &MainWindow::slotStartUpdate);
+	QObject::connect(actionQuit,   &QAction::triggered, this, &MainWindow::slotQuit);
+	QObject::connect(m_thread,     &QThread::finished,  this, &MainWindow::slotEndUpdate);
+	
+	this->slotStartUpdate();
 }
 
 
@@ -62,13 +70,28 @@ void MainWindow::createMenus()
 // SETUP WIDGET ///////////////////////////////////////////////////////////////
 void MainWindow::setupWidget()
 {
-	w = new QWidget{this};
-	layout = new QGridLayout{w};
-	w->setLayout(layout);
+	gridWidget = new QWidget{this};
+	layout = new QGridLayout{gridWidget};
+	gridWidget->setLayout(layout);
 	layout->setContentsMargins(10,20,10,20);
 	layout->setVerticalSpacing(15);
 	
-	this->setCentralWidget(w);
+	widgetLoading = new QWidget{this};
+	layoutLoading = new QVBoxLayout{widgetLoading};
+	widgetLoading->setLayout(layoutLoading);
+	labelLoading = new QLabel{"Enumerating controllers...",this};
+	labelGif = new QLabel{this};
+	movieGif = new QMovie{":/RESOURCES/ICONES/loading.gif",{},this};
+	labelGif->setMovie(movieGif);
+	layoutLoading->addWidget(labelLoading);
+	layoutLoading->addWidget(labelGif);
+	
+	stack = new QStackedWidget{this};
+	stack->addWidget(gridWidget);
+	stack->addWidget(widgetLoading);
+	stack->setCurrentWidget(gridWidget);
+	
+	this->setCentralWidget(stack);
 	this->resize(600,250);
 	this->setWindowIcon(QIcon{":/RESOURCES/ICONES/info.png"});
 	this->setWindowTitle("Controllers info");
@@ -106,18 +129,9 @@ void MainWindow::clearLayout()
 	while ((child = layout->takeAt(0))) {delete child->widget();}
 }
 
-
-
-
-
-
-// SLOT UPDATE ////////////////////////////////////////////////////////////////
-void MainWindow::slotUpdate()
+// SET DATA ///////////////////////////////////////////////////////////////////
+void MainWindow::setData(const QVector<GameController*> joysticks)
 {
-	// search for DirectInput and XInput controllers
-	QVector<GameController*> joysticks = GameController::enumerateControllers(this);
-	
-	// update the table
 	this->clearLayout();
 	this->createHeaders();
 	int iLine = 1;
@@ -154,5 +168,45 @@ void MainWindow::slotUpdate()
 	}
 	
 	layout->addItem(new QSpacerItem{0,0,QSizePolicy::Minimum,QSizePolicy::Expanding},iLine,0,1,1);
+}
+
+
+
+
+
+
+// SLOT START UPDATE //////////////////////////////////////////////////////////
+void MainWindow::slotStartUpdate()
+{
+	if (m_thread->isRunning()) {return;}
+	
+	// widgets
+	actionUpdate->setEnabled(false);
+	actionQuit->setEnabled(false);
+	stack->setCurrentWidget(widgetLoading);
+	movieGif->start();
+	
+	// search for DirectInput and XInput controllers
+	m_thread->enumerateControllers();
+}
+
+// SLOT END UPDATE ////////////////////////////////////////////////////////////
+void MainWindow::slotEndUpdate()
+{
+	// retrieve results and update the table
+	this->setData(m_thread->gameControllers());
+	
+	// widgets
+	movieGif->stop();
+	stack->setCurrentWidget(gridWidget);
+	actionUpdate->setEnabled(true);
+	actionQuit->setEnabled(true);
+}
+
+// SLOT QUIT //////////////////////////////////////////////////////////////////
+void MainWindow::slotQuit()
+{
+	if (m_thread->isRunning()) {return;}
+	qApp->quit();
 }
 

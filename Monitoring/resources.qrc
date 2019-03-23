@@ -2,6 +2,7 @@
 <qresource>
 	<file>RESOURCES/ICONES/croixRouge.png</file>
 	<file>RESOURCES/ICONES/eyes.png</file>
+	<file>RESOURCES/ICONES/loading.gif</file>
 	<file>RESOURCES/ICONES/update.png</file>
 </qresource>
 </RCC>

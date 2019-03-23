@@ -10,13 +10,17 @@
 ///////////////////////////////////////////////////////////////////////////////
 //  CONSTRUCTEUR ET DESTRUCTEUR
 //  LOAD PLUGINS
-//  SEARCH FOR CONTROLLERS
+//  UNLOAD PLUGINS
+//
+//  SEARCH FOR REAL JOYSTICKS
+//  FROM GAME CONTROLLERS
 //  CREATE JOYSTICK
 //
 //  NB JOYSTICKS
 //  JOYSTICKS NAMES
 //  JOYSTICK
 //  RELEASE JOYSTICK
+//  RELEASE ALL
 ///////////////////////////////////////////////////////////////////////////////
 
 
@@ -52,27 +56,41 @@ void RealJoysticksManager::loadPlugins(const QString &path)
 	}
 }
 
-// SEARCH FOR CONTROLLERS /////////////////////////////////////////////////////
-void RealJoysticksManager::searchForControllers()
+// UNLOAD PLUGINS /////////////////////////////////////////////////////////////
+void RealJoysticksManager::unloadPlugins()
+{
+	qDeleteAll(m_loaders);
+	m_loaders.clear();
+	m_factories.clear();
+}
+
+
+
+
+
+
+// SEARCH FOR REAL JOYSTICKS //////////////////////////////////////////////////
+void RealJoysticksManager::searchForRealJoysticks()
+{
+	// search for DirectInput and XInput controllers
+	QVector<GameController*> joysticks = GameController::enumerateControllers();
+	
+	// upgrade them
+	this->fromGameControllers(joysticks);
+}
+
+// FROM GAME CONTROLLERS //////////////////////////////////////////////////////
+void RealJoysticksManager::fromGameControllers(QVector<GameController*> &gcv)
 {
 	// reset
 	qDeleteAll(m_joysticks);
 	m_joysticks.clear();
 	
-	// search for DirectInput and XInput controllers
-	QVector<GameController*> joysticks = GameController::enumerateControllers();
-	
 	// build RealJoysticks objects
-	for (GameController *gc : joysticks)
+	for (GameController *gc : gcv)
 	{
-		if (AbstractRealJoystick *j = this->createJoystick(gc))
-		{
-			m_joysticks << j;
-		}
-		else
-		{
-			delete gc;
-		}
+		if (AbstractRealJoystick *j = this->createJoystick(gc)) {m_joysticks << j;}
+		else {delete gc;}
 	}
 }
 
@@ -157,5 +175,13 @@ AbstractRealJoystick* RealJoysticksManager::releaseJoystick(const QString &joyst
 	}
 	
 	return nullptr;
+}
+
+// RELEASE ALL ////////////////////////////////////////////////////////////////
+QVector<AbstractRealJoystick*> RealJoysticksManager::releaseAll()
+{
+	QVector<AbstractRealJoystick*> joys = m_joysticks;
+	m_joysticks.clear();
+	return joys;
 }
 

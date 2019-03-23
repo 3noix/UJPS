@@ -3,6 +3,8 @@
 
 
 #include <QtWidgets>
+class WorkerThread;
+class GameController;
 
 
 class MainWindow : public QMainWindow
@@ -19,10 +21,14 @@ class MainWindow : public QMainWindow
 		
 		
 	private slots:
-		void slotUpdate();
+		void slotStartUpdate();
+		void slotEndUpdate();
+		void slotQuit();
 		
 		
 	private:
+		void setData(const QVector<GameController*> joysticks);
+		
 		void createActions();
 		void createMenus();
 		void setupWidget();
@@ -33,8 +39,14 @@ class MainWindow : public QMainWindow
 		QAction *actionUpdate, *actionQuit;
 		QMenu *fileMenu;
 		
-		QWidget *w;
+		QStackedWidget *stack;
+		QWidget *gridWidget, *widgetLoading;
 		QGridLayout *layout;
+		QVBoxLayout *layoutLoading;
+		QLabel *labelLoading, *labelGif;
+		QMovie *movieGif;
+		
+		WorkerThread *m_thread;
 };
 
 

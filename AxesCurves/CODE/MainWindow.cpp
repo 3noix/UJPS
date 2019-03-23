@@ -1,6 +1,8 @@
 #include "MainWindow.h"
 #include "CurveChartView.h"
 #include "AbstractRealJoystick.h"
+#include "RealJoysticksManager.h"
+#include "WorkerThread.h"
 
 #include "CURVES/GuiCurvePolynomial2.h"
 #include "CURVES/GuiCurvePolynomial3Centered.h"
@@ -17,15 +19,25 @@
 #include <QLabel>
 #include <QDoubleSpinBox>
 #include <QComboBox>
+#include <QStackedWidget>
 #include <QTimer>
+#include <QMenu>
+#include <QMenuBar>
+#include <QMovie>
 
 
 ///////////////////////////////////////////////////////////////////////////////
 //  CONSTRUCTEUR
-//
 //  SETUP WIDGET
+//  CREATE ACTIONS
+//  CREATE MENUS
+//
 //  CURVES NAMES
 //  CREATE CURVE
+//
+//  SLOT UPDATE
+//  SLOT END UPDATE
+//  SLOT QUIT
 //  SLOT RUN ONE LOOP
 //
 //  SLOT JOYSTICK CHANGED
@@ -38,34 +50,39 @@
 
 
 // CONSTRUCTEUR ///////////////////////////////////////////////////////////////
-MainWindow::MainWindow(QWidget *parent) : QWidget{parent}
+MainWindow::MainWindow(QWidget *parent) : QMainWindow{parent}
 {
-	m_joyManager.loadPlugins(QCoreApplication::applicationDirPath() + "/../../ControllersPlugins/PLUGINS/");
-	m_joyManager.searchForControllers();
-	
 	m_currentJoystick = nullptr;
 	m_axis = 0;
 	m_settingsWidget = nullptr;
 	m_curve = nullptr;
 	
 	this->setupWidget();
+	this->createActions();
+	this->createMenus();
 	this->resize(600,700);
+	
+	m_thread = new WorkerThread{this};
+	m_jm.loadPlugins(QCoreApplication::applicationDirPath() + "/../../ControllersPlugins/PLUGINS/");
+	
+	QObject::connect(actionUpdate, &QAction::triggered, this, &MainWindow::slotUpdate);
+	QObject::connect(actionQuit,   &QAction::triggered, this, &MainWindow::slotQuit);
+	QObject::connect(m_thread,     &QThread::finished,  this, &MainWindow::slotEndUpdate);
 	
 	m_timer = new QTimer{this};
 	m_timer->setInterval(15);
 	QObject::connect(m_timer, &QTimer::timeout, this, &MainWindow::slotRunOneLoop);
-	m_timer->start();
+	
+	this->slotUpdate();
 }
-
-
-
 
 // SETUP WIDGET ///////////////////////////////////////////////////////////////
 void MainWindow::setupWidget()
 {
 	// create layouts
-	layout = new QGridLayout{this};
-	this->setLayout(layout);
+	mainWidget = new QWidget{this};
+	layout = new QGridLayout{mainWidget};
+	mainWidget->setLayout(layout);
 	
 	// labels
 	labelJoystick  = new QLabel{"Joystick:",this};
@@ -115,19 +132,55 @@ void MainWindow::setupWidget()
 	layout->addItem(new QSpacerItem{0,0,QSizePolicy::Expanding,QSizePolicy::Minimum},0,3,1,1);
 	layout->addWidget(chartView,7,0,1,4);
 	
+	// page 2 (loading)
+	widgetLoading = new QWidget{this};
+	layoutLoading = new QVBoxLayout{widgetLoading};
+	widgetLoading->setLayout(layoutLoading);
+	labelLoading = new QLabel{"Enumerating controllers...",this};
+	labelGif = new QLabel{this};
+	movieGif = new QMovie{":/RESOURCES/ICONES/loading.gif",{},this};
+	labelGif->setMovie(movieGif);
+	layoutLoading->addWidget(labelLoading);
+	layoutLoading->addWidget(labelGif);
+	layoutLoading->addStretch();
 	
-	// connections
-	QObject::connect(boxJoystick,  SIGNAL(currentIndexChanged(int)), this, SLOT(slotJoystickChanged(int)));
-	QObject::connect(boxAxis,      SIGNAL(currentIndexChanged(int)), this, SLOT(slotAxisChanged(int)));
-	QObject::connect(boxDirection, SIGNAL(currentIndexChanged(int)), this, SLOT(slotDirectionChanged(int)));
-	QObject::connect(boxTrim1,     SIGNAL(valueChanged(double)),     this, SLOT(slotTrim1Changed(double)));
-	QObject::connect(boxTrim2,     SIGNAL(valueChanged(double)),     this, SLOT(slotTrim2Changed(double)));
-	QObject::connect(boxCurve,     SIGNAL(currentIndexChanged(int)), this, SLOT(slotCurveChanged(int)));
-	boxJoystick->addItems(m_joyManager.joysticksNames());
-	
-	// end
+	// stack and loading pages
+	stack = new QStackedWidget{this};
+	stack->addWidget(mainWidget);
+	stack->addWidget(widgetLoading);
+	this->setCentralWidget(stack);
 	this->setWindowIcon(QIcon{":/RESOURCES/ICONES/curve.png"});
 }
+
+// CREATE ACTIONS /////////////////////////////////////////////////////////////
+void MainWindow::createActions()
+{
+	actionUpdate = new QAction{"Update controllers list",this};
+	actionUpdate->setStatusTip("Update controllers list");
+	actionUpdate->setShortcut(QKeySequence{"F5"});
+	actionUpdate->setShortcutContext(Qt::WindowShortcut);
+	actionUpdate->setIcon(QIcon{":/RESOURCES/ICONES/update.png"});
+	
+	actionQuit = new QAction{"Quit",this};
+	actionQuit->setStatusTip("Quit");
+	actionQuit->setShortcut(QKeySequence{"Ctrl+Q"});
+	actionQuit->setShortcutContext(Qt::WindowShortcut);
+	actionQuit->setIcon(QIcon{":/RESOURCES/ICONES/croixRouge.png"});
+}
+
+// CREATE MENUS ///////////////////////////////////////////////////////////////
+void MainWindow::createMenus()
+{
+	fileMenu = this->menuBar()->addMenu("File");
+	fileMenu->addAction(actionUpdate);
+	fileMenu->addSeparator();
+	fileMenu->addAction(actionQuit);
+}
+
+
+
+
+
 
 // CURVES NAMES ///////////////////////////////////////////////////////////////
 QStringList MainWindow::curvesNames() const
@@ -156,6 +209,82 @@ AbstractAxisCurve* MainWindow::createCurve(const QString &curveName) const
 	else {return nullptr;}
 }
 
+
+
+
+
+
+// SLOT UPDATE ////////////////////////////////////////////////////////////////
+void MainWindow::slotUpdate()
+{
+	if (m_thread->isRunning()) {return;}
+	m_timer->stop();
+	
+	QObject::disconnect(boxJoystick,  SIGNAL(currentIndexChanged(int)), this, SLOT(slotJoystickChanged(int)));
+	QObject::disconnect(boxAxis,      SIGNAL(currentIndexChanged(int)), this, SLOT(slotAxisChanged(int)));
+	QObject::disconnect(boxDirection, SIGNAL(currentIndexChanged(int)), this, SLOT(slotDirectionChanged(int)));
+	QObject::disconnect(boxTrim1,     SIGNAL(valueChanged(double)),     this, SLOT(slotTrim1Changed(double)));
+	QObject::disconnect(boxTrim2,     SIGNAL(valueChanged(double)),     this, SLOT(slotTrim2Changed(double)));
+	QObject::disconnect(boxCurve,     SIGNAL(currentIndexChanged(int)), this, SLOT(slotCurveChanged(int)));
+	
+	actionUpdate->setEnabled(false);
+	actionQuit->setEnabled(false);
+	stack->setCurrentWidget(widgetLoading);
+	movieGif->start();
+	
+	boxJoystick->clear();
+	boxAxis->clear();
+	boxJoystick->setEnabled(false);
+	boxAxis->setEnabled(false);
+	boxDirection->setEnabled(false);
+	boxTrim1->setEnabled(false);
+	boxTrim2->setEnabled(false);
+	boxCurve->setEnabled(false);
+	
+	m_currentJoystick = nullptr;
+	m_axis = 0;
+	m_settingsWidget = nullptr;
+	m_curve = nullptr;
+	
+	m_thread->enumerateControllers();
+}
+
+// SLOT END UPDATE ////////////////////////////////////////////////////////////
+void MainWindow::slotEndUpdate()
+{
+	QObject::connect(boxJoystick,  SIGNAL(currentIndexChanged(int)), this, SLOT(slotJoystickChanged(int)));
+	QObject::connect(boxAxis,      SIGNAL(currentIndexChanged(int)), this, SLOT(slotAxisChanged(int)));
+	QObject::connect(boxDirection, SIGNAL(currentIndexChanged(int)), this, SLOT(slotDirectionChanged(int)));
+	QObject::connect(boxTrim1,     SIGNAL(valueChanged(double)),     this, SLOT(slotTrim1Changed(double)));
+	QObject::connect(boxTrim2,     SIGNAL(valueChanged(double)),     this, SLOT(slotTrim2Changed(double)));
+	QObject::connect(boxCurve,     SIGNAL(currentIndexChanged(int)), this, SLOT(slotCurveChanged(int)));
+	
+	QVector<GameController*> gcv = m_thread->releaseGameControllers();
+	m_jm.fromGameControllers(gcv);
+	boxJoystick->addItems(m_jm.joysticksNames());
+	
+	boxJoystick->setEnabled(true);
+	boxAxis->setEnabled(true);
+	boxDirection->setEnabled(true);
+	boxTrim1->setEnabled(true);
+	boxTrim2->setEnabled(true);
+	boxCurve->setEnabled(true);
+	
+	movieGif->stop();
+	stack->setCurrentWidget(mainWidget);
+	actionUpdate->setEnabled(true);
+	actionQuit->setEnabled(true);
+	
+	m_timer->start();
+}
+
+// SLOT QUIT //////////////////////////////////////////////////////////////////
+void MainWindow::slotQuit()
+{
+	if (m_thread->isRunning()) {return;}
+	qApp->quit();
+}
+
 // SLOT RUN ONE LOOP //////////////////////////////////////////////////////////
 void MainWindow::slotRunOneLoop()
 {
@@ -174,13 +303,15 @@ void MainWindow::slotRunOneLoop()
 
 
 
+
+
 // SLOT JOYSTICK CHANGED //////////////////////////////////////////////////////
 void MainWindow::slotJoystickChanged(int index)
 {
 	QObject::disconnect(boxAxis, SIGNAL(currentIndexChanged(int)), this, SLOT(slotAxisChanged(int)));
 	
 	boxAxis->clear();
-	if (AbstractRealJoystick *joystick = m_joyManager.joystick(index))
+	if (AbstractRealJoystick *joystick = m_jm.joystick(index))
 	{
 		m_currentJoystick = joystick;
 		boxAxis->addItems(m_currentJoystick->axesNames());
