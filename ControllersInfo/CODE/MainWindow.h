@@ -3,7 +3,7 @@
 
 
 #include <QtWidgets>
-class WorkerThread;
+class GameControllersEnumThread;
 class GameController;
 
 
@@ -46,7 +46,7 @@ class MainWindow : public QMainWindow
 		QLabel *labelLoading, *labelGif;
 		QMovie *movieGif;
 		
-		WorkerThread *m_thread;
+		GameControllersEnumThread *m_thread;
 };
 
 

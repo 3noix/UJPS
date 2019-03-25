@@ -1,6 +1,6 @@
 #include "MainWindow.h"
 #include "GameController.h"
-#include "WorkerThread.h"
+#include "GameControllersEnumThread.h"
 #include <QCoreApplication>
 
 
@@ -27,7 +27,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow{parent}
 	this->createMenus();
 	this->setupWidget();
 	
-	m_thread = new WorkerThread{this};
+	m_thread = new GameControllersEnumThread{this};
 	
 	// connections
 	QObject::connect(actionUpdate, &QAction::triggered, this, &MainWindow::slotStartUpdate);

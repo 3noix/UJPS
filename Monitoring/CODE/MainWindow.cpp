@@ -2,7 +2,7 @@
 #include "GameController.h"
 #include "AbstractRealJoystick.h"
 #include "RealJoysticksManager.h"
-#include "WorkerThread.h"
+#include "GameControllersEnumThread.h"
 #include "WIDGETS/StandardJoystickWidget.h"
 #include "WIDGETS/StandardJoystickWidgetRaw.h"
 
@@ -32,7 +32,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow{parent}
 	this->createMenus();
 	this->setupWidget();
 	
-	m_thread = new WorkerThread{this};
+	m_thread = new GameControllersEnumThread{this};
 	m_index = 2;
 	
 	QObject::connect(boxMode,      SIGNAL(currentIndexChanged(int)), this, SLOT(slotModeChanged(int)));

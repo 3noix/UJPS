@@ -1,4 +1,4 @@
-#include "WorkerThread.h"
+#include "GameControllersEnumThread.h"
 #include "GameController.h"
 #include <QMutexLocker>
 
@@ -17,11 +17,11 @@
 
 
 // CONSTRUCTEUR ET DESTRUCTEUR ////////////////////////////////////////////////
-WorkerThread::WorkerThread(QObject *parent) : QThread{parent}
+GameControllersEnumThread::GameControllersEnumThread(QObject *parent) : QThread{parent}
 {
 }
 
-WorkerThread::~WorkerThread()
+GameControllersEnumThread::~GameControllersEnumThread()
 {
 	qDeleteAll(m_joysticks);
 	this->wait();
@@ -31,7 +31,7 @@ WorkerThread::~WorkerThread()
 
 
 // ENUMERATE CONTROLLERS //////////////////////////////////////////////////////
-void WorkerThread::enumerateControllers()
+void GameControllersEnumThread::enumerateControllers()
 {
 	if (this->isRunning()) {return;}
 	m_mutex.lock();
@@ -42,14 +42,14 @@ void WorkerThread::enumerateControllers()
 }
 
 // GAME CONTROLLERS ///////////////////////////////////////////////////////////
-QVector<GameController*> WorkerThread::gameControllers()
+QVector<GameController*> GameControllersEnumThread::gameControllers()
 {
 	QMutexLocker locker{&m_mutex};
 	return m_joysticks;
 }
 
 // RELEASE GAME CONTROLLERS ///////////////////////////////////////////////////
-QVector<GameController*> WorkerThread::releaseGameControllers()
+QVector<GameController*> GameControllersEnumThread::releaseGameControllers()
 {
 	QMutexLocker locker{&m_mutex};
 	QVector<GameController*> gcv = m_joysticks;
@@ -58,7 +58,7 @@ QVector<GameController*> WorkerThread::releaseGameControllers()
 }
 
 // RUN ////////////////////////////////////////////////////////////////////////
-void WorkerThread::run()
+void GameControllersEnumThread::run()
 {
 	QMutexLocker locker{&m_mutex};
 	m_joysticks = GameController::enumerateControllers();

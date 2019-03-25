@@ -2,7 +2,7 @@
 #include "CurveChartView.h"
 #include "AbstractRealJoystick.h"
 #include "RealJoysticksManager.h"
-#include "WorkerThread.h"
+#include "GameControllersEnumThread.h"
 
 #include "CURVES/GuiCurvePolynomial2.h"
 #include "CURVES/GuiCurvePolynomial3Centered.h"
@@ -62,7 +62,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow{parent}
 	this->createMenus();
 	this->resize(600,700);
 	
-	m_thread = new WorkerThread{this};
+	m_thread = new GameControllersEnumThread{this};
 	m_jm.loadPlugins(QCoreApplication::applicationDirPath() + "/../../ControllersPlugins/PLUGINS/");
 	
 	QObject::connect(actionUpdate, &QAction::triggered, this, &MainWindow::slotUpdate);

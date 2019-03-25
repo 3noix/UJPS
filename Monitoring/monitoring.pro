@@ -27,7 +27,6 @@ INCLUDEPATH +=  ../StaticLibs/INCLUDES/QtGameControllerModif/ \
 
 
 HEADERS +=  CODE/MainWindow.h \
-			CODE/WorkerThread.h \
 			CODE/WIDGETS/StandardJoystickWidget.h \
 			CODE/WIDGETS/StandardJoystickWidgetRaw.h \
 			CODE/WIDGETS/AxesWidget.h \
@@ -40,7 +39,6 @@ HEADERS +=  CODE/MainWindow.h \
 
 SOURCES +=  CODE/main.cpp \
 			CODE/MainWindow.cpp \
-			CODE/WorkerThread.cpp \
 			CODE/WIDGETS/StandardJoystickWidget.cpp \
 			CODE/WIDGETS/StandardJoystickWidgetRaw.cpp \
 			CODE/WIDGETS/AxesWidget.cpp \

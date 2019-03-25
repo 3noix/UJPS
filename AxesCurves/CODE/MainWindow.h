@@ -18,7 +18,7 @@ class QTimer;
 class QMenu;
 class QMovie;
 
-class WorkerThread;
+class GameControllersEnumThread;
 class CurveChartView;
 class AbstractAxisCurve;
 class AbstractRealJoystick;
@@ -78,7 +78,7 @@ class MainWindow : public QMainWindow
 		QMovie *movieGif;
 		
 		QTimer *m_timer;
-		WorkerThread *m_thread;
+		GameControllersEnumThread *m_thread;
 		RealJoysticksManager m_jm;
 		AbstractRealJoystick *m_currentJoystick;
 		int m_axis;

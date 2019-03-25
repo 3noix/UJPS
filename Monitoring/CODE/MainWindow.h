@@ -3,7 +3,7 @@
 
 
 #include <QtWidgets>
-class WorkerThread;
+class GameControllersEnumThread;
 class GameController;
 class AbstractRealJoystick;
 
@@ -55,7 +55,7 @@ class MainWindow : public QMainWindow
 		QTabWidget *tabs;
 		QLabel *labelNoController;
 		
-		WorkerThread *m_thread;
+		GameControllersEnumThread *m_thread;
 		int m_index;
 };
 
