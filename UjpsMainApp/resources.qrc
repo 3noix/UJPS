@@ -13,6 +13,5 @@
 	<file>RESOURCES/ICONES/play.png</file>
 	<file>RESOURCES/ICONES/select.png</file>
 	<file>RESOURCES/ICONES/stop.png</file>
-	<file>RESOURCES/XSD/genericProperties.xsd</file>
 </qresource>
 </RCC>

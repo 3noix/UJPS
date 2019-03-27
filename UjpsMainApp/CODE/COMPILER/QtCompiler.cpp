@@ -1,6 +1,6 @@
 #include "QtCompiler.h"
 #include "QtCompilationProcess.h"
-#include "../XML/GenericPropertiesInfo.h"
+#include "XML/GenericPropertiesInfo.h"
 
 #include <QCoreApplication>
 #include <QGroupBox>

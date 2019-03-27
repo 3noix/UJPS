@@ -1,7 +1,7 @@
 #include "GeneralSettingsWidget.h"
 #include "ApplicationSettings.h"
-#include "../otherFunctions.h"
-#include "../XML/GenericPropertiesInfo.h"
+#include "otherFunctions.h"
+#include "XML/GenericPropertiesInfo.h"
 #include "VirtualEventsQueue.h"
 
 #include <QVBoxLayout>

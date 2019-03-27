@@ -19,7 +19,7 @@
 #include "MainWindow.h"
 #include "TextEdit.h"
 #include "VirtualJoystick.h"
-#include "../otherFunctions.h"
+#include "otherFunctions.h"
 #include "../COMPILER/CompilationWidget.h"
 #include "../SETTINGS/SettingsDialog.h"
 #include "../SETTINGS/MyFileDialog.h"

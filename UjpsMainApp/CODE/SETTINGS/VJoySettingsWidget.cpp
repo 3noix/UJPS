@@ -1,6 +1,6 @@
 #include "VJoySettingsWidget.h"
 #include "ApplicationSettings.h"
-#include "../otherFunctions.h"
+#include "otherFunctions.h"
 #include "VirtualJoystick.h"
 
 #include <QVBoxLayout>

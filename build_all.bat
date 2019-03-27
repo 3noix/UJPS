@@ -13,6 +13,12 @@ call build_CleanQtProjects_fct.bat
 cd ..
 
 
+REM compilation of static lib Settings
+cd StaticLibs/SOURCES/Settings
+call build_Settings_fct.bat
+cd ../../..
+
+
 REM compilation of static lib QtGameControllerModif
 cd StaticLibs/SOURCES/QtGameControllerModif
 call build_QtGameControllerModif_fct.bat

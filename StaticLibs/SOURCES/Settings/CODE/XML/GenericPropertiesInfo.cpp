@@ -1,4 +1,4 @@
-#include "GenericPropertiesInfo.h"
+#include "XML/GenericPropertiesInfo.h"
 #include <QXmlStreamReader>
 #include <QXmlStreamWriter>
 

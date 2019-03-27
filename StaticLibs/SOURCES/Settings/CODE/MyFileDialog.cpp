@@ -1,6 +1,6 @@
 #include "MyFileDialog.h"
 #include "ApplicationSettings.h"
-#include "../otherFunctions.h"
+#include "otherFunctions.h"
 #include <QCoreApplication>
 
 

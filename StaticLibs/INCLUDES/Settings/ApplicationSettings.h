@@ -2,7 +2,7 @@
 #define APPLICATION_SETTINGS
 
 
-#include "../XML/GenericPropertiesInfo.h"
+#include "XML/GenericPropertiesInfo.h"
 
 
 class ApplicationSettings

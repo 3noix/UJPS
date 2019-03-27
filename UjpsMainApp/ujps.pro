@@ -16,18 +16,21 @@ QT = core xmlpatterns gui widgets
 DEFINES -= QT_NO_DEBUG
 
 
+win32-g++:LIBS += ../StaticLibs/SOURCES/Settings/$$MODE/libsettings.a
 win32-g++:LIBS += ../StaticLibs/SOURCES/QtGameControllerModif/$$MODE/libQtGameControllerModif.a
 win32-g++:LIBS += ../StaticLibs/SOURCES/VirtualJoysticks/$$MODE/libvirtualJoysticks.a
 win32-g++:LIBS += ../StaticLibs/SOURCES/UjpsCore/$$MODE/libujpsCore.a
 win32-g++:LIBS += ../vJoy218SDK-291116/SDK/lib/vJoyInterface.lib
 
+win32-msvc*:LIBS += ../StaticLibs/SOURCES/Settings/$$MODE/settings.lib
 win32-msvc*:LIBS += ../StaticLibs/SOURCES/QtGameControllerModif/$$MODE/QtGameControllerModif.lib
 win32-msvc*:LIBS += ../StaticLibs/SOURCES/VirtualJoysticks/$$MODE/virtualJoysticks.lib
 win32-msvc*:LIBS += ../StaticLibs/SOURCES/UjpsCore/$$MODE/ujpsCore.lib
 win32-msvc*:LIBS += ../vJoy218SDK-291116/SDK/lib/amd64/vJoyInterface.lib
 
 
-INCLUDEPATH +=  ../StaticLibs/INCLUDES/QtGameControllerModif/ \
+INCLUDEPATH +=  ../StaticLibs/INCLUDES/Settings/ \
+				../StaticLibs/INCLUDES/QtGameControllerModif/ \
 				../StaticLibs/INCLUDES/Other/ \
 				../StaticLibs/INCLUDES/VirtualJoysticks/ \
 				../StaticLibs/INCLUDES/RealJoysticks/ \
@@ -42,36 +45,22 @@ HEADERS +=  CODE/ProfileEngine.h \
 			CODE/COMPILER/QtCompiler.h \
 			CODE/COMPILER/QtCompilationProcess.h \
 			CODE/COMPILER/CompilationWidget.h \
-			CODE/SETTINGS/ApplicationSettings.h \
-			CODE/SETTINGS/AbstractSettingsWidget.h \
-			CODE/SETTINGS/SettingsDialog.h \
-			CODE/SETTINGS/MyFileDialog.h \
 			CODE/SETTINGS/GeneralSettingsWidget.h \
 			CODE/SETTINGS/VJoySettingsWidget.h \
-			CODE/SETTINGS/VigemSettingsWidget.h \
-			CODE/XML/AbstractXmlInfo.h \
-			CODE/XML/XmlValidationMessageHandler.h \
-			CODE/XML/GenericPropertiesInfo.h
+			CODE/SETTINGS/VigemSettingsWidget.h
 			
 			
 SOURCES +=  CODE/main.cpp \
 			CODE/VigemPidWhiteLister.cpp \
 			CODE/ProfileEngine.cpp \
-			CODE/otherFunctions.cpp \
 			CODE/HMI/MainWindow.cpp \
 			CODE/HMI/TextEdit.cpp \
 			CODE/COMPILER/QtCompiler.cpp \
 			CODE/COMPILER/QtCompilationProcess.cpp \
 			CODE/COMPILER/CompilationWidget.cpp \
-			CODE/SETTINGS/ApplicationSettings.cpp \
-			CODE/SETTINGS/SettingsDialog.cpp \
-			CODE/SETTINGS/MyFileDialog.cpp \
 			CODE/SETTINGS/GeneralSettingsWidget.cpp \
 			CODE/SETTINGS/VJoySettingsWidget.cpp \
-			CODE/SETTINGS/VigemSettingsWidget.cpp \
-			CODE/XML/AbstractXmlInfo.cpp \
-			CODE/XML/XmlValidationMessageHandler.cpp \
-			CODE/XML/GenericPropertiesInfo.cpp
+			CODE/SETTINGS/VigemSettingsWidget.cpp
 
 
 RESOURCES += resources.qrc

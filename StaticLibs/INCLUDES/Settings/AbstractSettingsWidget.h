@@ -1,6 +1,7 @@
 #ifndef ABSTRACT_SETTINGS_WIDGET
 #define ABSTRACT_SETTINGS_WIDGET
 
+
 #include <QWidget>
 
 
