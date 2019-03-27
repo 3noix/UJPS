@@ -1,4 +1,4 @@
-#include "VigemPidWhiteLister.h"
+#include "VigemPidWhiteListerConsole.h"
 
 #include <QProcess>
 #include <QNetworkRequest>
@@ -24,7 +24,7 @@
 
 
 // CONSTRUCTEUR ///////////////////////////////////////////////////////////////
-VigemPidWhiteLister::VigemPidWhiteLister(const QString &devconDirPath)
+VigemPidWhiteListerConsole::VigemPidWhiteListerConsole(const QString &devconDirPath)
 {
 	m_devconExePath = devconDirPath + "/devcon.exe";
 	m_urlToWhiteList = "http://localhost:26762/api/v1/hidguardian/whitelist/add/";
@@ -32,21 +32,21 @@ VigemPidWhiteLister::VigemPidWhiteLister(const QString &devconDirPath)
 }
 
 // WHITE LIST /////////////////////////////////////////////////////////////////
-bool VigemPidWhiteLister::whiteList(qint16 pid)
+bool VigemPidWhiteListerConsole::whiteList(qint16 pid)
 {
 	QString urlStr = m_urlToWhiteList + QString::number(pid);
 	return this->sendRequest(urlStr);
 }
 
 // BLACK LIST /////////////////////////////////////////////////////////////////
-bool VigemPidWhiteLister::blackList(qint16 pid)
+bool VigemPidWhiteListerConsole::blackList(qint16 pid)
 {
 	QString urlStr = m_urlToBlackList + QString::number(pid);
 	return this->sendRequest(urlStr);
 }
 
 // SEND REQUEST ///////////////////////////////////////////////////////////////////
-bool VigemPidWhiteLister::sendRequest(const QUrl &url)
+bool VigemPidWhiteListerConsole::sendRequest(const QUrl &url)
 {
 	QEventLoop localEventsLoop;
 	QNetworkReply *reply = m_qnam.get(QNetworkRequest{url});
@@ -86,7 +86,7 @@ bool VigemPidWhiteLister::sendRequest(const QUrl &url)
 
 
 // VIGEM IS READY /////////////////////////////////////////////////////////////
-bool VigemPidWhiteLister::vigemIsReady() const
+bool VigemPidWhiteListerConsole::vigemIsReady() const
 {
 	bool b1 = this->isHidGuardianInstalled();
 	bool b2 = this->isHidCerberusInstalled();
@@ -95,7 +95,7 @@ bool VigemPidWhiteLister::vigemIsReady() const
 }
 
 // IS HID GUARDIAN INSTALLED //////////////////////////////////////////////////
-bool VigemPidWhiteLister::isHidGuardianInstalled() const
+bool VigemPidWhiteListerConsole::isHidGuardianInstalled() const
 {
 	QProcess process;
 	process.start(m_devconExePath,{"Status","Root\\HidGuardian"});
@@ -110,7 +110,7 @@ bool VigemPidWhiteLister::isHidGuardianInstalled() const
 }
 
 // IS HID CERBERUS INSTALLED //////////////////////////////////////////////////
-bool VigemPidWhiteLister::isHidCerberusInstalled() const
+bool VigemPidWhiteListerConsole::isHidCerberusInstalled() const
 {
 	QProcess process;
 	process.start("cmd.exe",{"/c","sc","query","Hidcerberus.Srv"});
@@ -125,7 +125,7 @@ bool VigemPidWhiteLister::isHidCerberusInstalled() const
 }
 
 // IS HID CERBERUS RUNNING ////////////////////////////////////////////////////
-bool VigemPidWhiteLister::isHidCerberusRunning() const
+bool VigemPidWhiteListerConsole::isHidCerberusRunning() const
 {
 	QProcess process;
 	process.start("cmd.exe",{"/c","sc","query","Hidcerberus.Srv"});

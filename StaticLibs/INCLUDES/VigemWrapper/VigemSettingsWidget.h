@@ -3,7 +3,7 @@
 
 
 #include "AbstractSettingsWidget.h"
-#include "../VigemPidWhiteLister.h"
+#include "VigemPidWhiteLister.h"
 class QVBoxLayout;
 class QHBoxLayout;
 class QLabel;

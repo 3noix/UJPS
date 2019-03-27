@@ -19,6 +19,12 @@ call build_Settings_fct.bat
 cd ../../..
 
 
+REM compilation of static lib VigemWrapper
+cd StaticLibs/SOURCES/VigemWrapper
+call build_VigemWrapper_fct.bat
+cd ../../..
+
+
 REM compilation of static lib QtGameControllerModif
 cd StaticLibs/SOURCES/QtGameControllerModif
 call build_QtGameControllerModif_fct.bat

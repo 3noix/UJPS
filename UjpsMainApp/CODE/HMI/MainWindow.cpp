@@ -21,12 +21,12 @@
 #include "VirtualJoystick.h"
 #include "otherFunctions.h"
 #include "../COMPILER/CompilationWidget.h"
-#include "../SETTINGS/SettingsDialog.h"
-#include "../SETTINGS/MyFileDialog.h"
-#include "../SETTINGS/ApplicationSettings.h"
+#include "SettingsDialog.h"
+#include "MyFileDialog.h"
+#include "ApplicationSettings.h"
 #include "../SETTINGS/GeneralSettingsWidget.h"
 #include "../SETTINGS/VJoySettingsWidget.h"
-#include "../SETTINGS/VigemSettingsWidget.h"
+#include "VigemSettingsWidget.h"
 
 
 ///////////////////////////////////////////////////////////////////////////////
