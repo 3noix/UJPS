@@ -6,6 +6,10 @@
 #include "WIDGETS/StandardJoystickWidget.h"
 #include "WIDGETS/StandardJoystickWidgetRaw.h"
 
+#include "ApplicationSettings.h"
+#include "SettingsDialog.h"
+#include "VigemSettingsWidget.h"
+
 
 ///////////////////////////////////////////////////////////////////////////////
 //  CONSTRUCTEUR ET DESTRUCTEUR
@@ -18,6 +22,7 @@
 //  SET DATA
 //
 //  SLOT QUIT
+//  SLOT SETTINGS
 //  SLOT UPDATE
 //  SLOT MODE CHANGED
 //  START UPDATE
@@ -28,6 +33,12 @@
 // CONSTRUCTEUR ET DESTRUCTEUR ////////////////////////////////////////////////
 MainWindow::MainWindow(QWidget *parent) : QMainWindow{parent}
 {
+	// read settings
+	ApplicationSettings& settings = ApplicationSettings::instance();
+	settings.readFile();
+	bool bWhiteList = settings.property("bWhiteListPid").toBool();
+	
+	// widgets
 	this->createActions();
 	this->createMenus();
 	this->setupWidget();
@@ -35,17 +46,29 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow{parent}
 	m_thread = new GameControllersEnumThread{this};
 	m_index = 2;
 	
-	QObject::connect(boxMode,      SIGNAL(currentIndexChanged(int)), this, SLOT(slotModeChanged(int)));
-	QObject::connect(actionUpdate, &QAction::triggered,              this, &MainWindow::slotUpdate);
-	QObject::connect(m_thread,     &QThread::finished,               this, &MainWindow::slotEndUpdate);
-	QObject::connect(actionQuit,   &QAction::triggered,              this, &MainWindow::slotQuit);
+	// connections
+	QObject::connect(boxMode,        SIGNAL(currentIndexChanged(int)), this, SLOT(slotModeChanged(int)));
+	QObject::connect(actionSettings, &QAction::triggered,              this, &MainWindow::slotSettings);
+	QObject::connect(actionUpdate,   &QAction::triggered,              this, &MainWindow::slotUpdate);
+	QObject::connect(m_thread,       &QThread::finished,               this, &MainWindow::slotEndUpdate);
+	QObject::connect(actionQuit,     &QAction::triggered,              this, &MainWindow::slotQuit);
 	
+	// ViGEm white-listing
+	if (bWhiteList && m_vigemInterface.vigemIsReady())
+		m_vigemInterface.whiteList(QCoreApplication::applicationPid());
+	
+	// fetch joysticks info
 	this->slotModeChanged(2);
 }
 
 MainWindow::~MainWindow()
 {
 	delete layoutUp;
+	
+	// remove this application from the white list
+	// (to avoid to pollute the white list with many invalid pids)
+	if (m_vigemInterface.vigemIsReady())
+		m_vigemInterface.blackList(QCoreApplication::applicationPid());
 }
 
 
@@ -56,6 +79,10 @@ MainWindow::~MainWindow()
 // CREATE ACTIONS /////////////////////////////////////////////////////////////
 void MainWindow::createActions()
 {
+	actionSettings = new QAction{"Settings",this};
+	actionSettings->setStatusTip("Application settings");
+	actionSettings->setIcon(QIcon{":/RESOURCES/ICONES/outils.png"});
+	
 	actionUpdate = new QAction{"Update controllers list",this};
 	actionUpdate->setStatusTip("Update controllers list");
 	actionUpdate->setShortcut(QKeySequence{"F5"});
@@ -73,6 +100,7 @@ void MainWindow::createActions()
 void MainWindow::createMenus()
 {
 	fileMenu = this->menuBar()->addMenu("File");
+	fileMenu->addAction(actionSettings);
 	fileMenu->addAction(actionUpdate);
 	fileMenu->addSeparator();
 	fileMenu->addAction(actionQuit);
@@ -211,6 +239,16 @@ void MainWindow::slotQuit()
 	qApp->quit();
 }
 
+// SLOT SETTINGS //////////////////////////////////////////////////////////////
+void MainWindow::slotSettings()
+{
+	SettingsDialog settingsDialog{this};
+	settingsDialog.addSettingsWidget(new VigemSettingsWidget{&settingsDialog});
+	
+	int result = settingsDialog.exec();
+	if (result == QDialog::Rejected) {return;}
+}
+
 // SLOT UPDATE ////////////////////////////////////////////////////////////////
 void MainWindow::slotUpdate()
 {
@@ -225,6 +263,7 @@ void MainWindow::slotModeChanged(int index)
 	// widgets
 	this->clearTabs();
 	boxMode->setEnabled(false);
+	actionSettings->setEnabled(false);
 	actionUpdate->setEnabled(false);
 	actionQuit->setEnabled(false);
 	stack->setCurrentWidget(widgetLoading);
@@ -252,6 +291,7 @@ void MainWindow::slotEndUpdate()
 	// widgets
 	movieGif->stop();
 	stack->setCurrentWidget(tabs);
+	actionSettings->setEnabled(true);
 	actionUpdate->setEnabled(true);
 	actionQuit->setEnabled(true);
 	boxMode->setEnabled(true);

@@ -3,6 +3,7 @@
 
 
 #include <QtWidgets>
+#include "VigemPidWhiteLister.h"
 class GameControllersEnumThread;
 class GameController;
 class AbstractRealJoystick;
@@ -23,6 +24,7 @@ class MainWindow : public QMainWindow
 		
 	private slots:
 		void slotModeChanged(int index);
+		void slotSettings();
 		void slotUpdate();
 		void slotEndUpdate();
 		void slotQuit();
@@ -37,7 +39,7 @@ class MainWindow : public QMainWindow
 		void setupWidget();
 		void clearTabs();
 		
-		QAction *actionUpdate, *actionQuit;
+		QAction *actionSettings, *actionUpdate, *actionQuit;
 		QMenu *fileMenu;
 		
 		QWidget *mainWidget;
@@ -57,6 +59,8 @@ class MainWindow : public QMainWindow
 		
 		GameControllersEnumThread *m_thread;
 		int m_index;
+		
+		VigemPidWhiteLister m_vigemInterface;
 };
 
 

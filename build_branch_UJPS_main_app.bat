@@ -22,7 +22,6 @@ cd ..
 REM copy network dll for AxesCurves and Monitoring
 REM (necessary because RemoteJoystickServer is in RealJoysticks.dll)
 copy /Y UjpsMainApp\release\Qt5Network.dll AxesCurves\release
-copy /Y UjpsMainApp\release\Qt5Network.dll Monitoring\release
 
 
 REM create shortcut to UJPS main app
