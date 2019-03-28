@@ -12,14 +12,21 @@ CONFIG += c++11
 DESTDIR = $$MODE
 OBJECTS_DIR = $$DESTDIR/objects
 MOC_DIR = $$DESTDIR/moc
-QT += core gui widgets
+QT += core gui widgets charts xmlpatterns network
 
 
+win32-g++:LIBS += ../StaticLibs/SOURCES/Settings/$$MODE/libsettings.a
+win32-g++:LIBS += ../StaticLibs/SOURCES/VigemWrapper/$$MODE/libvigemWrapper.a
 win32-g++:LIBS += ../StaticLibs/SOURCES/QtGameControllerModif/$$MODE/libQtGameControllerModif.a
+
+win32-msvc*:LIBS += ../StaticLibs/SOURCES/Settings/$$MODE/settings.lib
+win32-msvc*:LIBS += ../StaticLibs/SOURCES/VigemWrapper/$$MODE/vigemWrapper.lib
 win32-msvc*:LIBS += ../StaticLibs/SOURCES/QtGameControllerModif/$$MODE/QtGameControllerModif.lib
 
 		
-INCLUDEPATH +=  ../StaticLibs/INCLUDES/QtGameControllerModif/
+INCLUDEPATH +=  ../StaticLibs/INCLUDES/Settings/ \
+				../StaticLibs/INCLUDES/VigemWrapper/ \
+				../StaticLibs/INCLUDES/QtGameControllerModif/
 
 
 HEADERS +=  CODE/MainWindow.h

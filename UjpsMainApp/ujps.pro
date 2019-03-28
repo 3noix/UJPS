@@ -12,7 +12,7 @@ CONFIG += c++11
 DESTDIR = $$MODE
 OBJECTS_DIR = $$DESTDIR/objects
 MOC_DIR = $$DESTDIR/moc
-QT = core xmlpatterns gui widgets
+QT = core gui widgets xmlpatterns network
 DEFINES -= QT_NO_DEBUG
 
 

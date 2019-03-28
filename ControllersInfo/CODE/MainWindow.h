@@ -3,6 +3,7 @@
 
 
 #include <QtWidgets>
+#include "VigemPidWhiteLister.h"
 class GameControllersEnumThread;
 class GameController;
 
@@ -17,10 +18,11 @@ class MainWindow : public QMainWindow
 		MainWindow(MainWindow &&other) = delete;
 		MainWindow& operator=(const MainWindow &other) = delete;
 		MainWindow& operator=(MainWindow &&other) = delete;
-		virtual ~MainWindow() = default;
+		virtual ~MainWindow();
 		
 		
 	private slots:
+		void slotSettings();
 		void slotStartUpdate();
 		void slotEndUpdate();
 		void slotQuit();
@@ -36,7 +38,7 @@ class MainWindow : public QMainWindow
 		void createHeaders();
 		void clearLayout();
 		
-		QAction *actionUpdate, *actionQuit;
+		QAction *actionSettings, *actionUpdate, *actionQuit;
 		QMenu *fileMenu;
 		
 		QStackedWidget *stack;
@@ -47,6 +49,8 @@ class MainWindow : public QMainWindow
 		QMovie *movieGif;
 		
 		GameControllersEnumThread *m_thread;
+		
+		VigemPidWhiteLister m_vigemInterface;
 };
 
 
