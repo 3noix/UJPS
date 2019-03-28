@@ -19,11 +19,6 @@ call build_UJPS_main_app_fct.bat
 cd ..
 
 
-REM copy network dll for AxesCurves and Monitoring
-REM (necessary because RemoteJoystickServer is in RealJoysticks.dll)
-copy /Y UjpsMainApp\release\Qt5Network.dll AxesCurves\release
-
-
 REM create shortcut to UJPS main app
 set SCRIPT="%~dp0\createShorcuts.vbs"
 echo Set oWS = WScript.CreateObject("WScript.Shell") >> %SCRIPT%

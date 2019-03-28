@@ -5,6 +5,7 @@
 #include <QMainWindow>
 #include <QCloseEvent>
 #include "RealJoysticksManager.h"
+#include "VigemPidWhiteLister.h"
 class QGridLayout;
 class QVBoxLayout;
 class QHBoxLayout;
@@ -34,10 +35,11 @@ class MainWindow : public QMainWindow
 		MainWindow(MainWindow &&other) = delete;
 		MainWindow& operator=(const MainWindow &other) = delete;
 		MainWindow& operator=(MainWindow &&other) = delete;
-		virtual ~MainWindow() = default;
+		virtual ~MainWindow();
 		
 		
 	private slots:
+		void slotSettings();
 		void slotUpdate();
 		void slotEndUpdate();
 		void slotQuit();
@@ -60,7 +62,7 @@ class MainWindow : public QMainWindow
 		QStringList curvesNames() const;
 		AbstractAxisCurve* createCurve(const QString &curveName) const;
 		
-		QAction *actionUpdate, *actionQuit;
+		QAction *actionSettings, *actionUpdate, *actionQuit;
 		QMenu *fileMenu;
 		
 		QStackedWidget *stack;
@@ -85,6 +87,8 @@ class MainWindow : public QMainWindow
 		
 		AbstractAxisCurve *m_curve;
 		QWidget *m_settingsWidget;
+		
+		VigemPidWhiteLister m_vigemInterface;
 };
 
 

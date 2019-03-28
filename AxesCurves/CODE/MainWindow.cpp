@@ -25,9 +25,13 @@
 #include <QMenuBar>
 #include <QMovie>
 
+#include "ApplicationSettings.h"
+#include "SettingsDialog.h"
+#include "VigemSettingsWidget.h"
+
 
 ///////////////////////////////////////////////////////////////////////////////
-//  CONSTRUCTEUR
+//  CONSTRUCTEUR ET DESTRUCTEUR
 //  SETUP WIDGET
 //  CREATE ACTIONS
 //  CREATE MENUS
@@ -35,6 +39,7 @@
 //  CURVES NAMES
 //  CREATE CURVE
 //
+//  SLOT SETTINGS
 //  SLOT UPDATE
 //  SLOT END UPDATE
 //  SLOT QUIT
@@ -49,14 +54,20 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 
-// CONSTRUCTEUR ///////////////////////////////////////////////////////////////
+// CONSTRUCTEUR ET DESTRUCTEUR ////////////////////////////////////////////////
 MainWindow::MainWindow(QWidget *parent) : QMainWindow{parent}
 {
+	// read settings
+	ApplicationSettings& settings = ApplicationSettings::instance();
+	settings.readFile();
+	bool bWhiteList = settings.property("bWhiteListPid").toBool();
+	
 	m_currentJoystick = nullptr;
 	m_axis = 0;
 	m_settingsWidget = nullptr;
 	m_curve = nullptr;
 	
+	// widgets
 	this->setupWidget();
 	this->createActions();
 	this->createMenus();
@@ -65,15 +76,30 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow{parent}
 	m_thread = new GameControllersEnumThread{this};
 	m_jm.loadPlugins(QCoreApplication::applicationDirPath() + "/../../ControllersPlugins/PLUGINS/");
 	
-	QObject::connect(actionUpdate, &QAction::triggered, this, &MainWindow::slotUpdate);
-	QObject::connect(actionQuit,   &QAction::triggered, this, &MainWindow::slotQuit);
-	QObject::connect(m_thread,     &QThread::finished,  this, &MainWindow::slotEndUpdate);
+	// connections
+	QObject::connect(actionSettings, &QAction::triggered, this, &MainWindow::slotSettings);
+	QObject::connect(actionUpdate,   &QAction::triggered, this, &MainWindow::slotUpdate);
+	QObject::connect(actionQuit,     &QAction::triggered, this, &MainWindow::slotQuit);
+	QObject::connect(m_thread,       &QThread::finished,  this, &MainWindow::slotEndUpdate);
 	
 	m_timer = new QTimer{this};
 	m_timer->setInterval(15);
 	QObject::connect(m_timer, &QTimer::timeout, this, &MainWindow::slotRunOneLoop);
 	
+	// ViGEm white-listing
+	if (bWhiteList && m_vigemInterface.vigemIsReady())
+		m_vigemInterface.whiteList(QCoreApplication::applicationPid());
+	
+	// fetch joysticks info
 	this->slotUpdate();
+}
+
+MainWindow::~MainWindow()
+{
+	// remove this application from the white list
+	// (to avoid to pollute the white list with many invalid pids)
+	if (m_vigemInterface.vigemIsReady())
+		m_vigemInterface.blackList(QCoreApplication::applicationPid());
 }
 
 // SETUP WIDGET ///////////////////////////////////////////////////////////////
@@ -155,6 +181,10 @@ void MainWindow::setupWidget()
 // CREATE ACTIONS /////////////////////////////////////////////////////////////
 void MainWindow::createActions()
 {
+	actionSettings = new QAction{"Settings",this};
+	actionSettings->setStatusTip("Application settings");
+	actionSettings->setIcon(QIcon{":/RESOURCES/ICONES/outils.png"});
+	
 	actionUpdate = new QAction{"Update controllers list",this};
 	actionUpdate->setStatusTip("Update controllers list");
 	actionUpdate->setShortcut(QKeySequence{"F5"});
@@ -172,6 +202,7 @@ void MainWindow::createActions()
 void MainWindow::createMenus()
 {
 	fileMenu = this->menuBar()->addMenu("File");
+	fileMenu->addAction(actionSettings);
 	fileMenu->addAction(actionUpdate);
 	fileMenu->addSeparator();
 	fileMenu->addAction(actionQuit);
@@ -214,6 +245,16 @@ AbstractAxisCurve* MainWindow::createCurve(const QString &curveName) const
 
 
 
+// SLOT SETTINGS //////////////////////////////////////////////////////////////
+void MainWindow::slotSettings()
+{
+	SettingsDialog settingsDialog{this};
+	settingsDialog.addSettingsWidget(new VigemSettingsWidget{&settingsDialog});
+	
+	int result = settingsDialog.exec();
+	if (result == QDialog::Rejected) {return;}
+}
+
 // SLOT UPDATE ////////////////////////////////////////////////////////////////
 void MainWindow::slotUpdate()
 {
@@ -227,6 +268,7 @@ void MainWindow::slotUpdate()
 	QObject::disconnect(boxTrim2,     SIGNAL(valueChanged(double)),     this, SLOT(slotTrim2Changed(double)));
 	QObject::disconnect(boxCurve,     SIGNAL(currentIndexChanged(int)), this, SLOT(slotCurveChanged(int)));
 	
+	actionSettings->setEnabled(false);
 	actionUpdate->setEnabled(false);
 	actionQuit->setEnabled(false);
 	stack->setCurrentWidget(widgetLoading);
@@ -272,6 +314,7 @@ void MainWindow::slotEndUpdate()
 	
 	movieGif->stop();
 	stack->setCurrentWidget(mainWidget);
+	actionSettings->setEnabled(true);
 	actionUpdate->setEnabled(true);
 	actionQuit->setEnabled(true);
 	
