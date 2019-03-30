@@ -24,7 +24,7 @@ namespace VJOY = vJoyDevice;
 
 
 // CONSTRUCTEUR ET DESTRUCTEUR ////////////////////////////////////////////////
-Profile::Profile() : AbstractProfile{}
+Profile::Profile() : AbstractProfileTarget{}
 {
 	rjse = nullptr;
 	vj1  = nullptr;
@@ -44,7 +44,7 @@ Profile::~Profile()
 void Profile::stop()
 {
 	// UnmapAll, delete real and virtual joysticks
-	this->AbstractProfile::stop();
+	this->AbstractProfileTarget::stop();
 	
 	// it is a good idea to set them to nullptr
 	rjse = nullptr;

@@ -2,12 +2,12 @@
 #define PROFILE
 
 
-#include "AbstractProfile.h"
+#include "AbstractProfileTarget.h"
 class EnhancedJoystick;
 class AbstractAction;
 
 
-class Profile : public AbstractProfile
+class Profile : public AbstractProfileTarget
 {
 	Q_OBJECT
 	Q_PLUGIN_METADATA(IID "Profile")

@@ -41,7 +41,7 @@ namespace SC2 = StarCitizenControls_vJoy2;
 
 
 // CONSTRUCTEUR ET DESTRUCTEUR ////////////////////////////////////////////////
-Profile::Profile() : AbstractProfile{}
+Profile::Profile() : AbstractProfileTarget{}
 {
 	tmwj = nullptr;
 	tmwt = nullptr;
@@ -78,7 +78,7 @@ void Profile::stop()
 	}
 	
 	// UnmapAll, delete real and virtual joysticks
-	this->AbstractProfile::stop();
+	this->AbstractProfileTarget::stop();
 	
 	// it is a good idea to set them to nullptr
 	tmwj = nullptr;

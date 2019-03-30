@@ -29,10 +29,12 @@ INCLUDEPATH +=  ../../INCLUDES/Other/ \
 				../../INCLUDES/UjpsCore/
 
 
-HEADERS +=  ../../INCLUDES/UjpsCore/AbstractProfile.h
+HEADERS +=  ../../INCLUDES/UjpsCore/AbstractProfile.h \
+			../../INCLUDES/UjpsCore/AbstractProfileTarget.h
 
 
 SOURCES +=  CODE/AbstractProfile.cpp \
+			CODE/AbstractProfileTarget.cpp \
 			CODE/VirtualEventsQueue.cpp \
 			CODE/LAYERS/LayersCombo.cpp \
 			CODE/LAYERS/LayerCalculator.cpp \
