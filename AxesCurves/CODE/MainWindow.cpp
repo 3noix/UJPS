@@ -294,6 +294,7 @@ void MainWindow::slotUpdate()
 // SLOT END UPDATE ////////////////////////////////////////////////////////////
 void MainWindow::slotEndUpdate()
 {
+	// restore connections
 	QObject::connect(boxJoystick,  SIGNAL(currentIndexChanged(int)), this, SLOT(slotJoystickChanged(int)));
 	QObject::connect(boxAxis,      SIGNAL(currentIndexChanged(int)), this, SLOT(slotAxisChanged(int)));
 	QObject::connect(boxDirection, SIGNAL(currentIndexChanged(int)), this, SLOT(slotDirectionChanged(int)));
@@ -301,10 +302,29 @@ void MainWindow::slotEndUpdate()
 	QObject::connect(boxTrim2,     SIGNAL(valueChanged(double)),     this, SLOT(slotTrim2Changed(double)));
 	QObject::connect(boxCurve,     SIGNAL(currentIndexChanged(int)), this, SLOT(slotCurveChanged(int)));
 	
+	// get list of joysticks hidden by ViGEm
+	bool bVigem = m_vigemInterface.vigemIsReady();
+	QStringList affectedDevices;
+	if (bVigem)
+	{
+		affectedDevices = m_vigemInterface.affectedDevices();
+		for (QString &str : affectedDevices) {str.remove("HID\\");}
+	}
+	
+	// build joysticks items
 	QVector<GameController*> gcv = m_thread->releaseGameControllers();
 	m_jm.fromGameControllers(gcv);
-	boxJoystick->addItems(m_jm.joysticksNames());
+	QStringList joysticksNames = m_jm.joysticksNames();
+	int i = 0;
+	for (QString &joystickName : joysticksNames)
+	{
+		if (affectedDevices.contains(m_jm.joystick(i)->hardwareId()))
+		{joystickName += " (hidden)";}
+	++i;
+	}
+	boxJoystick->addItems(joysticksNames);
 	
+	// reenable widgets and actions
 	boxJoystick->setEnabled(true);
 	boxAxis->setEnabled(true);
 	boxDirection->setEnabled(true);

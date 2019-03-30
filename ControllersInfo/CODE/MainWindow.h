@@ -35,7 +35,7 @@ class MainWindow : public QMainWindow
 		void createMenus();
 		void setupWidget();
 		
-		void createHeaders();
+		void createHeaders(bool bVigemColumn);
 		void clearLayout();
 		
 		QAction *actionSettings, *actionUpdate, *actionQuit;

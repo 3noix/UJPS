@@ -122,13 +122,13 @@ void MainWindow::setupWidget()
 	stack->setCurrentWidget(gridWidget);
 	
 	this->setCentralWidget(stack);
-	this->resize(600,250);
+	this->resize(700,250);
 	this->setWindowIcon(QIcon{":/RESOURCES/ICONES/info.png"});
 	this->setWindowTitle("Controllers info");
 }
 
 // CREATE HEADERS /////////////////////////////////////////////////////////////
-void MainWindow::createHeaders()
+void MainWindow::createHeaders(bool bVigemColumn)
 {
 	QLabel *labelDescription = new QLabel{"Description",this};
 	QLabel *labelId          = new QLabel{"ID",this};
@@ -150,6 +150,13 @@ void MainWindow::createHeaders()
 	layout->addWidget(labelAxes,0,3,1,1);
 	layout->addWidget(labelPovs,0,4,1,1);
 	layout->addWidget(labelHardwareId,0,5,1,1);
+	
+	if (bVigemColumn)
+	{
+		QLabel *labelHidden = new QLabel{"Hidden by ViGEm",this};
+		labelHidden->setAlignment(Qt::AlignCenter);
+		layout->addWidget(labelHidden,0,6,1,1);
+	}
 }
 
 // CLEAR LAYOUT ///////////////////////////////////////////////////////////////
@@ -163,9 +170,23 @@ void MainWindow::clearLayout()
 void MainWindow::setData(const QVector<GameController*> joysticks)
 {
 	this->clearLayout();
-	this->createHeaders();
-	int iLine = 1;
 	
+	// get list of joysticks hidden by ViGEm
+	bool bVigem = m_vigemInterface.vigemIsReady();
+	QStringList affectedDevices;
+	if (bVigem)
+	{
+		affectedDevices = m_vigemInterface.affectedDevices();
+		for (QString &str : affectedDevices) {str.remove("HID\\");}
+	}
+	
+	// an additional column only if we white-list this app
+	ApplicationSettings& settings = ApplicationSettings::instance();
+	bool bVigemColumn = settings.property("bWhiteListPid").toBool();
+	
+	// populate the grid
+	this->createHeaders(bVigemColumn);
+	int iLine = 1;
 	for (GameController *gc : joysticks)
 	{
 		uint id = gc->id();
@@ -193,6 +214,14 @@ void MainWindow::setData(const QVector<GameController*> joysticks)
 		layout->addWidget(item3,iLine,3,1,1);
 		layout->addWidget(item4,iLine,4,1,1);
 		layout->addWidget(item5,iLine,5,1,1);
+		
+		if (bVigemColumn)
+		{
+			QString hiddenOrNot = affectedDevices.contains(gc->hardwareId()) ? "Yes" : "No";
+			QLabel *item6 = new QLabel{hiddenOrNot,this};
+			item6->setAlignment(Qt::AlignCenter);
+			layout->addWidget(item6,iLine,6,1,1);
+		}
 		
 		++iLine;
 	}

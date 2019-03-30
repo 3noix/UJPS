@@ -186,6 +186,15 @@ void MainWindow::setData(const QVector<GameController*> joysticks)
 	}
 	else
 	{
+		// get list of joysticks hidden by ViGEm
+		bool bVigem = m_vigemInterface.vigemIsReady();
+		QStringList affectedDevices;
+		if (bVigem)
+		{
+			affectedDevices = m_vigemInterface.affectedDevices();
+			for (QString &str : affectedDevices) {str.remove("HID\\");}
+		}
+		
 		// add a tab for each controller
 		for (GameController *j : joysticks)
 		{
@@ -195,7 +204,10 @@ void MainWindow::setData(const QVector<GameController*> joysticks)
 			temp->setLayout(layout);
 			layout->addWidget(w);
 			layout->addStretch();
-			int index = tabs->addTab(temp,j->description());
+			
+			QString desc = j->description();
+			if (bVigem && affectedDevices.contains(j->hardwareId())) {desc += " (hidden)";}
+			int index = tabs->addTab(temp,desc);
 			tabs->setTabToolTip(index,j->hardwareId());
 		}
 		stack->setCurrentWidget(tabs);
@@ -211,6 +223,15 @@ void MainWindow::setData(const QVector<AbstractRealJoystick*> joysticks)
 	}
 	else
 	{
+		// get list of joysticks hidden by ViGEm
+		bool bVigem = m_vigemInterface.vigemIsReady();
+		QStringList affectedDevices;
+		if (bVigem)
+		{
+			affectedDevices = m_vigemInterface.affectedDevices();
+			for (QString &str : affectedDevices) {str.remove("HID\\");}
+		}
+		
 		// add a tab for each controller
 		for (AbstractRealJoystick *j : joysticks)
 		{
@@ -220,7 +241,10 @@ void MainWindow::setData(const QVector<AbstractRealJoystick*> joysticks)
 			temp->setLayout(layout);
 			layout->addWidget(w);
 			layout->addStretch();
-			int index = tabs->addTab(temp,j->description());
+			
+			QString desc = j->description();
+			if (bVigem && affectedDevices.contains(j->hardwareId())) {desc += " (hidden)";}
+			int index = tabs->addTab(temp,desc);
 			tabs->setTabToolTip(index,j->hardwareId());
 		}
 		stack->setCurrentWidget(tabs);
