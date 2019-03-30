@@ -17,16 +17,17 @@ class VigemPidWhiteListerConsole
 		VigemPidWhiteListerConsole& operator=(VigemPidWhiteListerConsole &&s) = delete;
 		~VigemPidWhiteListerConsole() = default;
 		
-		// white or black listing pid
+		// ViGEm commands
 		bool whiteList(qint16 pid);
 		bool blackList(qint16 pid);
+		QStringList affectedDevices();
 		
 		// check ViGEm status
 		bool vigemIsReady() const;
 		
 		
 	private:
-		bool sendRequest(const QUrl &url);
+		QString sendRequest(const QUrl &url);
 		
 		bool isHidGuardianInstalled() const;
 		bool isHidCerberusInstalled() const;

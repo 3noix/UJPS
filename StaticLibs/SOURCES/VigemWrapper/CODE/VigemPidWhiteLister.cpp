@@ -14,6 +14,7 @@
 //  CONSTRUCTEUR
 //  WHITE LIST
 //  BLACK LIST
+//  AFFECTED DEVICES
 //  SEND REQUEST
 //
 //  VIGEM IS READY
@@ -35,18 +36,30 @@ VigemPidWhiteLister::VigemPidWhiteLister(const QString &devconDirPath)
 bool VigemPidWhiteLister::whiteList(qint16 pid)
 {
 	QString urlStr = m_urlToWhiteList + QString::number(pid);
-	return this->sendRequest(urlStr);
+	return (this->sendRequest(urlStr) == "[\"OK\"]");
 }
 
 // BLACK LIST /////////////////////////////////////////////////////////////////
 bool VigemPidWhiteLister::blackList(qint16 pid)
 {
 	QString urlStr = m_urlToBlackList + QString::number(pid);
-	return this->sendRequest(urlStr);
+	return (this->sendRequest(urlStr) == "[\"OK\"]");
 }
 
-// SEND REQUEST ///////////////////////////////////////////////////////////////////
-bool VigemPidWhiteLister::sendRequest(const QUrl &url)
+// AFFECTED DEVICES ///////////////////////////////////////////////////////////
+QStringList VigemPidWhiteLister::affectedDevices()
+{
+	QString urlStr = "http://localhost:26762/api/v1/hidguardian/affected/get";
+	QString data = this->sendRequest(urlStr);
+	data.remove('[');
+	data.remove(']');
+	data.remove('\"');
+	data.replace("\\\\","\\");
+	return data.split(',',QString::SkipEmptyParts);
+}
+
+// SEND REQUEST ///////////////////////////////////////////////////////////////
+QString VigemPidWhiteLister::sendRequest(const QUrl &url)
 {
 	QEventLoop localEventsLoop;
 	QNetworkReply *reply = m_qnam.get(QNetworkRequest{url});
@@ -59,7 +72,8 @@ bool VigemPidWhiteLister::sendRequest(const QUrl &url)
 	if (reply->error() != QNetworkReply::NoError && reply->errorString() != errorMessageToIgnore)
 	{
 		QMessageBox::critical(nullptr, "ViGEm error", reply->errorString(), QMessageBox::Ok);
-		return false;
+		reply->deleteLater();
+		return {};
 	}
 	
 	// Get the http status code
@@ -68,16 +82,18 @@ bool VigemPidWhiteLister::sendRequest(const QUrl &url)
 	{
 		QString replyText = reply->readAll();
 		reply->deleteLater();
-		return (replyText == "[\"OK\"]");
+		return replyText;
 	}
 	else if (v >= 300 && v < 400) // redirection
 	{
 		QUrl newUrl = reply->attribute(QNetworkRequest::RedirectionTargetAttribute).toUrl();
 		newUrl = reply->url().resolved(newUrl); // because the redirection url can be relative, we have to use the previous one to resolve it
+		reply->deleteLater();
 		return this->sendRequest(newUrl);
 	}
 	
-	return false;
+	reply->deleteLater();
+	return {};
 }
 
 
