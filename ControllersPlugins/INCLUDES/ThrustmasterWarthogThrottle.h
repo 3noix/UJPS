@@ -40,7 +40,7 @@ namespace ThrustmasterWarthogThrottle_
 	const uint EACON    = 23;
 	const uint RDRNRM   = 24;	// radio altimeter norm
 	const uint APENG    = 25;	// engage autopilot
-	const uint APATT    = 26;	// autopilot path
+	const uint APPAT    = 26;	// autopilot path
 	const uint APALT    = 27;	// autopilot ALT
 	const uint IDLERON  = 28;	// idle right engine
 	const uint IDLELON  = 29;	// idle left engine

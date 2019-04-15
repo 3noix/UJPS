@@ -163,11 +163,11 @@ void Profile::runFirstStep()
 	// initialisation of control modes
 	if (tmwt->buttonPressed(TMWT::APALT))      {this->setControlsGround();}
 	else if (tmwt->buttonPressed(TMWT::APAH))  {this->setControlsFlightLanding();}
-	else if (tmwt->buttonPressed(TMWT::APATT)) {this->setControlsFlightCruise();}
+	else if (tmwt->buttonPressed(TMWT::APPAT)) {this->setControlsFlightCruise();}
 	// set transitions between control modes
 	Map(tmwt, ControlType::Button, TMWT::APALT, AllLayers, new TriggerButtonPress{}, new ActionCallback{[this](){this->setControlsGround();}});
 	Map(tmwt, ControlType::Button, TMWT::APAH,  AllLayers, new TriggerButtonPress{}, new ActionCallback{[this](){this->setControlsFlightLanding();}});
-	Map(tmwt, ControlType::Button, TMWT::APATT, AllLayers, new TriggerButtonPress{}, new ActionCallback{[this](){this->setControlsFlightCruise();}});
+	Map(tmwt, ControlType::Button, TMWT::APPAT, AllLayers, new TriggerButtonPress{}, new ActionCallback{[this](){this->setControlsFlightCruise();}});
 	
 	// throttle slider for power in relative (no axis provided for absolute power)
 	tmwt->setCurve(TMWT::THR_FC, new CurveExpCentered{2.0f, 2.0f, 2.0f, 0, 0});
