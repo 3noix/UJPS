@@ -4,6 +4,8 @@
 const uint NB_JOYSTICKS_MAX_DIRECTINPUT = 16;
 const uint NB_JOYSTICKS_MAX_XINPUT = 4;
 
+const bool bUseXInput = true;
+
 
 ///////////////////////////////////////////////////////////////////////////////
 // RESUME
@@ -27,7 +29,7 @@ QVector<GameController*> GameController::enumerateControllers(QObject *parent)
 	for (uint i=0; i<NB_JOYSTICKS_MAX_DIRECTINPUT; ++i)
 	{
 		GameController *j = new GameControllerDirectInput{i,parent};
-		if (j->isValid() && j->description() != "Controller (XBOX 360 For Windows)")
+		if (j->isValid() && (!bUseXInput || j->description() != "Controller (XBOX 360 For Windows)"))
 		{
 			controllers << j;
 		}
@@ -35,14 +37,17 @@ QVector<GameController*> GameController::enumerateControllers(QObject *parent)
 	}
 	
 	// search for XInput controllers
-	for (uint i=0; i<NB_JOYSTICKS_MAX_XINPUT; ++i)
+	if (bUseXInput)
 	{
-		GameController *j = new GameControllerXInput{i,parent};
-		if (j->isValid())
+		for (uint i=0; i<NB_JOYSTICKS_MAX_XINPUT; ++i)
 		{
-			controllers << j;
+			GameController *j = new GameControllerXInput{i,parent};
+			if (j->isValid())
+			{
+				controllers << j;
+			}
+			else {delete j;}
 		}
-		else {delete j;}
 	}
 	
 	// the end
