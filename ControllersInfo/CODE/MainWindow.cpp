@@ -257,7 +257,7 @@ void MainWindow::slotStartUpdate()
 	movieGif->start();
 	
 	// search for DirectInput and XInput controllers
-	m_thread->enumerateControllers();
+	m_thread->enumerateControllersAllAtOnce();
 }
 
 // SLOT END UPDATE ////////////////////////////////////////////////////////////

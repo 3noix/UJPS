@@ -20,7 +20,12 @@ class GameControllersEnumThread : public QThread
 		GameControllersEnumThread& operator=(GameControllersEnumThread &&other) = delete;
 		virtual ~GameControllersEnumThread();
 		
-		void enumerateControllers();
+		// start / stop computation
+		void enumerateControllersAllAtOnce();
+		void enumerateControllersOneByOne();
+		void stop(); // has no effect with "enumerateControllersAllAtOnce"
+		
+		// retrieve results
 		QVector<GameController*> gameControllers();
 		QVector<GameController*> releaseGameControllers();
 		
@@ -31,6 +36,8 @@ class GameControllersEnumThread : public QThread
 		
 	private:
 		QMutex m_mutex;
+		bool m_bStop;
+		bool m_b1by1;
 		QVector<GameController*> m_joysticks;
 };
 

@@ -288,7 +288,7 @@ void MainWindow::slotUpdate()
 	m_settingsWidget = nullptr;
 	m_curve = nullptr;
 	
-	m_thread->enumerateControllers();
+	m_thread->enumerateControllersAllAtOnce();
 }
 
 // SLOT END UPDATE ////////////////////////////////////////////////////////////

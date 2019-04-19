@@ -294,7 +294,7 @@ void MainWindow::slotModeChanged(int index)
 	movieGif->start();
 	
 	// search for DirectInput and XInput controllers
-	m_thread->enumerateControllers();
+	m_thread->enumerateControllersAllAtOnce();
 	m_index = index;
 }
 
