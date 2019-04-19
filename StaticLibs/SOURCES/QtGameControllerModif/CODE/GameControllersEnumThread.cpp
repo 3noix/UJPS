@@ -1,4 +1,5 @@
 #include "GameControllersEnumThread.h"
+#include "GameControllerEnumerator.h"
 #include "GameController.h"
 #include <QMutexLocker>
 
@@ -61,6 +62,6 @@ QVector<GameController*> GameControllersEnumThread::releaseGameControllers()
 void GameControllersEnumThread::run()
 {
 	QMutexLocker locker{&m_mutex};
-	m_joysticks = GameController::enumerateControllers();
+	m_joysticks = GameControllerEnumerator::enumerateControllers();
 }
 

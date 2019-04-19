@@ -15,9 +15,7 @@ class GameController : public QObject
 	Q_OBJECT
 	
 	public:
-		static QVector<GameController*> enumerateControllers(QObject *parent = nullptr);
-		
-		explicit GameController(QObject *parent = nullptr);
+		explicit GameController(QObject *parent = nullptr) : QObject{parent} {};
 		GameController(const GameController &other) = delete;
 		GameController(GameController &&other) = delete;
 		GameController& operator=(const GameController &other) = delete;

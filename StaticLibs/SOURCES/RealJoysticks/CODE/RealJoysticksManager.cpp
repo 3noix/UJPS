@@ -1,6 +1,7 @@
 #include "RealJoysticksManager.h"
 #include "RealJoystick.h"
 #include "AbstractRealJoystickFactory.h"
+#include "GameControllerEnumerator.h"
 #include "GameController.h"
 
 #include <QPluginLoader>
@@ -73,7 +74,7 @@ void RealJoysticksManager::unloadPlugins()
 void RealJoysticksManager::searchForRealJoysticks()
 {
 	// search for DirectInput and XInput controllers
-	QVector<GameController*> joysticks = GameController::enumerateControllers();
+	QVector<GameController*> joysticks = GameControllerEnumerator::enumerateControllers();
 	
 	// upgrade them
 	this->fromGameControllers(joysticks);
