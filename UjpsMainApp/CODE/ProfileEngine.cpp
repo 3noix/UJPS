@@ -4,16 +4,21 @@
 #include <QTimer>
 #include <QPluginLoader>
 #include "AbstractProfile.h"
+#include "RealJoysticksManager.h"
+#include "GameControllersEnumThread.h"
 
 
 ///////////////////////////////////////////////////////////////////////////////
 //  CONSTRUCTEUR ET DESTRUCTEUR
+//  WAIT
 //
 //  LOAD PROFILE
+//  SLOT RESUME LOAD PROFILE
+//  STOP LOADING
 //  UNLOAD PROFILE
 //  IS LOADED
 //
-//  START
+//  PLAY
 //  STOP
 //  IS ACTIVE
 //
@@ -25,7 +30,10 @@
 ProfileEngine::ProfileEngine(bool bWhiteList, QObject *parent) : QObject{parent}
 {
 	m_timer = new QTimer{this};
+	m_thread = new GameControllersEnumThread{this};
+	
 	QObject::connect(m_timer, &QTimer::timeout, this, &ProfileEngine::slotOneLoop);
+	QObject::connect(m_thread, SIGNAL(done()), this, SLOT(slotResumeLoadProfile()));
 	
 	m_dllFileName = "";
 	m_profile = nullptr;
@@ -37,6 +45,7 @@ ProfileEngine::ProfileEngine(bool bWhiteList, QObject *parent) : QObject{parent}
 
 ProfileEngine::~ProfileEngine()
 {
+	m_thread->wait();
 	m_timer->stop();
 	this->unloadProfile();
 	
@@ -46,15 +55,27 @@ ProfileEngine::~ProfileEngine()
 		m_vigemInterface.blackList(QCoreApplication::applicationPid());
 }
 
+// WAIT ///////////////////////////////////////////////////////////////////////
+void ProfileEngine::wait()
+{
+	m_thread->wait();
+}
+
 
 
 
 
 
 // LOAD PROFILE ///////////////////////////////////////////////////////////////
-bool ProfileEngine::loadProfile(const QString &dllFilePath)
+void ProfileEngine::loadProfile(const QString &dllFilePath)
 {
-	if (m_loader) {return false;}
+	if (m_thread->isRunning()) {return;}
+	
+	if (m_loader)
+	{
+		emit loadDone(false);
+		return;
+	}
 	
 	emit message("Loading profile " + m_dllFileName,Qt::black);
 	m_loader = new QPluginLoader{dllFilePath};
@@ -65,19 +86,60 @@ bool ProfileEngine::loadProfile(const QString &dllFilePath)
 			m_dllFileName = shortName(dllFilePath);
 			m_profile = profile;
 			QObject::connect(m_profile, SIGNAL(message(QString,QColor)), this, SIGNAL(message(QString,QColor)));
-			return true;
+			
+			emit message("Enumerating controllers",Qt::black);
+			m_thread->enumerateControllersOneByOne();
+			return;
 		}
 	}
 	
-	emit message("Plugin loading failed",Qt::red);
+	emit message("Profile loading failed",Qt::red);
 	delete m_loader;
 	m_loader = nullptr;
-	return false;
+	emit loadDone(false);
+}
+
+// SLOT RESUME LOAD PROFILE ///////////////////////////////////////////////////
+void ProfileEngine::slotResumeLoadProfile()
+{
+	if (!m_profile) {return;} // we get here if thread was stopped at the last step
+	QVector<GameController*> gcv = m_thread->releaseGameControllers();
+	
+	RealJoysticksManager *rjm = new RealJoysticksManager{};
+	QString controllersPluginsDirPath = QCoreApplication::applicationDirPath() + "/../../ControllersPlugins/PLUGINS/";
+	rjm->loadPlugins(controllersPluginsDirPath);
+	rjm->fromGameControllers(gcv);
+	m_profile->setRealJoysticksManager(rjm); // ownership is transfered to the profile
+	
+	emit loadDone(true);
+}
+
+// STOP LOADING ///////////////////////////////////////////////////////////////
+void ProfileEngine::stopLoading()
+{
+	// maybe the thread just finished
+	if (!m_thread->isRunning())
+	{
+		this->stop();
+		return;
+	}
+	
+	m_thread->stop();
+	m_thread->wait();
+	
+	m_loader->unload(); // it deletes m_profile, but on Qt5.11 it does not unleash the dll
+	delete m_loader;
+	
+	emit message("Profile loading stopped",Qt::black);
+	m_dllFileName = "";
+	m_loader = nullptr;
+	m_profile = nullptr;
 }
 
 // UNLOAD PROFILE /////////////////////////////////////////////////////////////
 bool ProfileEngine::unloadProfile()
 {
+	if (m_thread->isRunning()) {return false;}
 	if (!m_loader) {return true;}
 	
 	this->stop();
@@ -94,7 +156,7 @@ bool ProfileEngine::unloadProfile()
 // IS LOADED //////////////////////////////////////////////////////////////////
 bool ProfileEngine::isLoaded() const
 {
-	return (m_loader != nullptr);
+	return (m_loader != nullptr && !m_thread->isRunning());
 }
 
 
@@ -102,9 +164,10 @@ bool ProfileEngine::isLoaded() const
 
 
 
-// START //////////////////////////////////////////////////////////////////////
-bool ProfileEngine::start(int dtms)
+// PLAY ///////////////////////////////////////////////////////////////////////
+bool ProfileEngine::play(int dtms)
 {
+	if (m_thread->isRunning()) {return false;}
 	if (!m_profile || m_timer->isActive()) {return false;}
 	
 	// initialize profile
@@ -135,6 +198,7 @@ bool ProfileEngine::start(int dtms)
 // STOP ////////////////////////////////////////////////////////////////////////
 void ProfileEngine::stop()
 {
+	if (m_thread->isRunning()) {return;}
 	if (!m_profile || !m_timer->isActive()) {return;}
 	
 	m_timer->stop();
@@ -145,7 +209,7 @@ void ProfileEngine::stop()
 // IS ACTIVE //////////////////////////////////////////////////////////////////
 bool ProfileEngine::isActive() const
 {
-	return m_timer->isActive();
+	return (m_timer->isActive() || m_thread->isRunning());
 }
 
 
@@ -156,6 +220,7 @@ bool ProfileEngine::isActive() const
 // SLOT ONE LOOP //////////////////////////////////////////////////////////////
 void ProfileEngine::slotOneLoop()
 {
+	if (m_thread->isRunning()) {return;}
 	if (!m_profile) {return;}
 	
 	try {m_profile->run();}

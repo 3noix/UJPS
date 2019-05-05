@@ -52,7 +52,8 @@ int main(int argc, char *argv[])
 		args.removeAll("-whitelist");
 	}
 	
-	if (argc == 2 || argc == 3) // to run profile from command line
+	int nbArgs = args.size();
+	if (nbArgs == 1 || nbArgs == 2) // to run profile from command line
 	{
 		// first argument: the profile dll
 		QString profileDllFilePath = QFileInfo{args[0]}.absoluteFilePath();
@@ -64,7 +65,7 @@ int main(int argc, char *argv[])
 		
 		// second optional argument, the time step (in milliseconds)
 		int dtms = 15;
-		if (argc == 3)
+		if (nbArgs == 2)
 		{
 			bool bok;
 			dtms = args[1].toInt(&bok);
@@ -78,8 +79,10 @@ int main(int argc, char *argv[])
 		ProfileEngine engine{bWhiteList};
 		MessagesDirector messenger;
 		messenger.startsListeningTo(&engine);
-		if (!engine.loadProfile(profileDllFilePath)) {return 1;}
-		if (!engine.start(dtms)) {return 1;} // only 15 ms time step for now
+		engine.loadProfile(profileDllFilePath);
+		engine.wait();
+		if (!engine.isLoaded()) {return 1;}
+		if (!engine.play(dtms)) {return 1;} // only 15 ms time step for now
 		return app.exec();
 	}
 	else

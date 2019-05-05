@@ -8,6 +8,7 @@
 class QTimer;
 class QPluginLoader;
 class AbstractProfile;
+class GameControllersEnumThread;
 
 
 class ProfileEngine : public QObject
@@ -22,21 +23,25 @@ class ProfileEngine : public QObject
 		ProfileEngine& operator=(ProfileEngine &&other) = delete;
 		virtual ~ProfileEngine();
 		
-		bool loadProfile(const QString &dllFilePath);
+		void loadProfile(const QString &dllFilePath);
+		void stopLoading();
 		bool unloadProfile();
 		bool isLoaded() const;
 		
-		bool start(int dtms);
+		bool play(int dtms);
 		void stop();
 		bool isActive() const;
+		void wait();
 		
 		
 	private slots:
+		void slotResumeLoadProfile();
 		void slotOneLoop();
 		
 		
 	signals:
 		void message(const QString &message, QColor color);
+		void loadDone(bool bLoadOk);
 		
 		
 	private:
@@ -44,6 +49,7 @@ class ProfileEngine : public QObject
 		QString m_dllFileName;
 		AbstractProfile *m_profile;
 		QPluginLoader *m_loader;
+		GameControllersEnumThread *m_thread;
 		
 		VigemPidWhiteLister m_vigemInterface;
 };

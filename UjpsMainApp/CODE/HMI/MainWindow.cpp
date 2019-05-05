@@ -43,7 +43,8 @@
 //  SLOT BROWSE BUTTON CLICKED
 //  SLOT SETTINGS
 //  SLOT COMPILATION
-//  SLOT PLAY
+//  SLOT PLAY 1
+//  SLOT PLAY 2
 //  SLOT STOP
 //  SLOT UNLOAD
 //
@@ -80,20 +81,22 @@ MainWindow::MainWindow(QString proFilePath, int dtms, bool bPlay, QWidget *paren
 	this->createMenus();
 	this->createToolBar();
 	this->setupWidget();
-	this->setState(HmiState::WaitingForDll);
+	this->setState(HmiState::NoProfileSelected);
 	
 	// connections
 	QObject::connect(actionSettings,          &QAction::triggered,     this,     &MainWindow::slotSettings);
 	QObject::connect(actionQuit,              &QAction::triggered,     qApp,     &QCoreApplication::quit);
 	QObject::connect(actionCompilation,       &QAction::triggered,     this,     &MainWindow::slotCompilation);
-	QObject::connect(actionPlay,              &QAction::triggered,     this,     &MainWindow::slotPlay);
+	QObject::connect(actionPlay,              &QAction::triggered,     this,     &MainWindow::slotPlay1);
 	QObject::connect(actionStop,              &QAction::triggered,     this,     &MainWindow::slotStop);
 	QObject::connect(actionUnload,            &QAction::triggered,     this,     &MainWindow::slotUnload);
 	QObject::connect(actionRunControllersInfo,&QAction::triggered,     this,     &MainWindow::slotRunControllersInfo);
 	QObject::connect(actionRunMonitoring,     &QAction::triggered,     this,     &MainWindow::slotRunMonitoring);
 	QObject::connect(actionRunAxesCurves,     &QAction::triggered,     this,     &MainWindow::slotRunAxesCurves);
-	QObject::connect(m_engine,                &ProfileEngine::message, textEdit, &TextEdit::addMessage);
 	QObject::connect(boutonBrowse,            &QPushButton::clicked,   this,     &MainWindow::slotBrowseButtonClicked);
+	
+	QObject::connect(m_engine, &ProfileEngine::message, textEdit, &TextEdit::addMessage);
+	QObject::connect(m_engine, SIGNAL(loadDone(bool)),  this,     SLOT(slotPlay2(bool)));
 	
 	// arguments supplémentaires et valeurs par défaut
 	if (bUseDefaultTimeStep) {boxRefreshRate->setValue(defaultTimeStep);}
@@ -109,7 +112,7 @@ MainWindow::MainWindow(QString proFilePath, int dtms, bool bPlay, QWidget *paren
 		
 		boxRefreshRate->setValue(dtms);
 		
-		if (bPlay) {this->slotPlay();}
+		if (bPlay) {this->slotPlay1();}
 	}
 	else if (bUseStartingProfilePath && !startingProfile.isEmpty())
 	{
@@ -267,7 +270,7 @@ void MainWindow::setupWidget()
 // SET STATE //////////////////////////////////////////////////////////////////
 void MainWindow::setState(HmiState s)
 {
-	if (s == HmiState::WaitingForDll)
+	if (s == HmiState::NoProfileSelected)
 	{
 		actionSettings->setEnabled(true);
 		actionCompilation->setEnabled(false);
@@ -286,6 +289,16 @@ void MainWindow::setState(HmiState s)
 		actionUnload->setEnabled(false);
 		boutonBrowse->setEnabled(true);
 		boxRefreshRate->setEnabled(true);
+	}
+	else if (s == HmiState::Loading)
+	{
+		actionSettings->setEnabled(false);
+		actionCompilation->setEnabled(false);
+		actionPlay->setEnabled(false);
+		actionStop->setEnabled(true);
+		actionUnload->setEnabled(false);
+		boutonBrowse->setEnabled(false);
+		boxRefreshRate->setEnabled(false);
 	}
 	else if (s == HmiState::ReadyToPlayLoaded)
 	{
@@ -392,12 +405,11 @@ void MainWindow::slotCompilation()
 }
 
 // SLOT PLAY //////////////////////////////////////////////////////////////////
-void MainWindow::slotPlay()
+void MainWindow::slotPlay1()
 {
 	if (m_engine->isActive()) {return;}
 	
 	// load the plugin only if necessary
-	bool bConfigOk = true;
 	if (m_dllFilePath == "" || !m_engine->isLoaded())
 	{
 		// search for one dll
@@ -417,26 +429,44 @@ void MainWindow::slotPlay()
 		m_dllFilePath = dllDir + "/" + m_dllFileName;
 		
 		// load the profile plugin
-		bConfigOk = m_engine->loadProfile(m_dllFilePath);
+		this->setState(HmiState::Loading);
+		m_engine->loadProfile(m_dllFilePath);
 	}
-	
+	else
+	{
+		this->slotPlay2(true);
+	}
+}
+
+void MainWindow::slotPlay2(bool bLoadOk)
+{
 	// manages loading errors
-	if (!bConfigOk)
+	if (!bLoadOk)
 	{
 		this->setState(HmiState::ReadyToPlayNotLoaded);
 		return;
 	}
 	
 	// configuration and start
-	this->setState(HmiState::Playing);
-	if (!m_engine->start(boxRefreshRate->value())) {this->setState(HmiState::ReadyToPlayLoaded);}
+	if (!m_engine->play(boxRefreshRate->value()))
+		this->setState(HmiState::ReadyToPlayLoaded);
+	else
+		this->setState(HmiState::Playing);
 }
 
 // SLOT STOP //////////////////////////////////////////////////////////////////
 void MainWindow::slotStop()
 {
-	this->setState(HmiState::ReadyToPlayLoaded);
-	m_engine->stop();
+	if (m_engine->isLoaded())
+	{
+		this->setState(HmiState::ReadyToPlayLoaded);
+		m_engine->stop();
+	}
+	else
+	{
+		this->setState(HmiState::ReadyToPlayNotLoaded);
+		m_engine->stopLoading();
+	}
 }
 
 // SLOT UNLOAD ////////////////////////////////////////////////////////////////

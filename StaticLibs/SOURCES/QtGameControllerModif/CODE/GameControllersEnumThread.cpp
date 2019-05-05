@@ -107,17 +107,20 @@ void GameControllersEnumThread::run()
 	if (b1by1)
 	{
 		GameControllerEnumerator e;
-		while (GameController *gc = e.nextController()) // long step
+		while (!e.hasFinished())
 		{
+			GameController *gc = e.nextController(); // long step
 			QMutexLocker locker{&m_mutex};
-			m_joysticks << gc;
+			if (gc) {m_joysticks << gc;}
 			if (m_bStop) {return;}
 		}
+		emit done();
 	}
 	else
 	{
 		QMutexLocker locker{&m_mutex};
 		m_joysticks = GameControllerEnumerator::enumerateControllers(); // very long step
+		emit done();
 	}
 }
 

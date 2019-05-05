@@ -52,23 +52,11 @@ AbstractProfileTarget::AbstractProfileTarget() : AbstractProfile{}, m_eventsQueu
 {
 	m_isProcessingEvents = false;
 	m_bFirstStep = true;
-	
-	m_rjm = new RealJoysticksManager{};
-	QString controllersPluginsDirPath = QCoreApplication::applicationDirPath() + "/../../ControllersPlugins/PLUGINS/";
-	m_rjm->loadPlugins(controllersPluginsDirPath);
-	QObject::connect(m_rjm, SIGNAL(message(QString,QColor)), this, SIGNAL(message(QString,QColor)));
-	m_rjm->searchForRealJoysticks();
 }
 
 AbstractProfileTarget::~AbstractProfileTarget()
 {
 	this->UnmapAll();
-	
-	if (m_rjm)
-	{
-		delete m_rjm;
-		m_rjm = nullptr;
-	}
 }
 
 // PLAY ///////////////////////////////////////////////////////////////////////
@@ -165,7 +153,10 @@ void AbstractProfileTarget::run()
 // REGISTER REAL JOYSTICK /////////////////////////////////////////////////////
 EnhancedJoystick* AbstractProfileTarget::registerRealJoystick(const QString &description, int num)
 {
-	AbstractRealJoystick *rj = m_rjm->joystick(description,num);
+	RealJoysticksManager *rjm = this->realJoysticksManager();
+	if (!rjm) {return nullptr;}
+	
+	AbstractRealJoystick *rj = rjm->joystick(description,num);
 	if (!rj) {return nullptr;}
 	
 	EnhancedJoystick *erj = new EnhancedJoystick{rj,false};

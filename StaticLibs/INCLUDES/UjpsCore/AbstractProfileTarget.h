@@ -12,7 +12,6 @@
 #include "VirtualEventsQueue.h"
 #include "AxisDirection.h"
 
-class RealJoysticksManager;
 class AbstractRealJoystick;
 class EnhancedJoystick;
 class RemoteJoystickServer;
@@ -94,7 +93,6 @@ class AbstractProfileTarget : public AbstractProfile
 		
 		bool m_bFirstStep;
 		
-		RealJoysticksManager *m_rjm;
 		LayerCalculator m_layerCalculator;
 		QVector<JoystickChange> m_changes;
 		QVector<AbstractMapping*> m_mappings;

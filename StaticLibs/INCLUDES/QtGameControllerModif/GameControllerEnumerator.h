@@ -23,6 +23,7 @@ class GameControllerEnumerator
 		// return controllers one by one
 		void reset();
 		GameController* nextController(QObject *parent = nullptr);
+		bool hasFinished() const;
 		
 		
 	private:

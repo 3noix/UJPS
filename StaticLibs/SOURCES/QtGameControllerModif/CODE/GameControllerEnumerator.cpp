@@ -11,6 +11,7 @@
 //  CONSTRUCTEUR
 //  RESET
 //  NEXT CONTROLLER
+//  HAS FINISHED
 ///////////////////////////////////////////////////////////////////////////////
 
 
@@ -76,7 +77,7 @@ GameController* GameControllerEnumerator::nextController(QObject *parent)
 			++m_indexDirectInput;
 			
 			if (j->isValid() && !bIgnore) {return j;}
-			else {delete j;}
+			else {delete j; return nullptr;}
 		}
 	}
 	
@@ -89,11 +90,19 @@ GameController* GameControllerEnumerator::nextController(QObject *parent)
 			++m_indexXInput;
 			
 			if (j->isValid()) {return j;}
-			else {delete j;}
+			else {delete j; return nullptr;}
 		}
 	}
 	
 	// if finished
 	return nullptr;
+}
+
+// HAS FINISHED ///////////////////////////////////////////////////////////////
+bool GameControllerEnumerator::hasFinished() const
+{
+	bool bLookIntoDirectInput = (m_indexDirectInput < NB_JOYSTICKS_MAX_DIRECTINPUT);
+	bool bLookIntoXInput = (bUseXInput && m_indexXInput < NB_JOYSTICKS_MAX_XINPUT);
+	return (!bLookIntoDirectInput && !bLookIntoXInput);
 }
 

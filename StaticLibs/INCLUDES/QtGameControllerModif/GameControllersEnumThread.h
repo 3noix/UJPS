@@ -30,6 +30,10 @@ class GameControllersEnumThread : public QThread
 		QVector<GameController*> releaseGameControllers();
 		
 		
+	signals:
+		void done();
+		
+		
 	protected:
 		virtual void run() override;
 		

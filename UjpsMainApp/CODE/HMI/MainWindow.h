@@ -23,8 +23,9 @@ class ProfileEngine;
 
 enum class HmiState
 {
-	WaitingForDll,
+	NoProfileSelected,
 	ReadyToPlayNotLoaded,
+	Loading,
 	ReadyToPlayLoaded,
 	Playing,
 	Quitting
@@ -50,7 +51,8 @@ class MainWindow : public QMainWindow
 		void slotSettings();
 		void slotClose();
 		void slotCompilation();
-		void slotPlay();
+		void slotPlay1();
+		void slotPlay2(bool bLoadOk);
 		void slotStop();
 		void slotUnload();
 		
