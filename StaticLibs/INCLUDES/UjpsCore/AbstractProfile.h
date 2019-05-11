@@ -21,9 +21,10 @@ class AbstractProfile : public QObject
 		virtual ~AbstractProfile();
 		
 		// public functions (called by the window only)
-		virtual bool play() = 0;			// executed when clicking "play"
-		virtual void run() = 0;				// executed at each time step
-		virtual void stop() = 0;			// executed when clicking "stop"
+		virtual bool play() = 0;					// executed when clicking "play"
+		virtual void run() = 0;						// executed at each time step
+		virtual void stop() = 0;					// executed when clicking "stop"
+		virtual bool isInitComplete() const = 0;	// to check if remote joysticks are all connected
 		
 		// about time step
 		void setTimeStep(int dtms);
@@ -34,6 +35,7 @@ class AbstractProfile : public QObject
 		
 	signals:
 		void message(const QString &str, QColor color);
+		void asyncInitComplete();
 		
 		
 	protected:

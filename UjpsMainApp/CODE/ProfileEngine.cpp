@@ -19,6 +19,7 @@
 //  IS LOADED
 //
 //  PLAY
+//  SLOT START TIMER
 //  STOP
 //  IS ACTIVE
 //
@@ -86,6 +87,7 @@ void ProfileEngine::loadProfile(const QString &dllFilePath)
 			m_dllFileName = shortName(dllFilePath);
 			m_profile = profile;
 			QObject::connect(m_profile, SIGNAL(message(QString,QColor)), this, SIGNAL(message(QString,QColor)));
+			QObject::connect(m_profile, SIGNAL(asyncInitComplete()), this, SLOT(slotStartTimer()));
 			
 			emit message("Enumerating controllers",Qt::black);
 			m_thread->enumerateControllersOneByOne();
@@ -165,10 +167,13 @@ bool ProfileEngine::isLoaded() const
 
 
 // PLAY ///////////////////////////////////////////////////////////////////////
-bool ProfileEngine::play(int dtms)
+void ProfileEngine::play(int dtms)
 {
-	if (m_thread->isRunning()) {return false;}
-	if (!m_profile || m_timer->isActive()) {return false;}
+	if (m_thread->isRunning() || !m_profile || m_timer->isActive())
+	{
+		emit initDone(false);
+		return;
+	}
 	
 	// initialize profile
 	emit message("Starting " + m_dllFileName,Qt::black);
@@ -179,20 +184,29 @@ bool ProfileEngine::play(int dtms)
 		if (!m_profile->play())
 		{
 			emit message("Failed to initialize profile",Qt::red);
-			return false;
+			emit initDone(false);
+			return;
 		}
 	}
 	catch (std::exception &e)
 	{
 		QString msg = "Failed to initialize profile: " + QString{e.what()};
 		emit message(msg,Qt::red);
-		return false;
+		emit initDone(false);
+		return;
 	}
 	
+	if (m_profile->isInitComplete())
+		this->slotStartTimer();
+}
+
+// SLOT START TIMER ////////////////////////////////////////////////////////////
+void ProfileEngine::slotStartTimer()
+{
 	// start the loop!
 	m_timer->start();
 	emit message("Running",Qt::black);
-	return true;
+	emit initDone(true);
 }
 
 // STOP ////////////////////////////////////////////////////////////////////////

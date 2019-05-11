@@ -35,9 +35,10 @@ class AbstractProfileTarget : public AbstractProfile
 		virtual ~AbstractProfileTarget();
 		
 		// public functions (called by the window only)
-		virtual bool play() override;		// executed when clicking "play"
-		virtual void run() override;		// executed at each time step
-		virtual void stop() override;		// executed when clicking "stop"
+		virtual bool play() override;					// executed when clicking "play"
+		virtual void run() override;					// executed at each time step
+		virtual void stop() override;					// executed when clicking "stop"
+		virtual bool isInitComplete() const override;	// to check if remote joysticks are all connected
 			
 		
 	public:
@@ -78,6 +79,10 @@ class AbstractProfileTarget : public AbstractProfile
 		void registerLayerDim2(Layers::LayerDim2 layer2, AbstractRealJoystick *rj = nullptr, uint rButton = 0);
 		
 		
+	private slots:
+		void slotRemoteJoystickConnected();
+		
+		
 	private:
 		// private pure virtual functions
 		virtual bool setupJoysticks() = 0;	// called by "play" function
@@ -97,6 +102,7 @@ class AbstractProfileTarget : public AbstractProfile
 		QVector<JoystickChange> m_changes;
 		QVector<AbstractMapping*> m_mappings;
 		std::vector<AbstractRealJoystick*> m_realJoysticks;
+		std::vector<RemoteJoystickServer*> m_remoteJoysticks;
 		std::vector<VirtualJoystick*> m_virtualJoysticks;
 		VirtualEventsQueue m_eventsQueue;
 		

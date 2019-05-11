@@ -28,7 +28,7 @@ class ProfileEngine : public QObject
 		bool unloadProfile();
 		bool isLoaded() const;
 		
-		bool play(int dtms);
+		void play(int dtms);
 		void stop();
 		bool isActive() const;
 		void wait();
@@ -37,11 +37,13 @@ class ProfileEngine : public QObject
 	private slots:
 		void slotResumeLoadProfile();
 		void slotOneLoop();
+		void slotStartTimer();
 		
 		
 	signals:
 		void message(const QString &message, QColor color);
 		void loadDone(bool bLoadOk);
+		void initDone(bool bInitOk);
 		
 		
 	private:

@@ -97,6 +97,7 @@ MainWindow::MainWindow(QString proFilePath, int dtms, bool bPlay, QWidget *paren
 	
 	QObject::connect(m_engine, &ProfileEngine::message, textEdit, &TextEdit::addMessage);
 	QObject::connect(m_engine, SIGNAL(loadDone(bool)),  this,     SLOT(slotPlay2(bool)));
+	QObject::connect(m_engine, SIGNAL(initDone(bool)),  this,     SLOT(slotPlay3(bool)));
 	
 	// arguments supplémentaires et valeurs par défaut
 	if (bUseDefaultTimeStep) {boxRefreshRate->setValue(defaultTimeStep);}
@@ -310,6 +311,16 @@ void MainWindow::setState(HmiState s)
 		boutonBrowse->setEnabled(true);
 		boxRefreshRate->setEnabled(true);
 	}
+	else if (s == HmiState::Initializing)
+	{
+		actionSettings->setEnabled(false);
+		actionCompilation->setEnabled(false);
+		actionPlay->setEnabled(false);
+		actionStop->setEnabled(true);
+		actionUnload->setEnabled(false);
+		boutonBrowse->setEnabled(false);
+		boxRefreshRate->setEnabled(false);
+	}
 	else if (s == HmiState::Playing)
 	{
 		actionSettings->setEnabled(false);
@@ -448,7 +459,13 @@ void MainWindow::slotPlay2(bool bLoadOk)
 	}
 	
 	// configuration and start
-	if (!m_engine->play(boxRefreshRate->value()))
+	this->setState(HmiState::Initializing);
+	m_engine->play(boxRefreshRate->value());
+}
+
+void MainWindow::slotPlay3(bool bInitOk)
+{
+	if (!bInitOk)
 		this->setState(HmiState::ReadyToPlayLoaded);
 	else
 		this->setState(HmiState::Playing);

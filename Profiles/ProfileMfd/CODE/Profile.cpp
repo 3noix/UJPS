@@ -54,15 +54,15 @@ void Profile::stop()
 // SETUP JOYSTICKS ////////////////////////////////////////////////////////////
 bool Profile::setupJoysticks()
 {
-	// remote joystick
-	emit message("Now connect the client application for the remote controller", Qt::black);
-	RemoteJoystickServer *rjs = new RemoteJoystickServer{"MFD_remote",32241,100};
-	rjse = this->registerRealJoystick(rjs);
-	
 	// virtual joystick(s) setup
 	vj1 = this->registerVirtualJoystick(1);
 	if (vj1) {emit message("Virtual joystick 1 acquired",Qt::black);}
 	else {emit message("Virtual joystick 1 failed to configure",Qt::red);}
+	
+	// remote joystick
+	emit message("Now connect the client application for the remote controller", Qt::black);
+	RemoteJoystickServer *rjs = new RemoteJoystickServer{"MFD_remote",32241,100};
+	rjse = this->registerRealJoystick(rjs);
 	
 	return (rjse && vj1);
 }

@@ -64,16 +64,15 @@ bool Profile::setupJoysticks()
 	if (tmwj) {emit message("Warthog joystick detected !",Qt::black);}
 	else {emit message("Warthog joystick not detected !",Qt::red); return false;}
 	
-	emit message("Now connect the client application for the remote controller", Qt::black);
-	RemoteJoystickServer *rjs = new RemoteJoystickServer{"TouchScreen2",32241,100};
-	rjse = this->registerRealJoystick(rjs);
-	
-	
 	// virtual joystick(s) setup
 	vj1 = this->registerVirtualJoystick(1);
 	if (vj1) {emit message("Virtual joystick 1 acquired",Qt::black);}
 	else {emit message("Virtual joystick 1 failed to configure",Qt::red);}
 	
+	// remote joystick at last
+	emit message("Now connect the client application for the remote controller", Qt::black);
+	RemoteJoystickServer *rjs = new RemoteJoystickServer{"TouchScreen2",32241,100};
+	rjse = this->registerRealJoystick(rjs);
 	
 	return (tmwj && rjse && vj1);
 }

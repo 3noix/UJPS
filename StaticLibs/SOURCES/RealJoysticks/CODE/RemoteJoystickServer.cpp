@@ -8,6 +8,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 //  CONSTRUCTEUR ET DESTRUCTEUR
+//  IS CONNECTED
 //
 //  ID
 //  DESCRIPTION
@@ -48,6 +49,7 @@ RemoteJoystickServer::RemoteJoystickServer(const QString &name, int portNumber, 
 	m_portNumber = portNumber;
 	m_id = id;
 	m_msecTimeOut = msecTimeOut;
+	m_bConnected = false;
 	
 	m_dataSize = 0;
 	m_messageType = RemoteJoystickMessageType::Invalid;
@@ -89,12 +91,12 @@ RemoteJoystickServer::RemoteJoystickServer(const QString &name, int portNumber, 
 	}
 	
 	QObject::connect(m_tcpServer, &QTcpServer::newConnection, this, &RemoteJoystickServer::slotNewConnection);
-	if (!m_tcpServer->waitForNewConnection(m_msecTimeOut))
+	/*if (!m_tcpServer->waitForNewConnection(m_msecTimeOut))
 	{
 		m_tcpServer->close();
 		delete m_tcpServer;
 		throw ExceptionFailedToConnect{"Failed to connect to the remote controller"};
-	}
+	}*/
 }
 
 RemoteJoystickServer::~RemoteJoystickServer()
@@ -102,6 +104,12 @@ RemoteJoystickServer::~RemoteJoystickServer()
 	m_tcpServer->close();
 	delete m_tcpServer;
 	//m_tcpServer->deleteLater();
+}
+
+// IS CONNECTED ///////////////////////////////////////////////////////////////
+bool RemoteJoystickServer::isConnected() const
+{
+	return m_bConnected;
 }
 
 
@@ -306,6 +314,8 @@ void RemoteJoystickServer::slotNewConnection()
 	m_tcpSocket = newConnection;
 	QObject::connect(m_tcpSocket, &QIODevice::readyRead, this, &RemoteJoystickServer::slotReceiveData);
 	QObject::connect(m_tcpSocket, &QAbstractSocket::disconnected, this, &RemoteJoystickServer::slotRemoveConnection);
+	m_bConnected = true;
+	emit connected();
 }
 
 // SLOT RECEIVE DATA //////////////////////////////////////////////////////////
@@ -433,5 +443,6 @@ void RemoteJoystickServer::slotRemoveConnection()
 	m_tcpSocket->abort();
 	m_tcpSocket->deleteLater();
 	m_tcpSocket = nullptr;
+	m_bConnected = false;
 }
 

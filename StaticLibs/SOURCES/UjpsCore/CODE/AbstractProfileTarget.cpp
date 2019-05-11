@@ -16,8 +16,10 @@
 //  PLAY
 //  STOP
 //  RUN
+//  IS INIT COMPLETE
 //
 //  REGISTER REAL JOYSTICK
+//  SLOT REMOTE JOYSTICK CONNECTED
 //  REGISTER VIRTUAL JOYSTICK
 //  REGISTER LAYER DIM 1
 //  REGISTER LAYER DIM 2
@@ -77,6 +79,7 @@ void AbstractProfileTarget::stop()
 	
 	qDeleteAll(m_realJoysticks);
 	qDeleteAll(m_virtualJoysticks);
+	m_remoteJoysticks.clear();
 	m_realJoysticks.clear();
 	m_virtualJoysticks.clear();
 }
@@ -145,6 +148,17 @@ void AbstractProfileTarget::run()
 	this->processPendingMappingsRequests();
 }
 
+// IS INIT COMPLETE ///////////////////////////////////////////////////////////
+bool AbstractProfileTarget::isInitComplete() const
+{
+	for (RemoteJoystickServer *rjs : m_remoteJoysticks)
+	{
+		if (!rjs->isConnected())
+		{return false;}
+	}
+	
+	return true;
+}
 
 
 
@@ -169,9 +183,18 @@ EnhancedJoystick* AbstractProfileTarget::registerRealJoystick(RemoteJoystickServ
 	if (!rjs) {return nullptr;}
 	
 	QObject::connect(rjs, SIGNAL(message(QString,QColor)), this, SIGNAL(message(QString,QColor)));
+	QObject::connect(rjs, SIGNAL(connected()), this, SLOT(slotRemoteJoystickConnected()));
 	EnhancedJoystick *erj = new EnhancedJoystick{rjs,true};
 	m_realJoysticks.push_back(erj);
+	m_remoteJoysticks.push_back(rjs);
 	return erj;
+}
+
+// SLOT REMOTE JOYSTICK CONNECTED /////////////////////////////////////////////
+void AbstractProfileTarget::slotRemoteJoystickConnected()
+{
+	if (this->isInitComplete())
+		emit asyncInitComplete();
 }
 
 // REGISTER VIRTUAL JOYSTICK //////////////////////////////////////////////////

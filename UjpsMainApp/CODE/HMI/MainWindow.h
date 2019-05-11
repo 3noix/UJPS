@@ -27,6 +27,7 @@ enum class HmiState
 	ReadyToPlayNotLoaded,
 	Loading,
 	ReadyToPlayLoaded,
+	Initializing,
 	Playing,
 	Quitting
 	// no need of a state for Compiling as the compiler window is modal
@@ -53,6 +54,7 @@ class MainWindow : public QMainWindow
 		void slotCompilation();
 		void slotPlay1();
 		void slotPlay2(bool bLoadOk);
+		void slotPlay3(bool bInitOk);
 		void slotStop();
 		void slotUnload();
 		

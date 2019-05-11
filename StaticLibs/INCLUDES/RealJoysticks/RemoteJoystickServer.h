@@ -25,6 +25,8 @@ class RemoteJoystickServer : public QObject, public AbstractRealJoystick
 		RemoteJoystickServer& operator=(RemoteJoystickServer &&other) = delete;
 		virtual ~RemoteJoystickServer();
 		
+		bool isConnected() const;
+		
 		virtual uint id() const override final;
 		virtual QString description() const override;
 		virtual QString hardwareId() const override final;
@@ -52,6 +54,7 @@ class RemoteJoystickServer : public QObject, public AbstractRealJoystick
 		
 	signals:
 		void message(const QString &str, QColor color);
+		void connected();
 		
 		
 	private slots:
@@ -70,6 +73,7 @@ class RemoteJoystickServer : public QObject, public AbstractRealJoystick
 		int m_portNumber;
 		uint m_id;
 		int m_msecTimeOut;
+		bool m_bConnected;
 		
 		quint16 m_dataSize;
 		qint8 m_messageType;
