@@ -46,6 +46,7 @@
 //  SLOT PLAY 1
 //  SLOT PLAY 2
 //  SLOT STOP
+//  SLOT ENGINE STOPPED
 //  SLOT UNLOAD
 //
 //  SLOT RUN CONTROLLERS INFO
@@ -98,6 +99,7 @@ MainWindow::MainWindow(QString proFilePath, int dtms, bool bPlay, QWidget *paren
 	QObject::connect(m_engine, &ProfileEngine::message, textEdit, &TextEdit::addMessage);
 	QObject::connect(m_engine, SIGNAL(loadDone(bool)),  this,     SLOT(slotPlay2(bool)));
 	QObject::connect(m_engine, SIGNAL(initDone(bool)),  this,     SLOT(slotPlay3(bool)));
+	QObject::connect(m_engine, SIGNAL(stopped()),       this,     SLOT(slotEngineStopped()));
 	
 	// arguments supplémentaires et valeurs par défaut
 	if (bUseDefaultTimeStep) {boxRefreshRate->setValue(defaultTimeStep);}
@@ -484,6 +486,15 @@ void MainWindow::slotStop()
 		this->setState(HmiState::ReadyToPlayNotLoaded);
 		m_engine->stopLoading();
 	}
+}
+
+// SLOT ENGINE STOPPED ////////////////////////////////////////////////////////
+void MainWindow::slotEngineStopped()
+{
+	QColor orange{255,127,0};
+	textEdit->addMessage("A remote joystick has been disconnected",orange);
+	textEdit->addMessage("Profile has been stopped",orange);
+	this->setState(HmiState::ReadyToPlayLoaded);
 }
 
 // SLOT UNLOAD ////////////////////////////////////////////////////////////////

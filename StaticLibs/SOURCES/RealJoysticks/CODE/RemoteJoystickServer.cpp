@@ -50,6 +50,7 @@ RemoteJoystickServer::RemoteJoystickServer(const QString &name, int portNumber, 
 	m_id = id;
 	m_msecTimeOut = msecTimeOut;
 	m_bConnected = false;
+	m_bDestructionInProgress = false;
 	
 	m_dataSize = 0;
 	m_messageType = RemoteJoystickMessageType::Invalid;
@@ -89,21 +90,13 @@ RemoteJoystickServer::RemoteJoystickServer(const QString &name, int portNumber, 
 	{
 		this->slotSessionOpened();
 	}
-	
-	QObject::connect(m_tcpServer, &QTcpServer::newConnection, this, &RemoteJoystickServer::slotNewConnection);
-	/*if (!m_tcpServer->waitForNewConnection(m_msecTimeOut))
-	{
-		m_tcpServer->close();
-		delete m_tcpServer;
-		throw ExceptionFailedToConnect{"Failed to connect to the remote controller"};
-	}*/
 }
 
 RemoteJoystickServer::~RemoteJoystickServer()
 {
+	m_bDestructionInProgress = true;
 	m_tcpServer->close();
-	delete m_tcpServer;
-	//m_tcpServer->deleteLater();
+	m_tcpServer->deleteLater();
 }
 
 // IS CONNECTED ///////////////////////////////////////////////////////////////
@@ -273,6 +266,7 @@ void RemoteJoystickServer::slotSessionOpened()
 	}
 	
 	m_tcpServer = new QTcpServer{};
+	QObject::connect(m_tcpServer, &QTcpServer::newConnection, this, &RemoteJoystickServer::slotNewConnection);
 	if (!m_tcpServer->listen(QHostAddress::Any,m_portNumber))
 	{
 		m_tcpServer->close();
@@ -444,5 +438,8 @@ void RemoteJoystickServer::slotRemoveConnection()
 	m_tcpSocket->deleteLater();
 	m_tcpSocket = nullptr;
 	m_bConnected = false;
+	
+	if (!m_bDestructionInProgress)
+		emit disconnected();
 }
 

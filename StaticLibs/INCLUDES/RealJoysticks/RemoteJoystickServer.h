@@ -55,6 +55,7 @@ class RemoteJoystickServer : public QObject, public AbstractRealJoystick
 	signals:
 		void message(const QString &str, QColor color);
 		void connected();
+		void disconnected();
 		
 		
 	private slots:
@@ -74,6 +75,7 @@ class RemoteJoystickServer : public QObject, public AbstractRealJoystick
 		uint m_id;
 		int m_msecTimeOut;
 		bool m_bConnected;
+		bool m_bDestructionInProgress;
 		
 		quint16 m_dataSize;
 		qint8 m_messageType;

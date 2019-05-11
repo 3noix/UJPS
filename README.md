@@ -1,4 +1,4 @@
-# UJPS: Universal Joystick Programming Software (C++) V3.1.0
+# UJPS: Universal Joystick Programming Software (C++) V3.2.0
 ## Overview
 
 This project allows the user to "program a set of real joysticks" events from the real joysticks are transformed into virtual joysticks and keyboard events. This transformation is defined in the "profile" defined by the user using C++ programming language. It is comparable to the proprietary "Thrustmaster TARGET scripts". But Thrustmaster TARGET scripts explicitly blocks non-Thrustmaster hardware. This tool works for any game controller recognized by Windows.

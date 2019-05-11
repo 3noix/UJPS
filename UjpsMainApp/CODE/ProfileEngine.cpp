@@ -25,6 +25,7 @@
 //  IS ACTIVE
 //
 //  SLOT ONE LOOP
+//  SLOT REMOTE JOYSTICK DISCONNECTED
 ///////////////////////////////////////////////////////////////////////////////
 
 
@@ -87,8 +88,9 @@ void ProfileEngine::loadProfile(const QString &dllFilePath)
 		{
 			m_dllFileName = shortName(dllFilePath);
 			m_profile = profile;
-			QObject::connect(m_profile, SIGNAL(message(QString,QColor)), this, SIGNAL(message(QString,QColor)));
-			QObject::connect(m_profile, SIGNAL(asyncInitComplete()), this, SLOT(slotStartTimer()));
+			QObject::connect(m_profile, SIGNAL(message(QString,QColor)),      this, SIGNAL(message(QString,QColor)));
+			QObject::connect(m_profile, SIGNAL(asyncInitComplete()),          this, SLOT(slotStartTimer()));
+			QObject::connect(m_profile, SIGNAL(remoteJoystickDisconnected()), this, SLOT(slotRemoteJoystickDisconnected()));
 			
 			emit message("Enumerating controllers",Qt::black);
 			m_thread->enumerateControllersOneByOne();
@@ -220,9 +222,9 @@ void ProfileEngine::slotStartTimer()
 void ProfileEngine::stop()
 {
 	if (m_thread->isRunning()) {return;}
-	if (!m_profile || !m_timer->isActive()) {return;}
-	
 	m_timer->stop();
+	
+	if (!m_profile) {return;}
 	m_profile->stop();
 	emit message("Stop profile " + m_dllFileName,Qt::black);
 }
@@ -246,5 +248,13 @@ void ProfileEngine::slotOneLoop()
 	
 	try {m_profile->run();}
 	catch (std::exception &e) {emit message(e.what(),Qt::red);}
+}
+
+// SLOT REMOTE JOYSTICK DISCONNECTED //////////////////////////////////////////
+void ProfileEngine::slotRemoteJoystickDisconnected()
+{
+	m_timer->stop();
+	m_profile->stop();
+	emit stopped();
 }
 

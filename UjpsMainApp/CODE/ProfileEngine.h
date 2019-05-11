@@ -39,12 +39,14 @@ class ProfileEngine : public QObject
 		void slotResumeLoadProfile();
 		void slotOneLoop();
 		void slotStartTimer();
+		void slotRemoteJoystickDisconnected();
 		
 		
 	signals:
 		void message(const QString &message, QColor color);
 		void loadDone(bool bLoadOk);
 		void initDone(bool bInitOk);
+		void stopped();
 		
 		
 	private:

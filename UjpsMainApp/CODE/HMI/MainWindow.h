@@ -56,6 +56,7 @@ class MainWindow : public QMainWindow
 		void slotPlay2(bool bLoadOk);
 		void slotPlay3(bool bInitOk);
 		void slotStop();
+		void slotEngineStopped();
 		void slotUnload();
 		
 		void slotRunControllersInfo();

@@ -184,6 +184,7 @@ EnhancedJoystick* AbstractProfileTarget::registerRealJoystick(RemoteJoystickServ
 	
 	QObject::connect(rjs, SIGNAL(message(QString,QColor)), this, SIGNAL(message(QString,QColor)));
 	QObject::connect(rjs, SIGNAL(connected()), this, SLOT(slotRemoteJoystickConnected()));
+	QObject::connect(rjs, SIGNAL(disconnected()), this, SIGNAL(remoteJoystickDisconnected()));
 	EnhancedJoystick *erj = new EnhancedJoystick{rjs,true};
 	m_realJoysticks.push_back(erj);
 	m_remoteJoysticks.push_back(rjs);
