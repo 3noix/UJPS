@@ -42,13 +42,12 @@
 
 
 // CONSTRUCTEUR ET DESTRUCTEUR ////////////////////////////////////////////////
-RemoteJoystickServer::RemoteJoystickServer(const QString &name, int portNumber, uint id, int msecTimeOut) :
+RemoteJoystickServer::RemoteJoystickServer(const QString &name, int portNumber, uint id) :
 		QObject{}, AbstractRealJoystick{}
 {
 	m_name = name;
 	m_portNumber = portNumber;
 	m_id = id;
-	m_msecTimeOut = msecTimeOut;
 	m_bConnected = false;
 	m_bDestructionInProgress = false;
 	

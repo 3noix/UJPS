@@ -18,7 +18,7 @@ class RemoteJoystickServer : public QObject, public AbstractRealJoystick
 	
 	
 	public:
-		RemoteJoystickServer(const QString &name, int portNumber, uint id, int msecTimeOut = 10000);
+		RemoteJoystickServer(const QString &name, int portNumber, uint id);
 		RemoteJoystickServer(const RemoteJoystickServer &other) = delete;
 		RemoteJoystickServer(RemoteJoystickServer &&other) = delete;
 		RemoteJoystickServer& operator=(const RemoteJoystickServer &other) = delete;
@@ -73,7 +73,6 @@ class RemoteJoystickServer : public QObject, public AbstractRealJoystick
 		QString m_name;
 		int m_portNumber;
 		uint m_id;
-		int m_msecTimeOut;
 		bool m_bConnected;
 		bool m_bDestructionInProgress;
 		
