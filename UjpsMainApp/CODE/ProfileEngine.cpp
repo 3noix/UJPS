@@ -19,6 +19,7 @@
 //  IS LOADED
 //
 //  PLAY
+//  IS INITIALIZED
 //  SLOT START TIMER
 //  STOP
 //  IS ACTIVE
@@ -198,6 +199,12 @@ void ProfileEngine::play(int dtms)
 	
 	if (m_profile->isInitComplete())
 		this->slotStartTimer();
+}
+
+// IS INITIALIZED /////////////////////////////////////////////////////////////
+bool ProfileEngine::isInitialized() const
+{
+	return m_profile->isInitComplete();
 }
 
 // SLOT START TIMER ////////////////////////////////////////////////////////////

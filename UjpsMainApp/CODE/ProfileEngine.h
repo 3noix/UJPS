@@ -29,6 +29,7 @@ class ProfileEngine : public QObject
 		bool isLoaded() const;
 		
 		void play(int dtms);
+		bool isInitialized() const;
 		void stop();
 		bool isActive() const;
 		void wait();

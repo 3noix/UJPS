@@ -79,10 +79,23 @@ int main(int argc, char *argv[])
 		ProfileEngine engine{bWhiteList};
 		MessagesDirector messenger;
 		messenger.startsListeningTo(&engine);
+		
+		// load the profile
 		engine.loadProfile(profileDllFilePath);
 		engine.wait();
 		if (!engine.isLoaded()) {return 1;}
-		if (!engine.play(dtms)) {return 1;} // only 15 ms time step for now
+		
+		// start the profile
+		engine.play(dtms);
+		if (!engine.isInitialized())
+		{
+			// to let the time to the user to connect the remote joysticks
+			QEventLoop loop;
+			QObject::connect(&engine, SIGNAL(initDone(bool)), &loop, SLOT(quit()));
+			loop.exec();
+		}
+		if (!engine.isActive()) {return 1;}
+		
 		return app.exec();
 	}
 	else
