@@ -56,6 +56,7 @@ ThrustmasterWarthogThrottle::ThrustmasterWarthogThrottle(GameController *c) : Re
 	
 	// led support
 	m_thread = new WriteToHidThread{this};
+	m_bFirstWrite = true;
 	m_flags = 0;
 	m_brightness = 0;
 	m_dataModified = false;
@@ -447,8 +448,9 @@ void ThrustmasterWarthogThrottle::setData(const QString &str, QVariant v)
 // FLUSH //////////////////////////////////////////////////////////////////////
 void ThrustmasterWarthogThrottle::flush()
 {
-	if (!m_dataModified) {return;}
+	if (!m_bFirstWrite && !m_dataModified) {return;}
 	m_thread->launchWriteData(m_flags,m_brightness);
+	m_bFirstWrite = false;
 	m_dataModified = false;
 }
 
