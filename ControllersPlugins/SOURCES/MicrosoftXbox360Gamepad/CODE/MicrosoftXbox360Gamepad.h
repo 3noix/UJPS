@@ -48,6 +48,7 @@ class MicrosoftXbox360Gamepad : public RealJoystick
 		
 		double m_leftMotorSpeed;
 		double m_rightMotorSpeed;
+		bool m_bFirstWrite;
 		bool m_dataModified;
 };
 

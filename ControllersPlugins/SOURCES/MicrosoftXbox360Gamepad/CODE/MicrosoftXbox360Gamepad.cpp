@@ -35,6 +35,7 @@ MicrosoftXbox360Gamepad::MicrosoftXbox360Gamepad(GameController *c) : RealJoysti
 {
 	m_leftMotorSpeed = 0;
 	m_rightMotorSpeed = 0;
+	m_bFirstWrite = true;
 	m_dataModified = false;
 	
 	m_buttonsNames << "DPADU" << "DPADR" << "DPADD" << "DPADL";
@@ -175,7 +176,7 @@ void MicrosoftXbox360Gamepad::setData(const QString &str, QVariant v)
 // FLUSH //////////////////////////////////////////////////////////////////////
 void MicrosoftXbox360Gamepad::flush()
 {
-	if (!m_dataModified) {return;}
+	if (!m_bFirstWrite && !m_dataModified) {return;}
 	
 	XINPUT_VIBRATION state;
 	memset(&state,0,sizeof(XINPUT_VIBRATION));
@@ -183,6 +184,7 @@ void MicrosoftXbox360Gamepad::flush()
 	state.wRightMotorSpeed = lim<double>(655.35*m_rightMotorSpeed,0.0,65535.0);
 	XInputSetState(this->id()-100,&state);
 	
+	m_bFirstWrite = false;
 	m_dataModified = false;
 }
 
