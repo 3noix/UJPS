@@ -7,8 +7,7 @@ echo.
 cd ThrustmasterWarthogThrottle
 qmake
 mingw32-make release
-echo.
-copy /Y release\ThrustmasterWarthogThrottle.dll ..\..\PLUGINS
+copy /Y release\ThrustmasterWarthogThrottle.dll ..\..\..\bin\ControllersPlugins
 cd ..
 echo.
 echo.

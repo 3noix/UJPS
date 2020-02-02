@@ -10,7 +10,7 @@
 class VigemPidWhiteLister
 {
 	public:
-		VigemPidWhiteLister(const QString &devconDirPath = QCoreApplication::applicationDirPath() + "/../../HidingJoysticks/ViGEm/Resources/");
+		VigemPidWhiteLister(const QString &devconDirPath = QCoreApplication::applicationDirPath() + "/../HidingJoysticks/ViGEm/Resources/");
 		VigemPidWhiteLister(const VigemPidWhiteLister &s) = default;
 		VigemPidWhiteLister(VigemPidWhiteLister &&s) = default;
 		VigemPidWhiteLister& operator=(const VigemPidWhiteLister& s) = delete;

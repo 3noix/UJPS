@@ -307,7 +307,7 @@ void MainWindow::slotEndUpdate()
 	else if (m_index == 1 || m_index == 2)
 	{
 		RealJoysticksManager jm;
-		if (m_index == 2) {jm.loadPlugins(QCoreApplication::applicationDirPath() + "/../../ControllersPlugins/PLUGINS/");}
+		if (m_index == 2) {jm.loadPlugins(QCoreApplication::applicationDirPath() + "/ControllersPlugins/");}
 		jm.fromGameControllers(gcv);
 		this->setData(jm.releaseAll());
 	}

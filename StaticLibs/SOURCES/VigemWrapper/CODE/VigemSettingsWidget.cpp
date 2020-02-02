@@ -179,7 +179,7 @@ void VigemSettingsWidget::slotRefreshStatus()
 // SLOT START AUTO WHITE LISTER ///////////////////////////////////////////////
 void VigemSettingsWidget::slotStartAutoWhiteLister()
 {
-	QString autoWhiteListerExe = QCoreApplication::applicationDirPath() + "/../../HidingJoysticks/ViGEm/AutoWhitelister.exe";
+	QString autoWhiteListerExe = QCoreApplication::applicationDirPath() + "/../HidingJoysticks/ViGEm/AutoWhitelister.exe";
 	QProcess::startDetached(autoWhiteListerExe);
 }
 

@@ -7,8 +7,7 @@ echo.
 cd ThrustmasterWarthogJoystick
 qmake
 mingw32-make release
-echo.
-copy /Y release\ThrustmasterWarthogJoystick.dll ..\..\PLUGINS
+copy /Y release\ThrustmasterWarthogJoystick.dll ..\..\..\bin\ControllersPlugins
 cd ..
 echo.
 echo.

@@ -74,7 +74,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow{parent}
 	this->resize(600,700);
 	
 	m_thread = new GameControllersEnumThread{this};
-	m_jm.loadPlugins(QCoreApplication::applicationDirPath() + "/../../ControllersPlugins/PLUGINS/");
+	m_jm.loadPlugins(QCoreApplication::applicationDirPath() + "/ControllersPlugins/");
 	
 	// connections
 	QObject::connect(actionSettings, &QAction::triggered, this, &MainWindow::slotSettings);

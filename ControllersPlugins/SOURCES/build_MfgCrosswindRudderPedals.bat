@@ -7,8 +7,7 @@ echo.
 cd MfgCrosswindRudderPedals
 qmake
 mingw32-make release
-echo.
-copy /Y release\MfgCrosswindRudderPedals.dll ..\..\PLUGINS
+copy /Y release\MfgCrosswindRudderPedals.dll ..\..\..\bin\ControllersPlugins
 cd ..
 echo.
 echo.

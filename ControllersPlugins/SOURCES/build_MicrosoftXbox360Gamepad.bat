@@ -7,8 +7,7 @@ echo.
 cd MicrosoftXbox360Gamepad
 qmake
 mingw32-make release
-echo.
-copy /Y release\MicrosoftXbox360Gamepad.dll ..\..\PLUGINS
+copy /Y release\MicrosoftXbox360Gamepad.dll ..\..\..\bin\ControllersPlugins
 cd ..
 echo.
 echo.

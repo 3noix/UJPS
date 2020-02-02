@@ -111,7 +111,7 @@ void ProfileEngine::slotResumeLoadProfile()
 	QVector<GameController*> gcv = m_thread->releaseGameControllers();
 	
 	RealJoysticksManager *rjm = new RealJoysticksManager{};
-	QString controllersPluginsDirPath = QCoreApplication::applicationDirPath() + "/../../ControllersPlugins/PLUGINS/";
+	QString controllersPluginsDirPath = QCoreApplication::applicationDirPath() + "/ControllersPlugins/";
 	rjm->loadPlugins(controllersPluginsDirPath);
 	rjm->fromGameControllers(gcv);
 	m_profile->setRealJoysticksManager(rjm); // ownership is transfered to the profile

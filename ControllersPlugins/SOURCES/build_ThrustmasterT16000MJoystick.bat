@@ -7,8 +7,7 @@ echo.
 cd ThrustmasterT16000MJoystick
 qmake
 mingw32-make release
-echo.
-copy /Y release\ThrustmasterT16000MJoystick.dll ..\..\PLUGINS
+copy /Y release\ThrustmasterT16000MJoystick.dll ..\..\..\bin\ControllersPlugins
 cd ..
 echo.
 echo.

@@ -9,9 +9,9 @@ CONFIG(release, debug|release) {
 TEMPLATE = app
 TARGET = Monitoring
 CONFIG += c++11
-DESTDIR = $$MODE
-OBJECTS_DIR = $$DESTDIR/objects
-MOC_DIR = $$DESTDIR/moc
+DESTDIR = ../bin
+OBJECTS_DIR = $$MODE/objects
+MOC_DIR = $$MODE/moc
 QT += core gui widgets charts xmlpatterns network
 
 

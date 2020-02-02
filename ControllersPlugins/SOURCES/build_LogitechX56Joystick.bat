@@ -7,8 +7,7 @@ echo.
 cd LogitechX56Joystick
 qmake
 mingw32-make release
-echo.
-copy /Y release\LogitechX56Joystick.dll ..\..\PLUGINS
+copy /Y release\LogitechX56Joystick.dll ..\..\..\bin\ControllersPlugins
 cd ..
 echo.
 echo.

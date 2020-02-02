@@ -7,8 +7,7 @@ echo.
 cd LogitechExtreme3D
 qmake
 mingw32-make release
-echo.
-copy /Y release\LogitechExtreme3D.dll ..\..\PLUGINS
+copy /Y release\LogitechExtreme3D.dll ..\..\..\bin\ControllersPlugins
 cd ..
 echo.
 echo.

@@ -512,7 +512,7 @@ void MainWindow::slotUnload()
 // SLOT RUN CONTROLLERS INFO //////////////////////////////////////////////////
 void MainWindow::slotRunControllersInfo()
 {
-	QString controllersInfoExe = QCoreApplication::applicationDirPath() + "/../../ControllersInfo/release/ControllersInfo.exe";
+	QString controllersInfoExe = QCoreApplication::applicationDirPath() + "/ControllersInfo.exe";
 	if (!QProcess::startDetached(controllersInfoExe))
 		textEdit->addMessage("Failed to start ControllersInfo.exe",Qt::red);
 }
@@ -520,7 +520,7 @@ void MainWindow::slotRunControllersInfo()
 // SLOT RUN MONITORING ////////////////////////////////////////////////////////
 void MainWindow::slotRunMonitoring()
 {
-	QString monitoringExe = QCoreApplication::applicationDirPath() + "/../../Monitoring/release/Monitoring.exe";
+	QString monitoringExe = QCoreApplication::applicationDirPath() + "/Monitoring.exe";
 	if (!QProcess::startDetached(monitoringExe))
 		textEdit->addMessage("Failed to start Monitoring.exe",Qt::red);
 }
@@ -528,7 +528,7 @@ void MainWindow::slotRunMonitoring()
 // SLOT RUN AXES CURVES ///////////////////////////////////////////////////////
 void MainWindow::slotRunAxesCurves()
 {
-	QString axesCurvesExe = QCoreApplication::applicationDirPath() + "/../../AxesCurves/release/AxesCurves.exe";
+	QString axesCurvesExe = QCoreApplication::applicationDirPath() + "/AxesCurves.exe";
 	if (!QProcess::startDetached(axesCurvesExe))
 		textEdit->addMessage("Failed to start AxesCurves.exe",Qt::red);
 }

@@ -7,8 +7,7 @@ echo.
 cd LogitechX56Throttle
 qmake
 mingw32-make release
-echo.
-copy /Y release\LogitechX56Throttle.dll ..\..\PLUGINS
+copy /Y release\LogitechX56Throttle.dll ..\..\..\bin\ControllersPlugins
 cd ..
 echo.
 echo.

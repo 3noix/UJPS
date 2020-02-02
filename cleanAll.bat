@@ -28,10 +28,6 @@ echo.
 echo.
 
 
-echo cleaning all compile PLUGINS dlls
-If exist ControllersPlugins\PLUGINS rmdir /S /Q %~dp0\ControllersPlugins\PLUGINS
-
-
 echo removing CleanQtProjects manually
 del %~dp0\CleanQtProjects\.qmake.stash
 del %~dp0\CleanQtProjects\Makefile
@@ -48,6 +44,20 @@ del %~dp0\ControllersInfo.lnk
 del %~dp0\AxesCurves.lnk
 echo.
 echo cleaning finished
+
+
+echo cleaning up bin directory
+cd bin
+rmdir /S /Q bearer
+rmdir /S /Q iconengines
+rmdir /S /Q imageformats
+rmdir /S /Q platforms
+rmdir /S /Q styles
+rmdir /S /Q translations
+rmdir /S /Q ControllersPlugins
+del *.exe
+del *.dll
+cd ..
 
 
 pause

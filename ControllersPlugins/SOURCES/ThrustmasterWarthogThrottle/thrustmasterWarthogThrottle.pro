@@ -10,8 +10,8 @@ TEMPLATE = lib
 TARGET = ThrustmasterWarthogThrottle
 CONFIG += c++11 plugin
 DESTDIR = $$MODE
-OBJECTS_DIR = $$DESTDIR/objects
-MOC_DIR = $$DESTDIR/moc
+OBJECTS_DIR = $$MODE/objects
+MOC_DIR = $$MODE/moc
 
 
 win32-g++:LIBS += bin_lib_windows/x86/hid.lib

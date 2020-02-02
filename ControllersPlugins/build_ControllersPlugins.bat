@@ -1,5 +1,4 @@
 cd %~dp0
-If not exist PLUGINS mkdir PLUGINS
 cd SOURCES
 start cmd.exe /c build_LogitechExtreme3D.bat
 start cmd.exe /c build_LogitechX56Joystick.bat

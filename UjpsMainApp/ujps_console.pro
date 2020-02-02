@@ -9,9 +9,9 @@ CONFIG(release, debug|release) {
 TEMPLATE = app
 TARGET = UJPS_console
 CONFIG += c++11 console
-DESTDIR = $$MODE
-OBJECTS_DIR = $$DESTDIR/objects
-MOC_DIR = $$DESTDIR/moc
+DESTDIR = ../bin
+OBJECTS_DIR = $$MODE/objects
+MOC_DIR = $$MODE/moc
 QT = core gui xmlpatterns network
 DEFINES -= QT_NO_DEBUG
 

@@ -10,8 +10,8 @@ TEMPLATE = lib
 TARGET = ThrustmasterT16000MJoystick
 CONFIG += c++11 plugin
 DESTDIR = $$MODE
-OBJECTS_DIR = $$DESTDIR/objects
-MOC_DIR = $$DESTDIR/moc
+OBJECTS_DIR = $$MODE/objects
+MOC_DIR = $$MODE/moc
 
 
 win32-g++:LIBS += ../../../StaticLibs/SOURCES/QtGameControllerModif/$$MODE/libQtGameControllerModif.a

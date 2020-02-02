@@ -10,8 +10,8 @@ TEMPLATE = lib
 TARGET = MicrosoftXbox360Gamepad
 CONFIG += c++11 plugin
 DESTDIR = $$MODE
-OBJECTS_DIR = $$DESTDIR/objects
-MOC_DIR = $$DESTDIR/moc
+OBJECTS_DIR = $$MODE/objects
+MOC_DIR = $$MODE/moc
 
 
 LIBS += -lXInput

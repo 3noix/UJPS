@@ -7,8 +7,7 @@ echo.
 cd ThrustmasterTwcsThrottle
 qmake
 mingw32-make release
-echo.
-copy /Y release\ThrustmasterTwcsThrottle.dll ..\..\PLUGINS
+copy /Y release\ThrustmasterTwcsThrottle.dll ..\..\..\bin\ControllersPlugins
 cd ..
 echo.
 echo.

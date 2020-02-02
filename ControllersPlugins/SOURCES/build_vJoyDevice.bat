@@ -7,8 +7,7 @@ echo.
 cd %~dp0\vJoyDevice
 qmake
 mingw32-make release
-echo.
-copy /Y release\vJoyDevice.dll ..\..\PLUGINS
+copy /Y release\vJoyDevice.dll ..\..\..\bin\ControllersPlugins
 cd ..
 echo.
 echo.

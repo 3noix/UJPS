@@ -10,8 +10,8 @@ TEMPLATE = lib
 TARGET = virtualJoysticks
 CONFIG += c++11
 DESTDIR = $$MODE
-OBJECTS_DIR = $$DESTDIR/objects
-MOC_DIR = $$DESTDIR/moc
+OBJECTS_DIR = $$MODE/objects
+MOC_DIR = $$MODE/moc
 
 
 win32-g++:LIBS += ../../../vJoy218SDK-291116/SDK/lib/vJoyInterface.lib
