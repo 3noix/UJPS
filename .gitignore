@@ -14,8 +14,13 @@ Makefile
 Makefile.Debug
 Makefile.Release
 .qmake.stash
-UjpsMainApp/SETTINGS/QtCompilerSettings_Qt5.11.xml
-UjpsMainApp/SETTINGS/QtCompilerSettings_Qt5.7.xml
+bin/AxesCurvesSettings.xml
+bin/ControllersInfoSettings.xml
+bin/MonitoringSettings.xml
+bin/UjpsSettings.xml
+bin/QtCompilerSettings.xml
+bin/QtCompilerSettings_Qt5.11.xml
+bin/QtCompilerSettings_Qt5.7.xml
 StaticLibs/INCLUDES/UjpsCore/WindowsKeysScanCodes*.h
 StaticLibs/INCLUDES/UjpsCore/WindowsKeysVirtualCodes*.h
 StaticLibs/SOURCES/UjpsCore/CODE/VirtualEventsQueue_*.cpp

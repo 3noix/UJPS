@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!DOCTYPE genericProperties SYSTEM "genericProperties.xsd">
-<PROPERTIES>
-	<PROPERTY name="bWhiteListPid" type="bool" value="true"/>
-</PROPERTIES>

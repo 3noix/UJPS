@@ -25,13 +25,13 @@ ApplicationSettings& ApplicationSettings::instance()
 // READ FILE //////////////////////////////////////////////////////////////////
 bool ApplicationSettings::readFile()
 {
-	return m_settings.readFile(QCoreApplication::applicationDirPath() + "/../SETTINGS/ApplicationSettings.xml");
+	return m_settings.readFile(QCoreApplication::applicationDirPath() + "/" + QCoreApplication::applicationName() + "Settings.xml");
 }
 
 // WRITE FILE /////////////////////////////////////////////////////////////////
 bool ApplicationSettings::writeFile()
 {
-	return m_settings.writeFile(QCoreApplication::applicationDirPath() + "/../SETTINGS/ApplicationSettings.xml");
+	return m_settings.writeFile(QCoreApplication::applicationDirPath() + "/" + QCoreApplication::applicationName() + "Settings.xml");
 }
 
 // PROPERTY ///////////////////////////////////////////////////////////////////

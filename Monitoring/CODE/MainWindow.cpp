@@ -65,6 +65,10 @@ MainWindow::~MainWindow()
 {
 	delete layoutUp;
 	
+	// write settings
+	ApplicationSettings& settings = ApplicationSettings::instance();
+	if (!settings.isEmpty()) {settings.writeFile();}
+	
 	// remove this application from the white list
 	// (to avoid to pollute the white list with many invalid pids)
 	if (m_vigemInterface.vigemIsReady())
