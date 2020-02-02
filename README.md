@@ -1,7 +1,7 @@
-# UJPS: Universal Joystick Programming Software (C++) V3.2.0
+# UJPS: Universal Joystick Programming Software (C++) V3.2.1
 ## Overview
 
-This project allows the user to "program a set of real joysticks" events from the real joysticks are transformed into virtual joysticks and keyboard events. This transformation is defined in the "profile" defined by the user using C++ programming language. It is comparable to the proprietary "Thrustmaster TARGET scripts". But Thrustmaster TARGET scripts explicitly blocks non-Thrustmaster hardware. This tool works for any game controller recognized by Windows.
+This project allows the user to "program a set of real joysticks": events from the real joysticks are transformed into virtual joysticks events and/or keyboard events. This transformation is defined in the "profile" defined by the user using C++ programming language. It is comparable to the proprietary "Thrustmaster TARGET C scripts". But Thrustmaster TARGET scripts explicitly blocks non-Thrustmaster hardware. This tool works for any game controller recognized by Windows.
 
 
 ![ScreenShot](https://i.imgur.com/qCnL9to.png)
@@ -15,7 +15,7 @@ It does not use GUI to define the profile such as in "Thrustmaster TARGET GUI", 
 The whole procedure is described in details in the documentation (the pdf in the root directory). You will need to:
 - install vJoy for virtual joysticks: http://vjoystick.sourceforge.net/site/index.php/download-a-install/download
 - install Qt 5: https://www.qt.io/download-qt-installer/
-- build UJPS by running "build_all.bat"
+- build UJPS by running "build_all.bat" then "build_end_deployment.bat"
 
 Why no "binaries release"? Both building UJPS and compiling a profile requires Qt 5. So if you don't have Qt 5 installed you will only be able to run profiles done by other users without the slightest modification (profiles binaries are dll files). And as the "UJPS community" is really small right now and as it is really easy to build the tool, I don't provide a "binaries release" right now. I could reconsider if some of you are interested.
 
