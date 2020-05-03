@@ -11,7 +11,7 @@ QString debugOrRelease()
 	
 	QString s = list.last();
 	if (s == "debug") {return "debug";}
-	return s;
+	return "release";
 }
 
 // SHORT NAME /////////////////////////////////////////////////////////////////
