@@ -1,6 +1,6 @@
 #include "GuiCurveExpCentered.h"
 #include "Lim.h"
-
+#include <math.h>
 #include <QGridLayout>
 #include <QLabel>
 #include <QDoubleSpinBox>

@@ -62,7 +62,7 @@ void Profile::runFirstStep()
 
 ## Other tools
 
-Around the main UJPS program, a few other ones are provided (see screenshots at the end):
+Around the main UJPS program, a few other ones are provided:
 - ControllersInfo: it just provides some basic information about all the controllers currently connected
 - AxesCurves: it helps you to find the good parameters for your axes curves
 - Monitoring: it shows the real and virtual joysticks events with different modes (what sees the system, what sees UJPS, ... see the documentation for more details)
@@ -74,7 +74,7 @@ Around the main UJPS program, a few other ones are provided (see screenshots at 
 
 ## Remote controllers
 
-Moreover UJPS also provides classes to ease the creation of "remote controllers" (if you don't know what I am talking about, take a look at Roccat Power Grid or LEA extended input). A "remote controller" is an application that runs on your PC or mobile devices and that can send joystick events to your profile and receive inputs from it. The provided classes take care of the network communication between the remote controller and the profile, but you have to program the GUI yourself... I do not provide a GUI editor like in Roccat Power Grid or LEA extended input. I just provide 2 examples of "Thrustmaster MFD Cougar" implemented as remote controllers:
+Moreover UJPS also provides classes to ease the creation of "remote controllers" (if you don't know what I am talking about, take a look at Roccat Power Grid, LEA extended input or GameGlass). A "remote controller" is an application that runs on mobile devices (or on external screens of your PC) that can send joystick events to your profile and receive inputs from it. The provided classes take care of the network communication between the remote controller and the profile, but you have to program the GUI yourself... I do not provide a GUI editor like in Roccat Power Grid or LEA extended input. I just provide 2 examples of "Thrustmaster MFD Cougar" implemented as remote controllers:
 - "MFD_dumb" which just simulates the bezel and sends the buttons changes to the profile
 - "MFD_smart" which is more evolved than the first one. It includes a few MFD pages with basic graphics (only text). It does not send button changes, but actions requests which can be different for the same button on different MFD pages
 
