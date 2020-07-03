@@ -2,9 +2,9 @@ echo off
 
 
 REM compilation and deployment of Monitoring
-cd Monitoring
+cd src/Monitoring
 call build_Monitoring_fct.bat
-cd ..
+cd ../..
 
 
 REM create shortcut to Monitoring

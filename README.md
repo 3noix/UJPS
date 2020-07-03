@@ -22,7 +22,7 @@ Why no "binaries release"? Both building UJPS and compiling a profile requires Q
 
 ## Examples
 
-First, don't hesitate to take a look at the profiles examples in the "Profiles" directory. But here are a few lines of code of a UJPS profile, just to let you feel how a profile is coded. "tmwj" designates the ThrustMaster Warthog Joystick object and "TMWJ" the namespace that contains the names of its buttons, axes and povs:
+First, don't hesitate to take a look at the profiles examples in the "examples/Profiles" directory. But here are a few lines of code of a UJPS profile, just to let you feel how a profile is coded. "tmwj" designates the ThrustMaster Warthog Joystick object and "TMWJ" the namespace that contains the names of its buttons, axes and povs:
 
 ```C++
 bool Profile::setupJoysticks()

@@ -13,33 +13,33 @@ cd ..
 
 
 REM compilation and deployment of CleanQtProjects
-cd %~dp0\CleanQtProjects
+cd %~dp0\src\CleanQtProjects
 call build_CleanQtProjects_fct.bat
-cd ..
+cd ../..
 
 
 REM compilation of static lib Settings
-cd StaticLibs/SOURCES/Settings
+cd src/StaticLibs/SOURCES/Settings
 call build_Settings_fct.bat
-cd ../../..
+cd ../../../..
 
 
 REM compilation of static lib VigemWrapper
-cd StaticLibs/SOURCES/VigemWrapper
+cd src/StaticLibs/SOURCES/VigemWrapper
 call build_VigemWrapper_fct.bat
-cd ../../..
+cd ../../../..
 
 
 REM compilation of static lib QtGameControllerModif
-cd StaticLibs/SOURCES/QtGameControllerModif
+cd src/StaticLibs/SOURCES/QtGameControllerModif
 call build_QtGameControllerModif_fct.bat
-cd ../../..
+cd ../../../..
 
 
 REM compilation of static libRealJoysticks
-cd StaticLibs/SOURCES/RealJoysticks
+cd src/StaticLibs/SOURCES/RealJoysticks
 call build_RealJoysticks_fct.bat
-cd ../../..
+cd ../../../..
 
 
 REM build 4 different branches in parallel
@@ -50,9 +50,9 @@ start cmd.exe /c build_branch_UJPS_main_app.bat
 
 
 REM compilation and deployment of controllers plugins
-cd ControllersPlugins
+cd src/ControllersPlugins
 call build_ControllersPlugins.bat
-cd ..
+cd ../..
 
 
 echo finished

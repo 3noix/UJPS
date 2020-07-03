@@ -2,9 +2,9 @@ echo off
 
 
 REM compilation and deployment of ControllersInfo
-cd ControllersInfo
+cd src/ControllersInfo
 call build_ControllersInfo_fct.bat
-cd ..
+cd ../..
 
 
 REM create shortcut to ControllersInfo

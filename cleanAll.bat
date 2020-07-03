@@ -1,6 +1,6 @@
 echo off
 echo Setting up environment for cleaning projects...
-set PATH=%~dp0\CleanQtProjects\release;%PATH%
+set PATH=%~dp0\src\CleanQtProjects\release;%PATH%
 echo.
 echo.
 
@@ -9,41 +9,41 @@ echo cleaning all projects contained in the sub-directories
 echo in progress...
 echo.
 echo.
-CleanQtProjects.exe %~dp0\StaticLibs
+CleanQtProjects.exe %~dp0\src\StaticLibs
 echo.
-CleanQtProjects.exe %~dp0\UjpsMainApp
+CleanQtProjects.exe %~dp0\src\UjpsMainApp
 echo.
-CleanQtProjects.exe %~dp0\Monitoring
+CleanQtProjects.exe %~dp0\src\Monitoring
 echo.
-CleanQtProjects.exe %~dp0\ControllersInfo
+CleanQtProjects.exe %~dp0\src\ControllersInfo
 echo.
-CleanQtProjects.exe %~dp0\AxesCurves
+CleanQtProjects.exe %~dp0\src\AxesCurves
 echo.
-CleanQtProjects.exe %~dp0\Profiles
+CleanQtProjects.exe %~dp0\examples\Profiles
 echo.
-CleanQtProjects.exe %~dp0\RemoteControllers
+CleanQtProjects.exe %~dp0\examples\RemoteControllers
 echo.
-CleanQtProjects.exe %~dp0\ControllersPlugins
+CleanQtProjects.exe %~dp0\src\ControllersPlugins
 echo.
 echo.
 
 
 echo removing CleanQtProjects manually
-del %~dp0\CleanQtProjects\.qmake.stash
-del %~dp0\CleanQtProjects\Makefile
-del %~dp0\CleanQtProjects\Makefile.Debug
-del %~dp0\CleanQtProjects\Makefile.Release
-rmdir /S /Q %~dp0\CleanQtProjects\debug
-rmdir /S /Q %~dp0\CleanQtProjects\release
+del %~dp0\src\CleanQtProjects\.qmake.stash
+del %~dp0\src\CleanQtProjects\Makefile
+del %~dp0\src\CleanQtProjects\Makefile.Debug
+del %~dp0\src\CleanQtProjects\Makefile.Release
+rmdir /S /Q %~dp0\src\CleanQtProjects\debug
+rmdir /S /Q %~dp0\src\CleanQtProjects\release
 
 
-echo cleaning up shortcuts
-del %~dp0\UJPS.lnk
-del %~dp0\Monitoring.lnk
-del %~dp0\ControllersInfo.lnk
-del %~dp0\AxesCurves.lnk
-echo.
-echo cleaning finished
+REM echo cleaning up shortcuts
+REM del %~dp0\UJPS.lnk
+REM del %~dp0\Monitoring.lnk
+REM del %~dp0\ControllersInfo.lnk
+REM del %~dp0\AxesCurves.lnk
+REM echo.
+REM echo cleaning finished
 
 
 echo cleaning up bin directory

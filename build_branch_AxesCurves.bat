@@ -2,9 +2,9 @@ echo off
 
 
 REM compilation and deployment of AxesCurves
-cd AxesCurves
+cd src/AxesCurves
 call build_AxesCurves_fct.bat
-cd ..
+cd ../..
 
 
 REM create shortcut to AxesCurves

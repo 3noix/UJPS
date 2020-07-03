@@ -2,21 +2,21 @@ echo off
 
 
 REM compilation of static lib VirtualJoysticks
-cd StaticLibs/SOURCES/VirtualJoysticks
+cd src/StaticLibs/SOURCES/VirtualJoysticks
 call build_VirtualJoysticks_fct.bat
-cd ../../..
+cd ../../../..
 
 
 REM compilation of static lib UjpsCore
-cd StaticLibs/SOURCES/UjpsCore
+cd src/StaticLibs/SOURCES/UjpsCore
 call build_UjpsCore_fct.bat
-cd ../../..
+cd ../../../..
 
 
 REM compilation and deployment of UJPS main app
-cd UjpsMainApp
+cd src/UjpsMainApp
 call build_UJPS_main_app_fct.bat
-cd ..
+cd ../..
 
 
 REM create shortcut to UJPS main app
