@@ -14,13 +14,13 @@ OBJECTS_DIR = $$MODE/objects
 MOC_DIR = $$MODE/moc
 
 
-win32-g++:LIBS += bin_lib_windows/x86/hid.lib
-win32-g++:LIBS += bin_lib_windows/x86/setupapi.lib
+win32-g++:LIBS += ../../../../3rdparty/bin_lib_windows/x86/hid.lib
+win32-g++:LIBS += ../../../../3rdparty/bin_lib_windows/x86/setupapi.lib
 win32-g++:LIBS += ../../../StaticLibs/SOURCES/QtGameControllerModif/$$MODE/libQtGameControllerModif.a
 win32-g++:LIBS += ../../../StaticLibs/SOURCES/RealJoysticks/$$MODE/libRealJoysticks.a
 
-win32-msvc*:LIBS += bin_lib_windows/x64/hid.lib
-win32-msvc*:LIBS += bin_lib_windows/x64/setupapi.lib
+win32-msvc*:LIBS += ../../../../3rdparty/bin_lib_windows/x64/hid.lib
+win32-msvc*:LIBS += ../../../../3rdparty/bin_lib_windows/x64/setupapi.lib
 win32-msvc*:LIBS += ../../../StaticLibs/SOURCES/QtGameControllerModif/$$MODE/QtGameControllerModif.lib
 win32-msvc*:LIBS += ../../../StaticLibs/SOURCES/RealJoysticks/$$MODE/RealJoysticks.lib
 
