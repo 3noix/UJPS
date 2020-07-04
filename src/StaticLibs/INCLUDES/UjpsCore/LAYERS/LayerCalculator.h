@@ -4,12 +4,7 @@
 
 #include "Layer.h"
 #include <vector>
-#include <tuple>
-#include <algorithm>
 class AbstractRealJoystick;
-
-using Dim1Binding = std::tuple<Layers::LayerDim1,AbstractRealJoystick*,uint>;
-using Dim2Binding = std::tuple<Layers::LayerDim2,AbstractRealJoystick*,uint>;
 
 
 class LayerCalculator
@@ -30,6 +25,20 @@ class LayerCalculator
 		
 		
 	private:
+		struct Dim1Binding
+		{
+			Layers::LayerDim1 layer1;
+			AbstractRealJoystick *rj;
+			uint rButton;
+		};
+		
+		struct Dim2Binding
+		{
+			Layers::LayerDim2 layer2;
+			AbstractRealJoystick *rj;
+			uint rButton;
+		};
+		
 		static Layers::LayerDim1 defaultLayer1();
 		static Layers::LayerDim2 defaultLayer2();
 		

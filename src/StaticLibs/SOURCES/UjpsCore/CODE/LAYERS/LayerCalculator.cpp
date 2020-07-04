@@ -1,5 +1,6 @@
 #include "LAYERS/LayerCalculator.h"
 #include "AbstractRealJoystick.h"
+#include <algorithm>
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -34,22 +35,24 @@ LayerCalculator::LayerCalculator() : m_layer{std::make_pair(Layers::Out,Layers::
 void LayerCalculator::registerLayerDim1(Layers::LayerDim1 layer1, AbstractRealJoystick *rj, uint rButton)
 {
 	// we remove the Dim1Binding which concerns layer1 if there is one
-	auto islayer1 = [layer1](Dim1Binding d){return (std::get<0>(d) == layer1);};
-	std::remove_if(m_dim1.begin(),m_dim1.end(),islayer1);
+	auto islayer1 = [layer1](Dim1Binding d){return (d.layer1 == layer1);};
+	auto newEnd = std::remove_if(m_dim1.begin(),m_dim1.end(),islayer1);
+	m_dim1.erase(newEnd,m_dim1.end());
 	
 	// we add the Dim1Binding
-	m_dim1.push_back(std::make_tuple(layer1,rj,rButton));
+	m_dim1.push_back(Dim1Binding{layer1,rj,rButton});
 }
 
 // REGISTER LAYER DIM 1 ///////////////////////////////////////////////////////
 void LayerCalculator::registerLayerDim2(Layers::LayerDim2 layer2, AbstractRealJoystick *rj, uint rButton)
 {
 	// we remove the Dim2Binding which concerns layer2 if there is one
-	auto islayer2 = [layer2](Dim2Binding d){return (std::get<0>(d) == layer2);};
-	std::remove_if(m_dim2.begin(),m_dim2.end(),islayer2);
+	auto islayer2 = [layer2](Dim2Binding d){return (d.layer2 == layer2);};
+	auto newEnd = std::remove_if(m_dim2.begin(),m_dim2.end(),islayer2);
+	m_dim2.erase(newEnd,m_dim2.end());
 	
 	// we add the Dim2Binding
-	m_dim2.push_back(std::make_tuple(layer2,rj,rButton));
+	m_dim2.push_back(Dim2Binding{layer2,rj,rButton});
 }
 
 // CLEAR //////////////////////////////////////////////////////////////////////
@@ -72,22 +75,18 @@ void LayerCalculator::computeLayer()
 	
 	for (const Dim1Binding &d : m_dim1)
 	{
-		AbstractRealJoystick *rj = std::get<1>(d);
-		uint rButton = std::get<2>(d);
-		if (rj && rj->buttonPressed(rButton))
+		if (d.rj && d.rj->buttonPressed(d.rButton))
 		{
-			layer1 = std::get<0>(d);
+			layer1 = d.layer1;
 			break;
 		}
 	}
 	
 	for (const Dim2Binding &d : m_dim2)
 	{
-		AbstractRealJoystick *rj = std::get<1>(d);
-		uint rButton = std::get<2>(d);
-		if (rj && rj->buttonPressed(rButton))
+		if (d.rj && d.rj->buttonPressed(d.rButton))
 		{
-			layer2 = std::get<0>(d);
+			layer2 = d.layer2;
 			break;
 		}
 	}
