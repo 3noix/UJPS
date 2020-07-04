@@ -1,9 +1,9 @@
 <!DOCTYPE RCC><RCC version="1.0">
-<qresource>
-	<file>RESOURCES/ICONES/croixRouge.png</file>
-	<file>RESOURCES/ICONES/eyes.png</file>
-	<file>RESOURCES/ICONES/loading.gif</file>
-	<file>RESOURCES/ICONES/outils.png</file>
-	<file>RESOURCES/ICONES/update.png</file>
+<qresource prefix="icons">
+	<file alias="croixRouge.png">../Resources/Icons/croixRouge.png</file>
+	<file alias="eyes.png">../Resources/Icons/eyes.png</file>
+	<file alias="loading.png">../Resources/Icons/loading.gif</file>
+	<file alias="outils.png">../Resources/Icons/outils.png</file>
+	<file alias="update.png">../Resources/Icons/update.png</file>
 </qresource>
 </RCC>

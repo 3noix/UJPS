@@ -142,7 +142,7 @@ bool AbstractXmlInfo::checkData(QIODevice &device)
 	Q_INIT_RESOURCE(resources);
 	
 	// ouvrir le schéma
-	QFile fileSchema{":/RESOURCES/XSD/" + m_xsdFileName + ".xsd"};
+	QFile fileSchema{":/xsd/" + m_xsdFileName + ".xsd"};
 	if (!fileSchema.open(QIODevice::ReadOnly))
 	{
 		m_errorMessage = "The xml schema " + m_xsdFileName + ".xsd cannot be opened !";

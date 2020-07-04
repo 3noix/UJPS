@@ -25,7 +25,7 @@
 SettingsDialog::SettingsDialog(QWidget *parent) : QDialog{parent}
 {
 	this->setWindowTitle("Application settings");
-	this->setWindowIcon(QIcon{":/RESOURCES/ICONES/outils.png"});
+	this->setWindowIcon(QIcon{":/icons/outils.png"});
 	this->setWindowModality(Qt::WindowModal);
 	
 	this->setupWidget();

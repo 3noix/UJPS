@@ -42,19 +42,19 @@ void TextEdit::createActions()
 	// action clear
 	actionClear = new QAction{"Clear",this};
 	actionClear->setStatusTip("Clear the content of the message box");
-	actionClear->setIcon(QIcon{":/RESOURCES/ICONES/corbeille.png"});
+	actionClear->setIcon(QIcon{":/icons/corbeille.png"});
 	
 	// action copy
 	actionCopy = new QAction{"Copy",this};
 	actionCopy->setShortcut(QKeySequence{"Ctrl+C"});
 	actionCopy->setStatusTip("Copy the content of the message box");
-	actionCopy->setIcon(QIcon{":/RESOURCES/ICONES/copy.png"});
+	actionCopy->setIcon(QIcon{":/icons/copy.png"});
 	
 	// action select all
 	actionSelectAll = new QAction{"Select all",this};
 	actionSelectAll->setShortcut(QKeySequence{"Ctrl+A"});
 	actionSelectAll->setStatusTip("Select all the content of the message box");
-	actionSelectAll->setIcon(QIcon{":/RESOURCES/ICONES/select.png"});
+	actionSelectAll->setIcon(QIcon{":/icons/select.png"});
 }
 
 // CONTEXT MENU EVENT /////////////////////////////////////////////////////////

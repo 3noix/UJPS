@@ -146,39 +146,39 @@ void MainWindow::createActions()
 {
 	actionQuit = new QAction{"Quit",this};
 	actionQuit->setStatusTip("Quit");
-	actionQuit->setIcon(QIcon{":/RESOURCES/ICONES/croixRouge.png"});
+	actionQuit->setIcon(QIcon{":/icons/croixRouge.png"});
 	
 	actionSettings = new QAction{"Settings",this};
 	actionSettings->setStatusTip("Application settings");
-	actionSettings->setIcon(QIcon{":/RESOURCES/ICONES/outils.png"});
+	actionSettings->setIcon(QIcon{":/icons/outils.png"});
 	
 	actionCompilation = new QAction{"Compilation",this};
 	actionCompilation->setStatusTip("Compile profile");
-	actionCompilation->setIcon(QIcon{":/RESOURCES/ICONES/compilation.png"});
+	actionCompilation->setIcon(QIcon{":/icons/compilation.png"});
 	
 	actionPlay = new QAction{"Run",this};
 	actionPlay->setStatusTip("Load and run profile");
-	actionPlay->setIcon(QIcon{":/RESOURCES/ICONES/play.png"});
+	actionPlay->setIcon(QIcon{":/icons/play.png"});
 	
 	actionStop = new QAction{"Stop",this};
 	actionStop->setStatusTip("Stop profile");
-	actionStop->setIcon(QIcon{":/RESOURCES/ICONES/stop.png"});
+	actionStop->setIcon(QIcon{":/icons/stop.png"});
 	
 	actionUnload = new QAction{"Unload",this};
 	actionUnload->setStatusTip("Unload profile");
-	actionUnload->setIcon(QIcon{":/RESOURCES/ICONES/eject.png"});
+	actionUnload->setIcon(QIcon{":/icons/eject.png"});
 	
 	actionRunControllersInfo = new QAction{"Start ControllersInfo.exe",this};
 	actionRunControllersInfo->setStatusTip("Start ControllersInfo.exe");
-	actionRunControllersInfo->setIcon(QIcon{":/RESOURCES/ICONES/info.png"});
+	actionRunControllersInfo->setIcon(QIcon{":/icons/info.png"});
 	
 	actionRunMonitoring = new QAction{"Start Monitoring.exe",this};
 	actionRunMonitoring->setStatusTip("Start Monitoring.exe");
-	actionRunMonitoring->setIcon(QIcon{":/RESOURCES/ICONES/eyes.png"});
+	actionRunMonitoring->setIcon(QIcon{":/icons/eyes.png"});
 	
 	actionRunAxesCurves = new QAction{"Start AxesCurves.exe",this};
 	actionRunAxesCurves->setStatusTip("Start AxesCurves.exe");
-	actionRunAxesCurves->setIcon(QIcon{":/RESOURCES/ICONES/curve.png"});
+	actionRunAxesCurves->setIcon(QIcon{":/icons/curve.png"});
 }
 
 // CREATE MENUS ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -267,7 +267,7 @@ void MainWindow::setupWidget()
 	
 	// end
 	this->resize(500,500);
-	this->setWindowIcon(QIcon{":/RESOURCES/ICONES/gamepad.png"});
+	this->setWindowIcon(QIcon{":/icons/gamepad.png"});
 }
 
 // SET STATE //////////////////////////////////////////////////////////////////

@@ -1,17 +1,17 @@
 <!DOCTYPE RCC><RCC version="1.0">
-<qresource>
-	<file>RESOURCES/ICONES/compilation.png</file>
-	<file>RESOURCES/ICONES/copy.png</file>
-	<file>RESOURCES/ICONES/corbeille.png</file>
-	<file>RESOURCES/ICONES/croixRouge.png</file>
-	<file>RESOURCES/ICONES/curve.png</file>
-	<file>RESOURCES/ICONES/eject.png</file>
-	<file>RESOURCES/ICONES/eyes.png</file>
-	<file>RESOURCES/ICONES/gamepad.png</file>
-	<file>RESOURCES/ICONES/info.png</file>
-	<file>RESOURCES/ICONES/outils.png</file>
-	<file>RESOURCES/ICONES/play.png</file>
-	<file>RESOURCES/ICONES/select.png</file>
-	<file>RESOURCES/ICONES/stop.png</file>
+<qresource prefix="icons">
+	<file alias="compilation.png">../Resources/Icons/compilation.png</file>
+	<file alias="copy.png">../Resources/Icons/copy.png</file>
+	<file alias="corbeille.png">../Resources/Icons/corbeille.png</file>
+	<file alias="croixRouge.png">../Resources/Icons/croixRouge.png</file>
+	<file alias="curve.png">../Resources/Icons/curve.png</file>
+	<file alias="eject.png">../Resources/Icons/eject.png</file>
+	<file alias="eyes.png">../Resources/Icons/eyes.png</file>
+	<file alias="gamepad.png">../Resources/Icons/gamepad.png</file>
+	<file alias="info.png">../Resources/Icons/info.png</file>
+	<file alias="outils.png">../Resources/Icons/outils.png</file>
+	<file alias="play.png">../Resources/Icons/play.png</file>
+	<file alias="select.png">../Resources/Icons/select.png</file>
+	<file alias="stop.png">../Resources/Icons/stop.png</file>
 </qresource>
 </RCC>

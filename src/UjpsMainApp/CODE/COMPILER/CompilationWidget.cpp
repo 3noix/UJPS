@@ -71,7 +71,7 @@ void CompilationWidget::setProjectDirectory(const QString &projectDir)
 // SETUP WIDGET ///////////////////////////////////////////////////////////////
 void CompilationWidget::setupWidget()
 {
-	this->setWindowIcon(QIcon{":/RESOURCES/ICONES/compilation.png"});
+	this->setWindowIcon(QIcon{":/icons/compilation.png"});
 	this->setWindowTitle("Compilator");
 	this->setWindowFlags(Qt::Window);
 	this->setWindowModality(Qt::ApplicationModal);

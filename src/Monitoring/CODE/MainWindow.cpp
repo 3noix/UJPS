@@ -85,19 +85,19 @@ void MainWindow::createActions()
 {
 	actionSettings = new QAction{"Settings",this};
 	actionSettings->setStatusTip("Application settings");
-	actionSettings->setIcon(QIcon{":/RESOURCES/ICONES/outils.png"});
+	actionSettings->setIcon(QIcon{":/icons/outils.png"});
 	
 	actionUpdate = new QAction{"Update controllers list",this};
 	actionUpdate->setStatusTip("Update controllers list");
 	actionUpdate->setShortcut(QKeySequence{"F5"});
 	actionUpdate->setShortcutContext(Qt::WindowShortcut);
-	actionUpdate->setIcon(QIcon{":/RESOURCES/ICONES/update.png"});
+	actionUpdate->setIcon(QIcon{":/icons/update.png"});
 	
 	actionQuit = new QAction{"Quit",this};
 	actionQuit->setStatusTip("Quit");
 	actionQuit->setShortcut(QKeySequence{"Ctrl+Q"});
 	actionQuit->setShortcutContext(Qt::WindowShortcut);
-	actionQuit->setIcon(QIcon{":/RESOURCES/ICONES/croixRouge.png"});
+	actionQuit->setIcon(QIcon{":/icons/croixRouge.png"});
 }
 
 // CREATE MENUS ///////////////////////////////////////////////////////////////
@@ -144,7 +144,7 @@ void MainWindow::setupWidget()
 	widgetLoading->setLayout(layoutLoading);
 	labelLoading = new QLabel{"Enumerating controllers...",this};
 	labelGif = new QLabel{this};
-	movieGif = new QMovie{":/RESOURCES/ICONES/loading.gif",{},this};
+	movieGif = new QMovie{":/icons/loading.gif",{},this};
 	labelGif->setMovie(movieGif);
 	layoutLoading->addWidget(labelLoading);
 	layoutLoading->addWidget(labelGif);
@@ -159,7 +159,7 @@ void MainWindow::setupWidget()
 	
 	// end
 	this->setCentralWidget(mainWidget);
-	this->setWindowIcon(QIcon{":/RESOURCES/ICONES/eyes.png"});
+	this->setWindowIcon(QIcon{":/icons/eyes.png"});
 	this->setMinimumWidth(700.0);
 }
 
