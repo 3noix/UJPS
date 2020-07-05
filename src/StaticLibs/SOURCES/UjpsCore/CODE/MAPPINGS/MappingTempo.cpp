@@ -1,4 +1,4 @@
-#include "MAPPINGS/MappingTempo.h"
+#include "MappingTempo.h"
 #include "ACTIONS/AbstractAction.h"
 #include "AbstractRealJoystick.h"
 

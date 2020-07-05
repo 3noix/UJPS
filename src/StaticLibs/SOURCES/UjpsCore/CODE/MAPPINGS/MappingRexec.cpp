@@ -1,4 +1,4 @@
-#include "MAPPINGS/MappingRexec.h"
+#include "MappingRexec.h"
 #include "ACTIONS/AbstractAction.h"
 
 

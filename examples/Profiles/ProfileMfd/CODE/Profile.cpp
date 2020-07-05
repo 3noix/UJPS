@@ -1,5 +1,4 @@
 #include "Profile.h"
-#include "MAPPINGS/Mappings.h"
 #include "TRIGGERS/Triggers.h"
 #include "ACTIONS/Actions.h"
 LayersCombo AllLayers{};

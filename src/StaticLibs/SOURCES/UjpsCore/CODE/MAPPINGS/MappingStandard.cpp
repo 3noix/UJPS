@@ -1,4 +1,4 @@
-#include "MAPPINGS/MappingStandard.h"
+#include "MappingStandard.h"
 #include "TRIGGERS/AbstractTrigger.h"
 #include "ACTIONS/AbstractAction.h"
 #include "AbstractRealJoystick.h"

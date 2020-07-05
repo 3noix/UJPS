@@ -23,14 +23,14 @@ INCLUDEPATH +=  ../../INCLUDES/Other \
 
 
 HEADERS +=  ../../INCLUDES/QtGameControllerModif/GameController.h \
-			../../INCLUDES/QtGameControllerModif/GameControllerDirectInput.h \
-			../../INCLUDES/QtGameControllerModif/GameControllerXInput.h \
-			../../INCLUDES/QtGameControllerModif/GameControllersEnumThread.h
+			../../INCLUDES/QtGameControllerModif/GameControllersEnumThread.h \
+			CODE/GameControllerDirectInput.h \
+			CODE/GameControllerXInput.h
 
 
 SOURCES +=  CODE/GameControllerDirectInput.cpp \
-			CODE/GameControllerXInput.cpp \
+			CODE/GameControllersEnumThread.cpp \
 			CODE/GameControllerEvents.cpp \
-			CODE/GameControllerEnumerator.cpp \
-			CODE/GameControllersEnumThread.cpp
+			CODE/GameControllerXInput.cpp \
+			CODE/GameControllerEnumerator.cpp
 

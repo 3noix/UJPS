@@ -1,4 +1,4 @@
-#include "MAPPINGS/MappingMergeAxes.h"
+#include "MappingMergeAxes.h"
 #include "AbstractRealJoystick.h"
 #include "Lim.h"
 #include "CURVES/AbstractAxisCurve.h"

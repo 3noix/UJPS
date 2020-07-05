@@ -3,8 +3,8 @@
 
 
 #include "JoystickChange.h"
-#include "../LAYERS/LayersCombo.h"
-#include "../VirtualEventsQueue.h"
+#include "LAYERS/LayersCombo.h"
+#include "VirtualEventsQueue.h"
 class AbstractRealJoystick;
 
 

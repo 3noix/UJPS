@@ -23,11 +23,11 @@ AxesRotator::AxesRotator(AbstractRealJoystick *j)
 }
 
 // ROTATE AXES ////////////////////////////////////////////////////////////////
-bool AxesRotator::rotateAxes(uint axis1, uint axis2, float angle)
+bool AxesRotator::rotateAxes(uint axis1, uint axis2, float angleDeg)
 {
 	if (axis1 == axis2 || axis1 >= m_j->axesCount() || axis2 >= m_j->axesCount()) {return false;}
 	if (m_rotatedAxes.contains(axis1) || m_rotatedAxes.contains(axis2)) {return false;}
-	m_rotations << std::make_tuple(axis1,axis2,angle);
+	m_rotations << AxesRotation{axis1,axis2,angleDeg};
 	m_rotatedAxes << axis1 << axis2;
 	return true;
 }
@@ -40,8 +40,8 @@ uint AxesRotator::removeAxisRotation(uint axis)
 	
 	for (int i=0; i<nbRotations; ++i)
 	{
-		uint axis1 = std::get<0>(m_rotations[i]);
-		uint axis2 = std::get<1>(m_rotations[i]);
+		uint axis1 = m_rotations[i].axis1;
+		uint axis2 = m_rotations[i].axis2;
 		m_rotatedAxes.removeAll(axis1);
 		m_rotatedAxes.removeAll(axis2);
 		
@@ -75,11 +75,11 @@ QVector<JoystickChange> AxesRotator::changes()
 			int i = this->searchAxis(ch.numButtonAxisPov);
 			if (i == -1) {continue;}
 			
-			uint axis1 = std::get<0>(m_rotations[i]);
-			uint axis2 = std::get<1>(m_rotations[i]);
+			uint axis1 = m_rotations[i].axis1;
+			uint axis2 = m_rotations[i].axis2;
 			float f1 = m_j->axisValue(axis1);
 			float f2 = m_j->axisValue(axis2);
-			float angle = piSur180 * std::get<2>(m_rotations[i]);
+			float angle = piSur180 * m_rotations[i].rotAngleDegrees;
 			
 			float v1 = cos(angle) * f1 - sin(angle) * f2;
 			float v2 = sin(angle) * f1 + cos(angle) * f2;
@@ -113,11 +113,11 @@ float AxesRotator::axisValue(uint axis) const
 	int i = this->searchAxis(axis);
 	if (i == -1) {return m_j->axisValue(axis);}
 	
-	uint axis1 = std::get<0>(m_rotations[i]);
-	uint axis2 = std::get<1>(m_rotations[i]);
+	uint axis1 = m_rotations[i].axis1;
+	uint axis2 = m_rotations[i].axis2;
 	float f1 = m_j->axisValue(axis1);
 	float f2 = m_j->axisValue(axis2);
-	float angle = piSur180 * std::get<2>(m_rotations[i]);
+	float angle = piSur180 * m_rotations[i].rotAngleDegrees;
 	
 	float v = 0.0f;
 	if (axis == axis1) {v = cos(angle) * f1 - sin(angle) * f2;}
@@ -132,9 +132,7 @@ int AxesRotator::searchAxis(uint axis) const
 	int n = m_rotations.size();
 	for (int i=0; i<n; ++i)
 	{
-		uint axis1 = std::get<0>(m_rotations[i]);
-		uint axis2 = std::get<1>(m_rotations[i]);
-		if (axis == axis1 || axis == axis2) {return i;}
+		if (axis == m_rotations[i].axis1 || axis == m_rotations[i].axis2) {return i;}
 	}
 	return -1;
 }

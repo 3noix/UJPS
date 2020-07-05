@@ -27,7 +27,6 @@ class RealJoysticksManager : public QObject
 		void loadPlugins(const QString &path);
 		void unloadPlugins();
 		
-		void searchForRealJoysticks();
 		void fromGameControllers(QVector<GameController*> &gcv);
 		
 		int nbJoysticks() const;

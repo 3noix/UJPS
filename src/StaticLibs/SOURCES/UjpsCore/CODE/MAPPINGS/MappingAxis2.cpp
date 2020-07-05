@@ -1,4 +1,4 @@
-#include "MAPPINGS/MappingAxis2.h"
+#include "MappingAxis2.h"
 #include "ACTIONS/AbstractAction.h"
 #include "AbstractRealJoystick.h"
 #include "ExceptionBadMapAxis2.h"

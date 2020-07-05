@@ -6,9 +6,9 @@
 #include <QVector>
 #include <QMap>
 #include "JoystickChange.h"
-#include "MappingModifRequest.h"
+#include "../../SOURCES/UjpsCore/CODE/MappingModifRequest.h"
+#include "../../SOURCES/UjpsCore/CODE/LAYERS/LayerCalculator.h"
 #include "LAYERS/LayersCombo.h"
-#include "LAYERS/LayerCalculator.h"
 #include "VirtualEventsQueue.h"
 #include "AxisDirection.h"
 

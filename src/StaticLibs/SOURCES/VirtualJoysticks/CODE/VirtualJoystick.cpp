@@ -3,9 +3,7 @@
 #include "ExceptionFailedToStartVJoy.h"
 #include "ExceptionFailedToAcquireVJoyDevice.h"
 #include "ExceptionBadVirtualJoystickArgs.h"
-
 #include "vJoyModifiedInterface/vjoyinterface.h"
-#include "bitsLong.h"
 
 #include <QProcess>
 #include <QDir>
@@ -16,6 +14,16 @@ uint VirtualJoystick::m_nbInstances = 0;
 bool VirtualJoystick::m_bUseVJoyConfigExe = false;
 QString VirtualJoystick::m_vJoyConfigExeDirPath{};
 QString VirtualJoystick::m_vJoyConfigExeFileName{};
+
+
+// to play bitwise with 32 bits words
+// we use qint32 defined in QtGlobal or LONG to ensure sync with vJoy
+LONG one = 1L;
+LONG bitLong(uint i)
+{
+	//Q_ASSERT(i < 32);
+	return (one << i%32);
+};
 
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -1,4 +1,4 @@
-#include "MAPPINGS/MappingSplitAxis.h"
+#include "MappingSplitAxis.h"
 #include "AbstractRealJoystick.h"
 #include "Lim.h"
 

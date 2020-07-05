@@ -5,7 +5,7 @@
 #include <QMap>
 #include <QVariant>
 #include <QStringList>
-#include "AbstractXmlInfo.h"
+#include "../../../SOURCES/Settings/CODE/XML/AbstractXmlInfo.h"
 
 
 class GenericPropertiesInfo : public AbstractXmlInfo

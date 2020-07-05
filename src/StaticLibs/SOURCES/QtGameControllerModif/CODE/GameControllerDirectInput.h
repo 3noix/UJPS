@@ -7,7 +7,7 @@
 #include <windows.h>
 #define DIRECTINPUT_VERSION 0x0800
 #include "dinput.h"
-#include <dinputd.h>
+#include "dinputd.h"
 struct DI_ENUM_CONTEXT
 {
 	DIJOYCONFIG* pPreferredJoyCfg;

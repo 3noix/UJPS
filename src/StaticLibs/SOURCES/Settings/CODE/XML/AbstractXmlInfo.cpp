@@ -1,5 +1,5 @@
-#include "XML/AbstractXmlInfo.h"
-#include "XML/XmlValidationMessageHandler.h"
+#include "AbstractXmlInfo.h"
+#include "XmlValidationMessageHandler.h"
 
 #include <QXmlSchemaValidator>
 #include <QXmlSchema>

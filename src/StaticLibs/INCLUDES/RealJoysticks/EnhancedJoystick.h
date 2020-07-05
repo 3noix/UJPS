@@ -4,7 +4,7 @@
 
 #include "AbstractRealJoystick.h"
 #include "AbsoluteOrRelative.h"
-#include "AxesRotator.h"
+#include "../../SOURCES/RealJoysticks/CODE/AxesRotator.h"
 #include <array>
 class AbstractAxisCurve;
 

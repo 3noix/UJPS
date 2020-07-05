@@ -4,7 +4,7 @@
 
 #include <QObject>
 #include "AbstractRealJoystick.h"
-#include "VirtualPovDefinition.h"
+#include "../../SOURCES/RealJoysticks/CODE/VirtualPovDefinition.h"
 class GameController;
 class GameControllerButtonEvent;
 class GameControllerAxisEvent;

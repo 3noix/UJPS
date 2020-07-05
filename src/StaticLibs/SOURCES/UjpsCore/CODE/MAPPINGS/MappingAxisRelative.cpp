@@ -1,4 +1,4 @@
-#include "MAPPINGS/MappingAxisRelative.h"
+#include "MappingAxisRelative.h"
 #include "AbstractRealJoystick.h"
 #include "VirtualJoystick.h"
 

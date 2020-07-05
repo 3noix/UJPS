@@ -5,7 +5,6 @@
 #include "JoystickChange.h"
 #include <QString>
 #include <QVector>
-#include <tuple>
 class AbstractRealJoystick;
 
 
@@ -19,7 +18,7 @@ class AxesRotator
 		AxesRotator& operator=(AxesRotator &&other) = delete;
 		~AxesRotator() = default;
 		
-		bool rotateAxes(uint axis1, uint axis2, float angle);
+		bool rotateAxes(uint axis1, uint axis2, float angleDeg);
 		uint removeAxisRotation(uint axis);
 		
 		QVector<JoystickChange> changes();
@@ -27,10 +26,17 @@ class AxesRotator
 		
 		
 	private:
+		struct AxesRotation
+		{
+			uint axis1;
+			uint axis2;
+			float rotAngleDegrees;
+		};
+		
 		int searchAxis(uint axis) const;
 		
 		AbstractRealJoystick *m_j;
-		QVector<std::tuple<uint,uint,float>> m_rotations;
+		QVector<AxesRotation> m_rotations;
 		QVector<uint> m_rotatedAxes;
 		const float piSur180 = 3.14159265f / 180.0f;
 };
