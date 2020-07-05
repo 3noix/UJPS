@@ -15,7 +15,7 @@ MOC_DIR = $$DESTDIR/moc
 QT += widgets network
 
 
-INCLUDEPATH += ../../../src/ControllersPlugins/INCLUDES
+INCLUDEPATH += $$(UJPSPATH)/src/ControllersPlugins/INCLUDES
 
 
 HEADERS =   CODE/MfdWidget.h \

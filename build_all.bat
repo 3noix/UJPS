@@ -6,6 +6,14 @@ REM set PATH=C:\Qt\5.11.0\mingw53_32\bin;C:\Qt\Tools\mingw530_32\bin;%PATH%
 REM set PATH=E:\Qt5.11\5.11.0\mingw53_32\bin;E:/Qt5.11/Tools/mingw530_32\bin;%PATH%
 echo.
 
+
+REM add the environment variable UJPSPATH
+echo add environment variable UJPSPATH
+setx UJPSPATH %~dp0
+echo.
+echo.
+
+
 If not exist bin mkdir bin
 cd bin
 If not exist ControllersPlugins mkdir ControllersPlugins

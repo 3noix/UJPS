@@ -35,6 +35,8 @@ del %~dp0\src\CleanQtProjects\Makefile.Debug
 del %~dp0\src\CleanQtProjects\Makefile.Release
 rmdir /S /Q %~dp0\src\CleanQtProjects\debug
 rmdir /S /Q %~dp0\src\CleanQtProjects\release
+echo.
+echo.
 
 
 REM echo cleaning up shortcuts
@@ -42,8 +44,6 @@ REM del %~dp0\UJPS.lnk
 REM del %~dp0\Monitoring.lnk
 REM del %~dp0\ControllersInfo.lnk
 REM del %~dp0\AxesCurves.lnk
-REM echo.
-REM echo cleaning finished
 
 
 echo cleaning up bin directory
@@ -58,7 +58,16 @@ rmdir /S /Q ControllersPlugins
 del *.exe
 del *.dll
 cd ..
+echo.
+echo.
 
+
+REM remove the environment variable UJPSPATH
+echo remove environment variable UJPSPATH
+REG delete HKCU\Environment /f /v UJPSPATH
+REM REG delete "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Environment" /f /v UJPSPATH
+REM echo.
+REM echo cleaning finished
 
 pause
 
