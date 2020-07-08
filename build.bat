@@ -50,16 +50,42 @@ call build_RealJoysticks_fct.bat
 cd ../../../..
 
 
-REM build 4 different branches in parallel
-start cmd.exe /c build_branch_Monitoring.bat
-start cmd.exe /c build_branch_ControllersInfo.bat
-start cmd.exe /c build_branch_AxesCurves.bat
-start cmd.exe /c build_branch_UJPS_main_app.bat
+REM build in parallel:
+REM - AxesCurves
+REM - ControllersInfo
+REM - Monitoring
+REM - ControllersPlugins
+REM - VirtualJoysticks+UjpsCore+UjpsMainApp (from this file)
 
-
-REM compilation and deployment of controllers plugins
+cd src/AxesCurves
+start cmd.exe /c build_AxesCurves_fct.bat
+cd ../..
+cd src/ControllersInfo
+start cmd.exe /c build_ControllersInfo_fct.bat
+cd ../..
+cd src/Monitoring
+start cmd.exe /c build_Monitoring_fct.bat
+cd ../..
 cd src/ControllersPlugins
 call build_ControllersPlugins.bat
+cd ../..
+
+
+REM compilation of static lib VirtualJoysticks
+cd src/StaticLibs/SOURCES/VirtualJoysticks
+call build_VirtualJoysticks_fct.bat
+cd ../../../..
+
+
+REM compilation of static lib UjpsCore
+cd src/StaticLibs/SOURCES/UjpsCore
+call build_UjpsCore_fct.bat
+cd ../../../..
+
+
+REM compilation and deployment of UJPS main app
+cd src/UjpsMainApp
+call build_UJPS_main_app_fct.bat
 cd ../..
 
 

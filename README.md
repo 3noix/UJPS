@@ -14,8 +14,8 @@ It does not use GUI to define the profile such as in "Thrustmaster TARGET GUI", 
 
 The whole procedure is described in details in the documentation (the pdf in the root directory). You will need to:
 - install vJoy for virtual joysticks: http://vjoystick.sourceforge.net/site/index.php/download-a-install/download
-- install Qt 5: https://www.qt.io/download-qt-installer/
-- build UJPS by running "build_all.bat" then "build_end_deployment.bat"
+- install Qt 5: https://www.qt.io/download-qt-installer/, including the additional QtCharts module
+- build UJPS by running "build.bat" then "deploy.bat"
 
 Why no "binaries release"? Both building UJPS and compiling a profile requires Qt 5. So if you don't have Qt 5 installed you will only be able to run profiles done by other users without the slightest modification (profiles binaries are dll files). And as the "UJPS community" is really small right now and as it is really easy to build the tool, I don't provide a "binaries release" right now. I could reconsider if some of you are interested.
 
@@ -44,7 +44,7 @@ bool Profile::setupJoysticks()
 void Profile::runFirstStep()
 {
    // registering a modifier button
-   this->registerLayerDim1(Layers::In, tmwt, TMWJ::S4);
+   this->registerLayerDim1(Layers::In, tmwj, TMWJ::S4);
    
    // mappings creation
    MapAxis(tmwj,   TMWJ::JOYX, AllLayers, vj1, SC1::AxisFlightRoll);  // basic axis mapping

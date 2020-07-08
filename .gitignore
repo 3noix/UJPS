@@ -1,5 +1,3 @@
-Profiles/build_ProfileTest2.bat
-Profiles/ProfileTest2/
 *moc_*.h
 *moc_*.cpp
 qrc_resources.cpp
@@ -19,8 +17,3 @@ bin/ControllersInfoSettings.xml
 bin/MonitoringSettings.xml
 bin/UjpsSettings.xml
 bin/QtCompilerSettings.xml
-bin/QtCompilerSettings_Qt5.11.xml
-bin/QtCompilerSettings_Qt5.7.xml
-StaticLibs/INCLUDES/UjpsCore/WindowsKeysScanCodes*.h
-StaticLibs/INCLUDES/UjpsCore/WindowsKeysVirtualCodes*.h
-StaticLibs/SOURCES/UjpsCore/CODE/VirtualEventsQueue_*.cpp
