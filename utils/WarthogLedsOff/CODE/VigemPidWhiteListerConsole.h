@@ -10,7 +10,7 @@
 class VigemPidWhiteListerConsole
 {
 	public:
-		VigemPidWhiteListerConsole(const QString &devconDirPath = QCoreApplication::applicationDirPath() + "/../3rdparty/ViGEm/Resources/");
+		VigemPidWhiteListerConsole(const QString &devconDirPath);
 		VigemPidWhiteListerConsole(const VigemPidWhiteListerConsole &s) = default;
 		VigemPidWhiteListerConsole(VigemPidWhiteListerConsole &&s) = default;
 		VigemPidWhiteListerConsole& operator=(const VigemPidWhiteListerConsole& s) = delete;

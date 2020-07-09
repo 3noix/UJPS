@@ -25,11 +25,9 @@ INCLUDEPATH +=  ../../INCLUDES/Settings/ \
 
 
 HEADERS +=  ../../INCLUDES/VigemWrapper/VigemPidWhiteLister.h \
-			../../INCLUDES/VigemWrapper/VigemPidWhiteListerConsole.h \
 			../../INCLUDES/VigemWrapper/VigemSettingsWidget.h
 
 
 SOURCES +=  CODE/VigemPidWhiteLister.cpp \
-			CODE/VigemPidWhiteListerConsole.cpp \
 			CODE/VigemSettingsWidget.cpp
 

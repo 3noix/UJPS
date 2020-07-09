@@ -25,6 +25,8 @@ CleanQtProjects.exe %~dp0\examples\RemoteControllers
 echo.
 CleanQtProjects.exe %~dp0\src\ControllersPlugins
 echo.
+CleanQtProjects.exe %~dp0\utils
+echo.
 echo.
 
 
