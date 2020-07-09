@@ -1,4 +1,4 @@
-# UJPS: Universal Joystick Programming Software (C++) V3.3.0
+# UJPS: Universal Joystick Programming Software (C++) V3.4.0
 ## Overview
 
 This project allows the user to "program a set of real joysticks": events from the real joysticks are transformed into virtual joysticks events and/or keyboard events. This transformation is defined in the "profile" defined by the user using C++ programming language. It is comparable to the proprietary "Thrustmaster TARGET C scripts". But Thrustmaster TARGET scripts explicitly blocks non-Thrustmaster hardware. This tool works for any game controller recognized by Windows.
@@ -22,40 +22,133 @@ Why no "binaries release"? Both building UJPS and compiling a profile requires Q
 
 ## Examples
 
-First, don't hesitate to take a look at the profiles examples in the "examples/Profiles" directory. But here are a few lines of code of a UJPS profile, just to let you feel how a profile is coded. "tmwj" designates the ThrustMaster Warthog Joystick object and "TMWJ" the namespace that contains the names of its buttons, axes and povs:
+First, don't hesitate to take a look at the profiles examples in the "examples/Profiles" directory. But here is most of the code of a simple UJPS profile just for the demo. "tmwj" designates the ThrustMaster Warthog Joystick object and "TMWJ" the namespace that contains the names of its buttons, axes and povs:
 
 ```C++
-bool Profile::setupJoysticks()
+// file: Profile.h
+#include "AbstractProfileTarget.h"
+class EnhancedJoystick;
+
+class Profile : public AbstractProfileTarget
 {
-   // we retrieve pointers on real joysticks we are interested in
-   tmwj = this->registerRealJoystick("Joystick - HOTAS Warthog");
-   if (tmwj) {emit message("Warthog joystick detected !",Qt::black);}
-   else {emit message("Warthog joystick not detected !",Qt::red); return false;}
+   Q_OBJECT
+   Q_PLUGIN_METADATA(IID "Profile")
+   Q_INTERFACES(AbstractProfile)
    
-   // setup of 1 virtual joystick
-   vj1 = this->registerVirtualJoystick(1);
-   if (vj1) {emit message("Virtual joystick 1 acquired",Qt::black);}
-   else {emit message("Virtual joystick 1 failed to configure",Qt::red);}
+   public:
+      Profile();
+      Profile(const Profile &other) = delete;
+      Profile(Profile &&other) = delete;
+      Profile& operator=(const Profile &other) = delete;
+      Profile& operator=(Profile &&other) = delete;
+      virtual ~Profile() = default;
+      
+   private:
+      virtual bool setupJoysticks() override final;
+      virtual void runFirstStep() override final;
+      
+      void myCustomFunction();
+      EnhancedJoystick *tmwj; // Thrustmaster Warthog Joystick
+      VirtualJoystick  *vj1;  // virtual joystick #1
+};
+```
+```C++
+// file: Controls.h
+// It is very useful to give explicit names instead of using numbers
+#include "WindowsKeys.h"
+#include "vJoyDevice.h"
+namespace VJOY = vJoyDevice;
+
+namespace Controls_Keyboard
+{
+   const uint TrackIR_Pause  = Keys::Key_F8;
+   const uint TrackIR_Center = Keys::Key_F9;
+}
+
+namespace Controls_vJoy1
+{
+   const uint AxisFlightRoll   = VJOY::X;
+   const uint AxisFlightPitch  = VJOY::Y;
+   const uint AxisFlightYaw    = VJOY::Z;
+   const uint AxisFlightThrust = VJOY::ROTX;
    
-   return (tmwj && vj1);
+   const uint PushToTalk  = VJOY::DX1;
+   const uint Autopilot   = VJOY::DX2;
+   const uint Autoland    = VJOY::DX3;
+   const uint Autothrust  = VJOY::DX4;
+   const uint LandingGear = VJOY::DX5;
 }
 ```
 ```C++
-void Profile::runFirstStep()
+//file: Profile.cpp
+#include "Profile.h"
+#include "TRIGGERS/Triggers.h"
+#include "ACTIONS/Actions.h"
+LayersCombo AllLayers{};
+
+#include "VirtualJoystick.h"
+#include "EnhancedJoystick.h"
+#include "ThrustmasterWarthogJoystick.h"
+#include "Controls.h"
+namespace TMWJ = ThrustmasterWarthogJoystick;
+namespace CTLK = Controls_Keyboard;
+namespace CTL1 = Controls_vJoy1;
+
+
+bool Profile::setupJoysticks()
 {
-   // registering a modifier button
-   this->registerLayerDim1(Layers::In, tmwj, TMWJ::S4);
+   // we retrieve pointers on real joysticks we are interested in
+   if (tmwj = this->registerRealJoystick(TMWJ::Description))
+      emit message("Warthog joystick detected !",Qt::black);
+   else {
+      emit message("Warthog joystick not detected !",Qt::red);
+      return false;
+   }
    
-   // mappings creation
-   MapAxis(tmwj,   TMWJ::JOYX, AllLayers, vj1, SC1::AxisFlightRoll);  // basic axis mapping
-   MapButton(tmwj, TMWJ::TG1,  AllLayers, vj1, SC1::FireGroup1);      // basic button mapping
-   Map(tmwj, ControlType::Button, TMWJ::S2,  AllLayers, new TriggerButtonPress{},   new ActionCallback{[this]() {this->myCustomFunction();}}); // custom function execution when S2 gets pressed
-   Map(tmwj, ControlType::Button, TMWJ::H2U, AllLayers, new TriggerButtonRelease{},  // when H2U is released...
-     new ActionChain{
-       new ActionButtonPulse{vj1,SC1::ResetPowerDistribution,ms2cycles(200)},  // button pulse of 200 ms...
-       new Delay{ms2cycles(300)},                                // ... and 300 ms after the beginning of the first pulse...
-       new ActionKeyPulse{SCK::TrackIR_Center,0,ms2cycles(200)}  // ... a keystroke pulse of 200 ms
-   });
+   // virtual joystick(s) setup
+   if (vj1 = this->registerVirtualJoystick(1))
+      emit message("Virtual joystick 1 acquired",Qt::black);
+   else {
+      emit message("Virtual joystick 1 failed to configure",Qt::red);
+      return false;
+   }
+   
+   return true;
+}
+
+void Profile::runFirstStep() // executed one time at the beginning
+{
+   vj1->resetReport();
+   
+   // Basic axis mapping
+   // The axis "AxisFlightRoll" of virtual joystick 1 will follow the JOYX axis of TMWJ
+   MapAxis(tmwj, TMWJ::JOYX, AllLayers, vj1, CTL1::AxisFlightRoll);
+   
+   // Basic button mapping
+   // The button "PushToTalk" of virtual joystick 1 will follow the TG1 button of TMWJ
+   MapButton(tmwj, TMWJ::TG1, AllLayers, vj1, CTL1::PushToTalk);
+   
+   // Standard mapping
+   // The code just below does exactly the same as the basic button mapping but with
+   // a lower level function. It can be used with a wide range of triggers and actions,
+   // and you can create your own ones.
+   Map(tmwj, ControlType::Button, TMWJ::TG1, AllLayers,
+      new TriggerButtonChange{},                      // at each change of TG1 button
+      new ActionButtonSetChange{vj1, CTL1::Autopilot} // the change is reproduced on this one
+   );
+   
+   // Standard mapping
+   // With different triggers and actions
+   Map(tmwj, ControlType::Button, TMWJ::H2U, AllLayers,
+      new TriggerButtonRelease{},  // each time H2U button is released...
+      new ActionChain{{
+         new ActionButtonPulse{vj1,CTL1::Autoland,ms2cycles(200)},  // button pulse of 200 ms...
+         new Delay{ms2cycles(300)},  // ...and 300 ms after the beginning of the first pulse...
+         new ActionKeyPulse{CTLK::TrackIR_Center,0,ms2cycles(200)}, // ...a keystroke for 200 ms
+         new ActionCallback{[this]() {this->myCustomFunction();}}   // ...and myCustomFunction is executed*
+   }});
+   // *mappings can be deleted and added inside such functions: they are not frozen
+   // after the initial definition done in this "runFirstStep" function
 }
 ```
 
