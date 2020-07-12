@@ -26,13 +26,13 @@ MainWindow::MainWindow(QWidget *parent) :
 {
 	this->setupWidget();
 	this->setWindowTitle(QGuiApplication::applicationDisplayName());
-	this->slotSetState(RemoteJoystickClient::State::NotConnected);
+	this->slotSetState(RemoteJoystickTcpClient::State::NotConnected);
 	
-	QObject::connect(m_connectionWidget, &ConnectionWidget::connectionRequest, &m_client, &RemoteJoystickClient::slotConnect);
+	QObject::connect(m_connectionWidget, &ConnectionWidget::connectionRequest, &m_client, &RemoteJoystickTcpClient::slotConnect);
 	
-	QObject::connect(&m_client, &RemoteJoystickClient::signalSetData, this, &MainWindow::slotSetData);
-	QObject::connect(&m_client, &RemoteJoystickClient::stateChanged, this, &MainWindow::slotSetState);
-	QObject::connect(&m_client, &RemoteJoystickClient::error, m_connectionWidget, &ConnectionWidget::slotError);
+	QObject::connect(&m_client, &RemoteJoystickTcpClient::signalSetData, this, &MainWindow::slotSetData);
+	QObject::connect(&m_client, &RemoteJoystickTcpClient::stateChanged, this, &MainWindow::slotSetState);
+	QObject::connect(&m_client, &RemoteJoystickTcpClient::error, m_connectionWidget, &ConnectionWidget::slotError);
 	
 	QObject::connect(m_slider,  &QSlider::valueChanged, this, &MainWindow::slotSliderValueChanged);
 	QObject::connect(m_button1, &QPushButton::pressed,  this, &MainWindow::slotButton1Pressed);
@@ -85,17 +85,17 @@ void MainWindow::slotSetData(const QString &prop, QVariant data)
 }
 
 // SLOT SET STATE /////////////////////////////////////////////////////////////
-void MainWindow::slotSetState(RemoteJoystickClient::State s)
+void MainWindow::slotSetState(RemoteJoystickTcpClient::State s)
 {
-	if (s == RemoteJoystickClient::State::NotConnected || s == RemoteJoystickClient::State::Error)
+	if (s == RemoteJoystickTcpClient::State::NotConnected || s == RemoteJoystickTcpClient::State::Error)
 	{
 		m_connectionWidget->setDisconnected();
 	}
-	else if (s == RemoteJoystickClient::State::Connecting)
+	else if (s == RemoteJoystickTcpClient::State::Connecting)
 	{
 		m_connectionWidget->setConnecting();
 	}
-	else if (s == RemoteJoystickClient::State::Connected)
+	else if (s == RemoteJoystickTcpClient::State::Connected)
 	{
 		m_connectionWidget->setConnected();
 		

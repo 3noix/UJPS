@@ -7,9 +7,9 @@ REM echo.
 
 
 REM COMPILATION
-echo compiling RemoteControllerTest_v4
+echo compiling RemoteControllerTcpTest
 echo.
-cd RemoteControllerTest_v4
+cd RemoteControllerTcpTest
 qmake
 mingw32-make release
 echo.

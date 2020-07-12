@@ -1,7 +1,7 @@
 #include "AbstractProfileTarget.h"
 #include "RealJoysticksManager.h"
 #include "EnhancedJoystick.h"
-#include "RemoteJoystickServer.h"
+#include "RemoteJoystickTcpServer.h"
 #include "VirtualJoystick.h"
 #include "MAPPINGS/Mappings.h"
 #include "TRIGGERS/Triggers.h"
@@ -19,7 +19,8 @@
 //  IS INIT COMPLETE
 //
 //  REGISTER REAL JOYSTICK
-//  SLOT REMOTE JOYSTICK CONNECTED
+//  REGISTER REMOTE JOYSTICK TCP
+//  SLOT REMOTE JOYSTICK TCP CONNECTED
 //  REGISTER VIRTUAL JOYSTICK
 //  REGISTER LAYER DIM 1
 //  REGISTER LAYER DIM 2
@@ -79,7 +80,7 @@ void AbstractProfileTarget::stop()
 	
 	qDeleteAll(m_realJoysticks);
 	qDeleteAll(m_virtualJoysticks);
-	m_remoteJoysticks.clear();
+	m_remoteJoysticksTcp.clear();
 	m_realJoysticks.clear();
 	m_virtualJoysticks.clear();
 }
@@ -151,7 +152,7 @@ void AbstractProfileTarget::run()
 // IS INIT COMPLETE ///////////////////////////////////////////////////////////
 bool AbstractProfileTarget::isInitComplete() const
 {
-	for (RemoteJoystickServer *rjs : m_remoteJoysticks)
+	for (RemoteJoystickTcpServer *rjs : m_remoteJoysticksTcp)
 	{
 		if (!rjs->isConnected())
 		{return false;}
@@ -178,21 +179,22 @@ EnhancedJoystick* AbstractProfileTarget::registerRealJoystick(const QString &des
 	return erj;
 }
 
-EnhancedJoystick* AbstractProfileTarget::registerRealJoystick(RemoteJoystickServer *rjs)
+// REGISTER REMOTE JOYSTICK TCP ///////////////////////////////////////////////
+EnhancedJoystick* AbstractProfileTarget::registerRemoteJoystickTcp(RemoteJoystickTcpServer *rjs)
 {
 	if (!rjs) {return nullptr;}
 	
 	QObject::connect(rjs, SIGNAL(message(QString,QColor)), this, SIGNAL(message(QString,QColor)));
-	QObject::connect(rjs, SIGNAL(connected()), this, SLOT(slotRemoteJoystickConnected()));
-	QObject::connect(rjs, SIGNAL(disconnected()), this, SIGNAL(remoteJoystickDisconnected()));
+	QObject::connect(rjs, SIGNAL(connected()), this, SLOT(slotRemoteJoystickTcpConnected()));
+	QObject::connect(rjs, SIGNAL(disconnected()), this, SIGNAL(remoteJoystickTcpDisconnected()));
 	EnhancedJoystick *erj = new EnhancedJoystick{rjs,true};
 	m_realJoysticks.push_back(erj);
-	m_remoteJoysticks.push_back(rjs);
+	m_remoteJoysticksTcp.push_back(rjs);
 	return erj;
 }
 
-// SLOT REMOTE JOYSTICK CONNECTED /////////////////////////////////////////////
-void AbstractProfileTarget::slotRemoteJoystickConnected()
+// SLOT REMOTE JOYSTICK TCP CONNECTED /////////////////////////////////////////
+void AbstractProfileTarget::slotRemoteJoystickTcpConnected()
 {
 	if (this->isInitComplete())
 		emit asyncInitComplete();

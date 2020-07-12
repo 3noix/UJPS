@@ -12,7 +12,7 @@ class QPushButton;
 class QSlider;
 class QGroupBox;
 
-#include "RemoteJoystickClient.h"
+#include "RemoteJoystickTcpClient.h"
 class ConnectionWidget;
 
 
@@ -31,7 +31,7 @@ class MainWindow : public QWidget
 		
 	private slots:
 		void slotSetData(const QString &prop, QVariant data);
-		void slotSetState(RemoteJoystickClient::State s);
+		void slotSetState(RemoteJoystickTcpClient::State s);
 		
 		void slotSliderValueChanged(int value);
 		void slotButton1Pressed();
@@ -44,7 +44,7 @@ class MainWindow : public QWidget
 		void setupWidget();
 		
 		ConnectionWidget *m_connectionWidget;
-		RemoteJoystickClient m_client;
+		RemoteJoystickTcpClient m_client;
 		
 		QVBoxLayout *m_mainLayout;
 		QGroupBox *m_box;

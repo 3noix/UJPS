@@ -14,7 +14,7 @@
 
 class AbstractRealJoystick;
 class EnhancedJoystick;
-class RemoteJoystickServer;
+class RemoteJoystickTcpServer;
 class VirtualJoystick;
 class AbstractMapping;
 class AbstractTrigger;
@@ -72,7 +72,7 @@ class AbstractProfileTarget : public AbstractProfile
 		
 	protected:
 		EnhancedJoystick* registerRealJoystick(const QString &description, int num = 0);
-		EnhancedJoystick* registerRealJoystick(RemoteJoystickServer *rjs);
+		EnhancedJoystick* registerRemoteJoystickTcp(RemoteJoystickTcpServer *rjs);
 		VirtualJoystick* registerVirtualJoystick(uint id);
 		
 		void registerLayerDim1(Layers::LayerDim1 layer1, AbstractRealJoystick *rj = nullptr, uint rButton = 0);
@@ -80,7 +80,7 @@ class AbstractProfileTarget : public AbstractProfile
 		
 		
 	private slots:
-		void slotRemoteJoystickConnected();
+		void slotRemoteJoystickTcpConnected();
 		
 		
 	private:
@@ -102,7 +102,7 @@ class AbstractProfileTarget : public AbstractProfile
 		QVector<JoystickChange> m_changes;
 		QVector<AbstractMapping*> m_mappings;
 		std::vector<AbstractRealJoystick*> m_realJoysticks;
-		std::vector<RemoteJoystickServer*> m_remoteJoysticks;
+		std::vector<RemoteJoystickTcpServer*> m_remoteJoysticksTcp;
 		std::vector<VirtualJoystick*> m_virtualJoysticks;
 		VirtualEventsQueue m_eventsQueue;
 		

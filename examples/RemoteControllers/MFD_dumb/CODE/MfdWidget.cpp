@@ -45,12 +45,12 @@ MfdWidget::MfdWidget(int size, QWidget *parent) :
 	
 	// network work
 	m_connectionWidget = new ConnectionWidget{};
-	this->slotSetState(RemoteJoystickClient::State::NotConnected);
+	this->slotSetState(RemoteJoystickTcpClient::State::NotConnected);
 	
-	QObject::connect(&m_client, &RemoteJoystickClient::signalSetData, this, &MfdWidget::slotSetData);
-	QObject::connect(&m_client, &RemoteJoystickClient::stateChanged,  this, &MfdWidget::slotSetState);
-	QObject::connect(&m_client, &RemoteJoystickClient::error,         this, &MfdWidget::slotError);
-	QObject::connect(m_connectionWidget, &ConnectionWidget::connectionRequest, &m_client, &RemoteJoystickClient::slotConnect);
+	QObject::connect(&m_client, &RemoteJoystickTcpClient::signalSetData, this, &MfdWidget::slotSetData);
+	QObject::connect(&m_client, &RemoteJoystickTcpClient::stateChanged,  this, &MfdWidget::slotSetState);
+	QObject::connect(&m_client, &RemoteJoystickTcpClient::error,         this, &MfdWidget::slotError);
+	QObject::connect(m_connectionWidget, &ConnectionWidget::connectionRequest, &m_client, &RemoteJoystickTcpClient::slotConnect);
 }
 
 // DESTRUCTEUR ////////////////////////////////////////////////////////////////
@@ -95,21 +95,21 @@ void MfdWidget::slotError(const QString &text)
 }
 
 // SLOT SET STATE /////////////////////////////////////////////////////////////
-void MfdWidget::slotSetState(RemoteJoystickClient::State s)
+void MfdWidget::slotSetState(RemoteJoystickTcpClient::State s)
 {
-	if (s == RemoteJoystickClient::State::NotConnected || s == RemoteJoystickClient::State::Error)
+	if (s == RemoteJoystickTcpClient::State::NotConnected || s == RemoteJoystickTcpClient::State::Error)
 	{
 		m_connectionWidget->show();
 		m_connectionWidget->raise();
 		m_connectionWidget->setDisconnected();
 	}
-	else if (s == RemoteJoystickClient::State::Connecting)
+	else if (s == RemoteJoystickTcpClient::State::Connecting)
 	{
 		m_connectionWidget->show();
 		m_connectionWidget->raise();
 		m_connectionWidget->setConnecting();
 	}
-	else if (s == RemoteJoystickClient::State::Connected)
+	else if (s == RemoteJoystickTcpClient::State::Connected)
 	{
 		m_connectionWidget->hide();
 		m_connectionWidget->setConnected();

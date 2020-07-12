@@ -39,7 +39,7 @@ class ProfileEngine : public QObject
 		void slotResumeLoadProfile();
 		void slotOneLoop();
 		void slotStartTimer();
-		void slotRemoteJoystickDisconnected();
+		void slotRemoteJoystickTcpDisconnected();
 		
 		
 	signals:

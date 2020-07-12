@@ -36,7 +36,7 @@ class AbstractProfile : public QObject
 	signals:
 		void message(const QString &str, QColor color);
 		void asyncInitComplete();
-		void remoteJoystickDisconnected();
+		void remoteJoystickTcpDisconnected();
 		
 		
 	protected:

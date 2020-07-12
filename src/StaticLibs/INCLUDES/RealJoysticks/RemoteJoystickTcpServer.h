@@ -1,5 +1,5 @@
-#ifndef REMOTE_JOYSTICK_SERVER
-#define REMOTE_JOYSTICK_SERVER
+#ifndef REMOTE_JOYSTICK_TCP_SERVER
+#define REMOTE_JOYSTICK_TCP_SERVER
 
 
 #include <QObject>
@@ -11,19 +11,19 @@ class QNetworkSession;
 class QTcpSocket;
 
 
-class RemoteJoystickServer : public QObject, public AbstractRealJoystick
+class RemoteJoystickTcpServer : public QObject, public AbstractRealJoystick
 {
 	Q_OBJECT
 	Q_INTERFACES(AbstractRealJoystick)
 	
 	
 	public:
-		RemoteJoystickServer(const QString &name, int portNumber, uint id);
-		RemoteJoystickServer(const RemoteJoystickServer &other) = delete;
-		RemoteJoystickServer(RemoteJoystickServer &&other) = delete;
-		RemoteJoystickServer& operator=(const RemoteJoystickServer &other) = delete;
-		RemoteJoystickServer& operator=(RemoteJoystickServer &&other) = delete;
-		virtual ~RemoteJoystickServer();
+		RemoteJoystickTcpServer(const QString &name, int portNumber, uint id);
+		RemoteJoystickTcpServer(const RemoteJoystickTcpServer &other) = delete;
+		RemoteJoystickTcpServer(RemoteJoystickTcpServer &&other) = delete;
+		RemoteJoystickTcpServer& operator=(const RemoteJoystickTcpServer &other) = delete;
+		RemoteJoystickTcpServer& operator=(RemoteJoystickTcpServer &&other) = delete;
+		virtual ~RemoteJoystickTcpServer();
 		
 		bool isConnected() const;
 		

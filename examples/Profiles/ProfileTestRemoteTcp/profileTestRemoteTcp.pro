@@ -7,7 +7,7 @@ CONFIG(release, debug|release) {
 
 
 TEMPLATE = lib
-TARGET = ProfileTestRemote
+TARGET = ProfileTestRemoteTcp
 CONFIG += c++11 plugin
 DESTDIR = $$MODE
 OBJECTS_DIR = $$DESTDIR/objects

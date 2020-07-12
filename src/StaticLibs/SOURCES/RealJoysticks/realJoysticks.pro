@@ -27,12 +27,12 @@ INCLUDEPATH +=  ../../INCLUDES/QtGameControllerModif/ \
 HEADERS +=  ../../INCLUDES/RealJoysticks/AbstractRealJoystickFactory.h \
 			../../INCLUDES/RealJoysticks/RealJoysticksManager.h \
 			../../INCLUDES/RealJoysticks/RealJoystick.h \
-			../../INCLUDES/RealJoysticks/RemoteJoystickServer.h
+			../../INCLUDES/RealJoysticks/RemoteJoystickTcpServer.h
 
 
 SOURCES +=  CODE/RealJoysticksManager.cpp \
 			CODE/RealJoystick.cpp \
-			CODE/RemoteJoystickServer.cpp \
+			CODE/RemoteJoystickTcpServer.cpp \
 			CODE/EnhancedJoystick.cpp \
 			CODE/AxesRotator.cpp \
 			CODE/CURVES/CurvePolynomial2.cpp \

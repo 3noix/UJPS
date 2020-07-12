@@ -1,6 +1,6 @@
 #include "AbstractProfileBasic.h"
 #include "RealJoysticksManager.h"
-#include "RemoteJoystickServer.h"
+#include "RemoteJoystickTcpServer.h"
 #include "VirtualJoystick.h"
 
 #include <QCoreApplication>
@@ -15,7 +15,8 @@
 //  IS INIT COMPLETE
 //
 //  REGISTER REAL JOYSTICK
-//  SLOT REMOTE JOYSTICK CONNECTED
+//  REGISTER REMOTE JOYSTICK TCP
+//  SLOT REMOTE JOYSTICK TCP CONNECTED
 //  REGISTER VIRTUAL JOYSTICK
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -41,11 +42,11 @@ void AbstractProfileBasic::stop()
 	// the RealJoysticksManager has their ownership,
 	// and it is reset only if profile is unloaded
 	
-	qDeleteAll(m_remoteJoysticks);
+	qDeleteAll(m_remoteJoysticksTcp);
 	qDeleteAll(m_virtualJoysticks);
 	
 	m_realJoysticksNoRemote.clear();
-	m_remoteJoysticks.clear();
+	m_remoteJoysticksTcp.clear();
 	m_virtualJoysticks.clear();
 }
 
@@ -54,7 +55,7 @@ void AbstractProfileBasic::run()
 {
 	// read the states of each real joystick
 	for (AbstractRealJoystick *rj : m_realJoysticksNoRemote) {rj->readGameController();}
-	for (AbstractRealJoystick *rj : m_remoteJoysticks)       {rj->readGameController();}
+	for (AbstractRealJoystick *rj : m_remoteJoysticksTcp)       {rj->readGameController();}
 	
 	// core of the loop
 	this->runOneStep(m_bFirstStep);
@@ -62,7 +63,7 @@ void AbstractProfileBasic::run()
 	// flush virtual then real joysticks
 	for (VirtualJoystick *vj : m_virtualJoysticks)           {vj->flush();} // send HID report to vJoy devices
 	for (AbstractRealJoystick *rj : m_realJoysticksNoRemote) {rj->flush();} // implementation defined
-	for (AbstractRealJoystick *rj : m_remoteJoysticks)       {rj->flush();} // implementation defined
+	for (AbstractRealJoystick *rj : m_remoteJoysticksTcp)       {rj->flush();} // implementation defined
 	
 	m_bFirstStep = false;
 }
@@ -70,7 +71,7 @@ void AbstractProfileBasic::run()
 // IS INIT COMPLETE ///////////////////////////////////////////////////////////
 bool AbstractProfileBasic::isInitComplete() const
 {
-	for (RemoteJoystickServer *rjs : m_remoteJoysticks)
+	for (RemoteJoystickTcpServer *rjs : m_remoteJoysticksTcp)
 	{
 		if (!rjs->isConnected())
 		{return false;}
@@ -97,17 +98,18 @@ AbstractRealJoystick* AbstractProfileBasic::registerRealJoystick(const QString &
 	return rj;
 }
 
-void AbstractProfileBasic::registerRealJoystick(RemoteJoystickServer *rjs)
+// REGISTER REMOTE JOYSTICK TCP ///////////////////////////////////////////////
+void AbstractProfileBasic::registerRemoteJoystickTcp(RemoteJoystickTcpServer *rjs)
 {
 	if (!rjs) {return;}
 	QObject::connect(rjs, SIGNAL(message(QString,QColor)), this, SIGNAL(message(QString,QColor)));
-	QObject::connect(rjs, SIGNAL(connected()),             this, SLOT(slotRemoteJoystickConnected()));
-	QObject::connect(rjs, SIGNAL(disconnected()),          this, SIGNAL(remoteJoystickDisconnected()));
-	m_remoteJoysticks.push_back(rjs);
+	QObject::connect(rjs, SIGNAL(connected()),             this, SLOT(slotRemoteJoystickTcpConnected()));
+	QObject::connect(rjs, SIGNAL(disconnected()),          this, SIGNAL(remoteJoystickTcpDisconnected()));
+	m_remoteJoysticksTcp.push_back(rjs);
 }
 
-// SLOT REMOTE JOYSTICK CONNECTED /////////////////////////////////////////////
-void AbstractProfileBasic::slotRemoteJoystickConnected()
+// SLOT REMOTE JOYSTICK TCP CONNECTED /////////////////////////////////////////
+void AbstractProfileBasic::slotRemoteJoystickTcpConnected()
 {
 	if (this->isInitComplete())
 		emit asyncInitComplete();

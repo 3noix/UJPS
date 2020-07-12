@@ -37,7 +37,7 @@ HEADERS =   CODE/MfdWidget.h \
 			CODE/CUSTOM/MfdPage_IFCS.h \
 			CODE/CUSTOM/MfdPage_SYS.h \
 			CODE/REMOTE/ConnectionWidget.h \
-			CODE/REMOTE/RemoteJoystickClient.h
+			CODE/REMOTE/RemoteJoystickTcpClient.h
 
 
 SOURCES =   CODE/main.cpp \
@@ -57,5 +57,5 @@ SOURCES =   CODE/main.cpp \
 			CODE/CUSTOM/MfdPage_IFCS.cpp \
 			CODE/CUSTOM/MfdPage_SYS.cpp \
 			CODE/REMOTE/ConnectionWidget.cpp \
-			CODE/REMOTE/RemoteJoystickClient.cpp
+			CODE/REMOTE/RemoteJoystickTcpClient.cpp
 

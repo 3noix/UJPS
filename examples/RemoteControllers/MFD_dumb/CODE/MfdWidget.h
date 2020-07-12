@@ -5,7 +5,7 @@
 #include <QGraphicsView>
 #include "DEFAULT/MfdScene.h"
 
-#include "REMOTE/RemoteJoystickClient.h"
+#include "REMOTE/RemoteJoystickTcpClient.h"
 class ConnectionWidget;
 
 
@@ -34,13 +34,13 @@ class MfdWidget : public QGraphicsView
 		void slotSetData(const QString &prop, QVariant data);
 		
 		void slotError(const QString &text);
-		void slotSetState(RemoteJoystickClient::State s);
+		void slotSetState(RemoteJoystickTcpClient::State s);
 		
 		
 	private:
 		MfdScene m_scene;
 		ConnectionWidget *m_connectionWidget;
-		RemoteJoystickClient m_client;
+		RemoteJoystickTcpClient m_client;
 };
 
 

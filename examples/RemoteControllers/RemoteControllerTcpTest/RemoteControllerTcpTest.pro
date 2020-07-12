@@ -7,7 +7,7 @@ CONFIG(release, debug|release) {
 
 
 TEMPLATE = app
-TARGET = RemoteControllerTest_v4
+TARGET = RemoteControllerTcpTest
 CONFIG += c++11
 DESTDIR = $$MODE
 OBJECTS_DIR = $$DESTDIR/objects
@@ -17,11 +17,11 @@ QT += network widgets
 
 HEADERS =   CODE/MainWindow.h \
 			CODE/ConnectionWidget.h \
-			CODE/RemoteJoystickClient.h
+			CODE/RemoteJoystickTcpClient.h
 
 
 SOURCES =   CODE/main.cpp \
 			CODE/MainWindow.cpp \
 			CODE/ConnectionWidget.cpp \
-			CODE/RemoteJoystickClient.cpp
+			CODE/RemoteJoystickTcpClient.cpp
 

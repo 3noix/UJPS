@@ -1,9 +1,9 @@
-#ifndef REMOTE_JOYSTICK_MESSAGE_TYPES
-#define REMOTE_JOYSTICK_MESSAGE_TYPES
+#ifndef REMOTE_JOYSTICK_TCP_MESSAGE_TYPES
+#define REMOTE_JOYSTICK_TCP_MESSAGE_TYPES
 
 
 #include <QtGlobal>
-namespace RemoteJoystickMessageType
+namespace RemoteJoystickTcpMessageType
 {
 	const quint8 Invalid = 0;
 	const quint8 Init = 1;		// a QString, 2 quint8 and 2 QStringList

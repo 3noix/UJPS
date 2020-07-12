@@ -10,7 +10,7 @@ class QTcpSocket;
 class QNetworkSession;
 
 
-class RemoteJoystickClient : public QObject
+class RemoteJoystickTcpClient : public QObject
 {
 	Q_OBJECT
 	
@@ -23,18 +23,18 @@ class RemoteJoystickClient : public QObject
 			Error
 		};
 		
-		explicit RemoteJoystickClient(
+		explicit RemoteJoystickTcpClient(
 			const QString &description,
 			const QStringList &buttonsNames,
 			const QStringList &axesNames,
 			const QStringList &povsNames,
 			QObject *parent = nullptr
 		);
-		RemoteJoystickClient(const RemoteJoystickClient &other) = delete;
-		RemoteJoystickClient(RemoteJoystickClient &&other) = delete;
-		RemoteJoystickClient& operator=(const RemoteJoystickClient &other) = delete;
-		RemoteJoystickClient& operator=(RemoteJoystickClient &&other) = delete;
-		virtual ~RemoteJoystickClient() = default;
+		RemoteJoystickTcpClient(const RemoteJoystickTcpClient &other) = delete;
+		RemoteJoystickTcpClient(RemoteJoystickTcpClient &&other) = delete;
+		RemoteJoystickTcpClient& operator=(const RemoteJoystickTcpClient &other) = delete;
+		RemoteJoystickTcpClient& operator=(RemoteJoystickTcpClient &&other) = delete;
+		virtual ~RemoteJoystickTcpClient() = default;
 		
 		QString description() const;
 		quint8 buttonsCount() const;

@@ -5,7 +5,7 @@
 #include "AbstractProfile.h"
 
 class AbstractRealJoystick;
-class RemoteJoystickServer;
+class RemoteJoystickTcpServer;
 class VirtualJoystick;
 
 
@@ -30,12 +30,12 @@ class AbstractProfileBasic : public AbstractProfile
 		
 	protected:
 		AbstractRealJoystick* registerRealJoystick(const QString &description, int num = 0);
-		void registerRealJoystick(RemoteJoystickServer *rjs);
+		void registerRemoteJoystickTcp(RemoteJoystickTcpServer *rjs);
 		VirtualJoystick* registerVirtualJoystick(uint id);
 		
 		
 	private slots:
-		void slotRemoteJoystickConnected();
+		void slotRemoteJoystickTcpConnected();
 		
 		
 	private:
@@ -46,7 +46,7 @@ class AbstractProfileBasic : public AbstractProfile
 		bool m_bFirstStep;
 		
 		std::vector<AbstractRealJoystick*> m_realJoysticksNoRemote;
-		std::vector<RemoteJoystickServer*> m_remoteJoysticks;
+		std::vector<RemoteJoystickTcpServer*> m_remoteJoysticksTcp;
 		std::vector<VirtualJoystick*> m_virtualJoysticks;
 };
 

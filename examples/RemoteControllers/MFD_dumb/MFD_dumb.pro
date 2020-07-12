@@ -30,7 +30,7 @@ HEADERS =   CODE/MfdWidget.h \
 			CODE/DEFAULT/Geometry.h \
 			CODE/DEFAULT/Brushs.h \
 			CODE/REMOTE/ConnectionWidget.h \
-			CODE/REMOTE/RemoteJoystickClient.h
+			CODE/REMOTE/RemoteJoystickTcpClient.h
 
 
 SOURCES =   CODE/main.cpp \
@@ -44,5 +44,5 @@ SOURCES =   CODE/main.cpp \
 			CODE/DEFAULT/MfdRectangularButton.cpp \
 			CODE/DEFAULT/MfdScreen.cpp \
 			CODE/REMOTE/ConnectionWidget.cpp \
-			CODE/REMOTE/RemoteJoystickClient.cpp
+			CODE/REMOTE/RemoteJoystickTcpClient.cpp
 
