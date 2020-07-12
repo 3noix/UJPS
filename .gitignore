@@ -17,3 +17,5 @@ bin/ControllersInfoSettings.xml
 bin/MonitoringSettings.xml
 bin/UjpsSettings.xml
 bin/QtCompilerSettings.xml
+examples
+.vscode
