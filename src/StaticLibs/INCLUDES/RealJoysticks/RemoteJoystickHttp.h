@@ -1,31 +1,21 @@
-#ifndef REMOTE_JOYSTICK_TCP_SERVER
-#define REMOTE_JOYSTICK_TCP_SERVER
+#ifndef REMOTE_JOYSTICK_HTTP
+#define REMOTE_JOYSTICK_HTTP
 
 
-#include <QObject>
-#include <QColor>
 #include "AbstractRealJoystick.h"
 
-class QTcpServer;
-class QNetworkSession;
-class QTcpSocket;
 
-
-class RemoteJoystickTcpServer : public QObject, public AbstractRealJoystick
+class RemoteJoystickHttp : public AbstractRealJoystick
 {
-	Q_OBJECT
-	Q_INTERFACES(AbstractRealJoystick)
-	
-	
 	public:
-		RemoteJoystickTcpServer(const QString &name, int portNumber, uint id);
-		RemoteJoystickTcpServer(const RemoteJoystickTcpServer &other) = delete;
-		RemoteJoystickTcpServer(RemoteJoystickTcpServer &&other) = delete;
-		RemoteJoystickTcpServer& operator=(const RemoteJoystickTcpServer &other) = delete;
-		RemoteJoystickTcpServer& operator=(RemoteJoystickTcpServer &&other) = delete;
-		virtual ~RemoteJoystickTcpServer();
+		RemoteJoystickHttp(const QString &name, uint id);
+		RemoteJoystickHttp(const RemoteJoystickHttp &other) = delete;
+		RemoteJoystickHttp(RemoteJoystickHttp &&other) = delete;
+		RemoteJoystickHttp& operator=(const RemoteJoystickHttp &other) = delete;
+		RemoteJoystickHttp& operator=(RemoteJoystickHttp &&other) = delete;
+		virtual ~RemoteJoystickHttp() = default;
 		
-		bool isConnected() const;
+		QString url() const;
 		
 		virtual uint id() const override final;
 		virtual QString description() const override final;
@@ -52,33 +42,13 @@ class RemoteJoystickTcpServer : public QObject, public AbstractRealJoystick
 		virtual void flush() override final;
 		
 		
-	signals:
-		void message(const QString &str, QColor color);
-		void connected();
-		void disconnected();
-		
-		
-	private slots:
-		void slotSessionOpened();
-		void slotNewConnection();
-		void slotReceiveData();
-		void slotRemoveConnection();
-		
-		
 	private:
-		QVector<JoystickChange> m_changes;
+		void addChange(const JoystickChange &ch);
+		friend class UjpsHttpServer;
 		
 		QString m_name;
-		int m_portNumber;
 		uint m_id;
-		bool m_bConnected;
-		bool m_bDestructionInProgress;
 		
-		quint16 m_dataSize;
-		qint8 m_messageType;
-		
-		bool m_initialized;
-		bool m_initFailed;
 		uint m_nbButtons;
 		uint m_nbAxes;
 		uint m_nbPovs;
@@ -88,10 +58,7 @@ class RemoteJoystickTcpServer : public QObject, public AbstractRealJoystick
 		std::array<bool,128> m_buttons;
 		std::array<float,8> m_axes;
 		std::array<float,4> m_povs;
-		
-		QNetworkSession *m_networkSession;
-		QTcpServer *m_tcpServer;
-		QTcpSocket *m_tcpSocket;
+		QVector<JoystickChange> m_changes;
 };
 
 

@@ -1,0 +1,77 @@
+* {
+    touch-action: manipulation;
+    /* touch-action: none; */
+}
+
+.body {
+	background-color: white;
+	/* width: 667px; */
+	/* height: 375px; */
+	width: 667px;
+	height: 324px;
+	border: solid 1px black;
+}
+
+.btn.btn-outline-primary {
+	margin: 5px;
+	border-radius: 10px;
+	width: 50px;
+	height: 50px;
+	text-align: center;
+	vertical-align: middle;
+	display: table-cell;
+}
+
+.btn.btn-outline-primary:hover {
+	background-color: white;
+	color:#007bff;
+}
+
+.btn.btn-outline-primary:active {
+	background-color:#007bff;
+	color: white;
+}
+
+.slider-label {
+	margin: 5px;
+	vertical-align: middle;
+	display: table-cell;
+}
+
+.slidercontainer {
+	margin: 5px;
+	width: 200px;
+}
+
+.slider {
+	-webkit-appearance: none;  /* Override default CSS styles */
+	appearance: none;
+	width: 200px;
+	height: 25px;
+	background: #d3d3d3;
+	outline: none;
+	opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
+	-webkit-transition: .2s; /* 0.2 seconds transition on hover */
+	transition: opacity .2s;
+}
+
+.slider:hover {
+	opacity: 1;
+}
+
+/* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */
+.slider::-webkit-slider-thumb {
+	-webkit-appearance: none; /* Override default look */
+	appearance: none;
+	width: 25px;
+	height: 25px;
+	background: #4CAF50;
+	cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+	width: 25px;
+	height: 25px;
+	background: #4CAF50;
+	cursor: pointer;
+}

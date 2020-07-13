@@ -1,6 +1,8 @@
 #include "AbstractProfileBasic.h"
 #include "RealJoysticksManager.h"
 #include "RemoteJoystickTcpServer.h"
+#include "RemoteJoystickHttp.h"
+#include "UjpsHttpServer.h"
 #include "VirtualJoystick.h"
 
 #include <QCoreApplication>
@@ -16,6 +18,7 @@
 //
 //  REGISTER REAL JOYSTICK
 //  REGISTER REMOTE JOYSTICK TCP
+//  REGISTER REMOTE JOYSTICK HTTP
 //  SLOT REMOTE JOYSTICK TCP CONNECTED
 //  REGISTER VIRTUAL JOYSTICK
 ///////////////////////////////////////////////////////////////////////////////
@@ -42,12 +45,19 @@ void AbstractProfileBasic::stop()
 	// the RealJoysticksManager has their ownership,
 	// and it is reset only if profile is unloaded
 	
+	// not doing qDeleteAll on m_remoteJoysticksHttp, on purpose:
+	// the UjpsHttpServer has their ownership
+	// and delete them when "close" is called
+	
 	qDeleteAll(m_remoteJoysticksTcp);
 	qDeleteAll(m_virtualJoysticks);
 	
 	m_realJoysticksNoRemote.clear();
 	m_remoteJoysticksTcp.clear();
+	m_remoteJoysticksHttp.clear();
 	m_virtualJoysticks.clear();
+	
+	UjpsHttpServer::instance().close();
 }
 
 // RUN ////////////////////////////////////////////////////////////////////////
@@ -55,7 +65,8 @@ void AbstractProfileBasic::run()
 {
 	// read the states of each real joystick
 	for (AbstractRealJoystick *rj : m_realJoysticksNoRemote) {rj->readGameController();}
-	for (AbstractRealJoystick *rj : m_remoteJoysticksTcp)       {rj->readGameController();}
+	for (AbstractRealJoystick *rj : m_remoteJoysticksTcp)    {rj->readGameController();}
+	for (AbstractRealJoystick *rj : m_remoteJoysticksHttp)   {rj->readGameController();}
 	
 	// core of the loop
 	this->runOneStep(m_bFirstStep);
@@ -63,7 +74,8 @@ void AbstractProfileBasic::run()
 	// flush virtual then real joysticks
 	for (VirtualJoystick *vj : m_virtualJoysticks)           {vj->flush();} // send HID report to vJoy devices
 	for (AbstractRealJoystick *rj : m_realJoysticksNoRemote) {rj->flush();} // implementation defined
-	for (AbstractRealJoystick *rj : m_remoteJoysticksTcp)       {rj->flush();} // implementation defined
+	for (AbstractRealJoystick *rj : m_remoteJoysticksTcp)    {rj->flush();} // implementation defined
+	//for (AbstractRealJoystick *rj : m_remoteJoysticksHttp)   {rj->flush();} // sending data to them is not supported!
 	
 	m_bFirstStep = false;
 }
@@ -106,6 +118,18 @@ void AbstractProfileBasic::registerRemoteJoystickTcp(RemoteJoystickTcpServer *rj
 	QObject::connect(rjs, SIGNAL(connected()),             this, SLOT(slotRemoteJoystickTcpConnected()));
 	QObject::connect(rjs, SIGNAL(disconnected()),          this, SIGNAL(remoteJoystickTcpDisconnected()));
 	m_remoteJoysticksTcp.push_back(rjs);
+}
+
+// REGISTER REMOTE JOYSTICK HTTP //////////////////////////////////////////////
+RemoteJoystickHttp* AbstractProfileBasic::registerRemoteJoystickHttp(const QString &name, uint id, const QString &dirPath)
+{
+	UjpsHttpServer &httpServer = UjpsHttpServer::instance();
+	RemoteJoystickHttp *rjh = httpServer.registerRemoteGuiHttp(name,id,dirPath);
+	if (!rjh) {return nullptr;}
+	
+	m_remoteJoysticksHttp.push_back(rjh);
+	httpServer.listen();
+	return rjh;
 }
 
 // SLOT REMOTE JOYSTICK TCP CONNECTED /////////////////////////////////////////

@@ -2,6 +2,8 @@
 #include "RealJoysticksManager.h"
 #include "EnhancedJoystick.h"
 #include "RemoteJoystickTcpServer.h"
+#include "RemoteJoystickHttp.h"
+#include "UjpsHttpServer.h"
 #include "VirtualJoystick.h"
 #include "MAPPINGS/Mappings.h"
 #include "TRIGGERS/Triggers.h"
@@ -20,6 +22,7 @@
 //
 //  REGISTER REAL JOYSTICK
 //  REGISTER REMOTE JOYSTICK TCP
+//  REGISTER REMOTE JOYSTICK HTTP
 //  SLOT REMOTE JOYSTICK TCP CONNECTED
 //  REGISTER VIRTUAL JOYSTICK
 //  REGISTER LAYER DIM 1
@@ -83,6 +86,8 @@ void AbstractProfileTarget::stop()
 	m_remoteJoysticksTcp.clear();
 	m_realJoysticks.clear();
 	m_virtualJoysticks.clear();
+	
+	UjpsHttpServer::instance().close();
 }
 
 // RUN ////////////////////////////////////////////////////////////////////////
@@ -190,6 +195,19 @@ EnhancedJoystick* AbstractProfileTarget::registerRemoteJoystickTcp(RemoteJoystic
 	EnhancedJoystick *erj = new EnhancedJoystick{rjs,true};
 	m_realJoysticks.push_back(erj);
 	m_remoteJoysticksTcp.push_back(rjs);
+	return erj;
+}
+
+// REGISTER REMOTE JOYSTICK HTTP //////////////////////////////////////////////
+EnhancedJoystick* AbstractProfileTarget::registerRemoteJoystickHttp(const QString &name, uint id, const QString &dirPath)
+{
+	UjpsHttpServer &httpServer = UjpsHttpServer::instance();
+	RemoteJoystickHttp *rjh = httpServer.registerRemoteGuiHttp(name,id,dirPath);
+	if (!rjh) {return nullptr;}
+	
+	EnhancedJoystick *erj = new EnhancedJoystick{rjh,false};
+	m_realJoysticks.push_back(erj);
+	httpServer.listen();
 	return erj;
 }
 

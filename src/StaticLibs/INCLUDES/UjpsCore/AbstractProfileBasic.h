@@ -6,6 +6,7 @@
 
 class AbstractRealJoystick;
 class RemoteJoystickTcpServer;
+class RemoteJoystickHttp;
 class VirtualJoystick;
 
 
@@ -31,6 +32,7 @@ class AbstractProfileBasic : public AbstractProfile
 	protected:
 		AbstractRealJoystick* registerRealJoystick(const QString &description, int num = 0);
 		void registerRemoteJoystickTcp(RemoteJoystickTcpServer *rjs);
+		RemoteJoystickHttp* registerRemoteJoystickHttp(const QString &name, uint id, const QString &dirPath);
 		VirtualJoystick* registerVirtualJoystick(uint id);
 		
 		
@@ -47,6 +49,7 @@ class AbstractProfileBasic : public AbstractProfile
 		
 		std::vector<AbstractRealJoystick*> m_realJoysticksNoRemote;
 		std::vector<RemoteJoystickTcpServer*> m_remoteJoysticksTcp;
+		std::vector<RemoteJoystickHttp*> m_remoteJoysticksHttp;
 		std::vector<VirtualJoystick*> m_virtualJoysticks;
 };
 

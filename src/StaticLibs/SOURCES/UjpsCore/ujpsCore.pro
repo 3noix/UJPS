@@ -12,6 +12,7 @@ CONFIG += c++11
 DESTDIR = $$MODE
 OBJECTS_DIR = $$MODE/objects
 MOC_DIR = $$MODE/moc
+QT += network httpserver
 
 
 win32-g++:LIBS += ../RealJoysticks/$$MODE/librealJoysticks.a

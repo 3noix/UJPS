@@ -15,6 +15,7 @@
 class AbstractRealJoystick;
 class EnhancedJoystick;
 class RemoteJoystickTcpServer;
+class RemoteJoystickHttp;
 class VirtualJoystick;
 class AbstractMapping;
 class AbstractTrigger;
@@ -73,6 +74,7 @@ class AbstractProfileTarget : public AbstractProfile
 	protected:
 		EnhancedJoystick* registerRealJoystick(const QString &description, int num = 0);
 		EnhancedJoystick* registerRemoteJoystickTcp(RemoteJoystickTcpServer *rjs);
+		EnhancedJoystick* registerRemoteJoystickHttp(const QString &name, uint id, const QString &dirPath);
 		VirtualJoystick* registerVirtualJoystick(uint id);
 		
 		void registerLayerDim1(Layers::LayerDim1 layer1, AbstractRealJoystick *rj = nullptr, uint rButton = 0);

@@ -12,7 +12,7 @@ CONFIG += c++11
 DESTDIR = $$MODE
 OBJECTS_DIR = $$MODE/objects
 MOC_DIR = $$MODE/moc
-QT += network
+QT += network httpserver
 
 
 win32-g++:LIBS += ../QtGameControllerModif/$$MODE/libQtGameControllerModif.a
@@ -27,12 +27,16 @@ INCLUDEPATH +=  ../../INCLUDES/QtGameControllerModif/ \
 HEADERS +=  ../../INCLUDES/RealJoysticks/AbstractRealJoystickFactory.h \
 			../../INCLUDES/RealJoysticks/RealJoysticksManager.h \
 			../../INCLUDES/RealJoysticks/RealJoystick.h \
-			../../INCLUDES/RealJoysticks/RemoteJoystickTcpServer.h
+			../../INCLUDES/RealJoysticks/RemoteJoystickTcpServer.h \
+			../../INCLUDES/RealJoysticks/RemoteJoystickHttp.h \
+			../../INCLUDES/RealJoysticks/UjpsHttpServer.h
 
 
 SOURCES +=  CODE/RealJoysticksManager.cpp \
 			CODE/RealJoystick.cpp \
 			CODE/RemoteJoystickTcpServer.cpp \
+			CODE/RemoteJoystickHttp.cpp \
+			CODE/UjpsHttpServer.cpp \
 			CODE/EnhancedJoystick.cpp \
 			CODE/AxesRotator.cpp \
 			CODE/CURVES/CurvePolynomial2.cpp \

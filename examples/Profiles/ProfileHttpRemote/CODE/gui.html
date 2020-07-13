@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+		<link rel="stylesheet" href="gui.css"/>
+		<title>Web GUI test for iPhone 6</title>
+	</head>
+	<body class="body" id="body">
+		<header></header>
+
+		<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+			<a class="navbar-brand">GUI: @name@</a>
+		</nav>
+		
+		<main style="margin-top: 70px">
+			<div hidden id="name">@name@</div>
+			<div class="col">
+				<div class="row">
+					<button type="button" class="btn btn-outline-primary"
+						onmousedown="sendButtonMouse(0,true)"
+						onmouseup="sendButtonMouse(0,false)"
+						ontouchstart="sendButtonTouch(0,true)"
+						ontouchend="sendButtonTouch(0,false)">1</button>
+					<button type="button" class="btn btn-outline-primary"
+						onmousedown="sendButtonMouse(1,true)"
+						onmouseup="sendButtonMouse(1,false)"
+						ontouchstart="sendButtonTouch(1,true)"
+						ontouchend="sendButtonTouch(1,false)">2</button>
+					<button type="button" class="btn btn-outline-primary"
+						onmousedown="sendButtonMouse(2,true)"
+						onmouseup="sendButtonMouse(2,false)"
+						ontouchstart="sendButtonTouch(2,true)"
+						ontouchend="sendButtonTouch(2,false)">3</button>
+					<button type="button" class="btn btn-outline-primary"
+						onclick="requestFullScreen();">F</button>
+				</div>
+				<div class="row">
+					<div class="slidercontainer">
+						<input class="slider" id="slider1" type="range" min="0" max="2000" value="1000"/>
+					</div>
+					<label class="slider-label" id="slabel1">0</label>
+				</div>
+				<div class="row">
+					<div class="slidercontainer">
+						<input class="slider" id="slider2" type="range" min="0" max="2000" value="1000"/>
+					</div>
+					<label class="slider-label" id="slabel2">0</label>
+				</div>
+				<div>
+					<label id="msgDisplay" style="color: red;">Error message: none</label>
+				</div>
+			</div>
+		</main>
+
+
+		<footer></footer>
+		
+		<!-- Optional JavaScript -->
+		<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+		<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+		<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+		<script src="gui.js"></script>
+	</body>
+</html>
