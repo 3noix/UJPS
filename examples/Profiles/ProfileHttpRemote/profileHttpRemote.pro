@@ -38,3 +38,6 @@ INCLUDEPATH +=  $$(UJPSPATH)/src/StaticLibs/INCLUDES/QtGameControllerModif/ \
 HEADERS +=  CODE/Profile.h
 SOURCES +=  CODE/Profile.cpp
 
+
+RESOURCES += resources.qrc
+

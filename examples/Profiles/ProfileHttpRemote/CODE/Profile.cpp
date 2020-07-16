@@ -35,8 +35,9 @@ void Profile::stop()
 // SETUP JOYSTICKS ////////////////////////////////////////////////////////////
 bool Profile::setupJoysticks()
 {
-	QString remoteDirPath = QCoreApplication::applicationDirPath() + "/../examples/Profiles/ProfileHttpRemote/CODE";
-	remote = this->registerRemoteJoystickHttp("test",200,remoteDirPath);
+	Q_INIT_RESOURCE(resources);
+	
+	remote = this->registerRemoteJoystickHttp("test",200,":/RESOURCES/");
 	if (!remote)
 	{
 		emit message("Failed to create remote joystick!",Qt::red);
