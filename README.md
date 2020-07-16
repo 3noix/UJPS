@@ -141,12 +141,12 @@ void Profile::runFirstStep() // executed one time at the beginning
    // With different triggers and actions
    Map(tmwj, ControlType::Button, TMWJ::H2U, AllLayers,
       new TriggerButtonRelease{},  // each time H2U button is released...
-      new ActionChain{{
+      new ActionChain{
          new ActionButtonPulse{vj1,CTL1::Autoland,ms2cycles(200)},  // button pulse of 200 ms...
          new Delay{ms2cycles(300)},  // ...and 300 ms after the beginning of the first pulse...
          new ActionKeyPulse{CTLK::TrackIR_Center,0,ms2cycles(200)}, // ...a keystroke for 200 ms
          new ActionCallback{[this]() {this->myCustomFunction();}}   // ...and myCustomFunction is executed*
-   }});
+   });
    // *mappings can be deleted and added inside such functions: they are not frozen
    // after the initial definition done in this "runFirstStep" function
 }
