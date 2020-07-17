@@ -33,8 +33,8 @@ MyChartWidget::MyChartWidget(int n, int dtms, QWidget *parent) : QChartView{pare
 	m_axisY->setRange(-1.0,1.0);
 	m_axisX->setTitleText("time (s)");
 	//m_axisY->setTitleText("blabla");
-	m_chart->setAxisX(m_axisX);
-	m_chart->setAxisY(m_axisY);
+	m_chart->addAxis(m_axisX,Qt::AlignBottom);
+	m_chart->addAxis(m_axisY,Qt::AlignLeft);
 	
 	// the end
 	this->setChart(m_chart);

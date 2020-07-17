@@ -213,7 +213,7 @@ bool GenericPropertiesInfo::writeData(QIODevice &device)
 	writer.writeStartElement("PROPERTIES");
 	
 	// properties
-	QStringList keys = m_properties.uniqueKeys();
+	QStringList keys = m_properties.keys();
 	for (const QString &key : keys)
 	{
 		QVariant v = m_properties[key];

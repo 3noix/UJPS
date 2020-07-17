@@ -74,7 +74,7 @@ VirtualJoystick::VirtualJoystick(uint id, uint nbButtons, uint nbAxes, uint nbPo
 		// reset all vJoy devices
 		QString command = m_vJoyConfigExeFileName + " -r";
 		emit message("RESET VJOY DEVICES: "+command,Qt::black);
-		QProcess::execute(command);
+		QProcess::execute(command,{});
 	}
 	
 	
@@ -87,7 +87,7 @@ VirtualJoystick::VirtualJoystick(uint id, uint nbButtons, uint nbAxes, uint nbPo
 	{
 		QString command = m_vJoyConfigExeFileName + " " + QString::number(m_id) + " -f -a X Y Z Rx Ry Rz Sl0 Sl1 -b " + QString::number(nbButtons);
 		emit message("CREATE VJOY DEVICE: "+command,Qt::black);
-		QProcess::execute(command);
+		QProcess::execute(command,{});
 	}
 	
 	// get status
@@ -154,7 +154,7 @@ bool VirtualJoystick::enableVJoyIfNot()
 	{
 		QString command = m_vJoyConfigExeFileName + " enable on";
 		emit message("ENABLE VJOY: "+command,Qt::black);
-		QProcess::execute(command);
+		QProcess::execute(command,{});
 		if (vJoyEnabled())
 		{
 			emit message("vJoy enabled",Qt::black);
@@ -181,7 +181,7 @@ void VirtualJoystick::disableVJoy()
 	QString command = m_vJoyConfigExeFileName + " enable off";
 	emit message("EXECUTING: "+command,Qt::black);
 	//std::cout << "DISABLE VJOY: " << qPrintable(command);
-	QProcess::execute(command);
+	QProcess::execute(command,{});
 }
 
 // IS VJOY DEVICE FREE ////////////////////////////////////////////////////////

@@ -180,6 +180,6 @@ void VigemSettingsWidget::slotRefreshStatus()
 void VigemSettingsWidget::slotStartAutoWhiteLister()
 {
 	QString autoWhiteListerExe = QCoreApplication::applicationDirPath() + "/../3rdparty/ViGEm/AutoWhitelister.exe";
-	QProcess::startDetached(autoWhiteListerExe);
+	QProcess::startDetached(autoWhiteListerExe,{});
 }
 
