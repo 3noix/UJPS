@@ -117,15 +117,7 @@ QVector<JoystickChange> EnhancedJoystick::changes()
 	// add a change (axis position) in case of a change in trim or curve,
 	// even if the axis of the embedded object did not move
 	// in order not to wait for it to move
-	for (uint axis : m_axesToUpdate)
-	{
-		for (const JoystickChange &ch : chgts)
-		{
-			if (ch.joystick && ch.joystick->id() == this->id() && ch.type == ControlType::Axis && ch.numButtonAxisPov == axis)
-				continue;
-		}
-		chgts << JoystickChange{this,ControlType::Axis,axis,false,this->axisValue(axis)};
-	}
+	for (uint axis : m_axesToUpdate) {chgts << JoystickChange{this,ControlType::Axis,axis,false,this->axisValue(axis)};}
 	m_axesToUpdate.clear();
 	
 	return chgts;

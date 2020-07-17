@@ -442,9 +442,10 @@ bool VirtualJoystick::flush(bool bEvenIfNoChange)
 	bool b = UpdateVJD(m_id, &m_report);
 	
 	m_reportModified = false;
-	for (std::array<bool,128>::iterator it=m_buttonsHighPrio.begin(); it!=m_buttonsHighPrio.end(); ++it) {*it = false;}
-	for (std::array<bool,8>::iterator it=m_axesHighPrio.begin(); it!=m_axesHighPrio.end(); ++it) {*it = false;}
-	for (std::array<bool,4>::iterator it=m_povsHighPrio.begin(); it!=m_povsHighPrio.end(); ++it) {*it = false;}
+	
+	for (bool& b : m_buttonsHighPrio) {b = false;}
+	for (bool& b : m_axesHighPrio)    {b = false;}
+	for (bool& b : m_povsHighPrio)    {b = false;}
 	
 	return b;
 }

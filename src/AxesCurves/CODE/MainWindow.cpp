@@ -322,9 +322,8 @@ void MainWindow::slotEndUpdate()
 	int i = 0;
 	for (QString &joystickName : joysticksNames)
 	{
-		if (affectedDevices.contains(m_jm.joystick(i)->hardwareId()))
-		{joystickName += " (hidden)";}
-	++i;
+		if (affectedDevices.contains(m_jm.joystick(i)->hardwareId())) {joystickName += " (hidden)";}
+		++i;
 	}
 	boxJoystick->addItems(joysticksNames);
 	

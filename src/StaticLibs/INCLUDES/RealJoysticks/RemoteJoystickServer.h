@@ -28,28 +28,28 @@ class RemoteJoystickServer : public QObject, public AbstractRealJoystick
 		bool isConnected() const;
 		
 		virtual uint id() const override final;
-		virtual QString description() const override;
+		virtual QString description() const override final;
 		virtual QString hardwareId() const override final;
 		void readGameController() override final;
 		QVector<JoystickChange> changes() override final;
 		
-		virtual uint buttonsCount() const override;
-		virtual bool buttonPressed(uint button) const override;
-		virtual QString buttonName(uint button) const override;
-		virtual QStringList buttonsNames() const override;
+		virtual uint buttonsCount() const override final;
+		virtual bool buttonPressed(uint button) const override final;
+		virtual QString buttonName(uint button) const override final;
+		virtual QStringList buttonsNames() const override final;
 		
-		virtual uint axesCount() const override;
-		virtual float axisValue(uint axis) const override;
-		virtual QString axisName(uint axis) const override;
-		virtual QStringList axesNames() const override;
+		virtual uint axesCount() const override final;
+		virtual float axisValue(uint axis) const override final;
+		virtual QString axisName(uint axis) const override final;
+		virtual QStringList axesNames() const override final;
 		
-		virtual uint povsCount() const override;
-		virtual float povValue(uint pov) const override;
-		virtual QString povName(uint pov) const override;
-		virtual QStringList povsNames() const override;
+		virtual uint povsCount() const override final;
+		virtual float povValue(uint pov) const override final;
+		virtual QString povName(uint pov) const override final;
+		virtual QStringList povsNames() const override final;
 		
-		virtual void setData(const QString &str, QVariant v) override;
-		virtual void flush() override;
+		virtual void setData(const QString &str, QVariant v) override final;
+		virtual void flush() override final;
 		
 		
 	signals:

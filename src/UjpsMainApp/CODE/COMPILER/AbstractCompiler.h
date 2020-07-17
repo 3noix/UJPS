@@ -4,7 +4,6 @@
 
 #include <QObject>
 #include <QColor>
-class CompilatorsCenter;
 
 
 class AbstractCompiler : public QObject
@@ -18,8 +17,6 @@ class AbstractCompiler : public QObject
 		AbstractCompiler& operator=(const AbstractCompiler &other) = delete;
 		AbstractCompiler& operator=(AbstractCompiler &&other) = delete;
 		virtual ~AbstractCompiler() = default;
-		
-		void setCenter(CompilatorsCenter *c);
 		
 		virtual QString compilatorName() const = 0;
 		virtual void runCompilation() = 0;

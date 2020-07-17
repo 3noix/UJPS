@@ -50,9 +50,6 @@ RealJoystick::RealJoystick(GameController *c) : QObject{}, AbstractRealJoystick{
 	QObject::connect(c, SIGNAL(gameControllerAxisEvent(GameControllerAxisEvent*)),     this, SLOT(slotGameControllerAxisEvent(GameControllerAxisEvent*)));
 	QObject::connect(c, SIGNAL(gameControllerButtonEvent(GameControllerButtonEvent*)), this, SLOT(slotGameControllerButtonEvent(GameControllerButtonEvent*)));
 	QObject::connect(c, SIGNAL(gameControllerPovEvent(GameControllerPovEvent*)),       this, SLOT(slotGameControllerPovEvent(GameControllerPovEvent*)));
-	//QObject::connect(c, &GameController::gameControllerAxisEvent,   this, &RealJoystick::slotGameControllerAxisEvent);
-	//QObject::connect(c, &GameController::gameControllerButtonEvent, this, &RealJoystick::slotGameControllerButtonEvent);
-	//QObject::connect(c, &GameController::gameControllerPovEvent,    this, &RealJoystick::slotGameControllerPovEvent);
 	
 	m_bTransformPovInto4Buttons = (m_controller->description() != "vJoy Device");
 	m_bTransform4ButtonsIntoPov = (m_controller->description() != "vJoy Device");
@@ -114,7 +111,7 @@ QVector<JoystickChange> RealJoystick::changes()
 			if (index != -1u && !povsImpacted.contains(index)) {povsImpacted << index;}
 		}
 	}
-	qSort(povsImpacted);
+	std::sort(povsImpacted.begin(),povsImpacted.end());
 	
 	// we create one change per impacted pov
 	for (uint index : povsImpacted)

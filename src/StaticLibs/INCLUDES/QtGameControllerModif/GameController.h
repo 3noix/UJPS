@@ -4,7 +4,6 @@
 
 #include <QObject>
 #include <QString>
-#include <QVector>
 class GameControllerAxisEvent;
 class GameControllerButtonEvent;
 class GameControllerPovEvent;
