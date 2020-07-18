@@ -5,52 +5,34 @@
 using uint = unsigned int;
 
 
-class GameControllerAxisEvent
+struct GameControllerAxisEvent
 {
-	public:
-		GameControllerAxisEvent(uint controllerId, uint axis, float value);
-		uint controllerId() const;
-		uint axis() const;
-		float value() const;
-		
-		
-	private:
-		uint m_id;
-		uint m_axis;
-		float m_value;
+	uint controllerId;
+	uint axis;
+	float value;
 };
 
 
-class GameControllerButtonEvent
+struct GameControllerButtonEvent
 {
-	public:
-		GameControllerButtonEvent(uint controllerId, uint button, bool pressed);
-		uint controllerId() const;
-		uint button() const;
-		bool pressed() const;
-		
-		
-	private:
-		uint m_id;
-		uint m_button;
-		bool m_pressed;
+	uint controllerId;
+	uint button;
+	bool pressed;
 };
 
 
-class GameControllerPovEvent
+struct GameControllerPovEvent
 {
-	public:
-		GameControllerPovEvent(uint controllerId, uint pov, float angle);
-		uint controllerId() const;
-		uint pov() const;
-		float angle() const;
-		
-		
-	private:
-		uint m_id;
-		uint m_pov;
-		float m_angle;
+	uint controllerId;
+	uint pov;
+	float angle;
 };
+
+
+#include <QMetaType>
+Q_DECLARE_METATYPE(GameControllerAxisEvent);
+Q_DECLARE_METATYPE(GameControllerButtonEvent);
+Q_DECLARE_METATYPE(GameControllerPovEvent);
 
 
 #endif

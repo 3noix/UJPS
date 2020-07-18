@@ -1,6 +1,5 @@
 #include "LogitechExtreme3D.h"
 #include "GameController.h"
-#include "GameControllerEvents.h"
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -43,15 +42,15 @@ LogitechExtreme3D::LogitechExtreme3D(GameController *c) : RealJoystick{c}
 
 
 // SLOT GAME CONTROLLER AXIS EVENT ////////////////////////////////////////////
-void LogitechExtreme3D::slotGameControllerAxisEvent(GameControllerAxisEvent *event)
+void LogitechExtreme3D::slotGameControllerAxisEvent(GameControllerAxisEvent event)
 {
-	Q_ASSERT(event);
-	uint axis = event->axis();
+	uint axis = event.axis;
+	float f = event.value;
 	
-	if (axis == 1)      {m_changes << JoystickChange{this, ControlType::Axis, LogitechExtreme3D_::JOYX, false, event->value()};}
-	else if (axis == 0) {m_changes << JoystickChange{this, ControlType::Axis, LogitechExtreme3D_::JOYY, false, event->value()};}
-	else if (axis == 2) {m_changes << JoystickChange{this, ControlType::Axis, LogitechExtreme3D_::JOYZ, false, event->value()};}
-	else if (axis == 3) {m_changes << JoystickChange{this, ControlType::Axis, LogitechExtreme3D_::THR,  false, event->value()};}
+	if (axis == 1)      {m_changes << JoystickChange{this, ControlType::Axis, LogitechExtreme3D_::JOYX, false, f};}
+	else if (axis == 0) {m_changes << JoystickChange{this, ControlType::Axis, LogitechExtreme3D_::JOYY, false, f};}
+	else if (axis == 2) {m_changes << JoystickChange{this, ControlType::Axis, LogitechExtreme3D_::JOYZ, false, f};}
+	else if (axis == 3) {m_changes << JoystickChange{this, ControlType::Axis, LogitechExtreme3D_::THR,  false, f};}
 }
 
 // DESCRIPTION ////////////////////////////////////////////////////////////////

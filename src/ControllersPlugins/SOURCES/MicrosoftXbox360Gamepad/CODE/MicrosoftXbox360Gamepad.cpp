@@ -1,6 +1,5 @@
 #include "MicrosoftXbox360Gamepad.h"
 #include "GameController.h"
-#include "GameControllerEvents.h"
 #include "Lim.h"
 #include <XInput.h>
 #include <windows.h>

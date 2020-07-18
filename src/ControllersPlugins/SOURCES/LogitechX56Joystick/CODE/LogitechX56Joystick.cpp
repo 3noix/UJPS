@@ -1,6 +1,5 @@
 #include "LogitechX56Joystick.h"
 #include "GameController.h"
-#include "GameControllerEvents.h"
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -54,16 +53,16 @@ LogitechX56Joystick::LogitechX56Joystick(GameController *c) : RealJoystick{c}
 
 
 // SLOT GAME CONTROLLER AXIS EVENT ////////////////////////////////////////////
-void LogitechX56Joystick::slotGameControllerAxisEvent(GameControllerAxisEvent *event)
+void LogitechX56Joystick::slotGameControllerAxisEvent(GameControllerAxisEvent event)
 {
-	Q_ASSERT(event);
-	uint axis = event->axis();
+	uint axis = event.axis;
+	float f = event.value;
 	
-	if      (axis == 1) {m_changes << JoystickChange{this, ControlType::Axis, LogitechX56Joystick_::JOYX,    false, event->value()};}
-	else if (axis == 0) {m_changes << JoystickChange{this, ControlType::Axis, LogitechX56Joystick_::JOYY,    false, event->value()};}
-	else if (axis == 2) {m_changes << JoystickChange{this, ControlType::Axis, LogitechX56Joystick_::RUDDER,  false, event->value()};}
-	else if (axis == 4) {m_changes << JoystickChange{this, ControlType::Axis, LogitechX56Joystick_::JOYROTX, false, event->value()};}
-	else if (axis == 3) {m_changes << JoystickChange{this, ControlType::Axis, LogitechX56Joystick_::JOYROTY, false, event->value()};}
+	if      (axis == 1) {m_changes << JoystickChange{this, ControlType::Axis, LogitechX56Joystick_::JOYX,    false, f};}
+	else if (axis == 0) {m_changes << JoystickChange{this, ControlType::Axis, LogitechX56Joystick_::JOYY,    false, f};}
+	else if (axis == 2) {m_changes << JoystickChange{this, ControlType::Axis, LogitechX56Joystick_::RUDDER,  false, f};}
+	else if (axis == 4) {m_changes << JoystickChange{this, ControlType::Axis, LogitechX56Joystick_::JOYROTX, false, f};}
+	else if (axis == 3) {m_changes << JoystickChange{this, ControlType::Axis, LogitechX56Joystick_::JOYROTY, false, f};}
 }
 
 // DESCRIPTION ////////////////////////////////////////////////////////////////

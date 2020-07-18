@@ -3,9 +3,8 @@
 
 
 #include "RealJoystick.h"
+#include "GameControllerEvents.h"
 class GameController;
-class GameControllerButtonEvent;
-class GameControllerAxisEvent;
 
 #define INSIDE_PLUGIN
 #include "../../../INCLUDES/MfgCrosswindRudderPedals.h"
@@ -38,8 +37,8 @@ class MfgCrosswindRudderPedals : public RealJoystick
 		
 		
 	private slots:
-		void slotGameControllerButtonEvent(GameControllerButtonEvent *event) override final;
-		void slotGameControllerAxisEvent(GameControllerAxisEvent *event) override final;
+		void slotGameControllerButtonEvent(GameControllerButtonEvent event) override final;
+		void slotGameControllerAxisEvent(GameControllerAxisEvent event) override final;
 		
 		
 	private:

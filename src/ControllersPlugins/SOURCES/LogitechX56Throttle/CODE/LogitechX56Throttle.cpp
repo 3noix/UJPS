@@ -1,6 +1,5 @@
 #include "LogitechX56Throttle.h"
 #include "GameController.h"
-#include "GameControllerEvents.h"
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -57,19 +56,19 @@ LogitechX56Throttle::LogitechX56Throttle(GameController *c) : RealJoystick{c}
 
 
 // SLOT GAME CONTROLLER AXIS EVENT ////////////////////////////////////////////
-void LogitechX56Throttle::slotGameControllerAxisEvent(GameControllerAxisEvent *event)
+void LogitechX56Throttle::slotGameControllerAxisEvent(GameControllerAxisEvent event)
 {
-	Q_ASSERT(event);
-	uint axis = event->axis();
+	uint axis = event.axis;
+	float f = event.value;
 	
-	if      (axis == 1) {m_changes << JoystickChange{this, ControlType::Axis, LogitechX56Throttle_::THR_LEFT,  false, event->value()};}
-	else if (axis == 0) {m_changes << JoystickChange{this, ControlType::Axis, LogitechX56Throttle_::THR_RIGHT, false, event->value()};}
-	else if (axis == 6) {m_changes << JoystickChange{this, ControlType::Axis, LogitechX56Throttle_::JOYROTX,   false, event->value()};}
-	else if (axis == 4) {m_changes << JoystickChange{this, ControlType::Axis, LogitechX56Throttle_::JOYROTY,   false, event->value()};}
-	else if (axis == 7) {m_changes << JoystickChange{this, ControlType::Axis, LogitechX56Throttle_::RTY1,      false, event->value()};}
-	else if (axis == 5) {m_changes << JoystickChange{this, ControlType::Axis, LogitechX56Throttle_::RTY2,      false, event->value()};}
-	else if (axis == 2) {m_changes << JoystickChange{this, ControlType::Axis, LogitechX56Throttle_::RTY3,      false, event->value()};}
-	else if (axis == 3) {m_changes << JoystickChange{this, ControlType::Axis, LogitechX56Throttle_::RTY4,      false, event->value()};}
+	if      (axis == 1) {m_changes << JoystickChange{this, ControlType::Axis, LogitechX56Throttle_::THR_LEFT,  false, f};}
+	else if (axis == 0) {m_changes << JoystickChange{this, ControlType::Axis, LogitechX56Throttle_::THR_RIGHT, false, f};}
+	else if (axis == 6) {m_changes << JoystickChange{this, ControlType::Axis, LogitechX56Throttle_::JOYROTX,   false, f};}
+	else if (axis == 4) {m_changes << JoystickChange{this, ControlType::Axis, LogitechX56Throttle_::JOYROTY,   false, f};}
+	else if (axis == 7) {m_changes << JoystickChange{this, ControlType::Axis, LogitechX56Throttle_::RTY1,      false, f};}
+	else if (axis == 5) {m_changes << JoystickChange{this, ControlType::Axis, LogitechX56Throttle_::RTY2,      false, f};}
+	else if (axis == 2) {m_changes << JoystickChange{this, ControlType::Axis, LogitechX56Throttle_::RTY3,      false, f};}
+	else if (axis == 3) {m_changes << JoystickChange{this, ControlType::Axis, LogitechX56Throttle_::RTY4,      false, f};}
 }
 
 // DESCRIPTION ////////////////////////////////////////////////////////////////

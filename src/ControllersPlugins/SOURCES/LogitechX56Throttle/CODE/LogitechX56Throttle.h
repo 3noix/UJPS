@@ -3,8 +3,8 @@
 
 
 #include "RealJoystick.h"
+#include "GameControllerEvents.h"
 class GameController;
-class GameControllerAxisEvent;
 
 #define INSIDE_PLUGIN
 #include "../../../INCLUDES/LogitechX56Throttle.h"
@@ -40,7 +40,7 @@ class LogitechX56Throttle : public RealJoystick
 		
 		
 	protected slots:
-		void slotGameControllerAxisEvent(GameControllerAxisEvent *event) override final;
+		void slotGameControllerAxisEvent(GameControllerAxisEvent event) override final;
 		
 		
 	private:

@@ -140,7 +140,7 @@ void GameControllerXInput::readGameController()
 		bool wasPressed = (m_state.Gamepad.wButtons & m_buttonsMapping[i]);
 		bool isPressed  = (state.Gamepad.wButtons   & m_buttonsMapping[i]);
 		if (wasPressed != isPressed || m_bFirstRead)
-			emit gameControllerButtonEvent(new GameControllerButtonEvent{this->id(),i,isPressed});
+			emit gameControllerButtonEvent(GameControllerButtonEvent{this->id(),i,isPressed});
 	}
 	
 	// axes
@@ -151,12 +151,12 @@ void GameControllerXInput::readGameController()
 	bool thumbRXChanged = (m_state.Gamepad.sThumbRX != state.Gamepad.sThumbRX);
 	bool thumbRYChanged = (m_state.Gamepad.sThumbRY != state.Gamepad.sThumbRY);
 	
-	if (leftTriggerChanged  || m_bFirstRead) {emit gameControllerAxisEvent(new GameControllerAxisEvent{this->id(),0,byteToFloat(state.Gamepad.bLeftTrigger)});}
-	if (rightTriggerChanged || m_bFirstRead) {emit gameControllerAxisEvent(new GameControllerAxisEvent{this->id(),1,byteToFloat(state.Gamepad.bRightTrigger)});}
-	if (thumbLXChanged || m_bFirstRead) {emit gameControllerAxisEvent(new GameControllerAxisEvent{this->id(),2,shortToFloat(state.Gamepad.sThumbLX)});}
-	if (thumbLYChanged || m_bFirstRead) {emit gameControllerAxisEvent(new GameControllerAxisEvent{this->id(),3,shortToFloat(state.Gamepad.sThumbLY)});}
-	if (thumbRXChanged || m_bFirstRead) {emit gameControllerAxisEvent(new GameControllerAxisEvent{this->id(),4,shortToFloat(state.Gamepad.sThumbRX)});}
-	if (thumbRYChanged || m_bFirstRead) {emit gameControllerAxisEvent(new GameControllerAxisEvent{this->id(),5,shortToFloat(state.Gamepad.sThumbRY)});}
+	if (leftTriggerChanged  || m_bFirstRead) {emit gameControllerAxisEvent(GameControllerAxisEvent{this->id(),0,byteToFloat(state.Gamepad.bLeftTrigger)});}
+	if (rightTriggerChanged || m_bFirstRead) {emit gameControllerAxisEvent(GameControllerAxisEvent{this->id(),1,byteToFloat(state.Gamepad.bRightTrigger)});}
+	if (thumbLXChanged || m_bFirstRead) {emit gameControllerAxisEvent(GameControllerAxisEvent{this->id(),2,shortToFloat(state.Gamepad.sThumbLX)});}
+	if (thumbLYChanged || m_bFirstRead) {emit gameControllerAxisEvent(GameControllerAxisEvent{this->id(),3,shortToFloat(state.Gamepad.sThumbLY)});}
+	if (thumbRXChanged || m_bFirstRead) {emit gameControllerAxisEvent(GameControllerAxisEvent{this->id(),4,shortToFloat(state.Gamepad.sThumbRX)});}
+	if (thumbRYChanged || m_bFirstRead) {emit gameControllerAxisEvent(GameControllerAxisEvent{this->id(),5,shortToFloat(state.Gamepad.sThumbRY)});}
 	
 	// end
 	m_state = state;

@@ -4,7 +4,6 @@
 
 #include "RealJoystick.h"
 class GameController;
-class GameControllerAxisEvent;
 
 #define INSIDE_PLUGIN
 #include "../../../INCLUDES/MicrosoftXbox360Gamepad.h"

@@ -30,7 +30,6 @@ HEADERS +=  ../../INCLUDES/QtGameControllerModif/GameController.h \
 
 SOURCES +=  CODE/GameControllerDirectInput.cpp \
 			CODE/GameControllersEnumThread.cpp \
-			CODE/GameControllerEvents.cpp \
 			CODE/GameControllerXInput.cpp \
 			CODE/GameControllerEnumerator.cpp
 

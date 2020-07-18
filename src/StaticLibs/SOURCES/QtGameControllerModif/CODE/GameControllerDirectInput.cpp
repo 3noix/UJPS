@@ -321,7 +321,7 @@ void GameControllerDirectInput::readGameController()
 		if (value != m_axesValues[i] || m_bFirstRead)
 		{
 			m_axesValues[i] = value;
-			emit gameControllerAxisEvent(new GameControllerAxisEvent{m_id,i,value});
+			emit gameControllerAxisEvent(GameControllerAxisEvent{m_id,i,value});
 		}
 	}
 	
@@ -333,7 +333,7 @@ void GameControllerDirectInput::readGameController()
 		if (bPressed != m_buttonsValues[i] || m_bFirstRead)
 		{
 			m_buttonsValues[i] = bPressed;
-			emit gameControllerButtonEvent(new GameControllerButtonEvent{m_id,i,bPressed});
+			emit gameControllerButtonEvent(GameControllerButtonEvent{m_id,i,bPressed});
 		}
 	}
 	
@@ -350,7 +350,7 @@ void GameControllerDirectInput::readGameController()
 		if (povdegs != m_povsValues[i] || m_bFirstRead)
 		{
 			m_povsValues[i] = povdegs;
-			emit gameControllerPovEvent(new GameControllerPovEvent{m_id,i,povdegs});
+			emit gameControllerPovEvent(GameControllerPovEvent{m_id,i,povdegs});
 		}
 	}
 	

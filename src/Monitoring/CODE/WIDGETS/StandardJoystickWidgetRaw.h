@@ -2,10 +2,8 @@
 #define STANDARD_JOYSTICK_WIDGET_RAW
 
 
+#include "GameControllerEvents.h"
 class GameController;
-class GameControllerAxisEvent;
-class GameControllerButtonEvent;
-class GameControllerPovEvent;
 
 #include <QtWidgets>
 class AxesWidget;
@@ -29,9 +27,9 @@ class StandardJoystickWidgetRaw : public QWidget
 		
 	private slots:
 		void slotRunOneLoop();
-		void slotJoystickAxisValueChanged(GameControllerAxisEvent *event);
-		void slotJoystickButtonStateChanged(GameControllerButtonEvent *event);
-		void slotJoystickPovAngleChanged(GameControllerPovEvent *event);
+		void slotJoystickAxisValueChanged(GameControllerAxisEvent event);
+		void slotJoystickButtonStateChanged(GameControllerButtonEvent event);
+		void slotJoystickPovAngleChanged(GameControllerPovEvent event);
 		void slotUpdateTempoCurves(uint axis, bool bDisplay);
 		
 		
