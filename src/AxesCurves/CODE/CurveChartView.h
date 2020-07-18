@@ -2,12 +2,10 @@
 #define CURVE_CHART_VIEW
 
 
-#include <QtWidgets/QApplication>
-#include <QtWidgets/QMainWindow>
-#include <QtCharts/QChartView>
-#include <QtCharts/QValueAxis>
-#include <QtCharts/QLineSeries>
-#include <QtCharts/QScatterSeries>
+#include <QChartView>
+#include <QValueAxis>
+#include <QLineSeries>
+#include <QScatterSeries>
 using namespace QtCharts;
 
 class AbstractRealJoystick;

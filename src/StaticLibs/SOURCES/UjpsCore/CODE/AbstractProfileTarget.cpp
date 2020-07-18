@@ -157,13 +157,8 @@ void AbstractProfileTarget::run()
 // IS INIT COMPLETE ///////////////////////////////////////////////////////////
 bool AbstractProfileTarget::isInitComplete() const
 {
-	for (RemoteJoystickTcpServer *rjs : m_remoteJoysticksTcp)
-	{
-		if (!rjs->isConnected())
-		{return false;}
-	}
-	
-	return true;
+	auto isConnected = [] (RemoteJoystickTcpServer *rjs) {return rjs->isConnected();};
+	return std::all_of(m_remoteJoysticksTcp.begin(),m_remoteJoysticksTcp.end(),isConnected);
 }
 
 

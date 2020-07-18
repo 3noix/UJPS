@@ -3,10 +3,9 @@
 
 
 #include "RealJoystick.h"
+#include "GameControllerEvents.h"
 class WriteToHidThread;
 class GameController;
-class GameControllerButtonEvent;
-class GameControllerAxisEvent;
 
 #define INSIDE_PLUGIN
 #include "../../../INCLUDES/ThrustmasterWarthogThrottle.h"
@@ -46,8 +45,8 @@ class ThrustmasterWarthogThrottle : public RealJoystick
 		
 		
 	private slots:
-		void slotGameControllerButtonEvent(GameControllerButtonEvent *event) override final;
-		void slotGameControllerAxisEvent(GameControllerAxisEvent *event) override final;
+		void slotGameControllerButtonEvent(GameControllerButtonEvent event) override final;
+		void slotGameControllerAxisEvent(GameControllerAxisEvent event) override final;
 		
 		
 	private:

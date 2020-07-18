@@ -14,11 +14,16 @@ class ActionSequence : public AbstractAction
 			m_actions{actions},
 			m_compteur{0}
 		{};
+		ActionSequence(std::initializer_list<AbstractAction*> actions) :
+			AbstractAction{},
+			m_actions{actions},
+			m_compteur{0}
+		{};
 		ActionSequence(const ActionSequence &other) = delete;
 		ActionSequence(ActionSequence &&other) = delete;
 		ActionSequence& operator=(const ActionSequence &other) = delete;
 		ActionSequence& operator=(ActionSequence &&other) = delete;
-		virtual ~ActionSequence() = default;
+		virtual ~ActionSequence() {qDeleteAll(m_actions);};
 		
 		virtual QVector<VirtualEvent> generateEvents() override final
 		{

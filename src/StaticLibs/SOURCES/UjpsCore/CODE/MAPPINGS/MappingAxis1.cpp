@@ -46,16 +46,8 @@ MappingAxis1::MappingAxis1(AbstractRealJoystick *rj, uint rAxis, LayersCombo lc,
 
 MappingAxis1::~MappingAxis1()
 {
-	if (m_actionPlus)
-	{
-		delete m_actionPlus;
-		m_actionPlus = nullptr;
-	}
-	if (m_actionMoins)
-	{
-		delete m_actionMoins;
-		m_actionMoins = nullptr;
-	}
+	if (m_actionPlus) {delete m_actionPlus;}
+	if (m_actionMoins) {delete m_actionMoins;}
 }
 
 

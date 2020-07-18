@@ -1,6 +1,5 @@
 #include "StandardJoystickWidgetRaw.h"
 #include "GameController.h"
-#include "GameControllerEvents.h"
 #include "AxesWidget.h"
 #include "ButtonWidget.h"
 #include "PovWidgetDecorated.h"
@@ -39,12 +38,9 @@ StandardJoystickWidgetRaw::StandardJoystickWidgetRaw(GameController *j, bool own
 	QObject::connect(m_timer, &QTimer::timeout, this, &StandardJoystickWidgetRaw::slotRunOneLoop);
 	m_timer->start();
 	
-	QObject::connect(j, SIGNAL(gameControllerAxisEvent(GameControllerAxisEvent*)),     this, SLOT(slotJoystickAxisValueChanged(GameControllerAxisEvent*)));
-	QObject::connect(j, SIGNAL(gameControllerButtonEvent(GameControllerButtonEvent*)), this, SLOT(slotJoystickButtonStateChanged(GameControllerButtonEvent*)));
-	QObject::connect(j, SIGNAL(gameControllerPovEvent(GameControllerPovEvent*)),       this, SLOT(slotJoystickPovAngleChanged(GameControllerPovEvent*)));
-	//QObject::connect(j, &GameController::gameControllerAxisEvent,   this, &StandardJoystickWidgetRaw::slotJoystickAxisValueChanged);
-	//QObject::connect(j, &GameController::gameControllerButtonEvent, this, &StandardJoystickWidgetRaw::slotJoystickButtonStateChanged);
-	//QObject::connect(j, &GameController::gameControllerPovEvent,    this, &StandardJoystickWidgetRaw::slotJoystickPovAngleChanged);
+	QObject::connect(j, SIGNAL(gameControllerAxisEvent(GameControllerAxisEvent)),     this, SLOT(slotJoystickAxisValueChanged(GameControllerAxisEvent)));
+	QObject::connect(j, SIGNAL(gameControllerButtonEvent(GameControllerButtonEvent)), this, SLOT(slotJoystickButtonStateChanged(GameControllerButtonEvent)));
+	QObject::connect(j, SIGNAL(gameControllerPovEvent(GameControllerPovEvent)),       this, SLOT(slotJoystickPovAngleChanged(GameControllerPovEvent)));
 }
 
 StandardJoystickWidgetRaw::~StandardJoystickWidgetRaw()
@@ -148,21 +144,21 @@ void StandardJoystickWidgetRaw::slotRunOneLoop()
 }
 
 // SLOT JOYSTICK BUTTON STATE CHANGED /////////////////////////////////////////
-void StandardJoystickWidgetRaw::slotJoystickButtonStateChanged(GameControllerButtonEvent *event)
+void StandardJoystickWidgetRaw::slotJoystickButtonStateChanged(GameControllerButtonEvent event)
 {
-	buttonsWidgets[event->button()]->slotSetChecked(event->pressed());
+	buttonsWidgets[event.button]->slotSetChecked(event.pressed);
 }
 
 // SLOT JOYSTICK AXIS VALUE CHANGED ///////////////////////////////////////////
-void StandardJoystickWidgetRaw::slotJoystickAxisValueChanged(GameControllerAxisEvent *event)
+void StandardJoystickWidgetRaw::slotJoystickAxisValueChanged(GameControllerAxisEvent event)
 {
-	boxAxes->slotSetValue(event->axis(),event->value());
+	boxAxes->slotSetValue(event.axis,event.value);
 }
 
 // SLOT JOYSTICK POV ANGLE CHANGED ////////////////////////////////////////////
-void StandardJoystickWidgetRaw::slotJoystickPovAngleChanged(GameControllerPovEvent *event)
+void StandardJoystickWidgetRaw::slotJoystickPovAngleChanged(GameControllerPovEvent event)
 {
-	povWidgets[event->pov()]->slotSetAngle(event->angle());
+	povWidgets[event.pov]->slotSetAngle(event.angle);
 }
 
 

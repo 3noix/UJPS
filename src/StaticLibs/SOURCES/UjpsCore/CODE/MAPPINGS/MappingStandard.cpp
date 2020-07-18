@@ -40,16 +40,8 @@ MappingStandard::MappingStandard(AbstractRealJoystick *rj, ControlType t, uint r
 
 MappingStandard::~MappingStandard()
 {
-	if (m_trigger)
-	{
-		delete m_trigger;
-		m_trigger = nullptr;
-	}
-	if (m_action)
-	{
-		delete m_action;
-		m_action = nullptr;
-	}
+	if (m_trigger) {delete m_trigger;}
+	if (m_action) {delete m_action;}
 }
 
 

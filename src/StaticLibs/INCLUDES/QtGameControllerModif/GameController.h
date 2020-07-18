@@ -4,10 +4,7 @@
 
 #include <QObject>
 #include <QString>
-#include <QVector>
-class GameControllerAxisEvent;
-class GameControllerButtonEvent;
-class GameControllerPovEvent;
+#include "GameControllerEvents.h"
 
 
 class GameController : public QObject
@@ -41,9 +38,9 @@ class GameController : public QObject
 		
 		
 	signals:
-		void gameControllerAxisEvent(GameControllerAxisEvent *event);
-		void gameControllerButtonEvent(GameControllerButtonEvent *event);
-		void gameControllerPovEvent(GameControllerPovEvent *event);
+		void gameControllerAxisEvent(GameControllerAxisEvent event);
+		void gameControllerButtonEvent(GameControllerButtonEvent event);
+		void gameControllerPovEvent(GameControllerPovEvent event);
 };
 
 

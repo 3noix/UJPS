@@ -42,16 +42,8 @@ MappingTempo::MappingTempo(AbstractRealJoystick *rj, uint rButton, LayersCombo l
 
 MappingTempo::~MappingTempo()
 {
-	if (m_action1)
-	{
-		delete m_action1;
-		m_action1 = nullptr;
-	}
-	if (m_action2)
-	{
-		delete m_action2;
-		m_action2 = nullptr;
-	}
+	if (m_action1) {delete m_action1;}
+	if (m_action2) {delete m_action2;}
 }
 
 

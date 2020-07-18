@@ -14,11 +14,16 @@ class ActionChain : public AbstractAction
 			m_actions{actions},
 			m_delay{0}
 		{};
+		ActionChain(std::initializer_list<AbstractAction*> actions) :
+			AbstractAction{},
+			m_actions{actions},
+			m_delay{0}
+		{};
 		ActionChain(const ActionChain &other) = delete;
 		ActionChain(ActionChain &&other) = delete;
 		ActionChain& operator=(const ActionChain &other) = delete;
 		ActionChain& operator=(ActionChain &&other) = delete;
-		virtual ~ActionChain() = default;
+		virtual ~ActionChain() {qDeleteAll(m_actions);};
 		
 		virtual QVector<VirtualEvent> generateEvents() override final
 		{

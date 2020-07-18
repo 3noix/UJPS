@@ -56,7 +56,7 @@ LayersCombo::LayersCombo(const std::vector<Layer> layers)
 
 LayersCombo::LayersCombo(QString str)
 {
-	str.toLower();
+	str = str.toLower();
 	str.remove(' ');
 	
 	// we do some verification on str2

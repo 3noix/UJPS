@@ -1,6 +1,5 @@
 #include "ThrustmasterWarthogJoystick.h"
 #include "GameController.h"
-#include "GameControllerEvents.h"
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -60,13 +59,13 @@ ThrustmasterWarthogJoystick::ThrustmasterWarthogJoystick(GameController *c) : Re
 
 
 // SLOT GAME CONTROLLER AXIS EVENT ////////////////////////////////////////////
-void ThrustmasterWarthogJoystick::slotGameControllerAxisEvent(GameControllerAxisEvent *event)
+void ThrustmasterWarthogJoystick::slotGameControllerAxisEvent(GameControllerAxisEvent event)
 {
-	Q_ASSERT(event);
-	uint axis = event->axis();
+	uint axis = event.axis;
+	float f = event.value;
 	
-	if (axis == 1)      {m_changes << JoystickChange{this, ControlType::Axis, ThrustmasterWarthogJoystick_::JOYX, false, event->value()};}
-	else if (axis == 0) {m_changes << JoystickChange{this, ControlType::Axis, ThrustmasterWarthogJoystick_::JOYY, false, event->value()};}
+	if (axis == 1)      {m_changes << JoystickChange{this, ControlType::Axis, ThrustmasterWarthogJoystick_::JOYX, false, f};}
+	else if (axis == 0) {m_changes << JoystickChange{this, ControlType::Axis, ThrustmasterWarthogJoystick_::JOYY, false, f};}
 }
 
 // DESCRIPTION ////////////////////////////////////////////////////////////////

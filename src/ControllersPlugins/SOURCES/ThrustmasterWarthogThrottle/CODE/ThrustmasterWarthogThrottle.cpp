@@ -1,6 +1,5 @@
 #include "ThrustmasterWarthogThrottle.h"
 #include "GameController.h"
-#include "GameControllerEvents.h"
 #include "Lim.h"
 #include "WriteToHidThread.h"
 
@@ -74,12 +73,10 @@ ThrustmasterWarthogThrottle::ThrustmasterWarthogThrottle(GameController *c) : Re
 
 
 // SLOT GAME CONTROLLER BUTTON EVENT //////////////////////////////////////////
-void ThrustmasterWarthogThrottle::slotGameControllerButtonEvent(GameControllerButtonEvent *event)
+void ThrustmasterWarthogThrottle::slotGameControllerButtonEvent(GameControllerButtonEvent event)
 {
-	Q_ASSERT(event);
-	
-	uint button = event->button();
-	bool bPressed = event->pressed();
+	uint button = event.button;
+	bool bPressed = event.pressed;
 	
 	if (button == ThrustmasterWarthogThrottle_::SC || 
 		button == ThrustmasterWarthogThrottle_::MSP ||
@@ -219,16 +216,16 @@ void ThrustmasterWarthogThrottle::slotGameControllerButtonEvent(GameControllerBu
 }
 
 // SLOT GAME CONTROLLER AXIS EVENT ////////////////////////////////////////////
-void ThrustmasterWarthogThrottle::slotGameControllerAxisEvent(GameControllerAxisEvent *event)
+void ThrustmasterWarthogThrottle::slotGameControllerAxisEvent(GameControllerAxisEvent event)
 {
-	Q_ASSERT(event);
-	uint axis = event->axis();
+	uint axis = event.axis;
+	float f = event.value;
 	
-	if (axis == 0)      {m_changes << JoystickChange{this, ControlType::Axis, ThrustmasterWarthogThrottle_::SCX,       false, event->value()};}
-	else if (axis == 1) {m_changes << JoystickChange{this, ControlType::Axis, ThrustmasterWarthogThrottle_::SCY,       false, event->value()};}
-	else if (axis == 2) {m_changes << JoystickChange{this, ControlType::Axis, ThrustmasterWarthogThrottle_::THR_FC,    false, event->value()};}
-	else if (axis == 3) {m_changes << JoystickChange{this, ControlType::Axis, ThrustmasterWarthogThrottle_::THR_RIGHT, false, event->value()};}
-	else if (axis == 4) {m_changes << JoystickChange{this, ControlType::Axis, ThrustmasterWarthogThrottle_::THR_LEFT,  false, event->value()};}
+	if (axis == 0)      {m_changes << JoystickChange{this, ControlType::Axis, ThrustmasterWarthogThrottle_::SCX,       false, f};}
+	else if (axis == 1) {m_changes << JoystickChange{this, ControlType::Axis, ThrustmasterWarthogThrottle_::SCY,       false, f};}
+	else if (axis == 2) {m_changes << JoystickChange{this, ControlType::Axis, ThrustmasterWarthogThrottle_::THR_FC,    false, f};}
+	else if (axis == 3) {m_changes << JoystickChange{this, ControlType::Axis, ThrustmasterWarthogThrottle_::THR_RIGHT, false, f};}
+	else if (axis == 4) {m_changes << JoystickChange{this, ControlType::Axis, ThrustmasterWarthogThrottle_::THR_LEFT,  false, f};}
 }
 
 // DESCRIPTION ////////////////////////////////////////////////////////////////

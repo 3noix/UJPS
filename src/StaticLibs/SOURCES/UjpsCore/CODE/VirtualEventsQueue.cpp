@@ -64,22 +64,19 @@ void VirtualEventsQueue::processEvents()
 		VirtualEvent &e = m_events[i];
 		if (e.delay == 0) // we process the event whose delay elapsed
 		{
-			if (e.type == EventType::VJoy) // it is a VJoyEvent
+			if (e.type == EventType::VJoy && e.vjev.joystick) // it is a VJoyEvent and there is a VirtualJoystick specified
 			{
-				if (e.vjev.joystick) // and there is a VirtualJoystick specified
+				if (e.vjev.type == ControlType::Button)
 				{
-					if (e.vjev.type == ControlType::Button)
-					{
-						e.vjev.joystick->setButton(e.vjev.numButtonAxisPov, e.vjev.bButtonPressed, Priority::Low);
-					}
-					else if (e.vjev.type == ControlType::Axis)
-					{
-						e.vjev.joystick->setAxis(e.vjev.numButtonAxisPov, e.vjev.axisOrPovValue, Priority::Low, TrimOrNot::UseTrim);
-					}
-					else if (e.vjev.type == ControlType::Pov)
-					{
-						e.vjev.joystick->setPov(e.vjev.numButtonAxisPov, e.vjev.axisOrPovValue, Priority::Low);
-					}
+					e.vjev.joystick->setButton(e.vjev.numButtonAxisPov, e.vjev.bButtonPressed, Priority::Low);
+				}
+				else if (e.vjev.type == ControlType::Axis)
+				{
+					e.vjev.joystick->setAxis(e.vjev.numButtonAxisPov, e.vjev.axisOrPovValue, Priority::Low, TrimOrNot::UseTrim);
+				}
+				else if (e.vjev.type == ControlType::Pov)
+				{
+					e.vjev.joystick->setPov(e.vjev.numButtonAxisPov, e.vjev.axisOrPovValue, Priority::Low);
 				}
 			}
 			else if (e.type == EventType::Keyboard) // it is a keyboard event

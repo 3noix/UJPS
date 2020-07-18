@@ -3,7 +3,6 @@
 
 
 #include "JoystickChange.h"
-#include <QString>
 #include <QVector>
 class AbstractRealJoystick;
 

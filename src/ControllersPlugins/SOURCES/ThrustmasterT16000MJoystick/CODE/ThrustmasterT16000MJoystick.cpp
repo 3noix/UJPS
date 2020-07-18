@@ -1,6 +1,5 @@
 #include "ThrustmasterT16000MJoystick.h"
 #include "GameController.h"
-#include "GameControllerEvents.h"
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -43,15 +42,15 @@ ThrustmasterT16000MJoystick::ThrustmasterT16000MJoystick(GameController *c) : Re
 
 
 // SLOT GAME CONTROLLER AXIS EVENT ////////////////////////////////////////////
-void ThrustmasterT16000MJoystick::slotGameControllerAxisEvent(GameControllerAxisEvent *event)
+void ThrustmasterT16000MJoystick::slotGameControllerAxisEvent(GameControllerAxisEvent event)
 {
-	Q_ASSERT(event);
-	uint axis = event->axis();
+	uint axis = event.axis;
+	float f = event.value;
 	
-	if (axis == 0)      {m_changes << JoystickChange{this, ControlType::Axis, ThrustmasterT16000MJoystick_::JOYX,   false, event->value()};}
-	else if (axis == 1) {m_changes << JoystickChange{this, ControlType::Axis, ThrustmasterT16000MJoystick_::JOYY,   false, event->value()};}
-	else if (axis == 3) {m_changes << JoystickChange{this, ControlType::Axis, ThrustmasterT16000MJoystick_::RUDDER, false, event->value()};}
-	else if (axis == 2) {m_changes << JoystickChange{this, ControlType::Axis, ThrustmasterT16000MJoystick_::THR,    false, event->value()};}
+	if (axis == 0)      {m_changes << JoystickChange{this, ControlType::Axis, ThrustmasterT16000MJoystick_::JOYX,   false, f};}
+	else if (axis == 1) {m_changes << JoystickChange{this, ControlType::Axis, ThrustmasterT16000MJoystick_::JOYY,   false, f};}
+	else if (axis == 3) {m_changes << JoystickChange{this, ControlType::Axis, ThrustmasterT16000MJoystick_::RUDDER, false, f};}
+	else if (axis == 2) {m_changes << JoystickChange{this, ControlType::Axis, ThrustmasterT16000MJoystick_::THR,    false, f};}
 }
 
 // DESCRIPTION ////////////////////////////////////////////////////////////////

@@ -67,8 +67,8 @@ CurveChartView::CurveChartView(QWidget *parent) : QChartView{parent}
 	m_axisY->setRange(-1,1);
 	m_axisX->setTitleText("Real joystick raw position");
 	m_axisY->setTitleText("Virtual joystick position");
-	m_chart->setAxisX(m_axisX);
-	m_chart->setAxisY(m_axisY);
+	m_chart->addAxis(m_axisX,Qt::AlignBottom);
+	m_chart->addAxis(m_axisY,Qt::AlignLeft);
 	
 	// attach series to axes
 	m_seriesCurve->attachAxis(m_axisX);

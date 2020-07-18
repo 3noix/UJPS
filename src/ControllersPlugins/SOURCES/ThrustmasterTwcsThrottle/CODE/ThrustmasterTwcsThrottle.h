@@ -3,8 +3,8 @@
 
 
 #include "RealJoystick.h"
+#include "GameControllerEvents.h"
 class GameController;
-class GameControllerAxisEvent;
 
 #define INSIDE_PLUGIN
 #include "../../../INCLUDES/ThrustmasterTwcsThrottle.h"
@@ -40,7 +40,7 @@ class ThrustmasterTwcsThrottle : public RealJoystick
 		
 		
 	private slots:
-		void slotGameControllerAxisEvent(GameControllerAxisEvent *event) override final;
+		void slotGameControllerAxisEvent(GameControllerAxisEvent event) override final;
 		
 		
 	private:

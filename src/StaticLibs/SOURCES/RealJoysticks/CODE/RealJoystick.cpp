@@ -1,6 +1,5 @@
 #include "RealJoystick.h"
 #include "GameController.h"
-#include "GameControllerEvents.h"
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -47,12 +46,9 @@ RealJoystick::RealJoystick(GameController *c) : QObject{}, AbstractRealJoystick{
 	m_controller = c;
 	m_controller->readGameController();
 	
-	QObject::connect(c, SIGNAL(gameControllerAxisEvent(GameControllerAxisEvent*)),     this, SLOT(slotGameControllerAxisEvent(GameControllerAxisEvent*)));
-	QObject::connect(c, SIGNAL(gameControllerButtonEvent(GameControllerButtonEvent*)), this, SLOT(slotGameControllerButtonEvent(GameControllerButtonEvent*)));
-	QObject::connect(c, SIGNAL(gameControllerPovEvent(GameControllerPovEvent*)),       this, SLOT(slotGameControllerPovEvent(GameControllerPovEvent*)));
-	//QObject::connect(c, &GameController::gameControllerAxisEvent,   this, &RealJoystick::slotGameControllerAxisEvent);
-	//QObject::connect(c, &GameController::gameControllerButtonEvent, this, &RealJoystick::slotGameControllerButtonEvent);
-	//QObject::connect(c, &GameController::gameControllerPovEvent,    this, &RealJoystick::slotGameControllerPovEvent);
+	QObject::connect(c, SIGNAL(gameControllerAxisEvent(GameControllerAxisEvent)),     this, SLOT(slotGameControllerAxisEvent(GameControllerAxisEvent)));
+	QObject::connect(c, SIGNAL(gameControllerButtonEvent(GameControllerButtonEvent)), this, SLOT(slotGameControllerButtonEvent(GameControllerButtonEvent)));
+	QObject::connect(c, SIGNAL(gameControllerPovEvent(GameControllerPovEvent)),       this, SLOT(slotGameControllerPovEvent(GameControllerPovEvent)));
 	
 	m_bTransformPovInto4Buttons = (m_controller->description() != "vJoy Device");
 	m_bTransform4ButtonsIntoPov = (m_controller->description() != "vJoy Device");
@@ -114,7 +110,7 @@ QVector<JoystickChange> RealJoystick::changes()
 			if (index != -1u && !povsImpacted.contains(index)) {povsImpacted << index;}
 		}
 	}
-	qSort(povsImpacted);
+	std::sort(povsImpacted.begin(),povsImpacted.end());
 	
 	// we create one change per impacted pov
 	for (uint index : povsImpacted)
@@ -140,18 +136,16 @@ QVector<JoystickChange> RealJoystick::changes()
 
 
 // SLOT GAME CONTROLLER AXIS EVENT ////////////////////////////////////////////
-void RealJoystick::slotGameControllerAxisEvent(GameControllerAxisEvent *event)
+void RealJoystick::slotGameControllerAxisEvent(GameControllerAxisEvent event)
 {
-	Q_ASSERT(event);
-	m_changes << JoystickChange{this,ControlType::Axis,event->axis(),false,event->value()};
+	m_changes << JoystickChange{this,ControlType::Axis,event.axis,false,event.value};
 	// for axes we do things simple!
 }
 
 // SLOT GAME CONTROLLER BUTTON EVENT //////////////////////////////////////////
-void RealJoystick::slotGameControllerButtonEvent(GameControllerButtonEvent *event)
+void RealJoystick::slotGameControllerButtonEvent(GameControllerButtonEvent event)
 {
-	Q_ASSERT(event);
-	m_changes << JoystickChange{this,ControlType::Button,event->button(),event->pressed(),0.0};
+	m_changes << JoystickChange{this,ControlType::Button,event.button,event.pressed,0.0};
 	
 	// if the button is a part of a virtual pov, we cannot compute the new virtual pov position now,
 	// as another button of this virtual pov may not have reported his new position yet. That is
@@ -159,15 +153,14 @@ void RealJoystick::slotGameControllerButtonEvent(GameControllerButtonEvent *even
 }
 
 // SLOT GAME CONTROLLER POV EVENT /////////////////////////////////////////////
-void RealJoystick::slotGameControllerPovEvent(GameControllerPovEvent *event)
+void RealJoystick::slotGameControllerPovEvent(GameControllerPovEvent event)
 {
-	Q_ASSERT(event);
-	m_changes << JoystickChange{this,ControlType::Pov,event->pov(),false,event->angle()};
+	m_changes << JoystickChange{this,ControlType::Pov,event.pov,false,event.angle};
 	if (!m_bTransformPovInto4Buttons) {return;}
 	
 	// now, using the new pov value, we determine the value of the 4 virtual buttons
-	uint pov = event->pov();
-	float angle = event->angle();
+	uint pov = event.pov;
+	float angle = event.angle;
 	float oldAngle = m_realPovsAngles[pov];
 	m_realPovsAngles[pov] = angle;
 	

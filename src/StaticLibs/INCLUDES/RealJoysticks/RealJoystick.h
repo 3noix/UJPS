@@ -4,11 +4,9 @@
 
 #include <QObject>
 #include "AbstractRealJoystick.h"
+#include "GameControllerEvents.h"
 #include "../../SOURCES/RealJoysticks/CODE/VirtualPovDefinition.h"
 class GameController;
-class GameControllerButtonEvent;
-class GameControllerAxisEvent;
-class GameControllerPovEvent;
 class RealJoysticksManager;
 
 
@@ -55,9 +53,9 @@ class RealJoystick : public QObject, public AbstractRealJoystick
 		
 		
 	private slots:
-		virtual void slotGameControllerAxisEvent(GameControllerAxisEvent *event);
-		virtual void slotGameControllerButtonEvent(GameControllerButtonEvent *event);
-		virtual void slotGameControllerPovEvent(GameControllerPovEvent *event);
+		virtual void slotGameControllerAxisEvent(GameControllerAxisEvent event);
+		virtual void slotGameControllerButtonEvent(GameControllerButtonEvent event);
+		virtual void slotGameControllerPovEvent(GameControllerPovEvent event);
 		
 		
 	protected:

@@ -1,6 +1,5 @@
 #include "MfgCrosswindRudderPedals.h"
 #include "GameController.h"
-#include "GameControllerEvents.h"
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -34,20 +33,20 @@ MfgCrosswindRudderPedals::MfgCrosswindRudderPedals(GameController *c) : RealJoys
 
 
 // SLOT GAME CONTROLLER BUTTON EVENT //////////////////////////////////////////
-void MfgCrosswindRudderPedals::slotGameControllerButtonEvent(GameControllerButtonEvent *event)
+void MfgCrosswindRudderPedals::slotGameControllerButtonEvent(GameControllerButtonEvent event)
 {
 	Q_UNUSED(event)
 }
 
 // SLOT GAME CONTROLLER AXIS EVENT ////////////////////////////////////////////
-void MfgCrosswindRudderPedals::slotGameControllerAxisEvent(GameControllerAxisEvent *event)
+void MfgCrosswindRudderPedals::slotGameControllerAxisEvent(GameControllerAxisEvent event)
 {
-	Q_ASSERT(event);
+	uint axis = event.axis;
+	float f = event.value;
 	
-	uint axis = event->axis();
-	if (axis == MfgCrosswindRudderPedals_::RUDDER)         {m_changes << JoystickChange{this,ControlType::Axis,0,false,event->value()};}
-	else if (axis == MfgCrosswindRudderPedals_::BRK_LEFT)  {m_changes << JoystickChange{this,ControlType::Axis,2,false,event->value()};}
-	else if (axis == MfgCrosswindRudderPedals_::BRK_RIGHT) {m_changes << JoystickChange{this,ControlType::Axis,1,false,event->value()};}
+	if (axis == MfgCrosswindRudderPedals_::RUDDER)         {m_changes << JoystickChange{this,ControlType::Axis,0,false,f};}
+	else if (axis == MfgCrosswindRudderPedals_::BRK_LEFT)  {m_changes << JoystickChange{this,ControlType::Axis,2,false,f};}
+	else if (axis == MfgCrosswindRudderPedals_::BRK_RIGHT) {m_changes << JoystickChange{this,ControlType::Axis,1,false,f};}
 }
 
 // DESCRIPTION ////////////////////////////////////////////////////////////////

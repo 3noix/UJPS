@@ -1,8 +1,7 @@
+#include "TextEdit.h"
 #include <QMenu>
 #include <QTime>
 #include <QMouseEvent>
-
-#include "TextEdit.h"
 
 
 ///////////////////////////////////////////////////////////////////////////////

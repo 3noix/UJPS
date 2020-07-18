@@ -3,7 +3,6 @@
 
 
 #include <QMainWindow>
-#include <QCloseEvent>
 #include "RealJoysticksManager.h"
 #include "VigemPidWhiteLister.h"
 class QGridLayout;
