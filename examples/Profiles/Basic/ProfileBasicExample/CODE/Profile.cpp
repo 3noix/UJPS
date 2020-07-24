@@ -1,4 +1,5 @@
 #include "Profile.h"
+#include "BASIC/ProfileBasicUtilities.h"
 
 #include "VirtualJoystick.h"
 #include "AbstractRealJoystick.h"
@@ -120,13 +121,28 @@ void Profile::runOneStep(bool bInit)
 	float y = tmwj->axisValue(TMWJ::JOYY);
 	bool tg1 = tmwj->buttonPressed(TMWJ::TG1);
 	
+	
 	// computations
-	float rollInput = x + y;
-	bool lgToggle = !tg1;
+	float xpy = x + y;
+	
+	static Tempo tempo{ms2cycles(500)};
+	TempoOutput out = tempo(tg1);
+	
+	static CrenelOnRising crenelShort{ms2cycles(500),false};
+	static CrenelOnRising crenelLong{ms2cycles(500),false};
+	bool crenelShortOut = crenelShort(out.shortPress);
+	bool crenelLongOut = crenelLong(out.longPress);
+	
 	
 	// set outputs
 	//vj1->setPov(0,h1);
-	vj1->setAxis(Controls::AxisRoll,rollInput);
-	vj1->setButton(Controls::LandingGear,lgToggle);
+	vj1->setAxis(0,xpy);
+	vj1->setAxis(1,y);
+	
+	vj1->setButton(0,tg1);
+	vj1->setButton(1,out.shortPress);
+	vj1->setButton(2,out.longPress);
+	vj1->setButton(9,crenelShortOut);
+	vj1->setButton(10,crenelLongOut);
 }
 
