@@ -174,7 +174,7 @@ Profile::AxesData Profile::getAxesData(bool bInit) const
 	
 	// tempo: short input = recenter, long input = set trim at 0
 	static Tempo tempoTrim{nbCycles1s};
-	TempoOutput tempoTrimOut = tempoTrim.calculate(BPSF);
+	TempoOutput tempoTrimOut = tempoTrim(BPSF);
 	bool BRESETTRIMS = tempoTrimOut.longPress;
 	bool BSETTRIMS = (tempoTrimOut.shortPress || (bInit && bTrimAtInit));
 	bool bTrimMemCond = !(BRESETTRIMS || BSETTRIMS);
@@ -185,11 +185,11 @@ Profile::AxesData Profile::getAxesData(bool bInit) const
 	static Memorization<float> memo_drped{DRPED_raw};
 	static Memorization<float> memo_brkl{BRKL_raw};
 	static Memorization<float> memo_brkr{BRKR_raw};
-	float JOYX_trimmed  = JOYX_raw  - memo_joyx.calculate(BRESETTRIMS  ? 0.0f : JOYX_raw,  bTrimMemCond);
-	float JOYY_trimmed  = JOYY_raw  - memo_joyy.calculate(BRESETTRIMS  ? 0.0f : JOYY_raw,  bTrimMemCond);
-	float DRPED_trimmed = DRPED_raw - memo_drped.calculate(BRESETTRIMS ? 0.0f : DRPED_raw, bTrimMemCond);
-	float BRKL_trimmed  = BRKL_raw  - memo_brkl.calculate(BRESETTRIMS  ? 0.0f : 1.0f+BRKL_raw,  bTrimMemCond);
-	float BRKR_trimmed  = BRKR_raw  - memo_brkr.calculate(BRESETTRIMS  ? 0.0f : 1.0f+BRKR_raw,  bTrimMemCond);
+	float JOYX_trimmed  = JOYX_raw  - memo_joyx(BRESETTRIMS  ? 0.0f : JOYX_raw,  bTrimMemCond);
+	float JOYY_trimmed  = JOYY_raw  - memo_joyy(BRESETTRIMS  ? 0.0f : JOYY_raw,  bTrimMemCond);
+	float DRPED_trimmed = DRPED_raw - memo_drped(BRESETTRIMS ? 0.0f : DRPED_raw, bTrimMemCond);
+	float BRKL_trimmed  = BRKL_raw  - memo_brkl(BRESETTRIMS  ? 0.0f : 1.0f+BRKL_raw,  bTrimMemCond);
+	float BRKR_trimmed  = BRKR_raw  - memo_brkr(BRESETTRIMS  ? 0.0f : 1.0f+BRKR_raw,  bTrimMemCond);
 	
 	// addition of axes curves
 	static CurveExpCentered curve_JOY{1.5f,1.5f,1.5f,2.5f,0.0f};
@@ -208,8 +208,8 @@ Profile::AxesData Profile::getAxesData(bool bInit) const
 	out.THRL  = -THRL;
 	out.THRR  = -THRR;
 	out.DRPED = curve_DRPED.run(DRPED_trimmed);
-	out.BRKL  = interpDzBrk.calculate(BRKL_trimmed);
-	out.BRKR  = interpDzBrk.calculate(BRKR_trimmed);
+	out.BRKL  = interpDzBrk(BRKL_trimmed);
+	out.BRKR  = interpDzBrk(BRKR_trimmed);
 	return out;
 }
 
@@ -259,9 +259,9 @@ float Profile::getLandingFactor(bool bLndMode) const
 	// integrate -1 or +1 function of button pressed
 	static Integrator integ_lnd_factor{0.3f,-1.0f,1.0f,this->timeStep()};
 	static PulseOnRising risingMSU;
-	bool bResetLndFactor = (BSHIFTR && risingMSU.calculate(BMSU));
+	bool bResetLndFactor = (BSHIFTR && risingMSU(BMSU));
 	float integInputTemp = (BMSL && BSHIFTR) ? -1.0f : ((BMSR && BSHIFTR) ? 1.0f : 0.0f);
-	float integOutput1 = integ_lnd_factor.calculate(kIntLndFactor*integInputTemp,bResetLndFactor,0.3f);
+	float integOutput1 = integ_lnd_factor(kIntLndFactor*integInputTemp,bResetLndFactor,0.3f);
 	
 	// apply curve (for exponential sensitivity)
 	static CurveExpNotCentered curve_KLNDFACTOR{0.0f,0.0f,2.8f,0.0f};
@@ -272,7 +272,7 @@ float Profile::getLandingFactor(bool bLndMode) const
 	
 	// rate limitation
 	static RateLimiter rlimLdnFactor{kIntLndFactorRlim,kLndFactorTemp,this->timeStep()};
-	float KLNDFACTOR = rlimLdnFactor.calculate(bLndMode ? kLndFactorTemp : 1.0f);
+	float KLNDFACTOR = rlimLdnFactor(bLndMode ? kLndFactorTemp : 1.0f);
 	return KLNDFACTOR;
 }
 
@@ -293,16 +293,16 @@ void Profile::processSpeedManagement() const
 	
 	// tempo
 	static Tempo tempoSpd{nbCycles500ms};
-	TempoOutput tempoSpdOut = tempoSpd.calculate(BMSU);
+	TempoOutput tempoSpdOut = tempoSpd(BMSU);
 	static CrenelOnRising crenelSpdlim{nbCyclesPulseButton,true};
 	static CrenelOnRising crenelCrzCtl{nbCyclesPulseButton,true};
-	bool BSPDLIMTOGGLE = crenelSpdlim.calculate(!BSHIFTR && tempoSpdOut.shortPress);
-	bool BCRZCTLTOGGLE = crenelCrzCtl.calculate(!BSHIFTR && tempoSpdOut.longPress);
+	bool BSPDLIMTOGGLE = crenelSpdlim(!BSHIFTR && tempoSpdOut.shortPress);
+	bool BCRZCTLTOGGLE = crenelCrzCtl(!BSHIFTR && tempoSpdOut.longPress);
 
 	// integrate -1 or +1 function of button pressed
 	static Integrator integ_spdlim{0.0f,-1.0f,1.0f,this->timeStep()};
 	float integInput = (BMSL && !BSHIFTR) ? -1.0f : ((BMSR && !BSHIFTR) ? 1.0f : 0.0f);
-	float integOutput = integ_spdlim.calculate(kIntSpdLim*integInput);
+	float integOutput = integ_spdlim(kIntSpdLim*integInput);
 	static CurveExpNotCentered curve_SPDLIM{0.0f,0.0f,2.5f,0.0f};
 	float spdlim = curve_SPDLIM.run(integOutput);
 	
@@ -324,35 +324,35 @@ void Profile::processOtherFlightControls() const
 	bool BBSF = tmwt->buttonPressed(TMWT::BSF);
 	static PulseOnRising risingBsf;
 	static PulseOnFalling fallingBsf;
-	bool decoupledPulse = ((risingBsf.calculate(BBSF) || fallingBsf.calculate(BBSF)) && !bTogglesInhibition && BFLTMODE);
+	bool decoupledPulse = ((risingBsf(BBSF) || fallingBsf(BBSF)) && !bTogglesInhibition && BFLTMODE);
 	static CrenelOnRising risingDecoupled{nbCyclesPulseButton,true};
-	bool BDECOUPLEDTOGGLE = risingDecoupled.calculate(decoupledPulse);
+	bool BDECOUPLEDTOGGLE = risingDecoupled(decoupledPulse);
 	
 	// GForce safety
 	static PulseOnRising risingH1L;
-	bool H1L_pulse = risingH1L.calculate(tmwj->buttonPressed(TMWJ::H1L));
+	bool H1L_pulse = risingH1L(tmwj->buttonPressed(TMWJ::H1L));
 	bool gForceTemp = (H1L_pulse && BFLTMODE && BSHIFTL);
 	static CrenelOnRising crenelGforce{nbCyclesPulseButton,true};
-	bool BGFORCESAFETYTOGGLE = crenelGforce.calculate(gForceTemp);
+	bool BGFORCESAFETYTOGGLE = crenelGforce(gForceTemp);
 	
 	// ESP
 	static PulseOnRising risingH1R;
-	bool H1R_pulse = risingH1R.calculate(tmwj->buttonPressed(TMWJ::H1R));
+	bool H1R_pulse = risingH1R(tmwj->buttonPressed(TMWJ::H1R));
 	bool espTemp = (H1R_pulse && BFLTMODE && BSHIFTL);
 	static CrenelOnRising crenelEsp{nbCyclesPulseButton,true};
-	bool ESPTOGGLE = crenelEsp.calculate(espTemp);
+	bool ESPTOGGLE = crenelEsp(espTemp);
 	
 	// landing
 	bool BAPENG = tmwt->buttonPressed(TMWT::APENG);
 	static Tempo tempoLanding{nbCycles500ms};
-	TempoOutput tempoLandingOut = tempoLanding.calculate(BAPENG);
+	TempoOutput tempoLandingOut = tempoLanding(BAPENG);
 	static CrenelOnRising risingLngToggle{nbCyclesPulseButton,true};
-	bool BLNDSYSTOGGLE = risingLngToggle.calculate(BFLTMODE && tempoLandingOut.shortPress);
+	bool BLNDSYSTOGGLE = risingLngToggle(BFLTMODE && tempoLandingOut.shortPress);
 	bool BSETAUTOLAND = (BFLTMODE && tempoLandingOut.longPress);
 	static PulseOnFalling fallingAutoland;
-	bool BRESETAUTOLAND = fallingAutoland.calculate(BFLTMODE && BAPENG);
-	static FlipFlopPrioritySet flipFlopAutoland{false};
-	bool BAUTOLAND = flipFlopAutoland.calculate(BSETAUTOLAND,BRESETAUTOLAND);
+	bool BRESETAUTOLAND = fallingAutoland(BFLTMODE && BAPENG);
+	static FlipFlop flipFlopAutoland{true,false};
+	bool BAUTOLAND = flipFlopAutoland(BSETAUTOLAND,BRESETAUTOLAND);
 	
 	// other
 	bool BAFTERBURNER = (BFLTMODE && tmwt->buttonPressed(TMWT::SPDB));
@@ -386,11 +386,11 @@ void Profile::processTargeting() const
 	bool BS1 = tmwj->buttonPressed(TMWJ::S1);
 	
 	static PulseOnRising risingH4L, risingH4U, risingH4R, risingH4D, risingBS1;
-	bool H4L_pulse = risingH4L.calculate(BH4L);
-	bool H4U_pulse = risingH4U.calculate(BH4U);
-	bool H4R_pulse = risingH4R.calculate(BH4R);
-	bool H4D_pulse = risingH4D.calculate(BH4D);
-	bool BS1_pulse = risingBS1.calculate(BS1);
+	bool H4L_pulse = risingH4L(BH4L);
+	bool H4U_pulse = risingH4U(BH4U);
+	bool H4R_pulse = risingH4R(BH4R);
+	bool H4D_pulse = risingH4D(BH4D);
+	bool BS1_pulse = risingBS1(BS1);
 	
 	// get the targeting mode
 	static TargetingMode targetingMode = All;
@@ -408,22 +408,22 @@ void Profile::processTargeting() const
 	static CrenelOnRising crenelPrevHstTgt{nbCyclesPulseButton,true};
 	static CrenelOnRising crenelNextFrdTgt{nbCyclesPulseButton,true};
 	static CrenelOnRising crenelPrevFrdTgt{nbCyclesPulseButton,true};
-	bool BNEXTPINTGT = crenelNextPinTgt.calculate(targetingMode == Pinned && H4R_pulse && !BSHIFTL);
-	bool BPREVPINTGT = crenelPrevPinTgt.calculate(targetingMode == Pinned && H4L_pulse && !BSHIFTL);
-	bool BNEXTALLTGT = crenelNextAllTgt.calculate(targetingMode == All && H4R_pulse && !BSHIFTL);
-	bool BPREVALLTGT = crenelPrevAllTgt.calculate(targetingMode == All && H4L_pulse && !BSHIFTL);
-	bool BNEXTHSTTGT = crenelNextHstTgt.calculate(targetingMode == Hostiles && H4R_pulse && !BSHIFTL);
-	bool BPREVHSTTGT = crenelPrevHstTgt.calculate(targetingMode == Hostiles && H4L_pulse && !BSHIFTL);
-	bool BNEXTFRDTGT = crenelNextFrdTgt.calculate(targetingMode == Friends && H4R_pulse && !BSHIFTL);
-	bool BPREVFRDTGT = crenelPrevFrdTgt.calculate(targetingMode == Friends && H4L_pulse && !BSHIFTL);
+	bool BNEXTPINTGT = crenelNextPinTgt(targetingMode == Pinned && H4R_pulse && !BSHIFTL);
+	bool BPREVPINTGT = crenelPrevPinTgt(targetingMode == Pinned && H4L_pulse && !BSHIFTL);
+	bool BNEXTALLTGT = crenelNextAllTgt(targetingMode == All && H4R_pulse && !BSHIFTL);
+	bool BPREVALLTGT = crenelPrevAllTgt(targetingMode == All && H4L_pulse && !BSHIFTL);
+	bool BNEXTHSTTGT = crenelNextHstTgt(targetingMode == Hostiles && H4R_pulse && !BSHIFTL);
+	bool BPREVHSTTGT = crenelPrevHstTgt(targetingMode == Hostiles && H4L_pulse && !BSHIFTL);
+	bool BNEXTFRDTGT = crenelNextFrdTgt(targetingMode == Friends && H4R_pulse && !BSHIFTL);
+	bool BPREVFRDTGT = crenelPrevFrdTgt(targetingMode == Friends && H4L_pulse && !BSHIFTL);
 	
 	// other
 	static CrenelOnRising crenelTgtNearestHst{nbCyclesPulseButton,true};
 	static CrenelOnRising crenelReticleFocus{nbCyclesPulseButton,true};
 	static CrenelOnRising crenelPinTgt{nbCyclesPulseButton,true};
-	bool BTGTNEARESTHST = crenelTgtNearestHst.calculate(BS1_pulse && BSHIFTL);
-	bool BRETICLEFOCUS = crenelReticleFocus.calculate(BS1_pulse && !BSHIFTL);
-	bool BPINTGT = crenelPinTgt.calculate(H4D_pulse && !BSHIFTL);
+	bool BTGTNEARESTHST = crenelTgtNearestHst(BS1_pulse && BSHIFTL);
+	bool BRETICLEFOCUS = crenelReticleFocus(BS1_pulse && !BSHIFTL);
+	bool BPINTGT = crenelPinTgt(H4D_pulse && !BSHIFTL);
 	
 	// set outputs
 	vj1->setButton(SC1::CyclePinnedTargets,BNEXTPINTGT);
@@ -452,22 +452,22 @@ void Profile::processScan() const
 	// ping
 	bool BSCANPING = (BSCANONCS && BCSD);
 	static PulseOnRising risingCSL, risingCSR;
-	bool CSL_pulse = risingCSL.calculate(BCSL);
-	bool CSR_pulse = risingCSR.calculate(BCSR);
+	bool CSL_pulse = risingCSL(BCSL);
+	bool CSR_pulse = risingCSR(BCSR);
 	static CrenelOnRising crenelScanIncAngle{nbCyclesPulseButton,true};
 	static CrenelOnRising crenelScanDecAngle{nbCyclesPulseButton,true};
-	bool BSCANINCANGLE = crenelScanIncAngle.calculate(BSCANONCS && CSR_pulse);
-	bool BSCANDECANGLE = crenelScanDecAngle.calculate(BSCANONCS && CSL_pulse);
+	bool BSCANINCANGLE = crenelScanIncAngle(BSCANONCS && CSR_pulse);
+	bool BSCANDECANGLE = crenelScanDecAngle(BSCANONCS && CSL_pulse);
 	
 	// scan mode and scan activation
 	static Tempo tempoScan{nbCycles500ms};
-	TempoOutput tempoScanOut = tempoScan.calculate(BCSU);
+	TempoOutput tempoScanOut = tempoScan(BCSU);
 	static CrenelOnRising crenelScanModelToggle{nbCyclesPulseButton,true};
-	bool BSCANMODETOGGLE = crenelScanModelToggle.calculate(BSCANONCS && tempoScanOut.shortPress);
+	bool BSCANMODETOGGLE = crenelScanModelToggle(BSCANONCS && tempoScanOut.shortPress);
 	static PulseOnFalling fallingCSUp;
-	bool bResetActScan = fallingCSUp.calculate(BSCANONCS && BCSU);
-	static FlipFlopPrioritySet flipFlopScan{false};
-	bool BACTSCAN = flipFlopScan.calculate(BSCANONCS && tempoScanOut.longPress, bResetActScan);
+	bool bResetActScan = fallingCSUp(BSCANONCS && BCSU);
+	static FlipFlop flipFlopScan{true,false};
+	bool BACTSCAN = flipFlopScan(BSCANONCS && tempoScanOut.longPress, bResetActScan);
 	
 	// set outputs
 	vj2->setButton(SC2::ScanningRadarPing,BSCANPING);
@@ -494,14 +494,14 @@ void Profile::processWeaponsAndCm() const
 	bool BLAUNCHMISS = (!BSHIFTL && BS2);
 	
 	static PulseOnRising risingH4U;
-	bool H4U_pulse = risingH4U.calculate(BH4U);
+	bool H4U_pulse = risingH4U(BH4U);
 	static CrenelOnRising crenelLockMissile{nbCyclesPulseButton,true};
-	bool BACQMISSLOCK = crenelLockMissile.calculate(!BSHIFTL && H4U_pulse);
+	bool BACQMISSLOCK = crenelLockMissile(!BSHIFTL && H4U_pulse);
 	
 	static PulseOnRising risingS2;
-	bool S2_pulse = risingS2.calculate(BS2);
+	bool S2_pulse = risingS2(BS2);
 	static CrenelOnRising crenelUnlockMissile{nbCyclesPulseButton,true};
-	bool BUNLOCKMISS = crenelUnlockMissile.calculate(BSHIFTL && S2_pulse);
+	bool BUNLOCKMISS = crenelUnlockMissile(BSHIFTL && S2_pulse);
 	
 	// set outputs
 	vj1->setButton(SC1::FireGroup1, BTG1);
@@ -534,8 +534,8 @@ void Profile::processPower() const
 	// flight ready and power off
 	static CrenelOnRising crenelFlightReady{nbCyclesPulseButton,true};
 	static CrenelOnRising crenelPowerOff{nbCyclesPulseButton,true};
-	bool BFLIGHTREADY = crenelFlightReady.calculate(BEORIGN);
-	bool BPOWEROFF = crenelPowerOff.calculate(BEORMOTOR);
+	bool BFLIGHTREADY = crenelFlightReady(BEORIGN);
+	bool BPOWEROFF = crenelPowerOff(BEORMOTOR);
 	
 	// increase / decrease
 	bool BINCREASEPOWER = (BPWRONCS && BSHIFTR && BCSR);
@@ -543,31 +543,31 @@ void Profile::processPower() const
 	
 	// distribution changes
 	static PulseOnRising risingCSL, risingCSU, risingCSR, risingCSD;
-	bool CSL_pulse = risingCSL.calculate(BCSL);
-	bool CSU_pulse = risingCSU.calculate(BCSU);
-	bool CSR_pulse = risingCSR.calculate(BCSR);
-	bool CSD_pulse = risingCSD.calculate(BCSD);
+	bool CSL_pulse = risingCSL(BCSL);
+	bool CSU_pulse = risingCSU(BCSU);
+	bool CSR_pulse = risingCSR(BCSR);
+	bool CSD_pulse = risingCSD(BCSD);
 	static CrenelOnRising crenelPwrInc1{nbCyclesPulseButton,true};
 	static CrenelOnRising crenelPwrInc2{nbCyclesPulseButton,true};
 	static CrenelOnRising crenelPwrInc3{nbCyclesPulseButton,true};
 	static CrenelOnRising crenelPwrResetDist{nbCyclesPulseButton,true};
-	bool POWERPRESET1INC = crenelPwrInc1.calculate(BPWRONCS && !BSHIFTR && CSL_pulse);
-	bool POWERPRESET2INC = crenelPwrInc2.calculate(BPWRONCS && !BSHIFTR && CSD_pulse);
-	bool POWERPRESET3INC = crenelPwrInc3.calculate(BPWRONCS && !BSHIFTR && CSR_pulse);
-	bool RESETPOWERDISTRIB = crenelPwrResetDist.calculate(BPWRONCS && !BSHIFTR && CSU_pulse);
+	bool POWERPRESET1INC = crenelPwrInc1(BPWRONCS && !BSHIFTR && CSL_pulse);
+	bool POWERPRESET2INC = crenelPwrInc2(BPWRONCS && !BSHIFTR && CSD_pulse);
+	bool POWERPRESET3INC = crenelPwrInc3(BPWRONCS && !BSHIFTR && CSR_pulse);
+	bool RESETPOWERDISTRIB = crenelPwrResetDist(BPWRONCS && !BSHIFTR && CSU_pulse);
 	
 	// switches
 	static PulseOnRising risingEac, risingRdr, risingLtb;
 	static PulseOnFalling fallingEac, fallingRdr;
-	bool switch1 = (risingEac.calculate(BEACON) || fallingEac.calculate(BEACON)) && !bTogglesInhibition;
-	bool switch2 = (risingRdr.calculate(BRDRNRM) || fallingRdr.calculate(BRDRNRM)) && !bTogglesInhibition;
-	bool switch3 = risingLtb.calculate(BLTB) && !bTogglesInhibition;
+	bool switch1 = (risingEac(BEACON) || fallingEac(BEACON)) && !bTogglesInhibition;
+	bool switch2 = (risingRdr(BRDRNRM) || fallingRdr(BRDRNRM)) && !bTogglesInhibition;
+	bool switch3 = risingLtb(BLTB) && !bTogglesInhibition;
 	static CrenelOnRising crenelPwrSwitch1{nbCyclesPulseButton,true};
 	static CrenelOnRising crenelPwrSwitch2{nbCyclesPulseButton,true};
 	static CrenelOnRising crenelPwrSwitch3{nbCyclesPulseButton,true};
-	bool BPOWERPRESET1TOGGLE = crenelPwrSwitch1.calculate(switch1);
-	bool BPOWERPRESET2TOGGLE = crenelPwrSwitch2.calculate(switch2);
-	bool BPOWERPRESET3TOGGLE = crenelPwrSwitch3.calculate(switch3);
+	bool BPOWERPRESET1TOGGLE = crenelPwrSwitch1(switch1);
+	bool BPOWERPRESET2TOGGLE = crenelPwrSwitch2(switch2);
+	bool BPOWERPRESET3TOGGLE = crenelPwrSwitch3(switch3);
 	
 	// set outputs
 	vj1->setButton(SC1::FlightReady,BFLIGHTREADY);
@@ -592,11 +592,11 @@ void Profile::processShields() const
 	
 	// shield mode and reset distrib
 	static Tempo tempoShields{nbCycles500ms};
-	TempoOutput tempoShieldsOut = tempoShields.calculate(BSC);
+	TempoOutput tempoShieldsOut = tempoShields(BSC);
 	static bool BSHDHORZ = bShieldsHorzInit;
 	if (tempoShieldsOut.shortPress) {BSHDHORZ = !BSHDHORZ;}
 	static CrenelOnRising crenelResetDistrib{nbCyclesPulseButton,true};
-	bool BRESETSHDLEVELS = crenelResetDistrib.calculate(tempoShieldsOut.longPress);
+	bool BRESETSHDLEVELS = crenelResetDistrib(tempoShieldsOut.longPress);
 	
 	// actions
 	bool BSHDRAISELEFT  = (SCX < -0.84);
@@ -651,13 +651,13 @@ void Profile::processView() const
 	
 	// track IR
 	static Tempo tempoTrackIr{nbCycles500ms};
-	TempoOutput tempoTrackIrOut = tempoTrackIr.calculate(BPSB);
+	TempoOutput tempoTrackIrOut = tempoTrackIr(BPSB);
 	static CrenelOnRising crenelTrackIrCenter{nbCyclesPulseButton,true};
-	bool BTRKIRCENTER = crenelTrackIrCenter.calculate(tempoTrackIrOut.shortPress || tempoTrackIrOut.longPress);
+	bool BTRKIRCENTER = crenelTrackIrCenter(tempoTrackIrOut.shortPress || tempoTrackIrOut.longPress);
 	
 	static Delay<bool> delayTrackIrPause{2*nbCyclesPulseButton};
 	static CrenelOnRising crenelTrackIrPause{nbCyclesPulseButton,true};
-	bool BTRKIRPAUSE = crenelTrackIrPause.calculate(delayTrackIrPause.calculate(tempoTrackIrOut.longPress));*/
+	bool BTRKIRPAUSE = crenelTrackIrPause(delayTrackIrPause(tempoTrackIrOut.longPress));*/
 	
 	// set outputs
 	vj2->setButton(SC2::ZoomIn, BH1L && !BSHIFTL);
@@ -675,8 +675,8 @@ void Profile::processLeds(bool bInit) const
 	// leds inhibition
 	static bool BINHIBDECLEDS = false;
 	static PulseOnRising risingInhib, risingDecoupled;
-	if (risingDecoupled.calculate(BDECOUPLED)) {BINHIBDECLEDS = false;}
-	else if (BDECOUPLED && risingInhib.calculate(BLDGH)) {BINHIBDECLEDS = true;}
+	if (risingDecoupled(BDECOUPLED)) {BINHIBDECLEDS = false;}
+	else if (BDECOUPLED && risingInhib(BLDGH)) {BINHIBDECLEDS = true;}
 	
 	// duration the decoupled mode was on
 	static float timeStepInSec = 0.001 * this->timeStep();
@@ -689,8 +689,8 @@ void Profile::processLeds(bool bInit) const
 	bool ledsOnInterm = (duration > dtLedsMin && modulo(duration-dtLedsMin,0.0f,dtLedsCycle) < 1.0f);
 	bool ledsOffInterm = (duration > dtLedsMin && modulo(duration-dtLedsMin-dtLedsFlash,0.0f,dtLedsCycle) < 1.0f);
 	static PulseOnRising risingLedsOn, risingLedsOff, risingNoInteg;
-	bool BSBRIGHTNESS5 = (!BINHIBDECLEDS && risingLedsOn.calculate(ledsOnInterm));
-	bool BSBRIGHTNESS0 = (BINHIBDECLEDS || risingLedsOff.calculate(ledsOffInterm) || risingNoInteg.calculate(bNoInteg));
+	bool BSBRIGHTNESS5 = (!BINHIBDECLEDS && risingLedsOn(ledsOnInterm));
+	bool BSBRIGHTNESS0 = (BINHIBDECLEDS || risingLedsOff(ledsOffInterm) || risingNoInteg(bNoInteg));
 	
 	// set outputs
 	if (BSBRIGHTNESS5) {tmwt->setData("BRIGHTNESS",5);}
@@ -709,12 +709,12 @@ void Profile::processOther() const
 	// headlights and broadcast ID
 	static PulseOnRising risingEfl, risingEfr;
 	static PulseOnFalling fallingEfl, fallingEfr;
-	bool bSwitchingEflNorm = (risingEfl.calculate(BEFLNORM) || fallingEfl.calculate(BEFLNORM));
-	bool bSwitchingEfrNorm = (risingEfr.calculate(BEFRNORM) || fallingEfr.calculate(BEFRNORM));
+	bool bSwitchingEflNorm = (risingEfl(BEFLNORM) || fallingEfl(BEFLNORM));
+	bool bSwitchingEfrNorm = (risingEfr(BEFRNORM) || fallingEfr(BEFRNORM));
 	static CrenelOnRising crenelHeadlights{nbCyclesPulseButton,true};
 	static CrenelOnRising crenelBroadcastId{nbCyclesPulseButton,true};
-	bool BHEADLIGHTSTOGGLE = crenelHeadlights.calculate(bSwitchingEflNorm && !bTogglesInhibition);
-	bool BIDBROADCASTTOGGLE = crenelBroadcastId.calculate(bSwitchingEfrNorm && !bTogglesInhibition);
+	bool BHEADLIGHTSTOGGLE = crenelHeadlights(bSwitchingEflNorm && !bTogglesInhibition);
+	bool BIDBROADCASTTOGGLE = crenelBroadcastId(bSwitchingEfrNorm && !bTogglesInhibition);
 	
 	// set outputs
 	vj2->setButton(SC2::HailTarget,BH2U);

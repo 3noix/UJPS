@@ -15,7 +15,7 @@ class CrenelOnRising
 			m_prevOutput = false;
 		};
 		
-		bool calculate(bool input)
+		bool operator()(bool input)
 		{
 			if (!m_firstTime && input && !m_prevInput && (m_retriggable || !m_prevOutput)) // rising
 			{

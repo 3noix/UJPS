@@ -126,12 +126,12 @@ void Profile::runOneStep(bool bInit)
 	float xpy = x + y;
 	
 	static Tempo tempo{ms2cycles(500)};
-	TempoOutput out = tempo.calculate(tg1);
+	TempoOutput out = tempo(tg1);
 	
 	static CrenelOnRising crenelShort{ms2cycles(500),false};
 	static CrenelOnRising crenelLong{ms2cycles(500),false};
-	bool crenelShortOut = crenelShort.calculate(out.shortPress);
-	bool crenelLongOut = crenelLong.calculate(out.longPress);
+	bool crenelShortOut = crenelShort(out.shortPress);
+	bool crenelLongOut = crenelLong(out.longPress);
 	
 	
 	// set outputs

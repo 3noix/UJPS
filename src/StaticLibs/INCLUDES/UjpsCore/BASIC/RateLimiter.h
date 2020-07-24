@@ -12,7 +12,7 @@ class RateLimiter
 			m_limDown = -m_limUp;
 		};
 		
-		float calculate(float input, bool reset = false)
+		float operator()(float input, bool reset = false)
 		{
 			if (reset)
 			{

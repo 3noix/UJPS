@@ -19,7 +19,7 @@ class Tempo
 			m_counter = 0;
 		};
 		
-		TempoOutput calculate(bool input)
+		TempoOutput operator()(bool input)
 		{
 			TempoOutput output;
 			if (input)

@@ -13,7 +13,7 @@ class Interpolation1D
 			m_ybp = ybp;
 		};
 		
-		float calculate(float input)
+		float operator()(float input)
 		{
 			if (m_xbp.size() != m_ybp.size()) {return 9999.0f;}
 			int indexLast = m_xbp.size() - 1;
