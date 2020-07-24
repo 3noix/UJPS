@@ -10,7 +10,7 @@ class PulseOnRising
 			m_prevInput = inputInitValue;
 		};
 		
-		bool calculate(bool input)
+		bool operator()(bool input)
 		{
 			bool output = (input && !m_prevInput);
 			m_prevInput = input;

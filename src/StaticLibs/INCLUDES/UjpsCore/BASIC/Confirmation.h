@@ -13,7 +13,7 @@ class Confirmation
 			m_prevInput = !m_atTrue;
 		};
 		
-		bool calculate(bool input)
+		bool operator()(bool input)
 		{
 			bool b1 = (input && m_prevInput && m_atTrue);
 			bool b2 = (!input && !m_prevInput && !m_atTrue);

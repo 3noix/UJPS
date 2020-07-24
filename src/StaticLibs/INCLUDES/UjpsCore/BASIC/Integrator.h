@@ -15,7 +15,7 @@ class Integrator
 			m_dt = 0.001f * dtms;
 		};
 		
-		float calculate(float input, bool bReset = false, float initValue = 0.0f)
+		float operator()(float input, bool bReset = false, float initValue = 0.0f)
 		{
 			if (bReset)
 			{

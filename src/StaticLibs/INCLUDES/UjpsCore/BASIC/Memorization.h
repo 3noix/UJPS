@@ -11,7 +11,7 @@ class Memorization
 			m_prevOutput = outputInitValue;
 		};
 		
-		T calculate(T input, bool memCond)
+		T operator()(T input, bool memCond)
 		{
 			T output = (memCond ? m_prevOutput : input);
 			m_prevOutput = output;

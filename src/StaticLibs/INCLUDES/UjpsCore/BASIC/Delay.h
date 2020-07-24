@@ -14,7 +14,7 @@ class Delay
 			m_nbCycles = nbCycles;
 		};
 		
-		T calculate(T input)
+		T operator()(T input)
 		{
 			m_buffer.push_back(input);
 			T output = m_buffer.front();
