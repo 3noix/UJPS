@@ -7,7 +7,6 @@
 #include <QAbstractSocket>
 #include <QStringList>
 class QTcpSocket;
-class QNetworkSession;
 
 
 class RemoteJoystickClient : public QObject
@@ -63,7 +62,6 @@ class RemoteJoystickClient : public QObject
 		
 		
 	private slots:
-		void slotSessionOpened();
 		void slotConnected();
 		void slotReceiveData();
 		void slotDisconnected();
@@ -82,7 +80,6 @@ class RemoteJoystickClient : public QObject
 		quint16 m_port;
 		State m_state;
 		QTcpSocket *m_tcpSocket;
-		QNetworkSession *m_networkSession;
 };
 
 

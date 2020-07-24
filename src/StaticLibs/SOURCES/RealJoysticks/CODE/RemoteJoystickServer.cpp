@@ -3,7 +3,10 @@
 #include "ExceptionFailedToConnect.h"
 #include "ExceptionInconsistentInitData.h"
 #include "Lim.h"
-#include <QtNetwork>
+
+#include <QTcpServer>
+#include <QTcpSocket>
+#include <QDataStream>
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -34,7 +37,6 @@
 //  SET DATA
 //  FLUSH
 //
-//  SLOT SESSION OPENED
 //  SLOT NEW CONNECTION
 //  SLOT RECEIVE DATA
 //  SLOT REMOVE CONNECTION
@@ -63,31 +65,15 @@ RemoteJoystickServer::RemoteJoystickServer(const QString &name, int portNumber, 
 	for (float &f : m_axes) {f = 0.0f;}
 	for (float &f : m_povs) {f = -1.0f;}
 	
-	m_tcpServer = nullptr;
 	m_tcpSocket = nullptr;
-	m_networkSession = nullptr;
-	
-	
-	QNetworkConfigurationManager manager;
-	if (manager.capabilities() & QNetworkConfigurationManager::NetworkSessionRequired)
+	m_tcpServer = new QTcpServer{};
+	QObject::connect(m_tcpServer, &QTcpServer::newConnection, this, &RemoteJoystickServer::slotNewConnection);
+	if (!m_tcpServer->listen(QHostAddress::Any,m_portNumber))
 	{
-		// Get saved network configuration
-		QSettings settings{QSettings::UserScope, QLatin1String{"QtProject"}};
-		settings.beginGroup(QLatin1String{"QtNetwork"});
-		const QString id = settings.value(QLatin1String{"DefaultNetworkConfiguration"}).toString();
-		settings.endGroup();
-		
-		// If the saved network configuration is not currently discovered use the system default
-		QNetworkConfiguration config = manager.configurationFromIdentifier(id);
-		if ((config.state() & QNetworkConfiguration::Discovered) != QNetworkConfiguration::Discovered) {config = manager.defaultConfiguration();}
-		
-		m_networkSession = new QNetworkSession{config,this};
-		QObject::connect(m_networkSession, &QNetworkSession::opened, this, &RemoteJoystickServer::slotSessionOpened);
-		m_networkSession->open();
-	}
-	else
-	{
-		this->slotSessionOpened();
+		m_tcpServer->close();
+		QString message = "Unable to start the server " + m_name + ": " + m_tcpServer->errorString();
+		delete m_tcpServer;
+		throw ExceptionFailedToConnect{message.toStdString()};
 	}
 }
 
@@ -244,54 +230,6 @@ void RemoteJoystickServer::flush()
 
 
 
-
-// SLOT SESSION OPENED ////////////////////////////////////////////////////////
-void RemoteJoystickServer::slotSessionOpened()
-{
-	// Save the used configuration
-	if (m_networkSession)
-	{
-		QNetworkConfiguration config = m_networkSession->configuration();
-		QString id;
-		if (config.type() == QNetworkConfiguration::UserChoice)
-			id = m_networkSession->sessionProperty(QLatin1String("UserChoiceConfiguration")).toString();
-		else
-			id = config.identifier();
-		
-		QSettings settings{QSettings::UserScope, QLatin1String{"QtProject"}};
-		settings.beginGroup(QLatin1String{"QtNetwork"});
-		settings.setValue(QLatin1String{"DefaultNetworkConfiguration"}, id);
-		settings.endGroup();
-	}
-	
-	m_tcpServer = new QTcpServer{};
-	QObject::connect(m_tcpServer, &QTcpServer::newConnection, this, &RemoteJoystickServer::slotNewConnection);
-	if (!m_tcpServer->listen(QHostAddress::Any,m_portNumber))
-	{
-		m_tcpServer->close();
-		QString message = "Unable to start the server " + m_name + ": " + m_tcpServer->errorString();
-		delete m_tcpServer;
-		throw ExceptionFailedToConnect{message.toStdString()};
-		return;
-	}
-	
-	/*
-	// use the first non-localhost IPv4 address
-	QString ipAddress;
-	QList<QHostAddress> ipAddressesList = QNetworkInterface::allAddresses();
-	for (const QHostAddress &ha : ipAddressesList)
-	{
-		if (ha != QHostAddress::LocalHost && ha.toIPv4Address())
-		{
-			ipAddress = ha.toString();
-			break;
-		}
-	}
-	// if we did not find one, use IPv4 localhost
-	if (ipAddress == "") {ipAddress = QHostAddress{QHostAddress::LocalHost}.toString();}
-	QString message = "IP: " + ipAddress + ", port: " + QString::number(m_tcpServer->serverPort());
-	*/
-}
 
 // SLOT NEW CONNECTION ////////////////////////////////////////////////////////
 void RemoteJoystickServer::slotNewConnection()

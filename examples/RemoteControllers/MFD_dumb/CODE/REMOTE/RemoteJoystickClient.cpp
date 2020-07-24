@@ -1,8 +1,7 @@
 #include "RemoteJoystickClient.h"
 #include "RemoteJoystickMessageTypes.h"
-
 #include <QtWidgets>
-#include <QtNetwork>
+#include <QTcpSocket>
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -25,7 +24,6 @@
 //  SLOT SEND AXIS INFO
 //  SLOT SEND POV INFO
 //
-//  SLOT SESSION OPENED
 //  SLOT CONNECTED
 //  SLOT RECEIVE DATA
 //  SLOT DISCONNECTED
@@ -50,34 +48,12 @@ RemoteJoystickClient::RemoteJoystickClient(
 	m_port = 0;
 	m_state = State::NotConnected;
 	m_tcpSocket = new QTcpSocket{this};
-	m_networkSession = nullptr;
 	
 	// connections
-	connect(m_tcpSocket, &QTcpSocket::connected, this, &RemoteJoystickClient::slotConnected);
-	connect(m_tcpSocket, &QTcpSocket::disconnected, this, &RemoteJoystickClient::slotDisconnected);
-	connect(m_tcpSocket, &QIODevice::readyRead, this, &RemoteJoystickClient::slotReceiveData);
-	typedef void (QAbstractSocket::*QAbstractSocketErrorSignal)(QAbstractSocket::SocketError);
-	connect(m_tcpSocket, static_cast<QAbstractSocketErrorSignal>(&QAbstractSocket::error), this, &RemoteJoystickClient::slotError);
-	
-	// configuration du client
-	QNetworkConfigurationManager manager;
-	if (manager.capabilities() & QNetworkConfigurationManager::NetworkSessionRequired)
-	{
-		// Get saved network configuration
-		QSettings settings{QSettings::UserScope, QLatin1String{"QtProject"}};
-		settings.beginGroup(QLatin1String{"QtNetwork"});
-		const QString id = settings.value(QLatin1String{"DefaultNetworkConfiguration"}).toString();
-		settings.endGroup();
-		
-		// If the saved network configuration is not currently discovered use the system default
-		QNetworkConfiguration config = manager.configurationFromIdentifier(id);
-		if ((config.state() & QNetworkConfiguration::Discovered) != QNetworkConfiguration::Discovered)
-			config = manager.defaultConfiguration();
-		
-		m_networkSession = new QNetworkSession{config,this};
-		connect(m_networkSession, &QNetworkSession::opened, this, &RemoteJoystickClient::slotSessionOpened);
-		m_networkSession->open();
-	}
+	connect(m_tcpSocket, SIGNAL(connected()),    this, SLOT(slotConnected()));
+	connect(m_tcpSocket, SIGNAL(disconnected()), this, SLOT(slotDisconnected()));
+	connect(m_tcpSocket, SIGNAL(readyRead()),    this, SLOT(slotReceiveData()));
+	connect(m_tcpSocket, SIGNAL(error()),        this, SLOT(slotError()));
 }
 
 
@@ -217,23 +193,6 @@ void RemoteJoystickClient::slotSendPovInfo(quint8 pov, float povValue)
 
 
 
-
-// SLOT SESSION OPENED ////////////////////////////////////////////////////////
-void RemoteJoystickClient::slotSessionOpened()
-{
-	// Save the used configuration
-	QNetworkConfiguration config = m_networkSession->configuration();
-	QString id;
-	if (config.type() == QNetworkConfiguration::UserChoice)
-		id = m_networkSession->sessionProperty(QLatin1String{"UserChoiceConfiguration"}).toString();
-	else
-		id = config.identifier();
-	
-	QSettings settings{QSettings::UserScope, QLatin1String{"QtProject"}};
-	settings.beginGroup(QLatin1String{"QtNetwork"});
-	settings.setValue(QLatin1String{"DefaultNetworkConfiguration"}, id);
-	settings.endGroup();
-}
 
 // SLOT CONNECTED /////////////////////////////////////////////////////////////
 void RemoteJoystickClient::slotConnected()

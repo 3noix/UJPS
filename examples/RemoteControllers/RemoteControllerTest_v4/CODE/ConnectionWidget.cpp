@@ -23,7 +23,7 @@
 ConnectionWidget::ConnectionWidget(QWidget *parent) : QWidget{parent}
 {
 	this->setupWidget();
-	connect(m_connectButton, &QAbstractButton::clicked, this, &ConnectionWidget::slotConnect);
+	QObject::connect(m_connectButton, &QAbstractButton::clicked, this, &ConnectionWidget::slotConnect);
 }
 
 // SETUP WIDGET ///////////////////////////////////////////////////////////////
