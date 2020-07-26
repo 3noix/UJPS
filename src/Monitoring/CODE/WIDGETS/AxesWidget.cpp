@@ -47,9 +47,9 @@ AxesWidget::AxesWidget(const QStringList &names, QWidget *parent) : QGroupBox{"A
 		layout->addWidget(slider,i,2,1,1);
 		layout->addWidget(label2,i,3,1,1);
 		
-		m_boxes   << boxTem;
-		m_sliders << slider;
-		m_labels2 << label2;
+		m_boxes.push_back(boxTem);
+		m_sliders.push_back(slider);
+		m_labels2.push_back(label2);
 		
 		QObject::connect(boxTem, &MyCheckBox::axisDisplayChanged, this, &AxesWidget::axisDisplayChanged);
 		++i;
@@ -63,13 +63,13 @@ float AxesWidget::value(int i) const
 }
 
 // AXES TO DISPLAY ////////////////////////////////////////////////////////////
-QVector<uint> AxesWidget::axesToDisplay() const
+std::vector<uint> AxesWidget::axesToDisplay() const
 {
-	QVector<uint> v;
+	std::vector<uint> v;
 	uint i = 0u;
 	for (MyCheckBox *box : m_boxes)
 	{
-		if (box->checkState() == Qt::Checked) {v << i;}
+		if (box->checkState() == Qt::Checked) {v.push_back(i);}
 		++i;
 	}
 	return v;

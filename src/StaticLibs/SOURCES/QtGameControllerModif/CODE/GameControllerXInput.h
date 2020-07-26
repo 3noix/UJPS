@@ -5,7 +5,7 @@
 #include "GameController.h"
 #include <windows.h>
 #include <XInput.h>
-#include <QVector>
+#include <vector>
 
 
 class GameControllerXInput : public GameController
@@ -46,7 +46,7 @@ class GameControllerXInput : public GameController
 		bool m_bFirstRead;
 		bool m_connected;
 		XINPUT_STATE m_state;
-		QVector<WORD> m_buttonsMapping;
+		std::vector<WORD> m_buttonsMapping;
 };
 
 

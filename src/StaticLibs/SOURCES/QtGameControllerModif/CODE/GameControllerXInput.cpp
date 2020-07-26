@@ -33,20 +33,20 @@ GameControllerXInput::GameControllerXInput(uint id, QObject *parent) : GameContr
 	m_bFirstRead = true;
 	m_connected = false;
 	
-	m_buttonsMapping << XINPUT_GAMEPAD_DPAD_UP;			// 0
-	m_buttonsMapping << XINPUT_GAMEPAD_DPAD_RIGHT;		// 1, reordered compared to XInput
-	m_buttonsMapping << XINPUT_GAMEPAD_DPAD_DOWN;		// 2, reordered compared to XInput
-	m_buttonsMapping << XINPUT_GAMEPAD_DPAD_LEFT;		// 3, reordered compared to XInput
-	m_buttonsMapping << XINPUT_GAMEPAD_START;			// 4
-	m_buttonsMapping << XINPUT_GAMEPAD_BACK;			// 5
-	m_buttonsMapping << XINPUT_GAMEPAD_LEFT_THUMB;		// 6
-	m_buttonsMapping << XINPUT_GAMEPAD_RIGHT_THUMB;		// 7
-	m_buttonsMapping << XINPUT_GAMEPAD_LEFT_SHOULDER;	// 8
-	m_buttonsMapping << XINPUT_GAMEPAD_RIGHT_SHOULDER;	// 9
-	m_buttonsMapping << XINPUT_GAMEPAD_A;				// 10
-	m_buttonsMapping << XINPUT_GAMEPAD_B;				// 11
-	m_buttonsMapping << XINPUT_GAMEPAD_X;				// 12
-	m_buttonsMapping << XINPUT_GAMEPAD_Y;				// 13
+	m_buttonsMapping.push_back(XINPUT_GAMEPAD_DPAD_UP);			// 0
+	m_buttonsMapping.push_back(XINPUT_GAMEPAD_DPAD_RIGHT);		// 1, reordered compared to XInput
+	m_buttonsMapping.push_back(XINPUT_GAMEPAD_DPAD_DOWN);		// 2, reordered compared to XInput
+	m_buttonsMapping.push_back(XINPUT_GAMEPAD_DPAD_LEFT);		// 3, reordered compared to XInput
+	m_buttonsMapping.push_back(XINPUT_GAMEPAD_START);			// 4
+	m_buttonsMapping.push_back(XINPUT_GAMEPAD_BACK);			// 5
+	m_buttonsMapping.push_back(XINPUT_GAMEPAD_LEFT_THUMB);		// 6
+	m_buttonsMapping.push_back(XINPUT_GAMEPAD_RIGHT_THUMB);		// 7
+	m_buttonsMapping.push_back(XINPUT_GAMEPAD_LEFT_SHOULDER);	// 8
+	m_buttonsMapping.push_back(XINPUT_GAMEPAD_RIGHT_SHOULDER);	// 9
+	m_buttonsMapping.push_back(XINPUT_GAMEPAD_A);				// 10
+	m_buttonsMapping.push_back(XINPUT_GAMEPAD_B);				// 11
+	m_buttonsMapping.push_back(XINPUT_GAMEPAD_X);				// 12
+	m_buttonsMapping.push_back(XINPUT_GAMEPAD_Y);				// 13
 }
 
 // BYTE TO FLOAT //////////////////////////////////////////////////////////////

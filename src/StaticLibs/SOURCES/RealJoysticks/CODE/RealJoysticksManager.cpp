@@ -18,7 +18,6 @@
 //  NB JOYSTICKS
 //  JOYSTICKS NAMES
 //  JOYSTICK
-//  RELEASE JOYSTICK
 //  RELEASE ALL
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -26,7 +25,6 @@
 // CONSTRUCTEUR ET DESTRUCTEUR ////////////////////////////////////////////////
 RealJoysticksManager::RealJoysticksManager() : QObject{}
 {
-	
 }
 
 RealJoysticksManager::~RealJoysticksManager()
@@ -46,8 +44,8 @@ void RealJoysticksManager::loadPlugins(const QString &path)
 		{
 			if (AbstractRealJoystickFactory* factory = qobject_cast<AbstractRealJoystickFactory*>(plugin))
 			{
-				m_loaders << loader;
-				m_factories << factory;
+				m_loaders.push_back(loader);
+				m_factories.push_back(factory);
 				continue;
 			}
 		}
@@ -69,7 +67,7 @@ void RealJoysticksManager::unloadPlugins()
 
 
 // FROM GAME CONTROLLERS //////////////////////////////////////////////////////
-void RealJoysticksManager::fromGameControllers(QVector<GameController*> &gcv)
+void RealJoysticksManager::fromGameControllers(std::vector<GameController*> &gcv)
 {
 	// reset
 	qDeleteAll(m_joysticks);
@@ -78,7 +76,7 @@ void RealJoysticksManager::fromGameControllers(QVector<GameController*> &gcv)
 	// build RealJoysticks objects
 	for (GameController *gc : gcv)
 	{
-		if (AbstractRealJoystick *j = this->createJoystick(gc)) {m_joysticks << j;}
+		if (AbstractRealJoystick *j = this->createJoystick(gc)) {m_joysticks.push_back(j);}
 		else {delete gc;}
 	}
 }
@@ -119,9 +117,9 @@ QStringList RealJoysticksManager::joysticksNames() const
 }
 
 // JOYSTICK ///////////////////////////////////////////////////////////////////
-AbstractRealJoystick* RealJoysticksManager::joystick(int id) const
+AbstractRealJoystick* RealJoysticksManager::joystick(uint id) const
 {
-	if (id <0 || id >= m_joysticks.size()) {return nullptr;}
+	if (id >= m_joysticks.size()) {return nullptr;}
 	return m_joysticks[id];
 }
 
@@ -142,34 +140,10 @@ AbstractRealJoystick* RealJoysticksManager::joystick(const QString &joystickName
 	return nullptr;
 }
 
-// RELEASE JOYSTICK ///////////////////////////////////////////////////////////
-AbstractRealJoystick* RealJoysticksManager::releaseJoystick(int id)
-{
-	if (id <0 || id >= m_joysticks.size()) {return nullptr;}
-	return m_joysticks.takeAt(id);
-}
-
-AbstractRealJoystick* RealJoysticksManager::releaseJoystick(const QString &joystickName, int num)
-{
-	int compteur = 0;
-	for (int i=0; i<m_joysticks.size(); ++i)
-	{
-		if (m_joysticks[i]->description() == joystickName)
-		{
-			if (compteur == num)
-				return m_joysticks.takeAt(i);
-			else
-				++compteur;
-		}
-	}
-	
-	return nullptr;
-}
-
 // RELEASE ALL ////////////////////////////////////////////////////////////////
-QVector<AbstractRealJoystick*> RealJoysticksManager::releaseAll()
+std::vector<AbstractRealJoystick*> RealJoysticksManager::releaseAll()
 {
-	QVector<AbstractRealJoystick*> joys = m_joysticks;
+	std::vector<AbstractRealJoystick*> joys = m_joysticks;
 	m_joysticks.clear();
 	return joys;
 }

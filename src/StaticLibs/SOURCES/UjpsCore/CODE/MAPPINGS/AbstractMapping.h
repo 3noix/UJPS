@@ -57,7 +57,7 @@ class AbstractMapping
 		
 	protected:
 		void postEvent(VirtualEvent event) {m_eventsQueue.postEvent(event);};
-		void postEvents(const QVector<VirtualEvent> &events) {m_eventsQueue.postEvents(events);};
+		void postEvents(const std::vector<VirtualEvent> &events) {m_eventsQueue.postEvents(events);};
 		
 		
 	private:

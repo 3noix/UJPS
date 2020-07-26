@@ -181,7 +181,7 @@ void MainWindow::clearTabs()
 }
 
 // SET DATA ///////////////////////////////////////////////////////////////////
-void MainWindow::setData(const QVector<GameController*> joysticks)
+void MainWindow::setData(const std::vector<GameController*> joysticks)
 {
 	// case there is no controller
 	if (joysticks.size() == 0)
@@ -218,7 +218,7 @@ void MainWindow::setData(const QVector<GameController*> joysticks)
 	}
 }
 
-void MainWindow::setData(const QVector<AbstractRealJoystick*> joysticks)
+void MainWindow::setData(const std::vector<AbstractRealJoystick*> joysticks)
 {
 	// case there is no controller
 	if (joysticks.size() == 0)
@@ -305,7 +305,7 @@ void MainWindow::slotModeChanged(int index)
 // SLOT END UPDATE ////////////////////////////////////////////////////////////
 void MainWindow::slotEndUpdate()
 {
-	QVector<GameController*> gcv = m_thread->releaseGameControllers();
+	std::vector<GameController*> gcv = m_thread->releaseGameControllers();
 	
 	if (m_index == 0) {this->setData(gcv);}
 	else if (m_index == 1 || m_index == 2)

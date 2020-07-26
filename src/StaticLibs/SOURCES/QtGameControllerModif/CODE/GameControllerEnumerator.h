@@ -2,9 +2,11 @@
 #define GAME_CONTROLLER_ENUMERATOR
 
 
-#include <QVector>
+#include <vector>
 class GameController;
 class QObject;
+
+using uint = unsigned int;
 
 
 class GameControllerEnumerator
@@ -18,7 +20,7 @@ class GameControllerEnumerator
 		~GameControllerEnumerator() = default;
 		
 		// return all controllers at a time
-		static QVector<GameController*> enumerateControllers(QObject *parent = nullptr);
+		static std::vector<GameController*> enumerateControllers(QObject *parent = nullptr);
 		
 		// return controllers one by one
 		void reset();

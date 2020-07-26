@@ -20,18 +20,18 @@ class ActionKeySetChange : public AbstractAction
 		ActionKeySetChange& operator=(ActionKeySetChange &&other) = delete;
 		virtual ~ActionKeySetChange() = default;
 		
-		virtual QVector<VirtualEvent> generateEvents() override final
+		virtual std::vector<VirtualEvent> generateEvents() override final
 		{
 			return {};
 		};
 		
-		virtual QVector<VirtualEvent> generateEvents(const JoystickChange &ch) override final
+		virtual std::vector<VirtualEvent> generateEvents(const JoystickChange &ch) override final
 		{
 			VirtualEvent ev{EventType::Keyboard,{},KeyboardEvent{ch.bButtonPressed,m_key,m_modifier},{},0};
 			return {ev};
 		};
 		
-		virtual QVector<VirtualEvent> activateByLayerChange(AbstractRealJoystick *rj, ControlType t, uint rnum) override final
+		virtual std::vector<VirtualEvent> activateByLayerChange(AbstractRealJoystick *rj, ControlType t, uint rnum) override final
 		{
 			Q_UNUSED(t)
 			// we don't wait for a change in the real joystick button to update the key
@@ -39,14 +39,14 @@ class ActionKeySetChange : public AbstractAction
 			return {ev};
 		};
 		
-		virtual QVector<VirtualEvent> deactivateByLayerChange() override final
+		virtual std::vector<VirtualEvent> deactivateByLayerChange() override final
 		{
 			// we release the button immediatly
 			VirtualEvent ev{EventType::Keyboard,{},KeyboardEvent{false,m_key,m_modifier},{},0};
 			return {ev};
 		};
 		
-		virtual QVector<VirtualEvent> aboutToBeDeleted() override final
+		virtual std::vector<VirtualEvent> aboutToBeDeleted() override final
 		{
 			// we release the button immediatly
 			VirtualEvent ev{EventType::Keyboard,{},KeyboardEvent{false,m_key,m_modifier},{},0};

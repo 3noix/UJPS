@@ -25,54 +25,72 @@ class ActionChain : public AbstractAction
 		ActionChain& operator=(ActionChain &&other) = delete;
 		virtual ~ActionChain() {qDeleteAll(m_actions);};
 		
-		virtual QVector<VirtualEvent> generateEvents() override final
+		virtual std::vector<VirtualEvent> generateEvents() override final
 		{
 			m_delay = 0;
-			QVector<VirtualEvent> events;
+			std::vector<VirtualEvent> events;
 			for (AbstractAction *action : m_actions)
 			{
 				if (action->additionalDelay() > 0) {m_delay += action->additionalDelay();}
 				
-				QVector<VirtualEvent> eventsTemp = action->generateEvents();
-				for (VirtualEvent &event : eventsTemp) {event.delay += m_delay;}
-				events << eventsTemp;
+				std::vector<VirtualEvent> eventsTemp = action->generateEvents();
+				for (VirtualEvent event : eventsTemp)
+				{
+					event.delay += m_delay;
+					events.push_back(event);
+				}
 			}
 			return events;
 		};
 		
-		virtual QVector<VirtualEvent> generateEvents(const JoystickChange &ch) override final
+		virtual std::vector<VirtualEvent> generateEvents(const JoystickChange &ch) override final
 		{
 			m_delay = 0;
-			QVector<VirtualEvent> events;
+			std::vector<VirtualEvent> events;
 			for (AbstractAction *action : m_actions)
 			{
 				if (action->additionalDelay() > 0) {m_delay += action->additionalDelay();}
 				
-				QVector<VirtualEvent> eventsTemp = action->generateEvents(ch);
-				for (VirtualEvent &event : eventsTemp) {event.delay += m_delay;}
-				events << eventsTemp;
+				std::vector<VirtualEvent> eventsTemp = action->generateEvents(ch);
+				for (VirtualEvent event : eventsTemp)
+				{
+					event.delay += m_delay;
+					events.push_back(event);
+				}
 			}
 			return events;
 		};
 		
-		virtual QVector<VirtualEvent> activateByLayerChange(AbstractRealJoystick *rj, ControlType t, uint rnum) override final
+		virtual std::vector<VirtualEvent> activateByLayerChange(AbstractRealJoystick *rj, ControlType t, uint rnum) override final
 		{
-			QVector<VirtualEvent> events;
-			for (AbstractAction *action : m_actions) {events << action->activateByLayerChange(rj,t,rnum);}
+			std::vector<VirtualEvent> events;
+			for (AbstractAction *action : m_actions)
+			{
+				for (const VirtualEvent &event : action->activateByLayerChange(rj,t,rnum))
+					events.push_back(event);
+			}
 			return events;
 		};
 		
-		virtual QVector<VirtualEvent> deactivateByLayerChange() override final
+		virtual std::vector<VirtualEvent> deactivateByLayerChange() override final
 		{
-			QVector<VirtualEvent> events;
-			for (AbstractAction *action : m_actions) {events << action->deactivateByLayerChange();}
+			std::vector<VirtualEvent> events;
+			for (AbstractAction *action : m_actions)
+			{
+				for (const VirtualEvent &event : action->deactivateByLayerChange())
+					events.push_back(event);
+			}
 			return events;
 		};
 		
-		virtual QVector<VirtualEvent> aboutToBeDeleted() override final
+		virtual std::vector<VirtualEvent> aboutToBeDeleted() override final
 		{
-			QVector<VirtualEvent> events;
-			for (AbstractAction *action : m_actions) {events << action->deactivateByLayerChange();}
+			std::vector<VirtualEvent> events;
+			for (AbstractAction *action : m_actions)
+			{
+				for (const VirtualEvent &event : action->aboutToBeDeleted())
+					events.push_back(event);
+			}
 			return events;
 		};
 		

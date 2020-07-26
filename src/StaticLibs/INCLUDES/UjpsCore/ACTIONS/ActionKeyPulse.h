@@ -20,14 +20,14 @@ class ActionKeyPulse : public AbstractAction
 		ActionKeyPulse& operator=(ActionKeyPulse &&other) = delete;
 		virtual ~ActionKeyPulse() = default;
 		
-		virtual QVector<VirtualEvent> generateEvents() override final
+		virtual std::vector<VirtualEvent> generateEvents() override final
 		{
 			VirtualEvent ev1{EventType::Keyboard,{},KeyboardEvent{true,m_key,m_modifier},{},0};
 			VirtualEvent ev2{EventType::Keyboard,{},KeyboardEvent{false,m_key,m_modifier},{},m_cycles};
 			return {ev1,ev2};
 		};
 		
-		virtual QVector<VirtualEvent> generateEvents(const JoystickChange &ch) override final
+		virtual std::vector<VirtualEvent> generateEvents(const JoystickChange &ch) override final
 		{
 			Q_UNUSED(ch)
 			VirtualEvent ev1{EventType::Keyboard,{},KeyboardEvent{true,m_key,m_modifier},{},0};
@@ -35,7 +35,7 @@ class ActionKeyPulse : public AbstractAction
 			return {ev1,ev2};
 		};
 		
-		virtual QVector<VirtualEvent> activateByLayerChange(AbstractRealJoystick *rj, ControlType t, uint rnum) override final
+		virtual std::vector<VirtualEvent> activateByLayerChange(AbstractRealJoystick *rj, ControlType t, uint rnum) override final
 		{
 			Q_UNUSED(rj)
 			Q_UNUSED(t)
@@ -43,14 +43,14 @@ class ActionKeyPulse : public AbstractAction
 			return {};
 		};
 		
-		virtual QVector<VirtualEvent> deactivateByLayerChange() override final
+		virtual std::vector<VirtualEvent> deactivateByLayerChange() override final
 		{
 			// we release the key immediatly
 			VirtualEvent ev{EventType::Keyboard,{},KeyboardEvent{false,m_key,m_modifier},{},0};
 			return {ev};
 		};
 		
-		virtual QVector<VirtualEvent> aboutToBeDeleted() override final
+		virtual std::vector<VirtualEvent> aboutToBeDeleted() override final
 		{
 			// we release the key immediatly
 			VirtualEvent ev{EventType::Keyboard,{},KeyboardEvent{false,m_key,m_modifier},{},0};

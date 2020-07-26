@@ -81,7 +81,7 @@ void StandardJoystickWidgetRaw::setupWidget()
 	{
 		PovWidgetDecorated *p = new PovWidgetDecorated{"POV"+QString::number(i+1),this};
 		layout4->addWidget(p);
-		povWidgets << p;
+		povWidgets.push_back(p);
 	}
 	layout4->addStretch();
 	layout3->addLayout(layout4);
@@ -97,7 +97,7 @@ void StandardJoystickWidgetRaw::setupWidget()
 	{
 		ButtonWidget *b = new ButtonWidget{i+1,i<nbButtons,this};
 		buttonsLayout->addWidget(b,i/8,i%8,1,1);
-		buttonsWidgets << b;
+		buttonsWidgets.push_back(b);
 	}
 	layout2->addWidget(boxButtons);
 	layout1->addLayout(layout2);
@@ -138,7 +138,7 @@ void StandardJoystickWidgetRaw::slotRunOneLoop()
 	++compteur;
 	if (compteur % ratioTempoChart == 0)
 	{
-		QVector<uint> axes = boxAxes->axesToDisplay();
+		std::vector<uint> axes = boxAxes->axesToDisplay();
 		for (uint axis : axes) {tempoChart->slotPushValue(axis,m_joystick->axisValue(axis));}
 	}
 }
@@ -169,7 +169,7 @@ void StandardJoystickWidgetRaw::slotJoystickPovAngleChanged(GameControllerPovEve
 // SLOT UPDATE TEMPO CURVES ///////////////////////////////////////////////////
 void StandardJoystickWidgetRaw::slotUpdateTempoCurves(uint axis, bool bDisplay)
 {
-	QVector<uint> axes = boxAxes->axesToDisplay();
+	std::vector<uint> axes = boxAxes->axesToDisplay();
 	
 	if (bDisplay) {tempoChart->slotAddCurve(axis,"Axis"+QString::number(axis+1));}
 	else {tempoChart->slotRemoveCurve(axis);}

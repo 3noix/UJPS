@@ -203,43 +203,43 @@ BOOL CALLBACK EnumObjectsCallback(const DIDEVICEOBJECTINSTANCE* pdidoi, VOID* pC
 	// Set the UI to reflect what objects the joystick supports
 	if (pdidoi->guidType == GUID_XAxis)
 	{
-		joysticktoenume->m_DIaxisGIIDs << pdidoi->guidType;
+		joysticktoenume->m_DIaxisGIIDs.push_back(pdidoi->guidType);
 		//qDebug() << "Axis found";
 		joysticktoenume->m_nbAxes++;
 	}
 	else if (pdidoi->guidType == GUID_YAxis)
 	{
-		joysticktoenume->m_DIaxisGIIDs << pdidoi->guidType;
+		joysticktoenume->m_DIaxisGIIDs.push_back(pdidoi->guidType);
 		//qDebug() << "Axis found";
 		joysticktoenume->m_nbAxes++;
 	}
 	else if (pdidoi->guidType == GUID_ZAxis)
 	{
-		joysticktoenume->m_DIaxisGIIDs << pdidoi->guidType;
+		joysticktoenume->m_DIaxisGIIDs.push_back(pdidoi->guidType);
 		//qDebug() << "Axis found";
 		joysticktoenume->m_nbAxes++;
 	}
 	else if (pdidoi->guidType == GUID_RxAxis)
 	{
-		joysticktoenume->m_DIaxisGIIDs << pdidoi->guidType;
+		joysticktoenume->m_DIaxisGIIDs.push_back(pdidoi->guidType);
 		//qDebug() << "Axis found";
 		joysticktoenume->m_nbAxes++;
 	}
 	else if (pdidoi->guidType == GUID_RyAxis)
 	{
-		joysticktoenume->m_DIaxisGIIDs << pdidoi->guidType;
+		joysticktoenume->m_DIaxisGIIDs.push_back(pdidoi->guidType);
 		//qDebug() << "Axis found";
 		joysticktoenume->m_nbAxes++;
 	}
 	else if (pdidoi->guidType == GUID_RzAxis)
 	{
-		joysticktoenume->m_DIaxisGIIDs << pdidoi->guidType;
+		joysticktoenume->m_DIaxisGIIDs.push_back(pdidoi->guidType);
 		//qDebug() << "Axis found";
 		joysticktoenume->m_nbAxes++;
 	}
 	else if (pdidoi->guidType == GUID_Slider)
 	{
-		joysticktoenume->m_DIaxisGIIDs << pdidoi->guidType;
+		joysticktoenume->m_DIaxisGIIDs.push_back(pdidoi->guidType);
 		//qDebug() << "Slider found";
 		joysticktoenume->m_nbAxes++;
 	}
@@ -273,9 +273,9 @@ void GameControllerDirectInput::readGameController()
 {
 	if (m_bFirstRead)
 	{
-		m_axesValues    = QVector<float>(m_nbAxes,0.0f);
-		m_buttonsValues = QVector<bool>(m_nbButtons,false);
-		m_povsValues    = QVector<float>(m_nbPovs,-1.0f);
+		m_axesValues.resize(m_nbAxes,0.0f);
+		m_buttonsValues.resize(m_nbButtons,false);
+		m_povsValues.resize(m_nbPovs,-1.0f);
 	}
 	
 	// read joystick state

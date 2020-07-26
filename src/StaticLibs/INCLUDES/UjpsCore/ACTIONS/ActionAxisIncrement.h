@@ -21,20 +21,20 @@ class ActionAxisIncrement : public AbstractAction
 		ActionAxisIncrement& operator=(ActionAxisIncrement &&other) = delete;
 		virtual ~ActionAxisIncrement() = default;
 		
-		virtual QVector<VirtualEvent> generateEvents() override final
+		virtual std::vector<VirtualEvent> generateEvents() override final
 		{
 			float newValue = m_vj->getAxis(m_vAxis) + m_increment;
 			return {VirtualEvent{EventType::VJoy,VJoyEvent{m_vj,ControlType::Axis,m_vAxis,false,newValue},{},{},0}};
 		};
 		
-		virtual QVector<VirtualEvent> generateEvents(const JoystickChange &ch) override final
+		virtual std::vector<VirtualEvent> generateEvents(const JoystickChange &ch) override final
 		{
 			Q_UNUSED(ch)
 			float newValue = m_vj->getAxis(m_vAxis) + m_increment;
 			return {VirtualEvent{EventType::VJoy,VJoyEvent{m_vj,ControlType::Axis,m_vAxis,false,newValue},{},{},0}};
 		};
 		
-		virtual QVector<VirtualEvent> activateByLayerChange(AbstractRealJoystick *rj, ControlType t, uint rnum) override final
+		virtual std::vector<VirtualEvent> activateByLayerChange(AbstractRealJoystick *rj, ControlType t, uint rnum) override final
 		{
 			Q_UNUSED(rj)
 			Q_UNUSED(t)
@@ -42,8 +42,8 @@ class ActionAxisIncrement : public AbstractAction
 			return {};
 		};
 		
-		virtual QVector<VirtualEvent> deactivateByLayerChange() override final {return {};};
-		virtual QVector<VirtualEvent> aboutToBeDeleted() override final {return {};};
+		virtual std::vector<VirtualEvent> deactivateByLayerChange() override final {return {};};
+		virtual std::vector<VirtualEvent> aboutToBeDeleted() override final {return {};};
 		
 		
 	private:

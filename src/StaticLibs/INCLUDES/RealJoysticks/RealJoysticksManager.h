@@ -3,9 +3,9 @@
 
 
 #include <QObject>
-#include <QVector>
 #include <QStringList>
 #include <QColor>
+#include <vector>
 class AbstractRealJoystick;
 class AbstractRealJoystickFactory;
 class GameController;
@@ -27,16 +27,14 @@ class RealJoysticksManager : public QObject
 		void loadPlugins(const QString &path);
 		void unloadPlugins();
 		
-		void fromGameControllers(QVector<GameController*> &gcv);
+		void fromGameControllers(std::vector<GameController*> &gcv);
 		
 		int nbJoysticks() const;
 		QStringList joysticksNames() const;
 		
-		AbstractRealJoystick* joystick(int id) const;
+		AbstractRealJoystick* joystick(uint id) const;
 		AbstractRealJoystick* joystick(const QString &joystickName, int num = 0) const;
-		AbstractRealJoystick* releaseJoystick(int id);
-		AbstractRealJoystick* releaseJoystick(const QString &joystickName, int num = 0);
-		QVector<AbstractRealJoystick*> releaseAll();
+		std::vector<AbstractRealJoystick*> releaseAll();
 		
 		
 	signals:
@@ -46,9 +44,9 @@ class RealJoysticksManager : public QObject
 	private:
 		AbstractRealJoystick* createJoystick(GameController *c);
 		
-		QVector<AbstractRealJoystick*> m_joysticks;
-		QVector<QPluginLoader*> m_loaders;
-		QVector<AbstractRealJoystickFactory*> m_factories;
+		std::vector<AbstractRealJoystick*> m_joysticks;
+		std::vector<QPluginLoader*> m_loaders;
+		std::vector<AbstractRealJoystickFactory*> m_factories;
 };
 
 

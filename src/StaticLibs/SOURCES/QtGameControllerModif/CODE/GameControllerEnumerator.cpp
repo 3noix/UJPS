@@ -16,16 +16,16 @@
 
 
 // ENUMERATE CONTROLLERS //////////////////////////////////////////////////////
-QVector<GameController*> GameControllerEnumerator::enumerateControllers(QObject *parent)
+std::vector<GameController*> GameControllerEnumerator::enumerateControllers(QObject *parent)
 {
-	QVector<GameController*> controllers;
+	std::vector<GameController*> controllers;
 	
 	// search for DirectInput controllers
 	for (uint i=0; i<NB_JOYSTICKS_MAX_DIRECTINPUT; ++i)
 	{
 		GameController *j = new GameControllerDirectInput{i,parent};
 		bool bIgnore = (bUseXInput && j->description() == "Controller (XBOX 360 For Windows)");
-		if (j->isValid() && !bIgnore) {controllers << j;}
+		if (j->isValid() && !bIgnore) {controllers.push_back(j);}
 		else {delete j;}
 	}
 	
@@ -35,7 +35,7 @@ QVector<GameController*> GameControllerEnumerator::enumerateControllers(QObject 
 		for (uint i=0; i<NB_JOYSTICKS_MAX_XINPUT; ++i)
 		{
 			GameController *j = new GameControllerXInput{i,parent};
-			if (j->isValid()) {controllers << j;}
+			if (j->isValid()) {controllers.push_back(j);}
 			else {delete j;}
 		}
 	}

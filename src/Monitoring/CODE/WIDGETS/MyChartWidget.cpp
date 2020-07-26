@@ -16,8 +16,15 @@
 // CONSTRUCTEUR ///////////////////////////////////////////////////////////////
 MyChartWidget::MyChartWidget(int n, int dtms, QWidget *parent) : QChartView{parent}
 {
-	m_colors << Qt::blue << Qt::red << Qt::green << Qt::cyan;
-	m_colors << Qt::magenta << QColor{255,127,0} << QColor{127,63,0} << Qt::black;
+	m_colors.push_back(Qt::blue);
+	m_colors.push_back(Qt::red);
+	m_colors.push_back(Qt::green);
+	m_colors.push_back(Qt::cyan);
+	m_colors.push_back(Qt::magenta);
+	m_colors.push_back(QColor{255,127,0});
+	m_colors.push_back(QColor{127,63,0});
+	m_colors.push_back(Qt::black);
+	
 	m_nbSamples = n;
 	m_dtms = dtms;
 	

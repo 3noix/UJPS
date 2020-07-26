@@ -74,7 +74,7 @@ void SettingsDialog::setupWidget()
 // ADD SETTINGS WIDGET ////////////////////////////////////////////////////////
 void SettingsDialog::addSettingsWidget(AbstractSettingsWidget *w)
 {
-	settingsWidgets.append(w);
+	settingsWidgets.push_back(w);
 	tabs->addTab(w,w->tabName());
 }
 

@@ -6,6 +6,7 @@
 #include <QValueAxis>
 #include <QLineSeries>
 #include <QScatterSeries>
+#include <vector>
 using namespace QtCharts;
 
 
@@ -42,7 +43,7 @@ class MyChartWidget : public QChartView
 		QValueAxis *m_axisX;
 		QValueAxis *m_axisY;
 		QMap<uint,QLineSeries*> m_seriesMap;
-		QVector<QColor> m_colors;
+		std::vector<QColor> m_colors;
 };
 
 

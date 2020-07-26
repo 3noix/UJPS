@@ -20,20 +20,20 @@ class ActionButtonToggle : public AbstractAction
 		ActionButtonToggle& operator=(ActionButtonToggle &&other) = delete;
 		virtual ~ActionButtonToggle() = default;
 		
-		virtual QVector<VirtualEvent> generateEvents() override final
+		virtual std::vector<VirtualEvent> generateEvents() override final
 		{
 			VirtualEvent ev{EventType::VJoy,VJoyEvent{m_vj,ControlType::Button,m_vButton,!m_vj->getButton(m_vButton),0.0},{},{},0};
 			return {ev};
 		};
 		
-		virtual QVector<VirtualEvent> generateEvents(const JoystickChange &ch) override final
+		virtual std::vector<VirtualEvent> generateEvents(const JoystickChange &ch) override final
 		{
 			Q_UNUSED(ch)
 			VirtualEvent ev{EventType::VJoy,VJoyEvent{m_vj,ControlType::Button,m_vButton,!m_vj->getButton(m_vButton),0.0},{},{},0};
 			return {ev};
 		};
 		
-		virtual QVector<VirtualEvent> activateByLayerChange(AbstractRealJoystick *rj, ControlType t, uint rnum) override final
+		virtual std::vector<VirtualEvent> activateByLayerChange(AbstractRealJoystick *rj, ControlType t, uint rnum) override final
 		{
 			Q_UNUSED(rj)
 			Q_UNUSED(t)
@@ -41,8 +41,8 @@ class ActionButtonToggle : public AbstractAction
 			return {};
 		};
 		
-		virtual QVector<VirtualEvent> deactivateByLayerChange() override final {return {};};
-		virtual QVector<VirtualEvent> aboutToBeDeleted() override final {return {};};
+		virtual std::vector<VirtualEvent> deactivateByLayerChange() override final {return {};};
+		virtual std::vector<VirtualEvent> aboutToBeDeleted() override final {return {};};
 		
 		
 	private:

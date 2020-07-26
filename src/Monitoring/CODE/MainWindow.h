@@ -3,6 +3,7 @@
 
 
 #include <QtWidgets>
+#include <vector>
 #include "VigemPidWhiteLister.h"
 class GameControllersEnumThread;
 class GameController;
@@ -31,8 +32,8 @@ class MainWindow : public QMainWindow
 		
 		
 	private:
-		void setData(const QVector<GameController*> joysticks);
-		void setData(const QVector<AbstractRealJoystick*> joysticks);
+		void setData(const std::vector<GameController*> joysticks);
+		void setData(const std::vector<AbstractRealJoystick*> joysticks);
 		
 		void createActions();
 		void createMenus();
