@@ -3,7 +3,7 @@
 
 
 #include "GameController.h"
-#include <QVector>
+#include <vector>
 #include <windows.h>
 #define DIRECTINPUT_VERSION 0x0800
 #include "dinput.h"
@@ -62,13 +62,13 @@ class GameControllerDirectInput : public GameController
 		uint m_nbButtons;
 		uint m_nbPovs;
 		
-		QVector<float> m_axesValues;
-		QVector<bool> m_buttonsValues;
-		QVector<float> m_povsValues;
+		std::vector<float> m_axesValues;
+		std::vector<bool> m_buttonsValues;
+		std::vector<float> m_povsValues;
 		
 		LPDIRECTINPUTDEVICE8 m_pJoystick;
 		uint m_enumCounter;
-		QVector<GUID> m_DIaxisGIIDs;
+		std::vector<GUID> m_DIaxisGIIDs;
 		bool m_bFirstRead;
 };
 

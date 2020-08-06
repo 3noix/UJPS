@@ -9,7 +9,7 @@ LayersCombo AllLayers{};
 using namespace Keys;
 
 #include "EnhancedJoystick.h"
-#include "RemoteJoystickServer.h"
+#include "RemoteJoystickTcpServer.h"
 #include "ThrustmasterWarthogJoystick.h"
 
 namespace VJOY = vJoyDevice;
@@ -70,8 +70,8 @@ bool Profile::setupJoysticks()
 	
 	// remote joystick at last
 	emit message("Now connect the client application for the remote controller", Qt::black);
-	RemoteJoystickServer *rjs = new RemoteJoystickServer{"TouchScreen2",32241,100};
-	rjse = this->registerRealJoystick(rjs);
+	RemoteJoystickTcpServer *rjs = new RemoteJoystickTcpServer{"TouchScreen2",32241,100};
+	rjse = this->registerRemoteJoystickTcp(rjs);
 	
 	return (tmwj && rjse && vj1);
 }

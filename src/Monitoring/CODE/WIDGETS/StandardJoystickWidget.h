@@ -3,6 +3,7 @@
 
 
 #include <QtWidgets>
+#include <vector>
 class AbstractRealJoystick;
 class AxesWidget;
 class ButtonWidget;
@@ -47,8 +48,8 @@ class StandardJoystickWidget : public QWidget
 		QGridLayout *buttonsLayout;
 		AxesWidget *boxAxes;
 		QGroupBox *boxButtons, *boxPov;
-		QVector<ButtonWidget*> buttonsWidgets;
-		QVector<PovWidgetDecorated*> povWidgets;
+		std::vector<ButtonWidget*> buttonsWidgets;
+		std::vector<PovWidgetDecorated*> povWidgets;
 		MyChartWidget *tempoChart;
 		
 		const int ratioTempoChart = 4;

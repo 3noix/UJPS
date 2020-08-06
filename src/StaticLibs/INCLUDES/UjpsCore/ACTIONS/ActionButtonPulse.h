@@ -21,14 +21,14 @@ class ActionButtonPulse : public AbstractAction
 		ActionButtonPulse& operator=(ActionButtonPulse &&other) = delete;
 		virtual ~ActionButtonPulse() = default;
 		
-		virtual QVector<VirtualEvent> generateEvents() override final
+		virtual std::vector<VirtualEvent> generateEvents() override final
 		{
 			VirtualEvent ev1{EventType::VJoy,VJoyEvent{m_vj,ControlType::Button,m_vButton,true,0.0},{},{},0};
 			VirtualEvent ev2{EventType::VJoy,VJoyEvent{m_vj,ControlType::Button,m_vButton,false,0.0},{},{},m_cycles};
 			return {ev1,ev2};
 		};
 		
-		virtual QVector<VirtualEvent> generateEvents(const JoystickChange &ch) override final
+		virtual std::vector<VirtualEvent> generateEvents(const JoystickChange &ch) override final
 		{
 			Q_UNUSED(ch)
 			VirtualEvent ev1{EventType::VJoy,VJoyEvent{m_vj,ControlType::Button,m_vButton,true,0.0},{},{},0};
@@ -36,7 +36,7 @@ class ActionButtonPulse : public AbstractAction
 			return {ev1,ev2};
 		};
 		
-		virtual QVector<VirtualEvent> activateByLayerChange(AbstractRealJoystick *rj, ControlType t, uint rnum) override final
+		virtual std::vector<VirtualEvent> activateByLayerChange(AbstractRealJoystick *rj, ControlType t, uint rnum) override final
 		{
 			// we do nothing, must be triggered again to generate a pulse
 			Q_UNUSED(rj)
@@ -45,14 +45,14 @@ class ActionButtonPulse : public AbstractAction
 			return {};
 		};
 		
-		virtual QVector<VirtualEvent> deactivateByLayerChange() override final
+		virtual std::vector<VirtualEvent> deactivateByLayerChange() override final
 		{
 			// we release the button immediatly
 			VirtualEvent ev{EventType::VJoy,VJoyEvent{m_vj,ControlType::Button,m_vButton,false,0.0},{},{},0};
 			return {ev};
 		};
 		
-		virtual QVector<VirtualEvent> aboutToBeDeleted() override final
+		virtual std::vector<VirtualEvent> aboutToBeDeleted() override final
 		{
 			// we release the button immediatly
 			VirtualEvent ev{EventType::VJoy,VJoyEvent{m_vj,ControlType::Button,m_vButton,false,0.0},{},{},0};

@@ -3,6 +3,7 @@
 
 
 #include <QGroupBox>
+#include <vector>
 class QGridLayout;
 class MyCheckBox;
 class QSlider;
@@ -22,7 +23,7 @@ class AxesWidget : public QGroupBox
 		virtual ~AxesWidget() = default;
 		
 		float value(int i) const;
-		QVector<uint> axesToDisplay() const;
+		std::vector<uint> axesToDisplay() const;
 		
 		
 	public slots:
@@ -37,9 +38,9 @@ class AxesWidget : public QGroupBox
 		float m_value;
 		
 		QGridLayout *layout;
-		QVector<MyCheckBox*> m_boxes;
-		QVector<QSlider*> m_sliders;
-		QVector<QLabel*> m_labels2;
+		std::vector<MyCheckBox*> m_boxes;
+		std::vector<QSlider*> m_sliders;
+		std::vector<QLabel*> m_labels2;
 };
 
 

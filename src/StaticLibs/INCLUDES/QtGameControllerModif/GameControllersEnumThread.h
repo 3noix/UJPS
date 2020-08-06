@@ -4,7 +4,7 @@
 
 #include <QThread>
 #include <QMutex>
-#include <QVector>
+#include <vector>
 class GameController;
 
 
@@ -26,8 +26,8 @@ class GameControllersEnumThread : public QThread
 		void stop(); // has no effect with "enumerateControllersAllAtOnce"
 		
 		// retrieve results
-		QVector<GameController*> gameControllers();
-		QVector<GameController*> releaseGameControllers();
+		std::vector<GameController*> gameControllers();
+		std::vector<GameController*> releaseGameControllers();
 		
 		
 	signals:
@@ -42,7 +42,7 @@ class GameControllersEnumThread : public QThread
 		QMutex m_mutex;
 		bool m_bStop;
 		bool m_b1by1;
-		QVector<GameController*> m_joysticks;
+		std::vector<GameController*> m_joysticks;
 };
 
 

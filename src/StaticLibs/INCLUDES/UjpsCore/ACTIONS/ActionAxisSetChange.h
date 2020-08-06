@@ -23,18 +23,18 @@ class ActionAxisSetChange : public AbstractAction
 		ActionAxisSetChange& operator=(ActionAxisSetChange &&other) = delete;
 		virtual ~ActionAxisSetChange() = default;
 		
-		virtual QVector<VirtualEvent> generateEvents() override final
+		virtual std::vector<VirtualEvent> generateEvents() override final
 		{
 			return {};
 		};
 		
-		virtual QVector<VirtualEvent> generateEvents(const JoystickChange &ch) override final
+		virtual std::vector<VirtualEvent> generateEvents(const JoystickChange &ch) override final
 		{
 			if (m_direction == AxisDirection::Normal) {return {VirtualEvent{EventType::VJoy,VJoyEvent{m_vj,ControlType::Axis,m_vAxis,false,ch.axisOrPovValue},{},{},0}};}
 			else {return {VirtualEvent{EventType::VJoy,VJoyEvent{m_vj,ControlType::Axis,m_vAxis,false,-ch.axisOrPovValue},{},{},0}};}
 		};
 		
-		virtual QVector<VirtualEvent> activateByLayerChange(AbstractRealJoystick *rj, ControlType t, uint rnum) override final
+		virtual std::vector<VirtualEvent> activateByLayerChange(AbstractRealJoystick *rj, ControlType t, uint rnum) override final
 		{
 			if (t != ControlType::Axis) {return {};}
 			
@@ -51,13 +51,13 @@ class ActionAxisSetChange : public AbstractAction
 			}
 		};
 		
-		virtual QVector<VirtualEvent> deactivateByLayerChange() override final
+		virtual std::vector<VirtualEvent> deactivateByLayerChange() override final
 		{
 			// we do nothing, the axis stays at its value
 			return {};
 		};
 		
-		virtual QVector<VirtualEvent> aboutToBeDeleted() override final {return {};};
+		virtual std::vector<VirtualEvent> aboutToBeDeleted() override final {return {};};
 		
 		
 	private:

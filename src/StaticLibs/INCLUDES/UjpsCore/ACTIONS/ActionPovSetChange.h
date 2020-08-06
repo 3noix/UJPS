@@ -21,18 +21,18 @@ class ActionPovSetChange : public AbstractAction
 		ActionPovSetChange& operator=(ActionPovSetChange &&other) = delete;
 		virtual ~ActionPovSetChange() = default;
 		
-		virtual QVector<VirtualEvent> generateEvents() override final
+		virtual std::vector<VirtualEvent> generateEvents() override final
 		{
 			return {};
 		};
 		
-		virtual QVector<VirtualEvent> generateEvents(const JoystickChange &ch) override final
+		virtual std::vector<VirtualEvent> generateEvents(const JoystickChange &ch) override final
 		{
 			VirtualEvent ev{EventType::VJoy,VJoyEvent{m_vj,ControlType::Pov,m_vPov,false,ch.axisOrPovValue},{},{},0};
 			return {ev};
 		};
 		
-		virtual QVector<VirtualEvent> activateByLayerChange(AbstractRealJoystick *rj, ControlType t, uint rnum) override final
+		virtual std::vector<VirtualEvent> activateByLayerChange(AbstractRealJoystick *rj, ControlType t, uint rnum) override final
 		{
 			if (t != ControlType::Pov) {return {};}
 			// we don't wait for a change in the real joystick position to update the virtual joystick position
@@ -40,13 +40,13 @@ class ActionPovSetChange : public AbstractAction
 			return {ev};
 		};
 		
-		virtual QVector<VirtualEvent> deactivateByLayerChange() override final
+		virtual std::vector<VirtualEvent> deactivateByLayerChange() override final
 		{
 			// we do nothing, the pov stays at its value
 			return {};
 		};
 		
-		virtual QVector<VirtualEvent> aboutToBeDeleted() override final {return {};};
+		virtual std::vector<VirtualEvent> aboutToBeDeleted() override final {return {};};
 		
 		
 	private:

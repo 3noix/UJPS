@@ -327,7 +327,7 @@ void AbstractProfileTarget::addMapping(AbstractMapping *m)
 		}
 		else
 		{
-			m_mappingsRequests << MappingModifRequest{MappingModifRequestType::RequestAddMapping,nullptr,0,m}; // add it in a queue, waiting for the current loop to end
+			m_mappingsRequests.push_back(MappingModifRequest{MappingModifRequestType::RequestAddMapping,nullptr,0,m}); // add it in a queue, waiting for the current loop to end
 		}
 	}
 	catch (std::exception &e) {emit message(e.what(),Qt::red);}
@@ -457,7 +457,7 @@ void AbstractProfileTarget::UnmapAll()
 	}
 	else
 	{
-		m_mappingsRequests << MappingModifRequest{MappingModifRequestType::RequestUnmapAll,nullptr,0,nullptr}; // add it in a queue, waiting for the current loop to end
+		m_mappingsRequests.push_back(MappingModifRequest{MappingModifRequestType::RequestUnmapAll,nullptr,0,nullptr}); // add it in a queue, waiting for the current loop to end
 		for (AbstractMapping *m : m_mappings) {m->aboutToBeDeleted();}
 	}
 }
@@ -476,7 +476,7 @@ void AbstractProfileTarget::UnmapButton(AbstractRealJoystick *rj, uint rButton)
 	}
 	else
 	{
-		m_mappingsRequests << MappingModifRequest{MappingModifRequestType::RequestUnmapButton,rj,rButton,nullptr}; // add it in a queue, waiting for the current loop to end
+		m_mappingsRequests.push_back(MappingModifRequest{MappingModifRequestType::RequestUnmapButton,rj,rButton,nullptr}); // add it in a queue, waiting for the current loop to end
 		for (AbstractMapping *m : m_mappings)
 		{
 			if (m->isMappingButton(rj,rButton))
@@ -499,7 +499,7 @@ void AbstractProfileTarget::UnmapAxis(AbstractRealJoystick *rj, uint rAxis)
 	}
 	else
 	{
-		m_mappingsRequests << MappingModifRequest{MappingModifRequestType::RequestUnmapAxis,rj,rAxis,nullptr}; // add it in a queue, waiting for the current loop to end
+		m_mappingsRequests.push_back(MappingModifRequest{MappingModifRequestType::RequestUnmapAxis,rj,rAxis,nullptr}); // add it in a queue, waiting for the current loop to end
 		for (AbstractMapping *m : m_mappings)
 		{
 			if (m->isMappingAxis(rj,rAxis))
@@ -522,7 +522,7 @@ void AbstractProfileTarget::UnmapPov(AbstractRealJoystick *rj, uint rPov)
 	}
 	else
 	{
-		m_mappingsRequests << MappingModifRequest{MappingModifRequestType::RequestUnmapPov,rj,rPov,nullptr}; // add it in a queue, waiting for the current loop to end
+		m_mappingsRequests.push_back(MappingModifRequest{MappingModifRequestType::RequestUnmapPov,rj,rPov,nullptr}); // add it in a queue, waiting for the current loop to end
 		for (AbstractMapping *m : m_mappings)
 		{
 			if (m->isMappingPov(rj,rPov))
@@ -545,7 +545,7 @@ void AbstractProfileTarget::UnmapRexec(uint id)
 	}
 	else
 	{
-		m_mappingsRequests << MappingModifRequest{MappingModifRequestType::RequestUnmapRexec,nullptr,id,nullptr}; // add it in a queue, waiting for the current loop to end
+		m_mappingsRequests.push_back(MappingModifRequest{MappingModifRequestType::RequestUnmapRexec,nullptr,id,nullptr}); // add it in a queue, waiting for the current loop to end
 		for (AbstractMapping *m : m_mappings)
 		{
 			if (m->isMappingRexec(id))

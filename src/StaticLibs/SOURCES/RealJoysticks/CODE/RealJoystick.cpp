@@ -52,7 +52,7 @@ RealJoystick::RealJoystick(GameController *c) : QObject{}, AbstractRealJoystick{
 	
 	m_bTransformPovInto4Buttons = (m_controller->description() != "vJoy Device");
 	m_bTransform4ButtonsIntoPov = (m_controller->description() != "vJoy Device");
-	if (m_bTransformPovInto4Buttons) {m_realPovsAngles = QVector<float>(m_controller->povsCount(),-1.0f);}
+	if (m_bTransformPovInto4Buttons) {m_realPovsAngles.resize(m_controller->povsCount(),-1.0f);}
 }
 
 RealJoystick::~RealJoystick()
@@ -355,7 +355,7 @@ void RealJoystick::flush()
 // ADD VIRTUAL POV ////////////////////////////////////////////////////////////
 void RealJoystick::addVirtualPov(uint nUp, uint nRight, uint nDown, uint nLeft, const QString &povName)
 {
-	m_virtualPovsDef << VirtualPovDefinition{nUp,nRight,nDown,nLeft,povName};
+	m_virtualPovsDef.push_back(VirtualPovDefinition{nUp,nRight,nDown,nLeft,povName});
 }
 
 // BUTTONS TO POV /////////////////////////////////////////////////////////////

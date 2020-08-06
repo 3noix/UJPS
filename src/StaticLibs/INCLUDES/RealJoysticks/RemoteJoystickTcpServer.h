@@ -7,7 +7,6 @@
 #include "AbstractRealJoystick.h"
 
 class QTcpServer;
-class QNetworkSession;
 class QTcpSocket;
 
 
@@ -59,7 +58,6 @@ class RemoteJoystickTcpServer : public QObject, public AbstractRealJoystick
 		
 		
 	private slots:
-		void slotSessionOpened();
 		void slotNewConnection();
 		void slotReceiveData();
 		void slotRemoveConnection();
@@ -89,7 +87,6 @@ class RemoteJoystickTcpServer : public QObject, public AbstractRealJoystick
 		std::array<float,8> m_axes;
 		std::array<float,4> m_povs;
 		
-		QNetworkSession *m_networkSession;
 		QTcpServer *m_tcpServer;
 		QTcpSocket *m_tcpSocket;
 };

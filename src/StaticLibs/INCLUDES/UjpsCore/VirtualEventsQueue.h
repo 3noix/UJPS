@@ -2,7 +2,7 @@
 #define VIRTUAL_EVENTS_QUEUE
 
 
-#include <QVector>
+#include <vector>
 #include "VirtualEvent.h"
 class AbstractProfile;
 
@@ -18,7 +18,7 @@ class VirtualEventsQueue
 		virtual ~VirtualEventsQueue() = default;
 		
 		void postEvent(const VirtualEvent &event);
-		void postEvents(const QVector<VirtualEvent> &events);
+		void postEvents(const std::vector<VirtualEvent> &events);
 		void processEvents();
 		
 		static void setInputRepeaterEnabled(bool b);
@@ -27,7 +27,7 @@ class VirtualEventsQueue
 		
 	private:
 		// for usual events
-		QVector<VirtualEvent> m_events;
+		std::vector<VirtualEvent> m_events;
 		
 		// for input repeater
 		static bool bInputRepeaterEnabled;

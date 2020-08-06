@@ -3,6 +3,7 @@
 
 
 #include <QObject>
+#include <vector>
 #include "AbstractRealJoystick.h"
 #include "GameControllerEvents.h"
 #include "../../SOURCES/RealJoysticks/CODE/VirtualPovDefinition.h"
@@ -70,8 +71,8 @@ class RealJoystick : public QObject, public AbstractRealJoystick
 		GameController *m_controller;
 		bool m_bTransformPovInto4Buttons;
 		bool m_bTransform4ButtonsIntoPov;
-		QVector<float> m_realPovsAngles; // to keep track of the last values
-		QVector<VirtualPovDefinition> m_virtualPovsDef;
+		std::vector<float> m_realPovsAngles; // to keep track of the last values
+		std::vector<VirtualPovDefinition> m_virtualPovsDef;
 };
 
 

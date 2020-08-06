@@ -259,7 +259,8 @@ float Profile::getLandingFactor(bool bLndMode) const
 	// integrate -1 or +1 function of button pressed
 	static Integrator integ_lnd_factor{0.3f,-1.0f,1.0f,this->timeStep()};
 	static PulseOnRising risingMSU;
-	bool bResetLndFactor = (BSHIFTR && risingMSU(BMSU));
+	bool bRisingMsu = risingMSU(BMSU);
+	bool bResetLndFactor = (BSHIFTR && bRisingMsu);
 	float integInputTemp = (BMSL && BSHIFTR) ? -1.0f : ((BMSR && BSHIFTR) ? 1.0f : 0.0f);
 	float integOutput1 = integ_lnd_factor(kIntLndFactor*integInputTemp,bResetLndFactor,0.3f);
 	
@@ -324,9 +325,11 @@ void Profile::processOtherFlightControls() const
 	bool BBSF = tmwt->buttonPressed(TMWT::BSF);
 	static PulseOnRising risingBsf;
 	static PulseOnFalling fallingBsf;
-	bool decoupledPulse = ((risingBsf(BBSF) || fallingBsf(BBSF)) && !bTogglesInhibition && BFLTMODE);
-	static CrenelOnRising risingDecoupled{nbCyclesPulseButton,true};
-	bool BDECOUPLEDTOGGLE = risingDecoupled(decoupledPulse);
+	bool bRisingBsf = risingBsf(BBSF);
+	bool bFallingBsf = fallingBsf(BBSF);
+	bool decoupledPulse = ((bRisingBsf || bFallingBsf) && !bTogglesInhibition && BFLTMODE);
+	static CrenelOnRising crenelDecoupled{nbCyclesPulseButton,true};
+	bool BDECOUPLEDTOGGLE = crenelDecoupled(decoupledPulse);
 	
 	// GForce safety
 	static PulseOnRising risingH1L;
@@ -559,9 +562,15 @@ void Profile::processPower() const
 	// switches
 	static PulseOnRising risingEac, risingRdr, risingLtb;
 	static PulseOnFalling fallingEac, fallingRdr;
-	bool switch1 = (risingEac(BEACON) || fallingEac(BEACON)) && !bTogglesInhibition;
-	bool switch2 = (risingRdr(BRDRNRM) || fallingRdr(BRDRNRM)) && !bTogglesInhibition;
-	bool switch3 = risingLtb(BLTB) && !bTogglesInhibition;
+	bool bRisingEac = risingEac(BEACON);
+	bool bFallingEac = fallingEac(BEACON);
+	bool bRisingRdr = risingRdr(BRDRNRM);
+	bool bFallingRdr = fallingRdr(BRDRNRM);
+	bool bRisingLtb = risingLtb(BLTB);
+	
+	bool switch1 = (bRisingEac || bFallingEac) && !bTogglesInhibition;
+	bool switch2 = (bRisingRdr || bFallingRdr) && !bTogglesInhibition;
+	bool switch3 = bRisingLtb && !bTogglesInhibition;
 	static CrenelOnRising crenelPwrSwitch1{nbCyclesPulseButton,true};
 	static CrenelOnRising crenelPwrSwitch2{nbCyclesPulseButton,true};
 	static CrenelOnRising crenelPwrSwitch3{nbCyclesPulseButton,true};
@@ -675,8 +684,10 @@ void Profile::processLeds(bool bInit) const
 	// leds inhibition
 	static bool BINHIBDECLEDS = false;
 	static PulseOnRising risingInhib, risingDecoupled;
-	if (risingDecoupled(BDECOUPLED)) {BINHIBDECLEDS = false;}
-	else if (BDECOUPLED && risingInhib(BLDGH)) {BINHIBDECLEDS = true;}
+	bool bRisingDecoupled = risingDecoupled(BDECOUPLED);
+	bool bRisingInhib = risingInhib(BLDGH);
+	if (bRisingDecoupled) {BINHIBDECLEDS = false;}
+	else if (BDECOUPLED && bRisingInhib) {BINHIBDECLEDS = true;}
 	
 	// duration the decoupled mode was on
 	static float timeStepInSec = 0.001 * this->timeStep();
@@ -689,8 +700,11 @@ void Profile::processLeds(bool bInit) const
 	bool ledsOnInterm = (duration > dtLedsMin && modulo(duration-dtLedsMin,0.0f,dtLedsCycle) < 1.0f);
 	bool ledsOffInterm = (duration > dtLedsMin && modulo(duration-dtLedsMin-dtLedsFlash,0.0f,dtLedsCycle) < 1.0f);
 	static PulseOnRising risingLedsOn, risingLedsOff, risingNoInteg;
-	bool BSBRIGHTNESS5 = (!BINHIBDECLEDS && risingLedsOn(ledsOnInterm));
-	bool BSBRIGHTNESS0 = (BINHIBDECLEDS || risingLedsOff(ledsOffInterm) || risingNoInteg(bNoInteg));
+	bool bRisingLedsOn = risingLedsOn(ledsOnInterm);
+	bool bRisingLedsOff = risingLedsOff(ledsOffInterm);
+	bool bRisingNoInteg = risingNoInteg(bNoInteg);
+	bool BSBRIGHTNESS5 = (!BINHIBDECLEDS && bRisingLedsOn);
+	bool BSBRIGHTNESS0 = (BINHIBDECLEDS || bRisingLedsOff || bRisingNoInteg);
 	
 	// set outputs
 	if (BSBRIGHTNESS5) {tmwt->setData("BRIGHTNESS",5);}
@@ -709,8 +723,13 @@ void Profile::processOther() const
 	// headlights and broadcast ID
 	static PulseOnRising risingEfl, risingEfr;
 	static PulseOnFalling fallingEfl, fallingEfr;
-	bool bSwitchingEflNorm = (risingEfl(BEFLNORM) || fallingEfl(BEFLNORM));
-	bool bSwitchingEfrNorm = (risingEfr(BEFRNORM) || fallingEfr(BEFRNORM));
+	bool bRisingEfl = risingEfl(BEFLNORM);
+	bool bFallingEfl = fallingEfl(BEFLNORM);
+	bool bRisingEfr = risingEfr(BEFRNORM);
+	bool bFallingEfr = fallingEfr(BEFRNORM);
+	bool bSwitchingEflNorm = (bRisingEfl || bFallingEfl);
+	bool bSwitchingEfrNorm = (bRisingEfr || bFallingEfr);
+	
 	static CrenelOnRising crenelHeadlights{nbCyclesPulseButton,true};
 	static CrenelOnRising crenelBroadcastId{nbCyclesPulseButton,true};
 	bool BHEADLIGHTSTOGGLE = crenelHeadlights(bSwitchingEflNorm && !bTogglesInhibition);

@@ -40,7 +40,7 @@ class SettingsDialog : public QDialog
 		
 		QGridLayout *layout;
 		QTabWidget *tabs;
-		QList<AbstractSettingsWidget*> settingsWidgets;
+		std::vector<AbstractSettingsWidget*> settingsWidgets;
 		QPushButton *boutonOk, *boutonCancel;
 };
 

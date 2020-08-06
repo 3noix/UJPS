@@ -18,12 +18,12 @@ class Delay : public AbstractAction
 		Delay& operator=(Delay &&other) = delete;
 		virtual ~Delay() = default;
 		
-		virtual QVector<VirtualEvent> generateEvents() override final
+		virtual std::vector<VirtualEvent> generateEvents() override final
 		{
 			return {};
 		};
 		
-		virtual QVector<VirtualEvent> generateEvents(const JoystickChange &ch) override final
+		virtual std::vector<VirtualEvent> generateEvents(const JoystickChange &ch) override final
 		{
 			Q_UNUSED(ch)
 			return {};
@@ -34,7 +34,7 @@ class Delay : public AbstractAction
 			return m_delay;
 		};
 		
-		virtual QVector<VirtualEvent> activateByLayerChange(AbstractRealJoystick *rj, ControlType t, uint rnum) override final
+		virtual std::vector<VirtualEvent> activateByLayerChange(AbstractRealJoystick *rj, ControlType t, uint rnum) override final
 		{
 			Q_UNUSED(rj)
 			Q_UNUSED(t)
@@ -42,8 +42,8 @@ class Delay : public AbstractAction
 			return {};
 		};
 		
-		virtual QVector<VirtualEvent> deactivateByLayerChange() override final {return {};};
-		virtual QVector<VirtualEvent> aboutToBeDeleted() override final {return {};};
+		virtual std::vector<VirtualEvent> deactivateByLayerChange() override final {return {};};
+		virtual std::vector<VirtualEvent> aboutToBeDeleted() override final {return {};};
 		
 		
 	private:

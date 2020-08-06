@@ -316,7 +316,7 @@ void MainWindow::slotEndUpdate()
 	}
 	
 	// build joysticks items
-	QVector<GameController*> gcv = m_thread->releaseGameControllers();
+	std::vector<GameController*> gcv = m_thread->releaseGameControllers();
 	m_jm.fromGameControllers(gcv);
 	QStringList joysticksNames = m_jm.joysticksNames();
 	int i = 0;

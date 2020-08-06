@@ -108,7 +108,7 @@ void ProfileEngine::loadProfile(const QString &dllFilePath)
 void ProfileEngine::slotResumeLoadProfile()
 {
 	if (!m_profile) {return;} // we get here if thread was stopped at the last step
-	QVector<GameController*> gcv = m_thread->releaseGameControllers();
+	std::vector<GameController*> gcv = m_thread->releaseGameControllers();
 	
 	RealJoysticksManager *rjm = new RealJoysticksManager{};
 	QString controllersPluginsDirPath = QCoreApplication::applicationDirPath() + "/ControllersPlugins/";

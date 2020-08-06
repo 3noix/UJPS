@@ -82,17 +82,17 @@ void GameControllersEnumThread::stop()
 
 
 // GAME CONTROLLERS ///////////////////////////////////////////////////////////
-QVector<GameController*> GameControllersEnumThread::gameControllers()
+std::vector<GameController*> GameControllersEnumThread::gameControllers()
 {
 	QMutexLocker locker{&m_mutex};
 	return m_joysticks;
 }
 
 // RELEASE GAME CONTROLLERS ///////////////////////////////////////////////////
-QVector<GameController*> GameControllersEnumThread::releaseGameControllers()
+std::vector<GameController*> GameControllersEnumThread::releaseGameControllers()
 {
 	QMutexLocker locker{&m_mutex};
-	QVector<GameController*> gcv = m_joysticks;
+	std::vector<GameController*> gcv = m_joysticks;
 	m_joysticks.clear();
 	return gcv;
 }
@@ -111,7 +111,7 @@ void GameControllersEnumThread::run()
 		{
 			GameController *gc = e.nextController(); // long step
 			QMutexLocker locker{&m_mutex};
-			if (gc) {m_joysticks << gc;}
+			if (gc) {m_joysticks.push_back(gc);}
 			if (m_bStop) {return;}
 		}
 		emit done();

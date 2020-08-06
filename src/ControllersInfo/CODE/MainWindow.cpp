@@ -171,7 +171,7 @@ void MainWindow::clearLayout()
 }
 
 // SET DATA ///////////////////////////////////////////////////////////////////
-void MainWindow::setData(const QVector<GameController*> joysticks)
+void MainWindow::setData(const std::vector<GameController*> joysticks)
 {
 	this->clearLayout();
 	

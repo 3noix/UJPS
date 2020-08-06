@@ -4,6 +4,7 @@
 
 #include "VirtualEvent.h"
 #include "JoystickChange.h"
+#include <vector>
 class AbstractRealJoystick;
 
 
@@ -17,13 +18,13 @@ class AbstractAction
 		AbstractAction& operator=(AbstractAction &&other) = delete;
 		virtual ~AbstractAction() = default;
 		
-		virtual QVector<VirtualEvent> generateEvents() = 0;
-		virtual QVector<VirtualEvent> generateEvents(const JoystickChange &ch) = 0;
+		virtual std::vector<VirtualEvent> generateEvents() = 0;
+		virtual std::vector<VirtualEvent> generateEvents(const JoystickChange &ch) = 0;
 		virtual uint additionalDelay() const {return 0;}; // for chain action only
 		
-		virtual QVector<VirtualEvent> activateByLayerChange(AbstractRealJoystick *rj, ControlType t, uint rnum) = 0;
-		virtual QVector<VirtualEvent> deactivateByLayerChange() = 0;
-		virtual QVector<VirtualEvent> aboutToBeDeleted() = 0;
+		virtual std::vector<VirtualEvent> activateByLayerChange(AbstractRealJoystick *rj, ControlType t, uint rnum) = 0;
+		virtual std::vector<VirtualEvent> deactivateByLayerChange() = 0;
+		virtual std::vector<VirtualEvent> aboutToBeDeleted() = 0;
 };
 
 

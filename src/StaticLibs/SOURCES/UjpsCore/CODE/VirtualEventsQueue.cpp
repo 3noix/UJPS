@@ -39,19 +39,20 @@ VirtualEventsQueue::VirtualEventsQueue(AbstractProfile *p) : m_profile{p}
 // POST EVENT /////////////////////////////////////////////////////////////////
 void VirtualEventsQueue::postEvent(const VirtualEvent &event)
 {
-	m_events << event;
+	m_events.push_back(event);
 	
 	if (bInputRepeaterEnabled)
 		this->setInputRepeaterEvent(event);
 }
 
 // POST EVENTS ////////////////////////////////////////////////////////////////
-void VirtualEventsQueue::postEvents(const QVector<VirtualEvent> &events)
+void VirtualEventsQueue::postEvents(const std::vector<VirtualEvent> &events)
 {
-	m_events << events;
+	m_events.reserve(m_events.size()+events.size());
+	m_events.insert(m_events.end(), events.begin(), events.end());
 	
 	if (bInputRepeaterEnabled)
-		this->setInputRepeaterEvent(events.last());
+		this->setInputRepeaterEvent(events.back());
 }
 
 // PROCESS EVENTS /////////////////////////////////////////////////////////////
@@ -59,7 +60,7 @@ void VirtualEventsQueue::processEvents()
 {
 	if (bInputRepeaterEnabled) {this->updateInputRepeaterEvent();}
 	
-	for (int i=0; i<m_events.size(); ++i) // important to do like that because some callback called below can add events to run right away
+	for (uint i=0; i<m_events.size(); ++i) // important to do like that because some callback called below can add events to run right away
 	{
 		VirtualEvent &e = m_events[i];
 		if (e.delay == 0) // we process the event whose delay elapsed
@@ -141,19 +142,13 @@ void VirtualEventsQueue::processEvents()
 		}
 	}
 	
-	for (int i=m_events.size()-1; i>=0; --i)
-	{
-		if (m_events[i].delay == 0)
-		{
-			// we remove processed events
-			m_events.removeAt(i);
-		}
-		else
-		{
-			// we decrement the counter of other ones
-			m_events[i].delay--;
-		}
-	}
+	// we remove processed events
+	auto wasProcessed = [] (const VirtualEvent &e) {return e.delay == 0;};
+	auto newEnd = std::remove_if(m_events.begin(),m_events.end(),wasProcessed);
+	m_events.erase(newEnd,m_events.end());
+	
+	// we decrement the counter of the other ones
+	for (VirtualEvent &e : m_events) {e.delay--;}
 }
 
 
@@ -203,20 +198,20 @@ void VirtualEventsQueue::updateInputRepeaterEvent()
 		if (m_inputRepeaterEvent.vjev.type == ControlType::Button)
 		{
 			ActionButtonPulse action{m_inputRepeaterEvent.vjev.joystick, m_inputRepeaterEvent.vjev.numButtonAxisPov, m_profile->ms2cycles(50)};
-			m_events << action.generateEvents();
+			for (const VirtualEvent &event : action.generateEvents()) {m_events.push_back(event);}
 		}
 		else if (m_inputRepeaterEvent.vjev.type == ControlType::Axis)
 		{
 			m_inputRepeaterEvent.vjev.axisOrPovValue = (m_inputRepeaterEvent.vjev.axisOrPovValue >= 0) ? -0.5f : 0.5f;
 			ActionAxisSetValue action{m_inputRepeaterEvent.vjev.joystick, m_inputRepeaterEvent.vjev.numButtonAxisPov, m_inputRepeaterEvent.vjev.axisOrPovValue};
-			m_events << action.generateEvents();
+			for (const VirtualEvent &event : action.generateEvents()) {m_events.push_back(event);}
 		}
 		else if (m_inputRepeaterEvent.vjev.type == ControlType::Pov)
 		{
 			VirtualEvent ev1{EventType::VJoy,VJoyEvent{m_inputRepeaterEvent.vjev.joystick, ControlType::Pov, m_inputRepeaterEvent.vjev.numButtonAxisPov, false, m_inputRepeaterEvent.vjev.axisOrPovValue}, {}, {}, 0};
 			VirtualEvent ev2{EventType::VJoy,VJoyEvent{m_inputRepeaterEvent.vjev.joystick, ControlType::Pov, m_inputRepeaterEvent.vjev.numButtonAxisPov, false, -1.0f}, {}, {}, m_profile->ms2cycles(50)};
-			m_events << ev1;
-			m_events << ev2;
+			m_events.push_back(ev1);
+			m_events.push_back(ev2);
 		}
 		
 		m_inputRepeaterDtms = 0;
@@ -228,7 +223,7 @@ void VirtualEventsQueue::updateInputRepeaterEvent()
 		if (m_inputRepeaterEvent.vjev.type == ControlType::Axis)
 		{
 			ActionAxisSetValue action{m_inputRepeaterEvent.vjev.joystick, m_inputRepeaterEvent.vjev.numButtonAxisPov, m_inputRepeaterOriginalAxisValue};
-			m_events << action.generateEvents();
+			for (const VirtualEvent &event : action.generateEvents()) {m_events.push_back(event);}
 		}
 		
 		m_inputRepeaterDtms = 0;

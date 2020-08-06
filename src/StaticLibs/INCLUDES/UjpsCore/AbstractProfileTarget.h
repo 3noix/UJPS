@@ -4,6 +4,7 @@
 
 #include "AbstractProfile.h"
 #include <QVector>
+#include <vector>
 #include <QMap>
 #include "JoystickChange.h"
 #include "../../SOURCES/UjpsCore/CODE/MappingModifRequest.h"
@@ -95,7 +96,7 @@ class AbstractProfileTarget : public AbstractProfile
 		
 		// the following 3 are used to manage mapping modifications requests while they are being processed
 		void processPendingMappingsRequests();
-		QVector<MappingModifRequest> m_mappingsRequests;
+		std::vector<MappingModifRequest> m_mappingsRequests;
 		bool m_isProcessingEvents;
 		
 		bool m_bFirstStep;
