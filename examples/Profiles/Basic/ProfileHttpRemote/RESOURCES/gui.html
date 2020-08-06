@@ -18,34 +18,17 @@
 			<div hidden id="name">@name@</div>
 			<div class="col">
 				<div class="row">
-					<button type="button" class="btn btn-outline-primary"
-						onmousedown="sendButtonMouse(0,true)"
-						onmouseup="sendButtonMouse(0,false)"
-						ontouchstart="sendButtonTouch(0,true)"
-						ontouchend="sendButtonTouch(0,false)">1</button>
-					<button type="button" class="btn btn-outline-primary"
-						onmousedown="sendButtonMouse(1,true)"
-						onmouseup="sendButtonMouse(1,false)"
-						ontouchstart="sendButtonTouch(1,true)"
-						ontouchend="sendButtonTouch(1,false)">2</button>
-					<button type="button" class="btn btn-outline-primary"
-						onmousedown="sendButtonMouse(2,true)"
-						onmouseup="sendButtonMouse(2,false)"
-						ontouchstart="sendButtonTouch(2,true)"
-						ontouchend="sendButtonTouch(2,false)">3</button>
-					<button type="button" class="btn btn-outline-primary"
-						onclick="requestFullScreen();">F</button>
+					<button type="button" class="btn btn-outline-primary" data-type="button" data-number="0">1</button>
+					<button type="button" class="btn btn-outline-primary" data-type="button" data-number="1">2</button>
+					<button type="button" class="btn btn-outline-primary" data-type="button" data-number="2">3</button>
+					<button type="button" class="btn btn-outline-primary" onclick="requestFullScreen();">F</button>
 				</div>
 				<div class="row">
-					<div class="slidercontainer">
-						<input class="slider" id="slider1" type="range" min="0" max="2000" value="1000"/>
-					</div>
+					<input class="slider" id="slider1" type="range" data-type="axis" data-number="0"/>
 					<label class="slider-label" id="slabel1">0</label>
 				</div>
 				<div class="row">
-					<div class="slidercontainer">
-						<input class="slider" id="slider2" type="range" min="0" max="2000" value="1000"/>
-					</div>
+					<input class="slider" id="slider2" type="range" data-type="axis" data-number="1"/>
 					<label class="slider-label" id="slabel2">0</label>
 				</div>
 				<div>

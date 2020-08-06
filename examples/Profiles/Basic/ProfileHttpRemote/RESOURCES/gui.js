@@ -1,20 +1,19 @@
 ///////////////////////////////////////////////////////////////////////////////
 // INIT AND CONSTANTS /////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
-var target = "192.168.1.40:8080"; // to provide from navbar?
-//var target = "localhost:8080"; // to provide from navbar?
-var msgDisplay = document.getElementById("msgDisplay");
-var name = document.getElementById("name").innerHTML;
-var iError = 0;
-var sendRequest = true;
+let target = "192.168.1.40:8080"; // to provide from an input inside html?
+let msgDisplay = document.getElementById("msgDisplay");
+let name = document.getElementById("name").innerHTML;
+let iError = 0;
+let sendRequest = true;
 
 
 ///////////////////////////////////////////////////////////////////////////////
 // PLATFORM ///////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
-var pf = navigator.platform;
-var useTouchEvents = (pf == "iPhone");
-var useMouseEvents = (pf == "Win32" || !useTouchEvents);
+let pf = navigator.platform;
+let useTouchEvents = (pf == "iPhone");
+let useMouseEvents = (pf == "Win32" || !useTouchEvents);
 msgDisplay.innerHTML = pf;
 
 
@@ -22,63 +21,51 @@ msgDisplay.innerHTML = pf;
 // TESTS //////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 document.fullscreenEnabled = true;
-var body = document.getElementById("body");
+let body = document.getElementById("body");
 
-body.onfullscreenerror = function()
-{
+body.onfullscreenerror = function() {
 	msgDisplay.innerHTML = "full screen error";
 }
 
-window.onorientationchange = function(event)
-{
+window.onorientationchange = function(event) {
 	//msgDisplay.innerHTML = "Orientation is now " + event.target.screen.orientation.angle;
 	msgDisplay.innerHTML = "orientation changed";
 }
 
-function requestFullScreen()
-{
-	//body.requestFullscreen();
+let requestFullScreen = () => {
+	body.requestFullscreen();
 	msgDisplay.innerHTML = "full screen request";
-}
+};
 
 
 ///////////////////////////////////////////////////////////////////////////////
-// SLIDERS ////////////////////////////////////////////////////////////////////
+// SLIDERS LABELS /////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
-var slider1 = document.getElementById("slider1");
-var slabel1 = document.getElementById("slabel1");
-slabel1.innerHTML = 0.001*slider1.value-1.0;
-
-slider1.oninput = function()
-{
-	var f = 0.001 * this.value - 1.0;
+let slider1 = document.getElementById("slider1");
+let slabel1 = document.getElementById("slabel1");
+slabel1.innerHTML = 0;
+slider1.oninput = function() {
+	let f = 0.001 * this.value - 1.0;
 	slabel1.innerHTML = f.toString().substring(0,f<0?6:5);
-	sendAxis(0,f);
-}
+};
 
-var slider2 = document.getElementById("slider2");
-var slabel2 = document.getElementById("slabel2");
-slabel2.innerHTML = 0.001*slider2.value-1.0;
-
-slider2.oninput = function()
-{
-	var f = 0.001 * this.value - 1.0;
+let slider2 = document.getElementById("slider2");
+let slabel2 = document.getElementById("slabel2");
+slabel2.innerHTML = 0;
+slider2.oninput = function() {
+	let f = 0.001 * this.value - 1.0;
 	slabel2.innerHTML = f.toString().substring(0,f<0?6:5);
-	sendAxis(1,f);
-}
+};
 
 
 ///////////////////////////////////////////////////////////////////////////////
 // UJPS ///////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
-function sendButtonMouse(i,b)
-{
+let sendButtonMouse = (i,b) => {
 	if (!useMouseEvents) return;
-	var url = "http://" + target + "/button/" + name + "/" + i + "/" + (b ? "1" : "0");
-	//console.log(url);
-	if (sendRequest)
-	{
-		var reqhttp = new XMLHttpRequest();
+	let url = "http://" + target + "/button/" + name + "/" + i + "/" + (b ? "1" : "0");
+	if (sendRequest) {
+		let reqhttp = new XMLHttpRequest();
 		reqhttp.onerror = function() {
 			iError++;
 			msgDisplay.innerHTML = "An error occured (#" + iError + ")";
@@ -86,16 +73,13 @@ function sendButtonMouse(i,b)
 		reqhttp.open("GET",url,true);
 		reqhttp.send();
 	}
-}
+};
 
-function sendButtonTouch(i,b)
-{
+let sendButtonTouch = (i,b) => {
 	if (!useTouchEvents) return;
-	var url = "http://" + target + "/button/" + name + "/" + i + "/" + (b ? "1" : "0");
-	//console.log(url);
-	if (sendRequest)
-	{
-		var reqhttp = new XMLHttpRequest();
+	let url = "http://" + target + "/button/" + name + "/" + i + "/" + (b ? "1" : "0");
+	if (sendRequest) {
+		let reqhttp = new XMLHttpRequest();
 		reqhttp.onerror = function() {
 			iError++;
 			msgDisplay.innerHTML = "An error occured (#" + iError + ")";
@@ -103,15 +87,12 @@ function sendButtonTouch(i,b)
 		reqhttp.open("GET",url,true);
 		reqhttp.send();
 	}
-}
+};
 
-function sendAxis(i,f)
-{
-	var url = "http://" + target + "/axis/" + name + "/" + i + "/" + f;
-	//console.log(url);
-	if (sendRequest)
-	{
-		var reqhttp = new XMLHttpRequest();
+let sendAxis = (i,f) => {
+	let url = "http://" + target + "/axis/" + name + "/" + i + "/" + f;
+	if (sendRequest) {
+		let reqhttp = new XMLHttpRequest();
 		reqhttp.onerror = function() {
 			iError++;
 			msgDisplay.innerHTML = "An error occured (#" + iError + ")";
@@ -119,14 +100,12 @@ function sendAxis(i,f)
 		reqhttp.open("GET",url,true);
 		reqhttp.send();
 	}
-}
+};
 
-function sendPov(i,f) {
-	var url = "http://" + target + "/pov/" + name + "/" + i + "/" + f;
-	//console.log(url);
-	if (sendRequest)
-	{
-		var reqhttp = new XMLHttpRequest();
+let sendPov = (i,f) => {
+	let url = "http://" + target + "/pov/" + name + "/" + i + "/" + f;
+	if (sendRequest) {
+		let reqhttp = new XMLHttpRequest();
 		reqhttp.onerror = function() {
 			iError++;
 			msgDisplay.innerHTML = "An error occured (#" + iError + ")";
@@ -134,4 +113,46 @@ function sendPov(i,f) {
 		reqhttp.open("GET",url,true);
 		reqhttp.send();
 	}
-}
+};
+
+// initialisation
+(function() {
+	let ujpsButtons = document.querySelectorAll("button[data-type=button]");
+	for (let ujpsButton of ujpsButtons) {
+		if (ujpsButton.hasAttribute("data-number")) {
+			let number = parseInt(ujpsButton.getAttribute("data-number"));
+			if (!isNaN(number)) {
+				ujpsButton.addEventListener("mousedown", function() {
+					sendButtonMouse(number,true);
+				});
+				ujpsButton.addEventListener("mouseup", function() {
+					sendButtonMouse(number,false);
+				});
+				ujpsButton.addEventListener("touchstart", function() {
+					sendButtonTouch(number,true);
+				});
+				ujpsButton.addEventListener("touchend", function() {
+					sendButtonTouch(number,false);
+				});
+			}
+		}
+	}
+
+	let ujpsAxes = document.querySelectorAll("input[type=range]");
+	for (let ujpsAxis of ujpsAxes) {
+		if (ujpsAxis.hasAttribute("data-type") && ujpsAxis.hasAttribute("data-number")) {
+			let dataType = ujpsAxis.getAttribute("data-type");
+			let number = parseInt(ujpsAxis.getAttribute("data-number"));
+			if (dataType == "axis" && !isNaN(number)) {
+				ujpsAxis.addEventListener("input", function() {
+					let f = 0.001 * ujpsAxis.value - 1.0;
+					sendAxis(number,f);
+				});
+				ujpsAxis.setAttribute("min",0);
+				ujpsAxis.setAttribute("max",2000);
+				ujpsAxis.setAttribute("value",1000);
+				sendAxis(number,0);
+			}
+		}
+	}
+})();
