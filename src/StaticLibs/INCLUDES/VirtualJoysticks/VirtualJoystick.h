@@ -2,14 +2,12 @@
 #define VIRTUAL_JOYSTICK
 
 
-#include <array>
 #include <QObject>
 #include <QString>
 #include <QColor>
-#include "vJoyModifiedInterface/stdafx.h"
-#include "vJoyModifiedInterface/public.h"
 #include "AbsoluteOrRelative.h"
 using uint = unsigned int;
+class VirtualJoystickPrivate;
 
 
 enum class Priority
@@ -31,7 +29,7 @@ class VirtualJoystick : public QObject
 	Q_OBJECT
 	
 	public:
-		VirtualJoystick(uint id, uint nbButtons = 128, uint nbAxes = 8, uint nbPovs = 0, bool bForcedInit = true);
+		VirtualJoystick(uint id, bool bForcedInit = true);
 		VirtualJoystick(const VirtualJoystick &other) = delete;
 		VirtualJoystick(VirtualJoystick &&other) = delete;
 		VirtualJoystick& operator=(const VirtualJoystick &other) = delete;
@@ -53,11 +51,7 @@ class VirtualJoystick : public QObject
 		
 		void resetReport();
 		bool flush(bool bEvenIfNoChange = false);
-		
-		bool enableVJoyIfNot();
-		void disableVJoy();
 		bool isVJoyDeviceFree(uint numDevice);
-		static void setVJoyConfigOptions(bool bUseIt, QString exeFilePath);
 		
 		
 	signals:
@@ -65,26 +59,7 @@ class VirtualJoystick : public QObject
 		
 		
 	private:
-		LONG getAxisPrivate(uint axis) const;
-		DWORD getPovPrivate(uint pov) const;
-		
-		uint m_id;
-		bool m_reportModified;
-		bool m_bUseDiscretePovs;
-		JOYSTICK_POSITION_V2 m_report; // vJoy HID report
-		
-		std::array<bool,128> m_buttonsLocked;
-		std::array<bool,128> m_buttonsHighPrio;
-		std::array<bool,8> m_axesLocked;
-		std::array<bool,8> m_axesHighPrio;
-		std::array<LONG,8> m_axesTrim;
-		std::array<bool,4> m_povsLocked;
-		std::array<bool,4> m_povsHighPrio;
-		
-		static uint m_nbInstances;
-		static bool m_bUseVJoyConfigExe;
-		static QString m_vJoyConfigExeDirPath;
-		static QString m_vJoyConfigExeFileName;
+		VirtualJoystickPrivate *m_pimpl;
 };
 
 #endif

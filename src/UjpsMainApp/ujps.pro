@@ -49,8 +49,7 @@ HEADERS +=  CODE/ProfileEngine.h \
 			CODE/COMPILER/QtCompiler.h \
 			CODE/COMPILER/QtCompilationProcess.h \
 			CODE/COMPILER/CompilationWidget.h \
-			CODE/SETTINGS/GeneralSettingsWidget.h \
-			CODE/SETTINGS/VJoySettingsWidget.h
+			CODE/SETTINGS/GeneralSettingsWidget.h
 			
 			
 SOURCES +=  CODE/main.cpp \
@@ -60,8 +59,7 @@ SOURCES +=  CODE/main.cpp \
 			CODE/COMPILER/QtCompiler.cpp \
 			CODE/COMPILER/QtCompilationProcess.cpp \
 			CODE/COMPILER/CompilationWidget.cpp \
-			CODE/SETTINGS/GeneralSettingsWidget.cpp \
-			CODE/SETTINGS/VJoySettingsWidget.cpp
+			CODE/SETTINGS/GeneralSettingsWidget.cpp
 
 
 RESOURCES += resources.qrc

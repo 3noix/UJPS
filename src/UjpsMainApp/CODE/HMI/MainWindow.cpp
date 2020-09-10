@@ -25,7 +25,6 @@
 #include "MyFileDialog.h"
 #include "ApplicationSettings.h"
 #include "../SETTINGS/GeneralSettingsWidget.h"
-#include "../SETTINGS/VJoySettingsWidget.h"
 #include "VigemSettingsWidget.h"
 
 
@@ -403,7 +402,6 @@ void MainWindow::slotSettings()
 {
 	SettingsDialog settingsDialog{this};
 	settingsDialog.addSettingsWidget(new GeneralSettingsWidget{&settingsDialog});
-	//settingsDialog.addSettingsWidget(new VJoySettingsWidget{&settingsDialog});
 	settingsDialog.addSettingsWidget(new VigemSettingsWidget{&settingsDialog});
 	
 	int result = settingsDialog.exec();

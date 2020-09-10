@@ -22,6 +22,10 @@ INCLUDEPATH +=  ../../INCLUDES/Other/ \
 				../../INCLUDES/VirtualJoysticks/
 
 
-HEADERS +=  ../../INCLUDES/VirtualJoysticks/VirtualJoystick.h
-SOURCES +=  CODE/VirtualJoystick.cpp
+HEADERS +=  ../../INCLUDES/VirtualJoysticks/VirtualJoystick.h \
+			CODE/VirtualJoystickPrivate.h
+			
+			
+SOURCES +=  CODE/VirtualJoystick.cpp \
+			CODE/VirtualJoystickPrivate.cpp
 
