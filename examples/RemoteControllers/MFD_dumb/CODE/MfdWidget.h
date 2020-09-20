@@ -31,7 +31,7 @@ class MfdWidget : public QGraphicsView
 		
 	private slots:
 		void slotButtonChanged(uint button, bool bPressed);
-		void slotSetData(const QString &prop, QVariant data);
+		void slotSetData(const QString &data);
 		
 		void slotError(const QString &text);
 		void slotSetState(RemoteJoystickClient::State s);

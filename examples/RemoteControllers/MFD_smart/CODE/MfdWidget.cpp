@@ -25,9 +25,7 @@
 
 
 // CONSTRUCTEUR ///////////////////////////////////////////////////////////////
-MfdWidget::MfdWidget(int size, QWidget *parent) :
-	QGraphicsView{parent},
-	m_client{"MFD_remote",MfdControls::controlsNames,{},{}}
+MfdWidget::MfdWidget(int size, QWidget *parent) : QGraphicsView{parent}
 {
 	// widget work
 	this->setWindowTitle("MFD smart");
@@ -72,14 +70,16 @@ void MfdWidget::slotButtonChanged(uint button, bool bPressed)
 }
 
 // SLOT SET DATA //////////////////////////////////////////////////////////////
-void MfdWidget::slotSetData(const QString &prop, QVariant data)
+void MfdWidget::slotSetData(const QString &data)
 {
-	Q_UNUSED(prop)
 	Q_UNUSED(data)
 	
-	/*if (prop == "button3")
+	/*QStringList list = data.split('=');
+	if (list.size() != 2) {return;}
+	
+	if (list[0] == "button3")
 	{
-		bool b = data.toBool();
+		bool b = (list[1] == "true");
 		m_button3->setDown(b);
 	}*/
 }

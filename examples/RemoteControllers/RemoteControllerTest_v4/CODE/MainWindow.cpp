@@ -20,9 +20,7 @@
 
 
 // CONSTRUCTEUR ///////////////////////////////////////////////////////////////
-MainWindow::MainWindow(QWidget *parent) :
-	QWidget{parent},
-	m_client{"TouchScreen2",{"B1","B2"},{"A1"},{"POV1"}}
+MainWindow::MainWindow(QWidget *parent) : QWidget{parent}
 {
 	this->setupWidget();
 	this->setWindowTitle(QGuiApplication::applicationDisplayName());
@@ -75,11 +73,14 @@ void MainWindow::setupWidget()
 
 
 // SLOT SET DATA //////////////////////////////////////////////////////////////
-void MainWindow::slotSetData(const QString &prop, QVariant data)
+void MainWindow::slotSetData(const QString &data)
 {
-	if (prop == "button3")
+	QStringList list = data.split('=');
+	if (list.size() != 2) {return;}
+	
+	if (list[0] == "button3")
 	{
-		bool b = data.toBool();
+		bool b = (list[1] == "true");
 		m_button3->setDown(b);
 	}
 }

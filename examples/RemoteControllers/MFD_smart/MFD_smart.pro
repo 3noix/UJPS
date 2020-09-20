@@ -12,7 +12,7 @@ CONFIG += c++17
 DESTDIR = $$MODE
 OBJECTS_DIR = $$DESTDIR/objects
 MOC_DIR = $$DESTDIR/moc
-QT += widgets network
+QT += widgets websockets
 
 
 INCLUDEPATH += $$(UJPSPATH)/src/ControllersPlugins/INCLUDES

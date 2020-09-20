@@ -12,7 +12,7 @@ CONFIG += c++17
 DESTDIR = $$MODE
 OBJECTS_DIR = $$DESTDIR/objects
 MOC_DIR = $$DESTDIR/moc
-QT += network widgets
+QT += widgets websockets
 
 
 HEADERS =   CODE/MainWindow.h \

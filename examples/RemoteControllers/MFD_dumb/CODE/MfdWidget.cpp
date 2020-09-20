@@ -24,9 +24,7 @@
 
 
 // CONSTRUCTEUR ///////////////////////////////////////////////////////////////
-MfdWidget::MfdWidget(int size, QWidget *parent) :
-	QGraphicsView{parent},
-	m_client{"MFD_remote",{"OSB1","OSB2","OSB3","OSB4","OSB5","OSB6","OSB7","OSB8","OSB9","OSB10","OSB11","OSB12","OSB13","OSB14","OSB15","OSB16","OSB17","OSB18","OSB19","OSB20","SYMU","SYMD","CONU","COND","BRTU","BRTD","GAINU","GAIND"},{},{}}
+MfdWidget::MfdWidget(int size, QWidget *parent) : QGraphicsView{parent}
 {
 	// widget work
 	this->setWindowTitle("MFD dumb");
@@ -71,14 +69,16 @@ void MfdWidget::slotButtonChanged(uint button, bool bPressed)
 }
 
 // SLOT SET DATA //////////////////////////////////////////////////////////////
-void MfdWidget::slotSetData(const QString &prop, QVariant data)
+void MfdWidget::slotSetData(const QString &data)
 {
-	Q_UNUSED(prop)
 	Q_UNUSED(data)
 	
-	/*if (prop == "button3")
+	/*QStringList list = data.split('=');
+	if (list.size() != 2) {return;}
+	
+	if (list[0] == "button3")
 	{
-		bool b = data.toBool();
+		bool b = (list[1] == "true");
 		m_button3->setDown(b);
 	}*/
 }
