@@ -19,6 +19,7 @@
 //  IS INIT COMPLETE
 //
 //  REGISTER REAL JOYSTICK
+//  REGISTER REMOTE JOYSTICK
 //  SLOT REMOTE JOYSTICK CONNECTED
 //  REGISTER VIRTUAL JOYSTICK
 //  REGISTER LAYER DIM 1
@@ -173,12 +174,12 @@ EnhancedJoystick* AbstractProfileTarget::registerRealJoystick(const QString &des
 	return erj;
 }
 
-EnhancedJoystick* AbstractProfileTarget::registerRealJoystick(RemoteJoystickServer *rjs)
+// REGISTER REMOTE JOYSTICK ///////////////////////////////////////////////////
+EnhancedJoystick* AbstractProfileTarget::registerRemoteJoystick(RemoteJoystickServer *rjs)
 {
 	if (!rjs) {return nullptr;}
 	
-	QObject::connect(rjs, SIGNAL(message(QString,QColor)), this, SIGNAL(message(QString,QColor)));
-	QObject::connect(rjs, SIGNAL(connected()), this, SLOT(slotRemoteJoystickConnected()));
+	QObject::connect(rjs, SIGNAL(connected()),    this, SLOT(slotRemoteJoystickConnected()));
 	QObject::connect(rjs, SIGNAL(disconnected()), this, SIGNAL(remoteJoystickDisconnected()));
 	EnhancedJoystick *erj = new EnhancedJoystick{rjs,true};
 	m_realJoysticks.push_back(erj);

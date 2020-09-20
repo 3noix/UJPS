@@ -15,6 +15,7 @@
 //  IS INIT COMPLETE
 //
 //  REGISTER REAL JOYSTICK
+//  REGISTER REMOTE JOYSTICK
 //  SLOT REMOTE JOYSTICK CONNECTED
 //  REGISTER VIRTUAL JOYSTICK
 ///////////////////////////////////////////////////////////////////////////////
@@ -97,12 +98,12 @@ AbstractRealJoystick* AbstractProfileBasic::registerRealJoystick(const QString &
 	return rj;
 }
 
-void AbstractProfileBasic::registerRealJoystick(RemoteJoystickServer *rjs)
+// REGISTER REMOTE JOYSTICK ///////////////////////////////////////////////////
+void AbstractProfileBasic::registerRemoteJoystick(RemoteJoystickServer *rjs)
 {
 	if (!rjs) {return;}
-	QObject::connect(rjs, SIGNAL(message(QString,QColor)), this, SIGNAL(message(QString,QColor)));
-	QObject::connect(rjs, SIGNAL(connected()),             this, SLOT(slotRemoteJoystickConnected()));
-	QObject::connect(rjs, SIGNAL(disconnected()),          this, SIGNAL(remoteJoystickDisconnected()));
+	QObject::connect(rjs, SIGNAL(connected()),    this, SLOT(slotRemoteJoystickConnected()));
+	QObject::connect(rjs, SIGNAL(disconnected()), this, SIGNAL(remoteJoystickDisconnected()));
 	m_remoteJoysticks.push_back(rjs);
 }
 

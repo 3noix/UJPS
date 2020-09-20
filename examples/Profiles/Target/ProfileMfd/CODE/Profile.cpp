@@ -61,7 +61,7 @@ bool Profile::setupJoysticks()
 	// remote joystick
 	emit message("Now connect the client application for the remote controller", Qt::black);
 	RemoteJoystickServer *rjs = new RemoteJoystickServer{"MFD_remote",32241,100};
-	rjse = this->registerRealJoystick(rjs);
+	rjse = this->registerRemoteJoystick(rjs);
 	
 	return (rjse && vj1);
 }

@@ -30,7 +30,7 @@ class AbstractProfileBasic : public AbstractProfile
 		
 	protected:
 		AbstractRealJoystick* registerRealJoystick(const QString &description, int num = 0);
-		void registerRealJoystick(RemoteJoystickServer *rjs);
+		void registerRemoteJoystick(RemoteJoystickServer *rjs);
 		VirtualJoystick* registerVirtualJoystick(uint id);
 		
 		

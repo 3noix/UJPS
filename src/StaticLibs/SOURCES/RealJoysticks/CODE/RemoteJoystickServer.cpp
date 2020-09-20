@@ -1,17 +1,26 @@
 #include "RemoteJoystickServer.h"
-#include "RemoteJoystickMessageTypes.h"
 #include "ExceptionFailedToConnect.h"
-#include "ExceptionInconsistentInitData.h"
-#include "Lim.h"
-
-#include <QTcpServer>
-#include <QTcpSocket>
-#include <QDataStream>
+#include <QNetworkInterface>
+#include <QHttpServer>
+#include <QWebSocketServer>
+#include <QWebSocket>
 
 
 ///////////////////////////////////////////////////////////////////////////////
 //  CONSTRUCTEUR ET DESTRUCTEUR
 //  IS CONNECTED
+//  ETHERNET LOCAL IP ADDRESS
+//  URL
+//
+//  LISTEN
+//  CLOSE
+//
+//  SET DATA
+//  DATA 2 STRING
+//  FLUSH
+//  SLOT NEW WS CONNECTION
+//  SLOT PROCESS MESSAGE
+//  SLOT WS SOCKET DISCONNECTED
 //
 //  ID
 //  DESCRIPTION
@@ -33,61 +42,235 @@
 //  POV VALUE
 //  POV NAME
 //  POVS NAMES
-//
-//  SET DATA
-//  FLUSH
-//
-//  SLOT NEW CONNECTION
-//  SLOT RECEIVE DATA
-//  SLOT REMOVE CONNECTION
 ///////////////////////////////////////////////////////////////////////////////
 
 
 // CONSTRUCTEUR ET DESTRUCTEUR ////////////////////////////////////////////////
-RemoteJoystickServer::RemoteJoystickServer(const QString &name, int portNumber, uint id) :
+RemoteJoystickServer::RemoteJoystickServer(const QString &name, quint16 httpPort, quint16 wsPort, uint id, const QString &resourcesPath) :
 		QObject{}, AbstractRealJoystick{}
 {
 	m_name = name;
-	m_portNumber = portNumber;
+	m_httpPort = httpPort;
+	m_wsPort = wsPort;
 	m_id = id;
-	m_bConnected = false;
-	m_bDestructionInProgress = false;
+	m_resourcesPath = resourcesPath;
 	
-	m_dataSize = 0;
-	m_messageType = RemoteJoystickMessageType::Invalid;
-	
-	m_initialized = false;
-	m_initFailed = false;
-	m_nbButtons = 0;
-	m_nbAxes = 0;
-	m_nbPovs = 0;
 	for (bool &b : m_buttons) {b = false;}
 	for (float &f : m_axes) {f = 0.0f;}
 	for (float &f : m_povs) {f = -1.0f;}
 	
-	m_tcpSocket = nullptr;
-	m_tcpServer = new QTcpServer{};
-	QObject::connect(m_tcpServer, &QTcpServer::newConnection, this, &RemoteJoystickServer::slotNewConnection);
-	if (!m_tcpServer->listen(QHostAddress::Any,m_portNumber))
+	m_bDestructionInProgress = false;
+	m_httpServer = nullptr;
+	m_wsServer = nullptr;
+	
+	QString errorMessage;
+	if (!this->listen(&errorMessage))
 	{
-		m_tcpServer->close();
-		QString message = "Unable to start the server " + m_name + ": " + m_tcpServer->errorString();
-		delete m_tcpServer;
-		throw ExceptionFailedToConnect{message.toStdString()};
+		this->close();
+		throw ExceptionFailedToConnect{errorMessage.toStdString()};
 	}
 }
 
 RemoteJoystickServer::~RemoteJoystickServer()
 {
 	m_bDestructionInProgress = true;
-	m_tcpServer->close();
-	m_tcpServer->deleteLater();
+	this->close();
 }
 
 // IS CONNECTED ///////////////////////////////////////////////////////////////
 bool RemoteJoystickServer::isConnected() const
 {
-	return m_bConnected;
+	return m_wsClients.size() > 0;
+}
+
+// ETHERNET LOCAL IP ADDRESS //////////////////////////////////////////////////
+QString RemoteJoystickServer::ethernetLocalIpAddress(bool ipv6)
+{
+	// search for the first active ethernet network interface
+	QList<QNetworkInterface> interfaces = QNetworkInterface::allInterfaces();
+	auto isActiveEthernet = [] (const QNetworkInterface &ni) {return ni.type() == QNetworkInterface::Ethernet && (ni.flags() & QNetworkInterface::IsUp);};
+	auto result1 = std::find_if(interfaces.begin(),interfaces.end(),isActiveEthernet);
+	if (result1 == interfaces.end()) {return QString{};}
+	
+	// search for the first ip address with the right protocol
+	QList<QNetworkAddressEntry> addressesEntries = result1->addressEntries();
+	QAbstractSocket::NetworkLayerProtocol protocolToSearch = (ipv6 ? QAbstractSocket::IPv6Protocol : QAbstractSocket::IPv4Protocol);
+	auto isIpVX = [protocolToSearch] (const QNetworkAddressEntry &nae) {return nae.ip().protocol() == protocolToSearch;};
+	auto result2 = std::find_if(addressesEntries.begin(),addressesEntries.end(),isIpVX);
+	if (result2 == addressesEntries.end()) {return QString{};}
+	return result2->ip().toString();
+}
+
+// URL ////////////////////////////////////////////////////////////////////////
+QString RemoteJoystickServer::url() const
+{
+	return "http://" + ethernetLocalIpAddress() + ":" + QString::number(m_httpPort);
+}
+
+
+
+
+
+
+// LISTEN /////////////////////////////////////////////////////////////////////
+bool RemoteJoystickServer::listen(QString *errorMessage)
+{
+	if (!m_httpServer) {m_httpServer = new QHttpServer{};}
+	if (!m_wsServer)
+	{
+		m_wsServer = new QWebSocketServer{m_name,QWebSocketServer::NonSecureMode};
+		QObject::connect(m_wsServer, SIGNAL(newConnection()), this, SLOT(slotNewWsConnection()));
+	}
+	
+	// http routing for files (typically html, css, js, images, ...)
+	m_httpServer->route("/", [this] () {
+		return QHttpServerResponse::fromFile(m_resourcesPath + "/gui.html");
+	});
+	m_httpServer->route("/<arg>", [this] (const QString &fileName) {
+		return QHttpServerResponse::fromFile(m_resourcesPath + "/" + fileName);
+	});
+	
+	// start the servers
+	if (!m_httpServer->listen(QHostAddress::Any,m_httpPort))
+	{
+		if (errorMessage) {*errorMessage = "HTTP server failed to listen";}
+		return false;
+	}
+	if (!m_wsServer->listen(QHostAddress::Any,m_wsPort))
+	{
+		if (errorMessage) {*errorMessage = "WS server failed to listen: " + m_wsServer->errorString();}
+		return false;
+	}
+	
+	if (errorMessage) {*errorMessage = "";}
+	return true;
+}
+
+// CLOSE //////////////////////////////////////////////////////////////////////
+void RemoteJoystickServer::close()
+{
+	if (m_httpServer)
+	{
+		// the destruction of the QHttpServer close the connections...
+		// QHttpServer does not provide a "close" function!
+		delete m_httpServer;
+		m_httpServer = nullptr;
+	}
+	
+	if (m_wsServer)
+	{
+		// same for the WS server (even if it has a "close" function)
+		delete m_wsServer;
+		m_wsServer = nullptr;
+	}
+}
+
+// SET DATA ///////////////////////////////////////////////////////////////////
+void RemoteJoystickServer::setData(const QString &str, QVariant v)
+{
+	QString vStr = data2string(v);
+	if (vStr == "") {return;}
+	
+	QString msg = str + "=" + vStr;
+	for (QWebSocket *socket : m_wsClients)
+		socket->sendTextMessage(msg);
+}
+
+// DATA 2 STRING //////////////////////////////////////////////////////////////
+QString RemoteJoystickServer::data2string(QVariant v)
+{
+	QVariant::Type type = v.type();
+	
+	if (type == QMetaType::Bool) {return v.toBool() ? "true" : "false";}
+	else if (type == QMetaType::Int) {return QString::number(v.toInt());}
+	else if (type == QMetaType::Float) {return QString::number(v.toFloat());}
+	else if (type == QMetaType::Double) {return QString::number(v.toDouble());}
+	else if (type == QMetaType::QString) {return v.toString();}
+	
+	return {};
+}
+
+// FLUSH //////////////////////////////////////////////////////////////////////
+void RemoteJoystickServer::flush()
+{
+	// nothing
+}
+
+
+
+
+
+
+// SLOT NEW WS CONNECTION /////////////////////////////////////////////////////
+void RemoteJoystickServer::slotNewWsConnection()
+{
+	QWebSocket *socket = m_wsServer->nextPendingConnection();
+	
+	QObject::connect(socket, SIGNAL(textMessageReceived(QString)), this, SLOT(slotProcessMessage(QString)));
+	QObject::connect(socket, SIGNAL(disconnected()),               this, SLOT(slotWsSocketDisconnected()));
+	
+	m_wsClients.push_back(socket);
+	if (m_wsClients.size() == 1) {emit connected();}
+}
+
+// SLOT PROCESS MESSAGE ///////////////////////////////////////////////////////
+void RemoteJoystickServer::slotProcessMessage(const QString &msg)
+{
+	QStringList list = msg.split('/', Qt::KeepEmptyParts);
+	if (list.size() != 3) {return;}
+	
+	const QString &inputType = list[0];
+	const QString &value = list[2];
+	bool numOk = true;
+	uint num = list[1].toUInt(&numOk);
+	if (!numOk) {return;}
+	
+	if (inputType == "button")
+	{
+		if (num >= 128) {return;}
+		if (value != "true" && value != "false") {return;}
+		
+		bool bPressed = (value == "true");
+		JoystickChange ch{this,ControlType::Button,num,bPressed,0.0f};
+		m_changes << ch;
+		m_buttons[num] = bPressed;
+	}
+	else if (inputType == "axis")
+	{
+		if (num >= 8) {return;}
+		bool valueOk = true;
+		float axisValue = value.toFloat(&valueOk);
+		if (!valueOk) {return;}
+		if (axisValue < -1.0f || axisValue > 1.0f) {return;}
+		
+		JoystickChange ch{this,ControlType::Axis,num,false,axisValue};
+		m_changes << ch;
+		m_axes[num] = axisValue;
+	}
+	else if (inputType == "pov")
+	{
+		if (num >= 4) {return;}
+		bool valueOk = true;
+		float povValue = value.toFloat(&valueOk);
+		if (!valueOk) {return;}
+		if (povValue >= 360.0f || (povValue < 0.0f && povValue != -1.0f)) {return;}
+		
+		JoystickChange ch{this,ControlType::Pov,num,false,povValue};
+		m_changes << ch;
+		m_povs[num] = povValue;
+	}
+}
+
+// SLOT WS SOCKET DISCONNECTED ////////////////////////////////////////////////
+void RemoteJoystickServer::slotWsSocketDisconnected()
+{
+	if (QWebSocket *socket = qobject_cast<QWebSocket*>(sender()))
+	{
+		m_wsClients.remove(socket);
+		socket->deleteLater();
+	}
+	
+	if (m_wsClients.size() == 0 && !m_bDestructionInProgress) {emit disconnected();}
 }
 
 
@@ -96,28 +279,16 @@ bool RemoteJoystickServer::isConnected() const
 
 
 // ID /////////////////////////////////////////////////////////////////////////
-uint RemoteJoystickServer::id() const
-{
-	return m_id;
-}
+uint RemoteJoystickServer::id() const {return m_id;}
 
 // DESCRIPTION ////////////////////////////////////////////////////////////////
-QString RemoteJoystickServer::description() const
-{
-	return m_name;
-}
+QString RemoteJoystickServer::description() const {return m_name;}
 
 // HARDWARE ID ////////////////////////////////////////////////////////////////
-QString RemoteJoystickServer::hardwareId() const
-{
-	return {};
-}
+QString RemoteJoystickServer::hardwareId() const {return {};}
 
 // READ GAME CONTROLLER ///////////////////////////////////////////////////////
-void RemoteJoystickServer::readGameController()
-{
-	
-}
+void RemoteJoystickServer::readGameController() {}
 
 // CHANGES ////////////////////////////////////////////////////////////////////
 QVector<JoystickChange> RemoteJoystickServer::changes()
@@ -132,251 +303,64 @@ QVector<JoystickChange> RemoteJoystickServer::changes()
 
 
 
-// BUTTONS COUNT //////////////////////////////////////////////////////////////
-uint RemoteJoystickServer::buttonsCount() const {return m_nbButtons;}
+// BUTTONS ////////////////////////////////////////////////////////////////////
+uint RemoteJoystickServer::buttonsCount() const {return 128;}
 
-// BUTTON PRESSED /////////////////////////////////////////////////////////////
 bool RemoteJoystickServer::buttonPressed(uint button) const
 {
-	if (button >= m_nbButtons) {return false;}
+	if (button >= 128) {return false;}
 	return m_buttons[button];
 }
 
-// BUTTON NAME ////////////////////////////////////////////////////////////////
 QString RemoteJoystickServer::buttonName(uint button) const
 {
-	if (button >= m_nbButtons) {return QString();}
-	return m_buttonsNames[button];
+	Q_UNUSED(button)
+	return {};
 }
 
-// BUTTONS NAMES //////////////////////////////////////////////////////////////
-QStringList RemoteJoystickServer::buttonsNames() const {return m_buttonsNames;}
+QStringList RemoteJoystickServer::buttonsNames() const {return {};}
 
 
 
 
 
 
-// AXES COUNT /////////////////////////////////////////////////////////////////
-uint RemoteJoystickServer::axesCount() const {return m_nbAxes;}
+// AXES ///////////////////////////////////////////////////////////////////////
+uint RemoteJoystickServer::axesCount() const {return 8;}
 
-// AXIS VALUE /////////////////////////////////////////////////////////////////
 float RemoteJoystickServer::axisValue(uint axis) const
 {
-	if (axis >= m_nbAxes) {return 0.0f;}
+	if (axis >= 8) {return 0.0f;}
 	return m_axes[axis];
 }
 
-// AXIS NAME //////////////////////////////////////////////////////////////////
 QString RemoteJoystickServer::axisName(uint axis) const
 {
-	if (axis >= m_nbAxes) {return QString();}
-	return m_axesNames[axis];
+	Q_UNUSED(axis)
+	return {};
 }
 
-// AXES NAMES /////////////////////////////////////////////////////////////////
-QStringList RemoteJoystickServer::axesNames() const {return m_axesNames;}
+QStringList RemoteJoystickServer::axesNames() const {return {};}
 
 
 
 
 
 
-// POVS COUNT /////////////////////////////////////////////////////////////////
-uint RemoteJoystickServer::povsCount() const {return m_nbPovs;}
+// POVS ///////////////////////////////////////////////////////////////////////
+uint RemoteJoystickServer::povsCount() const {return 4;}
 
-// POV VALUE //////////////////////////////////////////////////////////////////
 float RemoteJoystickServer::povValue(uint pov) const
 {
-	if (pov >= m_nbPovs) {return -1.0f;}
+	if (pov >= 4) {return -1.0f;}
 	return m_povs[pov];
 }
 
-// POV NAME ///////////////////////////////////////////////////////////////////
 QString RemoteJoystickServer::povName(uint pov) const
 {
-	if (pov >= m_nbPovs) {return QString();}
-	return m_povsNames[pov];
+	Q_UNUSED(pov)
+	return {};
 }
 
-// POVS NAMES /////////////////////////////////////////////////////////////////
-QStringList RemoteJoystickServer::povsNames() const {return m_povsNames;}
-
-
-
-
-
-
-// SET DATA ///////////////////////////////////////////////////////////////////
-void RemoteJoystickServer::setData(const QString &str, QVariant v)
-{
-	if (m_initFailed) {return;}
-	if (!m_tcpSocket) {return;}
-	
-	QByteArray ba;
-	QDataStream out{&ba, QIODevice::WriteOnly};
-	out.setVersion(QDataStream::Qt_5_7);
-	out << str << v;
-	m_tcpSocket->write(ba);
-}
-
-// FLUSH //////////////////////////////////////////////////////////////////////
-void RemoteJoystickServer::flush()
-{
-	// nothing
-}
-
-
-
-
-
-
-// SLOT NEW CONNECTION ////////////////////////////////////////////////////////
-void RemoteJoystickServer::slotNewConnection()
-{
-	QTcpSocket *newConnection = m_tcpServer->nextPendingConnection();
-	if (m_tcpSocket)
-	{
-		// new connection request ignored (already connected)
-		newConnection->disconnectFromHost();
-		return;
-	}
-	
-	m_tcpSocket = newConnection;
-	QObject::connect(m_tcpSocket, &QIODevice::readyRead, this, &RemoteJoystickServer::slotReceiveData);
-	QObject::connect(m_tcpSocket, &QAbstractSocket::disconnected, this, &RemoteJoystickServer::slotRemoveConnection);
-	m_bConnected = true;
-	emit connected();
-}
-
-// SLOT RECEIVE DATA //////////////////////////////////////////////////////////
-void RemoteJoystickServer::slotReceiveData()
-{
-	if (m_initFailed) {return;}
-	
-	QDataStream in{m_tcpSocket};
-	in.setVersion(QDataStream::Qt_5_7);
-	
-	// search for the size of the message
-	if (m_messageType == RemoteJoystickMessageType::Invalid && m_dataSize == 0)
-	{
-		if (m_tcpSocket->bytesAvailable() < sizeof(quint16)) {return;}
-		in >> m_dataSize;
-	}
-	
-	// search for message type
-	//if (m_dataSize == 0) {qDebug() << "BUG 1";}
-	if (m_tcpSocket->bytesAvailable() < m_dataSize) {return;}
-	in >> m_messageType;
-	
-	// init message
-	if (m_messageType == RemoteJoystickMessageType::Init)
-	{
-		QString name;
-		quint8 nbButtons, nbAxes, nbPovs;
-		QStringList buttonsNames, axesNames, povsNames;
-		in >> name >> nbButtons >> buttonsNames >> nbAxes >> axesNames >> nbPovs >> povsNames;
-		
-		m_messageType = RemoteJoystickMessageType::Invalid;
-		m_dataSize = 0;
-		
-		if (name != m_name)
-		{
-			QString str = "Names of client (" + name + ") and server (" + m_name + ") does not match. You may not have connected the expected remote joystick";
-			emit message(str,QColor{255,127,0});
-			m_initFailed = true;
-			//throw ExceptionInconsistentInitData{str.toStdString()};
-		}
-		
-		if (nbButtons != buttonsNames.size() || nbAxes != axesNames.size() || nbPovs != povsNames.size())
-		{
-			QString str = "Wrong init data received: inconsistency in buttons/axes number and names";
-			emit message(str,QColor{255,127,0});
-			m_initFailed = true;
-			//throw ExceptionInconsistentInitData{str.toStdString()};
-		}
-		
-		if (m_initFailed) {return;}
-		m_nbButtons = nbButtons;
-		m_buttonsNames = buttonsNames;
-		m_nbAxes = nbAxes;
-		m_axesNames = axesNames;
-		m_nbPovs = nbPovs;
-		m_povsNames = povsNames;
-		m_initialized = true;
-	}
-	// button change
-	else if (m_messageType == RemoteJoystickMessageType::Button)
-	{
-		quint8 numButton;
-		bool bPressed;
-		in >> numButton >> bPressed;
-		
-		if (numButton < m_nbButtons)
-		{
-			JoystickChange ch{this,ControlType::Button,numButton,bPressed,0.0f};
-			m_changes << ch;
-			m_buttons[numButton] = bPressed;
-		}
-		
-		m_messageType = RemoteJoystickMessageType::Invalid;
-		m_dataSize = 0;
-	}
-	// axis change
-	else if (m_messageType == RemoteJoystickMessageType::Axis)
-	{
-		quint8 numAxis;
-		float axisValue;
-		in >> numAxis >> axisValue;
-		
-		if (numAxis < m_nbAxes)
-		{
-			JoystickChange ch{this,ControlType::Axis,numAxis,false,axisValue};
-			m_changes << ch;
-			m_axes[numAxis] = axisValue;
-		}
-		
-		m_messageType = RemoteJoystickMessageType::Invalid;
-		m_dataSize = 0;
-	}
-	// pov change
-	else if (m_messageType == RemoteJoystickMessageType::Pov)
-	{
-		quint8 numPov;
-		float povValue;
-		in >> numPov >> povValue;
-		
-		if (numPov < m_nbPovs)
-		{
-			JoystickChange ch{this,ControlType::Pov,numPov,false,povValue};
-			m_changes << ch;
-			m_povs[numPov] = povValue;
-		}
-		
-		m_messageType = RemoteJoystickMessageType::Invalid;
-		m_dataSize = 0;
-	}
-	else
-	{
-		//qDebug() << "BUG 2";
-		return;
-	}
-	
-	this->slotReceiveData();
-}
-
-// SLOT REMOVE CONNECTION /////////////////////////////////////////////////////
-void RemoteJoystickServer::slotRemoveConnection()
-{
-	if (!m_tcpSocket) {return;}
-	
-	m_tcpSocket->disconnectFromHost();
-	m_tcpSocket->abort();
-	m_tcpSocket->deleteLater();
-	m_tcpSocket = nullptr;
-	m_bConnected = false;
-	
-	if (!m_bDestructionInProgress)
-		emit disconnected();
-}
+QStringList RemoteJoystickServer::povsNames() const {return {};}
 

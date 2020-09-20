@@ -73,7 +73,7 @@ class AbstractProfileTarget : public AbstractProfile
 		
 	protected:
 		EnhancedJoystick* registerRealJoystick(const QString &description, int num = 0);
-		EnhancedJoystick* registerRealJoystick(RemoteJoystickServer *rjs);
+		EnhancedJoystick* registerRemoteJoystick(RemoteJoystickServer *rjs);
 		VirtualJoystick* registerVirtualJoystick(uint id);
 		
 		void registerLayerDim1(Layers::LayerDim1 layer1, AbstractRealJoystick *rj = nullptr, uint rButton = 0);

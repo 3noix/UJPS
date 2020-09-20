@@ -3,11 +3,11 @@
 
 
 #include <QObject>
-#include <QColor>
+#include <list>
 #include "AbstractRealJoystick.h"
-
-class QTcpServer;
-class QTcpSocket;
+class QHttpServer;
+class QWebSocketServer;
+class QWebSocket;
 
 
 class RemoteJoystickServer : public QObject, public AbstractRealJoystick
@@ -17,7 +17,7 @@ class RemoteJoystickServer : public QObject, public AbstractRealJoystick
 	
 	
 	public:
-		RemoteJoystickServer(const QString &name, int portNumber, uint id);
+		RemoteJoystickServer(const QString &name, quint16 httpPort, quint16 wsPort, uint id, const QString &resourcesPath);
 		RemoteJoystickServer(const RemoteJoystickServer &other) = delete;
 		RemoteJoystickServer(RemoteJoystickServer &&other) = delete;
 		RemoteJoystickServer& operator=(const RemoteJoystickServer &other) = delete;
@@ -25,12 +25,13 @@ class RemoteJoystickServer : public QObject, public AbstractRealJoystick
 		virtual ~RemoteJoystickServer();
 		
 		bool isConnected() const;
+		QString url() const;
 		
 		virtual uint id() const override final;
 		virtual QString description() const override final;
 		virtual QString hardwareId() const override final;
-		void readGameController() override final;
-		QVector<JoystickChange> changes() override final;
+		virtual void readGameController() override final;
+		virtual QVector<JoystickChange> changes() override final;
 		
 		virtual uint buttonsCount() const override final;
 		virtual bool buttonPressed(uint button) const override final;
@@ -52,45 +53,39 @@ class RemoteJoystickServer : public QObject, public AbstractRealJoystick
 		
 		
 	signals:
-		void message(const QString &str, QColor color);
 		void connected();
 		void disconnected();
 		
 		
 	private slots:
-		void slotNewConnection();
-		void slotReceiveData();
-		void slotRemoveConnection();
-		
-		
-	protected:
-		QVector<JoystickChange> m_changes;
+		void slotNewWsConnection();
+		void slotProcessMessage(const QString &msg);
+		void slotWsSocketDisconnected();
 		
 		
 	private:
+		static QString ethernetLocalIpAddress(bool ipv6 = false);
+		static QString data2string(QVariant v);
+		
+		bool listen(QString *errorMessage = nullptr);
+		void close();
+		
+		QVector<JoystickChange> m_changes;
+		
 		QString m_name;
-		int m_portNumber;
+		quint16 m_httpPort;
+		quint16 m_wsPort;
 		uint m_id;
-		bool m_bConnected;
-		bool m_bDestructionInProgress;
+		QString m_resourcesPath;
 		
-		quint16 m_dataSize;
-		qint8 m_messageType;
-		
-		bool m_initialized;
-		bool m_initFailed;
-		uint m_nbButtons;
-		uint m_nbAxes;
-		uint m_nbPovs;
-		QStringList m_buttonsNames;
-		QStringList m_axesNames;
-		QStringList m_povsNames;
 		std::array<bool,128> m_buttons;
 		std::array<float,8> m_axes;
 		std::array<float,4> m_povs;
 		
-		QTcpServer *m_tcpServer;
-		QTcpSocket *m_tcpSocket;
+		bool m_bDestructionInProgress;
+		QHttpServer *m_httpServer;
+		QWebSocketServer *m_wsServer;
+		std::list<QWebSocket*> m_wsClients;
 };
 
 

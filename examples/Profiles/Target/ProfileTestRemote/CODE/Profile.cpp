@@ -71,7 +71,7 @@ bool Profile::setupJoysticks()
 	// remote joystick at last
 	emit message("Now connect the client application for the remote controller", Qt::black);
 	RemoteJoystickServer *rjs = new RemoteJoystickServer{"TouchScreen2",32241,100};
-	rjse = this->registerRealJoystick(rjs);
+	rjse = this->registerRemoteJoystick(rjs);
 	
 	return (tmwj && rjse && vj1);
 }
