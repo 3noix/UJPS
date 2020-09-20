@@ -8,7 +8,7 @@ CONFIG(release, debug|release) {
 
 TEMPLATE = lib
 TARGET = virtualJoysticks
-CONFIG += c++11
+CONFIG += c++17
 DESTDIR = $$MODE
 OBJECTS_DIR = $$MODE/objects
 MOC_DIR = $$MODE/moc

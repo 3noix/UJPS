@@ -8,7 +8,7 @@ CONFIG(release, debug|release) {
 
 TEMPLATE = lib
 TARGET = ProfileBasicExample
-CONFIG += c++11 plugin
+CONFIG += c++17 plugin
 DESTDIR = $$MODE
 OBJECTS_DIR = $$DESTDIR/objects
 MOC_DIR = $$DESTDIR/moc

@@ -8,7 +8,7 @@ CONFIG(release, debug|release) {
 
 TEMPLATE = lib
 TARGET = StarCitizen_301_v1
-CONFIG += c++11 plugin
+CONFIG += c++17 plugin
 DESTDIR = $$MODE
 OBJECTS_DIR = $$DESTDIR/objects
 MOC_DIR = $$DESTDIR/moc

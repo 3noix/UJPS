@@ -6,7 +6,7 @@
 // DEBUG OR RELEASE ///////////////////////////////////////////////////////////
 QString debugOrRelease()
 {
-	QStringList list = QCoreApplication::applicationDirPath().split('/',QString::SkipEmptyParts);
+	QStringList list = QCoreApplication::applicationDirPath().split('/',Qt::SkipEmptyParts);
 	if (list.size() == 0) {return "release";}
 	
 	QString s = list.last();
@@ -18,7 +18,7 @@ QString debugOrRelease()
 QString shortName(QString path)
 {
 	path = path.replace('\\','/');
-	QStringList list = path.split('/',QString::SkipEmptyParts);
+	QStringList list = path.split('/',Qt::SkipEmptyParts);
 	if (list.size() == 0) {return {};}
 	return list.last();
 }
@@ -27,7 +27,7 @@ QString shortName(QString path)
 QString dirName(QString path)
 {
 	path = path.replace('\\','/');
-	QStringList list = path.split('/',QString::SkipEmptyParts);
+	QStringList list = path.split('/',Qt::SkipEmptyParts);
 	if (list.size() == 0) {return {};}
 	list.removeLast();
 	return list.join("/");

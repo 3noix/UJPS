@@ -2,7 +2,7 @@
 #define GENERIC_PROPERTIES_INFO
 
 
-#include <QMap>
+#include <map>
 #include <QVariant>
 #include <QStringList>
 #include "../../../SOURCES/Settings/CODE/XML/AbstractXmlInfo.h"
@@ -21,7 +21,7 @@ class GenericPropertiesInfo : public AbstractXmlInfo
 		bool contains(const QString &name);
 		bool contains(const QStringList &names);
 		QVariant property(const QString &name);
-		QMap<QString,QVariant> properties() const;
+		std::map<QString,QVariant> properties() const;
 		
 		
 	protected:
@@ -30,7 +30,7 @@ class GenericPropertiesInfo : public AbstractXmlInfo
 		
 		
 	private:
-		QMap<QString,QVariant> m_properties;
+		std::map<QString,QVariant> m_properties;
 		
 		static QList<QVariant> string2qlistbool(const QString &str);
 		static QList<QVariant> string2qlistdouble(const QString &str);

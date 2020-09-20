@@ -5,7 +5,7 @@
 #include "AbstractProfile.h"
 #include <QVector>
 #include <vector>
-#include <QMap>
+#include <map>
 #include "JoystickChange.h"
 #include "../../SOURCES/UjpsCore/CODE/MappingModifRequest.h"
 #include "../../SOURCES/UjpsCore/CODE/LAYERS/LayerCalculator.h"
@@ -109,7 +109,7 @@ class AbstractProfileTarget : public AbstractProfile
 		
 		// for rexec
 		QVector<uint> m_rexecIds;
-		QMap<uint,AbstractAction*> m_rexecFunctionsActionsToDelete;
+		std::map<uint,AbstractAction*> m_rexecFunctionsActionsToDelete;
 };
 
 

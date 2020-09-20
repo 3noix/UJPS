@@ -67,41 +67,36 @@ bool GenericPropertiesInfo::isEmpty() const
 // ADD PROPERTY ///////////////////////////////////////////////////////////////
 void GenericPropertiesInfo::addProperty(const QString &name, QVariant v)
 {
-	m_properties.insert(name,v);
+	m_properties.insert(std::make_pair(name,v));
 }
 
 // REMOVE PROPERTY ////////////////////////////////////////////////////////////
 bool GenericPropertiesInfo::removeProperty(const QString &name)
 {
-	return (m_properties.remove(name) > 0);
+	return (m_properties.erase(name) > 0);
 }
 
 // CONTAINS ///////////////////////////////////////////////////////////////////
 bool GenericPropertiesInfo::contains(const QString &name)
 {
-	return m_properties.contains(name);
+	return m_properties.count(name) > 0;
 }
 
 bool GenericPropertiesInfo::contains(const QStringList &names)
 {
-	for (const QString &name : names)
-	{
-		if (!m_properties.contains(name))
-		{return false;}
-	}
-	
-	return true;
+	auto containsProperty = [this] (const QString &name) {return m_properties.count(name) > 0;};
+	return std::all_of(names.begin(), names.end(), containsProperty);
 }
 
 // PROPERTY ///////////////////////////////////////////////////////////////////
 QVariant GenericPropertiesInfo::property(const QString &name)
 {
-	if (!m_properties.contains(name)) {return QVariant();}
+	if (m_properties.count(name) == 0) {return {};}
 	return m_properties[name];
 }
 
 // PROPERTIES /////////////////////////////////////////////////////////////////
-QMap<QString,QVariant> GenericPropertiesInfo::properties() const
+std::map<QString,QVariant> GenericPropertiesInfo::properties() const
 {
 	return m_properties;
 }
@@ -213,10 +208,8 @@ bool GenericPropertiesInfo::writeData(QIODevice &device)
 	writer.writeStartElement("PROPERTIES");
 	
 	// properties
-	QStringList keys = m_properties.keys();
-	for (const QString &key : keys)
+	for (const auto &[key,v] : m_properties)
 	{
-		QVariant v = m_properties[key];
 		QString typeStr;
 		QString valueStr;
 		if (v.type() == QVariant::Bool)
@@ -294,7 +287,7 @@ bool GenericPropertiesInfo::writeData(QIODevice &device)
 // STRING 2 QLISTBOOL //////////////////////////////////////////////////////////////////////////////////////////////////////////
 QList<QVariant> GenericPropertiesInfo::string2qlistbool(const QString &str)
 {
-	QStringList sl = str.split('|',QString::KeepEmptyParts);
+	QStringList sl = str.split('|',Qt::KeepEmptyParts);
 	QList<QVariant> list;
 	for (const QString &s : sl)
 	{
@@ -307,7 +300,7 @@ QList<QVariant> GenericPropertiesInfo::string2qlistbool(const QString &str)
 // STRING 2 QLISTDOUBLE ////////////////////////////////////////////////////////////////////////////////////////////////////////
 QList<QVariant> GenericPropertiesInfo::string2qlistdouble(const QString &str)
 {
-	QStringList sl = str.split('|',QString::KeepEmptyParts);
+	QStringList sl = str.split('|',Qt::KeepEmptyParts);
 	QList<QVariant> list;
 	for (const QString &s : sl) {list << s.toDouble();}
 	return list;
@@ -316,7 +309,7 @@ QList<QVariant> GenericPropertiesInfo::string2qlistdouble(const QString &str)
 // STRING 2 QLISTINT ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 QList<QVariant> GenericPropertiesInfo::string2qlistint(const QString &str)
 {
-	QStringList sl = str.split('|',QString::KeepEmptyParts);
+	QStringList sl = str.split('|',Qt::KeepEmptyParts);
 	QList<QVariant> list;
 	for (const QString &s : sl) {list << s.toInt();}
 	return list;
@@ -325,7 +318,7 @@ QList<QVariant> GenericPropertiesInfo::string2qlistint(const QString &str)
 // STRING 2 QSTRINGLIST ////////////////////////////////////////////////////////////////////////////////////////////////////////
 QList<QVariant> GenericPropertiesInfo::string2qstringlist(const QString &str)
 {
-	QStringList sl = str.split('|',QString::KeepEmptyParts);
+	QStringList sl = str.split('|',Qt::KeepEmptyParts);
 	QList<QVariant> list;
 	for (const QString &s : sl) {list << s;}
 	return list;

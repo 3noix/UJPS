@@ -271,7 +271,7 @@ bool AbstractProfileTarget::startRexec(uint id, uint cycles, std::function<void(
 	// this action (created below from the functor) is deleted when stopRexec is called with this id
 	ActionCallback *action = new ActionCallback{fct};
 	this->addMapping(new MappingRexec{id,cycles,action,m_eventsQueue});
-	m_rexecFunctionsActionsToDelete.insert(id,action);
+	m_rexecFunctionsActionsToDelete.insert(std::make_pair(id,action));
 	m_rexecIds << id;
 	return true;
 }
@@ -284,7 +284,7 @@ bool AbstractProfileTarget::stopRexec(uint id)
 	
 	this->UnmapRexec(id);
 	m_rexecIds.removeAll(id);
-	if (m_rexecFunctionsActionsToDelete.contains(id)) {delete m_rexecFunctionsActionsToDelete.take(id);}
+	if (m_rexecFunctionsActionsToDelete.count(id) > 0) {delete m_rexecFunctionsActionsToDelete.extract(id).mapped();}
 	return true;
 }
 

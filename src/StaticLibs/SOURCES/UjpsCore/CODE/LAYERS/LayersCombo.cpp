@@ -69,7 +69,7 @@ LayersCombo::LayersCombo(QString str)
 	str2.remove('|');
 	if (!str2.isEmpty()) {throw ExceptionBadLayersCombo{};}
 	
-	for (QString &s : str.split('|',QString::KeepEmptyParts))
+	for (QString &s : str.split('|',Qt::KeepEmptyParts))
 	{
 		bool bi = s.contains('i');
 		bool bo = s.contains('o');

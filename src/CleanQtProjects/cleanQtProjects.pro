@@ -8,7 +8,7 @@ CONFIG(release, debug|release) {
 
 TEMPLATE = app
 TARGET = CleanQtProjects
-CONFIG += c++11 console
+CONFIG += c++17 console
 DESTDIR = $$MODE
 OBJECTS_DIR = $$DESTDIR/objects
 MOC_DIR = $$DESTDIR/moc

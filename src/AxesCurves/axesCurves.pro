@@ -8,7 +8,7 @@ CONFIG(release, debug|release) {
 
 TEMPLATE = app
 TARGET = AxesCurves
-CONFIG += c++11
+CONFIG += c++17
 DESTDIR = ../../bin
 OBJECTS_DIR = $$MODE/objects
 MOC_DIR = $$MODE/moc

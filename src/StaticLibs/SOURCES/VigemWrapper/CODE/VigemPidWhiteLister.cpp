@@ -55,7 +55,7 @@ QStringList VigemPidWhiteLister::affectedDevices()
 	data.remove(']');
 	data.remove('\"');
 	data.replace("\\\\","\\");
-	return data.split(',',QString::SkipEmptyParts);
+	return data.split(',',Qt::SkipEmptyParts);
 }
 
 // SEND REQUEST ///////////////////////////////////////////////////////////////
@@ -119,7 +119,7 @@ bool VigemPidWhiteLister::isHidGuardianInstalled() const
 	
 	QString data = process.readAllStandardOutput();
 	data.replace("\r","");
-	QStringList lines = data.split('\n',QString::SkipEmptyParts);
+	QStringList lines = data.split('\n',Qt::SkipEmptyParts);
 	
 	if (lines.size() == 0) {return false;}
 	return lines.last().contains(" matching device(s) found");
@@ -134,7 +134,7 @@ bool VigemPidWhiteLister::isHidCerberusInstalled() const
 	
 	QString data = process.readAllStandardOutput();
 	data.replace("\r","");
-	QStringList lines = data.split('\n',QString::SkipEmptyParts);
+	QStringList lines = data.split('\n',Qt::SkipEmptyParts);
 	
 	if (lines.size() < 3) {return false;}
 	return lines[2].contains("STATE");
@@ -149,7 +149,7 @@ bool VigemPidWhiteLister::isHidCerberusRunning() const
 	
 	QString data = process.readAllStandardOutput();
 	data.replace("\r","");
-	QStringList lines = data.split('\n',QString::SkipEmptyParts);
+	QStringList lines = data.split('\n',Qt::SkipEmptyParts);
 	
 	if (lines.size() < 3) {return false;}
 	return (lines[2].contains("STATE") && lines[2].contains("RUNNING"));

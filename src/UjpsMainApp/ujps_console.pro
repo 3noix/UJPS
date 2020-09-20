@@ -8,7 +8,7 @@ CONFIG(release, debug|release) {
 
 TEMPLATE = app
 TARGET = UJPS_console
-CONFIG += c++11 console
+CONFIG += c++17 console
 DESTDIR = ../../bin
 OBJECTS_DIR = $$MODE/objects
 MOC_DIR = $$MODE/moc

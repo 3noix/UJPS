@@ -65,7 +65,7 @@ void MyChartWidget::mouseReleaseEvent(QMouseEvent *event)
 // ADD CURVE //////////////////////////////////////////////////////////////////
 bool MyChartWidget::addCurve(uint index, const QString &label, const QVector<double> &x, const QVector<double> &y)
 {
-	if (m_seriesMap.contains(index)) {return false;}
+	if (m_seriesMap.count(index) > 0) {return false;}
 	int n = x.size();
 	if (n != y.size() || n == 0) {return false;}
 	
@@ -89,14 +89,14 @@ bool MyChartWidget::addCurve(uint index, const QString &label, const QVector<dou
 	m_chart->addSeries(series);
 	series->attachAxis(m_axisX);
 	series->attachAxis(m_axisY);
-	m_seriesMap.insert(index,series);
+	m_seriesMap.insert(std::make_pair(index,series));
 	return true;
 }
 
 // SLOT ADD CURVE /////////////////////////////////////////////////////////////
 void MyChartWidget::slotAddCurve(uint index, const QString &label)
 {
-	if (m_seriesMap.contains(index)) {return;}
+	if (m_seriesMap.count(index) > 0) {return;}
 	
 	// pen for curve
 	QPen pen;
@@ -115,13 +115,13 @@ void MyChartWidget::slotAddCurve(uint index, const QString &label)
 	m_chart->addSeries(series);
 	series->attachAxis(m_axisX);
 	series->attachAxis(m_axisY);
-	m_seriesMap.insert(index,series);
+	m_seriesMap.insert(std::make_pair(index,series));
 }
 
 // SLOT PUSH VALUE ////////////////////////////////////////////////////////////
 void MyChartWidget::slotPushValue(uint index, qreal yvalue)
 {
-	if (!m_seriesMap.contains(index)) {return;}
+	if (m_seriesMap.count(index) == 0) {return;}
 	QLineSeries *series = m_seriesMap[index];
 	
 	qreal dt = 0.001 * m_dtms;
@@ -136,8 +136,11 @@ void MyChartWidget::slotPushValue(uint index, qreal yvalue)
 // SLOT REMOVE CURVE //////////////////////////////////////////////////////////
 void MyChartWidget::slotRemoveCurve(uint index)
 {
-	if (!m_seriesMap.contains(index)) {return;}
-	QLineSeries *series = m_seriesMap.take(index);
+	if (m_seriesMap.count(index) == 0) {return;}
+	auto node = m_seriesMap.extract(index);
+	if (!node) {return;}
+	
+	QLineSeries *series = node.mapped();
 	m_chart->removeSeries(series);
 	delete series;
 }
