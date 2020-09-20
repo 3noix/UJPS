@@ -159,8 +159,8 @@ void RemoteJoystickServer::close()
 	
 	if (m_wsServer)
 	{
-		// same for the WS server (even if it has a "close" function)
-		delete m_wsServer;
+		m_wsServer->close();
+		m_wsServer->deleteLater();
 		m_wsServer = nullptr;
 	}
 }
@@ -267,6 +267,7 @@ void RemoteJoystickServer::slotWsSocketDisconnected()
 	if (QWebSocket *socket = qobject_cast<QWebSocket*>(sender()))
 	{
 		m_wsClients.remove(socket);
+		socket->abort();
 		socket->deleteLater();
 	}
 	
