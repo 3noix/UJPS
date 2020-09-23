@@ -16,6 +16,7 @@ class ApplicationSettings
 		bool isEmpty() const;
 		QVariant property(const QString &name);
 		bool setProperty(const QString &name, const QVariant &value);
+		bool removeProperty(const QString &name);
 		bool contains(const QString &name);
 		
 		

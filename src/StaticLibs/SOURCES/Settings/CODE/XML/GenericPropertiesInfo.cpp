@@ -10,7 +10,7 @@
 //  DESTRUCTEUR
 //
 //  IS EMPTY
-//  ADD PROPERTY
+//  SET PROPERTY
 //  REMOVE PROPERTY
 //  CONTAINS
 //  PROPERTY
@@ -64,10 +64,10 @@ bool GenericPropertiesInfo::isEmpty() const
 	return (m_properties.size() == 0);
 }
 
-// ADD PROPERTY ///////////////////////////////////////////////////////////////
-void GenericPropertiesInfo::addProperty(const QString &name, QVariant v)
+// SET PROPERTY ///////////////////////////////////////////////////////////////
+void GenericPropertiesInfo::setProperty(const QString &name, QVariant v)
 {
-	m_properties.insert(std::make_pair(name,v));
+	m_properties[name] = v;
 }
 
 // REMOVE PROPERTY ////////////////////////////////////////////////////////////

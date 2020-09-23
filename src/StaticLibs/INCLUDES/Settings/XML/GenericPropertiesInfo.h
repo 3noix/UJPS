@@ -16,7 +16,7 @@ class GenericPropertiesInfo : public AbstractXmlInfo
 		virtual ~GenericPropertiesInfo() = default;
 		
 		bool isEmpty() const;
-		void addProperty(const QString &name, QVariant v);
+		void setProperty(const QString &name, QVariant v);
 		bool removeProperty(const QString &name);
 		bool contains(const QString &name);
 		bool contains(const QStringList &names);

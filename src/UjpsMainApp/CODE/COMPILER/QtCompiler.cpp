@@ -171,10 +171,10 @@ bool QtCompiler::writeSettings()
 {
 	QString settingsFileName = QCoreApplication::applicationDirPath() + "./SETTINGS/QtCompilerSettings.xml";
 	GenericPropertiesInfo settings;
-	settings.addProperty("qtBinaryDirPath",lineQtBinaryDirPath->text());
-	settings.addProperty("mingwBinaryDirPath",lineMingwBinaryDirPath->text());
-	settings.addProperty("debugCompilation",checkDebug->isChecked());
-	settings.addProperty("releaseCompilation",checkRelease->isChecked());
+	settings.setProperty("qtBinaryDirPath",lineQtBinaryDirPath->text());
+	settings.setProperty("mingwBinaryDirPath",lineMingwBinaryDirPath->text());
+	settings.setProperty("debugCompilation",checkDebug->isChecked());
+	settings.setProperty("releaseCompilation",checkRelease->isChecked());
 	if (!settings.isValid()) {return false;}
 	return settings.writeFile(settingsFileName);
 }

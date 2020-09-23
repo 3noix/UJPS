@@ -11,6 +11,7 @@ ApplicationSettings ApplicationSettings::m_instance;
 //  WRITE FILE
 //  PROPERTY
 //  SET PROPERTY
+//  REMOVE PROPERTY
 //  CONTAINS
 //  IS EMPTY
 ///////////////////////////////////////////////////////////////////////////////
@@ -43,9 +44,14 @@ QVariant ApplicationSettings::property(const QString &name)
 // SET PROPERTY ///////////////////////////////////////////////////////////////
 bool ApplicationSettings::setProperty(const QString &name, const QVariant &value)
 {
-	//if (!m_settings.contains(name)) {return false;}
-	m_settings.addProperty(name,value);
+	m_settings.setProperty(name,value);
 	return true;
+}
+
+// REMOVE PROPERTY ////////////////////////////////////////////////////////////
+bool ApplicationSettings::removeProperty(const QString &name)
+{
+	return m_settings.removeProperty(name);
 }
 
 // CONTAINS ///////////////////////////////////////////////////////////////////
