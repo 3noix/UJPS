@@ -116,6 +116,7 @@ QString RemoteJoystickServer::url() const
 bool RemoteJoystickServer::listen(QString *errorMessage)
 {
 	if (!m_httpServer) {m_httpServer = new QHttpServer{};}
+	//if (!m_httpServer && !m_resourcesPath.isEmpty()) {m_httpServer = new QHttpServer{};}
 	if (!m_wsServer)
 	{
 		m_wsServer = new QWebSocketServer{m_name,QWebSocketServer::NonSecureMode};
@@ -123,12 +124,15 @@ bool RemoteJoystickServer::listen(QString *errorMessage)
 	}
 	
 	// http routing for files (typically html, css, js, images, ...)
-	m_httpServer->route("/", [this] () {
-		return QHttpServerResponse::fromFile(m_resourcesPath + "/gui.html");
-	});
-	m_httpServer->route("/<arg>", [this] (const QString &fileName) {
-		return QHttpServerResponse::fromFile(m_resourcesPath + "/" + fileName);
-	});
+	//if (m_httpServer)
+	//{
+		m_httpServer->route("/", [this] () {
+			return QHttpServerResponse::fromFile(m_resourcesPath + "/index.html");
+		});
+		m_httpServer->route("/<arg>", [this] (const QString &fileName) {
+			return QHttpServerResponse::fromFile(m_resourcesPath + "/" + fileName);
+		});
+	//}
 	
 	// start the servers
 	if (!m_httpServer->listen(QHostAddress::Any,m_httpPort))
@@ -153,7 +157,8 @@ void RemoteJoystickServer::close()
 	{
 		// the destruction of the QHttpServer close the connections...
 		// QHttpServer does not provide a "close" function!
-		delete m_httpServer;
+		//delete m_httpServer;
+		m_httpServer->deleteLater();
 		m_httpServer = nullptr;
 	}
 	

@@ -17,7 +17,7 @@ class RemoteJoystickServer : public QObject, public AbstractRealJoystick
 	
 	
 	public:
-		RemoteJoystickServer(const QString &name, quint16 httpPort, quint16 wsPort, uint id, const QString &resourcesPath);
+		RemoteJoystickServer(const QString &name, quint16 httpPort, quint16 wsPort, uint id, const QString &resourcesPath = QString{});
 		RemoteJoystickServer(const RemoteJoystickServer &other) = delete;
 		RemoteJoystickServer(RemoteJoystickServer &&other) = delete;
 		RemoteJoystickServer& operator=(const RemoteJoystickServer &other) = delete;

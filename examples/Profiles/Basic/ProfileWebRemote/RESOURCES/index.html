@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="remote.css"/>
+	<title>Web GUI test</title>
+	<script src="remote.js" defer></script>
+</head>
+<body>
+	<form class="connection-widget">
+		<label for="pcIpAdress">PC IP adress:</label>
+		<input type="text" id="pcIpAdress" value="192.168.1.40" autofocus autocomplete="off">
+		<label for="">WS port:</label>
+		<input type="text" id="wsPort" value="54322" autocomplete="off">
+		<button type="submit">Connect</button>
+	</form>
+	<div class="haze"></div>
+	<div class="container">
+		<div class="buttons">
+			<button type="button" data-type="button" data-number="0">1</button>
+			<button type="button" data-type="button" data-number="1">2</button>
+			<button type="button" data-type="button" data-number="2">3</button>
+			<button type="button" data-type="button" data-number="3">4</button>
+			<button type="button" data-type="button" data-number="4">5</button>
+		</div>
+		<input type="range" min="0" max="1000" data-type="axis" data-number="0">
+		<input type="range" min="0" max="1000" data-type="axis" data-number="1">
+	</div>
+</body>
+</html>

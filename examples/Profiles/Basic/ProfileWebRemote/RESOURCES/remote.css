@@ -1,0 +1,154 @@
+* {
+  -ms-touch-action: manipulation;
+      touch-action: manipulation;
+  /* touch-action: none; */
+  margin: 0;
+  padding: 0;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+html, body {
+  width: 100vw;
+  height: 100vh;
+}
+
+body {
+  padding: 20px;
+}
+
+form.connection-widget {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 35px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 2;
+  -webkit-transform: none;
+          transform: none;
+}
+
+form.connection-widget label {
+  margin-left: 10px;
+  margin-right: 5px;
+  color: white;
+}
+
+form.connection-widget input {
+  background: none;
+  height: 22px;
+  border: 1px solid white;
+  border-radius: 5px;
+  padding: 2px;
+  color: white;
+}
+
+form.connection-widget button {
+  background: none;
+  height: 22px;
+  border: 1px solid white;
+  border-radius: 5px;
+  color: white;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin-left: 10px;
+}
+
+form.connection-widget.connected {
+  -webkit-transform: translateY(-35px);
+          transform: translateY(-35px);
+  -webkit-transition: 0.5s;
+  transition: 0.5s;
+}
+
+.haze {
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1;
+  opacity: 1;
+}
+
+.haze.connected {
+  z-index: -1;
+  opacity: 0;
+  -webkit-transition: 0.5s;
+  transition: 0.5s;
+}
+
+.container {
+  width: 100%;
+  height: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: space-evenly;
+      -ms-flex-pack: space-evenly;
+          justify-content: space-evenly;
+  -webkit-box-align: start;
+      -ms-flex-align: start;
+          align-items: flex-start;
+}
+
+.buttons {
+  width: 400px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+button[type=button] {
+  width: 50px;
+  height: 50px;
+  border-radius: 100px;
+  background: blue;
+  color: white;
+  border: none;
+  font-weight: bold;
+  font-size: 1.5em;
+  cursor: pointer;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+
+button[type=button]:active {
+  background: red;
+}
+
+input[type=range] {
+  width: 400px;
+  background: blue;
+}
