@@ -59,7 +59,7 @@ AbstractProfileTarget::AbstractProfileTarget() : AbstractProfile{}, m_eventsQueu
 
 AbstractProfileTarget::~AbstractProfileTarget()
 {
-	this->UnmapAll();
+	this->stop();
 }
 
 // PLAY ///////////////////////////////////////////////////////////////////////

@@ -8,7 +8,7 @@
 
 
 ///////////////////////////////////////////////////////////////////////////////
-//  CONSTRUCTEUR
+//  CONSTRUCTEUR ET DESTRUCTEUR
 //  PLAY
 //  STOP
 //  RUN
@@ -21,10 +21,15 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 
-// CONSTRUCTEUR ///////////////////////////////////////////////////////////////
+// CONSTRUCTEUR ET DESTRUCTEUR ////////////////////////////////////////////////
 AbstractProfileBasic::AbstractProfileBasic() : AbstractProfile{}
 {
 	m_bFirstStep = true;
+}
+
+AbstractProfileBasic::~AbstractProfileBasic()
+{
+	this->stop();
 }
 
 // PLAY ///////////////////////////////////////////////////////////////////////
@@ -71,13 +76,8 @@ void AbstractProfileBasic::run()
 // IS INIT COMPLETE ///////////////////////////////////////////////////////////
 bool AbstractProfileBasic::isInitComplete() const
 {
-	for (RemoteJoystickServer *rjs : m_remoteJoysticks)
-	{
-		if (!rjs->isConnected())
-		{return false;}
-	}
-	
-	return true;
+	auto isConnected = [] (RemoteJoystickServer *rjs) {return rjs->isConnected();};
+	return std::all_of(m_remoteJoysticks.begin(),m_remoteJoysticks.end(),isConnected);
 }
 
 

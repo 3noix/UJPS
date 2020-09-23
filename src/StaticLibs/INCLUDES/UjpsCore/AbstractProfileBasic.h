@@ -19,7 +19,7 @@ class AbstractProfileBasic : public AbstractProfile
 		AbstractProfileBasic(AbstractProfileBasic &&other) = delete;
 		AbstractProfileBasic& operator=(const AbstractProfileBasic &other) = delete;
 		AbstractProfileBasic& operator=(AbstractProfileBasic &&other) = delete;
-		virtual ~AbstractProfileBasic() = default;
+		virtual ~AbstractProfileBasic();
 		
 		// public functions (called by the window only)
 		virtual bool play() override;					// executed when clicking "play"
