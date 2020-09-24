@@ -13,9 +13,14 @@ Makefile.Debug
 Makefile.Release
 .qmake.stash
 bin/AxesCurvesSettings.xml
+bin/AxesCurvesSettings.json
 bin/ControllersInfoSettings.xml
+bin/ControllersInfoSettings.json
 bin/MonitoringSettings.xml
+bin/MonitoringSettings.json
 bin/UjpsSettings.xml
+bin/UjpsSettings.json
 bin/QtCompilerSettings.xml
+bin/QtCompilerSettings.json
 examples
 .vscode

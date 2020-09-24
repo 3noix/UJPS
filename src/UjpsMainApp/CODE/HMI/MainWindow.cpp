@@ -58,16 +58,14 @@
 MainWindow::MainWindow(QString proFilePath, int dtms, bool bPlay, QWidget *parent) : QMainWindow{parent}
 {
 	// read settings
-	ApplicationSettings& settings = ApplicationSettings::instance();
-	settings.readFile();
-	//bool bUseVJoyConfigBinary = settings.property("bUseVJoyConfigBinary").toBool();
-	//QString vJoyConfigBinary = settings.property("vJoyConfigBinary").toString();
-	//VirtualJoystick::setVJoyConfigOptions(bUseVJoyConfigBinary,vJoyConfigBinary);
-	bool bUseStartingProfilePath = settings.property("bUseStartingProfilePath").toBool();
-	QString startingProfile = settings.property("startingProfilePath").toString();
-	bool bUseDefaultTimeStep = settings.property("bUseDefaultTimeStep").toBool();
-	int defaultTimeStep = settings.property("defaultTimeStep").toInt();
-	bool bWhiteList = settings.property("bWhiteListPid").toBool();
+	ApplicationSettings::readFile();
+	QJsonObject &settings = ApplicationSettings::getSettings();
+	
+	bool bUseStartingProfilePath = settings["bUseStartingProfilePath"].toBool();
+	QString startingProfile = settings["startingProfilePath"].toString();
+	bool bUseDefaultTimeStep = settings["bUseDefaultTimeStep"].toBool();
+	int defaultTimeStep = settings["defaultTimeStep"].toInt();
+	bool bWhiteList = settings["bWhiteListPid"].toBool();
 	
 	// init
 	m_proFilePath = "";
@@ -131,8 +129,8 @@ MainWindow::MainWindow(QString proFilePath, int dtms, bool bPlay, QWidget *paren
 MainWindow::~MainWindow()
 {
 	// write settings
-	ApplicationSettings& settings = ApplicationSettings::instance();
-	if (!settings.isEmpty()) {settings.writeFile();}
+	QJsonObject& settings = ApplicationSettings::getSettings();
+	if (!settings.isEmpty()) {ApplicationSettings::writeFile();}
 }
 
 

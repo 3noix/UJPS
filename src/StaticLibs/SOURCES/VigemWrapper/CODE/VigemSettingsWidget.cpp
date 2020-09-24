@@ -121,8 +121,8 @@ void VigemSettingsWidget::addWhiteListWidgets()
 	layoutWhiteList->addWidget(boxWhiteList);
 	layoutWhiteList->addStretch();
 	
-	ApplicationSettings& settings = ApplicationSettings::instance();
-	bool bChecked = settings.property("bWhiteListPid").toBool();
+	QJsonObject& settings = ApplicationSettings::getSettings();
+	bool bChecked = settings["bWhiteListPid"].toBool();
 	
 	if (bChecked) {boxWhiteList->setCheckState(Qt::Checked);}
 	else {boxWhiteList->setCheckState(Qt::Unchecked);}
@@ -145,8 +145,8 @@ void VigemSettingsWidget::buttonOkClicked()
 	bool bWhiteList = (boxWhiteList->checkState() == Qt::Checked);
 	
 	// settings
-	ApplicationSettings& settings = ApplicationSettings::instance();
-	settings.setProperty("bWhiteListPid",bWhiteList);
+	QJsonObject& settings = ApplicationSettings::getSettings();
+	settings["bWhiteListPid"] = bWhiteList;
 	
 	// white or black list the pid
 	if (m_vigemInterface.vigemIsReady())
@@ -159,7 +159,6 @@ void VigemSettingsWidget::buttonOkClicked()
 // BUTTON CANCEL CLICKED //////////////////////////////////////////////////////
 void VigemSettingsWidget::buttonCancelClicked()
 {
-	
 }
 
 

@@ -1,9 +1,9 @@
 #include "GeneralSettingsWidget.h"
 #include "ApplicationSettings.h"
 #include "otherFunctions.h"
-#include "XML/GenericPropertiesInfo.h"
 #include "VirtualEventsQueue.h"
 
+#include <QJsonArray>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QLabel>
@@ -89,14 +89,14 @@ void GeneralSettingsWidget::addDefaultDirWidgets()
 	layoutDefDir->addWidget(radioDefDirFixed);
 	layoutDefDir->addWidget(lineDefDir);
 	
-	ApplicationSettings& settings = ApplicationSettings::instance();
-	QStringList list = GenericPropertiesInfo::qvariant2qstringlist(settings.property("defaultDirectory"));
-	if (list.size() == 2)
+	QJsonObject &settings = ApplicationSettings::getSettings();
+	QJsonArray array = settings["defaultDirectory"].toArray();
+	if (array.size() == 2)
 	{
-		if (list[0] == "Previous") {radioDefDirPrevious->setChecked(true);}
+		if (array[0].toString() == "Previous") {radioDefDirPrevious->setChecked(true);}
 		else {radioDefDirFixed->setChecked(true);}
 		
-		lineDefDir->setText(list[1]);
+		lineDefDir->setText(array[1].toString());
 	}
 	else
 	{
@@ -118,9 +118,9 @@ void GeneralSettingsWidget::addStartingProfileWidgets()
 	layoutStartingProfile->addWidget(lineStartingProfile);
 	layoutStartingProfile->addWidget(buttonStartingProfile);
 	
-	ApplicationSettings& settings = ApplicationSettings::instance();
-	bool bEnable = settings.property("bUseStartingProfilePath").toBool();
-	QString startingProfile = settings.property("startingProfilePath").toString();
+	QJsonObject &settings = ApplicationSettings::getSettings();
+	bool bEnable = settings["bUseStartingProfilePath"].toBool();
+	QString startingProfile = settings["startingProfilePath"].toString();
 	
 	if (bEnable) {boxUseStartingProfile->setCheckState(Qt::Checked);}
 	else {boxUseStartingProfile->setCheckState(Qt::Unchecked);}
@@ -146,9 +146,9 @@ void GeneralSettingsWidget::addDefaultTimeStepWidget()
 	layoutDefTimeStep->addWidget(spinboxDefTimeStep);
 	layoutDefTimeStep->addStretch();
 	
-	ApplicationSettings& settings = ApplicationSettings::instance();
-	bool bEnable = settings.property("bUseDefaultTimeStep").toBool();
-	int defaultTimeStep = settings.property("defaultTimeStep").toInt();
+	QJsonObject &settings = ApplicationSettings::getSettings();
+	bool bEnable = settings["bUseDefaultTimeStep"].toBool();
+	int defaultTimeStep = settings["defaultTimeStep"].toInt();
 	
 	if (bEnable) {checkboxDefTimeStep->setCheckState(Qt::Checked);}
 	else {checkboxDefTimeStep->setCheckState(Qt::Unchecked);}
@@ -184,23 +184,21 @@ QString GeneralSettingsWidget::tabName() const
 // BUTTON OK CLICKED //////////////////////////////////////////////////////////
 void GeneralSettingsWidget::buttonOkClicked()
 {
-	ApplicationSettings& settings = ApplicationSettings::instance();
+	QJsonObject &settings = ApplicationSettings::getSettings();
 	
 	// default directory
-	QVariant mode = QString{"Fixed"};
-	if (radioDefDirPrevious->isChecked()) {mode = QString("Previous");}
-	QVariant path = lineDefDir->text().replace("\\","/");
-	QList<QVariant> vlist;
-	vlist << mode << path;
-	settings.setProperty("defaultDirectory",QVariant(vlist));
+	QString mode = (radioDefDirPrevious->isChecked() ? "Previous" : "Fixed");
+	QString path = lineDefDir->text().replace("\\","/");
+	QJsonArray array{mode,path};
+	settings["defaultDirectory"] = array;
 	
 	// starting profile
-	settings.setProperty("bUseStartingProfilePath",boxUseStartingProfile->checkState()==Qt::Checked);
-	settings.setProperty("startingProfilePath",lineStartingProfile->text());
+	settings["bUseStartingProfilePath"] = (boxUseStartingProfile->checkState() == Qt::Checked);
+	settings["startingProfilePath"] = lineStartingProfile->text();
 	
 	// default time step
-	settings.setProperty("bUseDefaultTimeStep",checkboxDefTimeStep->checkState()==Qt::Checked);
-	settings.setProperty("defaultTimeStep",spinboxDefTimeStep->value());
+	settings["bUseDefaultTimeStep"] = (checkboxDefTimeStep->checkState() == Qt::Checked);
+	settings["defaultTimeStep"] = spinboxDefTimeStep->value();
 	
 	// output repeater
 	VirtualEventsQueue::setInputRepeaterEnabled(checkboxInputRepeater->checkState()==Qt::Checked);
@@ -209,7 +207,6 @@ void GeneralSettingsWidget::buttonOkClicked()
 // BUTTON CANCEL CLICKED //////////////////////////////////////////////////////
 void GeneralSettingsWidget::buttonCancelClicked()
 {
-	
 }
 
 
@@ -228,8 +225,8 @@ void GeneralSettingsWidget::slotStartingProfileStateChanged(int checkState)
 // SLOT STARTING PROFILE BROWSE ///////////////////////////////////////////////
 void GeneralSettingsWidget::slotStartingProfileBrowse()
 {
-	ApplicationSettings& settings = ApplicationSettings::instance();
-	QString dir = dirName(settings.property("startingProfilePath").toString());
+	QJsonObject& settings = ApplicationSettings::getSettings();
+	QString dir = dirName(settings["startingProfilePath"].toString());
 	
 	QString fileSelected = QFileDialog::getOpenFileName(this,"Starting profile path",dir,"*.pro");
 	if (fileSelected == "") {return;}

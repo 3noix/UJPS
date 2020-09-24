@@ -44,8 +44,7 @@ SettingsDialog::SettingsDialog(QWidget *parent) : QDialog{parent}
 void SettingsDialog::slotBoutonOk()
 {
 	for (AbstractSettingsWidget *w : settingsWidgets) {w->buttonOkClicked();}
-	ApplicationSettings& settings = ApplicationSettings::instance();
-	settings.writeFile();
+	ApplicationSettings::writeFile();
 	this->accept();
 }
 

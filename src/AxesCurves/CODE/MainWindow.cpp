@@ -58,9 +58,9 @@
 MainWindow::MainWindow(QWidget *parent) : QMainWindow{parent}
 {
 	// read settings
-	ApplicationSettings& settings = ApplicationSettings::instance();
-	settings.readFile();
-	bool bWhiteList = settings.property("bWhiteListPid").toBool();
+	ApplicationSettings::readFile();
+	QJsonObject &settings = ApplicationSettings::getSettings();
+	bool bWhiteList = settings["bWhiteListPid"].toBool();
 	
 	m_currentJoystick = nullptr;
 	m_axis = 0;
@@ -97,8 +97,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow{parent}
 MainWindow::~MainWindow()
 {
 	// write settings
-	ApplicationSettings& settings = ApplicationSettings::instance();
-	if (!settings.isEmpty()) {settings.writeFile();}
+	QJsonObject& settings = ApplicationSettings::getSettings();
+	if (!settings.isEmpty()) {ApplicationSettings::writeFile();}
 	
 	// remove this application from the white list
 	// (to avoid to pollute the white list with many invalid pids)

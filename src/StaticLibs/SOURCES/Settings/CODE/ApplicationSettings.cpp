@@ -1,68 +1,52 @@
 #include "ApplicationSettings.h"
 #include <QCoreApplication>
-ApplicationSettings ApplicationSettings::m_instance;
+#include <QJsonDocument>
+#include <QFile>
+
+QJsonObject settings;
 
 
 ///////////////////////////////////////////////////////////////////////////////
 // RESUME :
 //
-//  INSTANCE
+//  GET SETTINGS
 //  READ FILE
 //  WRITE FILE
-//  PROPERTY
-//  SET PROPERTY
-//  REMOVE PROPERTY
-//  CONTAINS
-//  IS EMPTY
 ///////////////////////////////////////////////////////////////////////////////
 
 
-// INSTANCE ///////////////////////////////////////////////////////////////////
-ApplicationSettings& ApplicationSettings::instance()
+namespace ApplicationSettings {
+// GET SETTINGS ///////////////////////////////////////////////////////////////
+QJsonObject& getSettings()
 {
-	return m_instance;
+	return settings;
 }
 
 // READ FILE //////////////////////////////////////////////////////////////////
-bool ApplicationSettings::readFile()
+bool readFile()
 {
-	return m_settings.readFile(QCoreApplication::applicationDirPath() + "/" + QCoreApplication::applicationName() + "Settings.xml");
-}
-
-// WRITE FILE /////////////////////////////////////////////////////////////////
-bool ApplicationSettings::writeFile()
-{
-	return m_settings.writeFile(QCoreApplication::applicationDirPath() + "/" + QCoreApplication::applicationName() + "Settings.xml");
-}
-
-// PROPERTY ///////////////////////////////////////////////////////////////////
-QVariant ApplicationSettings::property(const QString &name)
-{
-	return m_settings.property(name);
-}
-
-// SET PROPERTY ///////////////////////////////////////////////////////////////
-bool ApplicationSettings::setProperty(const QString &name, const QVariant &value)
-{
-	m_settings.setProperty(name,value);
+	QString filePath = QCoreApplication::applicationDirPath() + "/" + QCoreApplication::applicationName() + "Settings.json";
+	QFile file{filePath};
+	if (!file.open(QIODevice::ReadOnly)) {return false;}
+	QByteArray data = file.readAll();
+	file.close();
+	
+	QJsonDocument jsonDoc = QJsonDocument::fromJson(data);
+	if (!jsonDoc.isObject()) {return false;}
+	settings = jsonDoc.object();
 	return true;
 }
 
-// REMOVE PROPERTY ////////////////////////////////////////////////////////////
-bool ApplicationSettings::removeProperty(const QString &name)
+// WRITE FILE /////////////////////////////////////////////////////////////////
+bool writeFile()
 {
-	return m_settings.removeProperty(name);
+	QJsonDocument jsonDoc{settings};
+	QString filePath = QCoreApplication::applicationDirPath() + "/" + QCoreApplication::applicationName() + "Settings.json";
+	QFile file{filePath};
+	if (!file.open(QIODevice::WriteOnly)) {return false;}
+	qint64 bytesWritten = file.write(jsonDoc.toJson());
+	file.close();
+	return (bytesWritten > 0);
 }
-
-// CONTAINS ///////////////////////////////////////////////////////////////////
-bool ApplicationSettings::contains(const QString &name)
-{
-	return m_settings.contains(name);
-}
-
-// IS EMPTY ///////////////////////////////////////////////////////////////////
-bool ApplicationSettings::isEmpty() const
-{
-	return m_settings.isEmpty();
 }
 

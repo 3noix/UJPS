@@ -1,8 +1,9 @@
 #include "QtCompiler.h"
 #include "QtCompilationProcess.h"
-#include "XML/GenericPropertiesInfo.h"
 
 #include <QCoreApplication>
+#include <QJsonDocument>
+#include <QJsonObject>
 #include <QGroupBox>
 #include <QGridLayout>
 #include <QLabel>
@@ -150,32 +151,40 @@ void QtCompiler::createWidget()
 bool QtCompiler::readSettings()
 {
 	// read settings
-	QString settingsFileName = QCoreApplication::applicationDirPath() + "/../SETTINGS/QtCompilerSettings.xml";
-	GenericPropertiesInfo settings{settingsFileName};
-	if (settings.fileError()) {return false;}
+	QFile file{QCoreApplication::applicationDirPath() + "/QtCompilerSettings.json"};
+	if (!file.open(QIODevice::ReadOnly)) {return false;}
+	QJsonDocument jsonDoc = QJsonDocument::fromJson(file.readAll());
+	file.close();
+	if (!jsonDoc.isObject()) {return false;}
+	QJsonObject settings = jsonDoc.object();
 	
 	// on vérifie que toutes les propriétés sont là
-	QStringList properties{"qtBinaryDirPath", "mingwBinaryDirPath", "debugCompilation", "releaseCompilation"};
-	if (!settings.contains(properties)) {return false;}
+	if (!settings.contains("qtBinaryDirPath"))    {return false;}
+	if (!settings.contains("mingwBinaryDirPath")) {return false;}
+	if (!settings.contains("debugCompilation"))   {return false;}
+	if (!settings.contains("releaseCompilation")) {return false;}
 	
 	// application des réglages
-	lineQtBinaryDirPath->setText(settings.property("qtBinaryDirPath").toString());
-	lineMingwBinaryDirPath->setText(settings.property("mingwBinaryDirPath").toString());
-	checkDebug->setChecked(settings.property("debugCompilation").toBool());
-	checkRelease->setChecked(settings.property("releaseCompilation").toBool());
+	lineQtBinaryDirPath->setText(settings["qtBinaryDirPath"].toString());
+	lineMingwBinaryDirPath->setText(settings["mingwBinaryDirPath"].toString());
+	checkDebug->setChecked(settings["debugCompilation"].toBool());
+	checkRelease->setChecked(settings["releaseCompilation"].toBool());
 	return true;
 }
 
 // WRITE SETTINGS /////////////////////////////////////////////////////////////
 bool QtCompiler::writeSettings()
 {
-	QString settingsFileName = QCoreApplication::applicationDirPath() + "./SETTINGS/QtCompilerSettings.xml";
-	GenericPropertiesInfo settings;
-	settings.setProperty("qtBinaryDirPath",lineQtBinaryDirPath->text());
-	settings.setProperty("mingwBinaryDirPath",lineMingwBinaryDirPath->text());
-	settings.setProperty("debugCompilation",checkDebug->isChecked());
-	settings.setProperty("releaseCompilation",checkRelease->isChecked());
-	if (!settings.isValid()) {return false;}
-	return settings.writeFile(settingsFileName);
+	QJsonObject settings;
+	settings["qtBinaryDirPath"] = lineQtBinaryDirPath->text();
+	settings["mingwBinaryDirPath"] = lineMingwBinaryDirPath->text();
+	settings["debugCompilation"] = checkDebug->isChecked();
+	settings["releaseCompilation"] = checkRelease->isChecked();
+	
+	QFile file{QCoreApplication::applicationDirPath() + "/QtCompilerSettings.json"};
+	if (!file.open(QIODevice::WriteOnly)) {return false;}
+	qint64 bytesWritten = file.write(QJsonDocument{settings}.toJson());
+	file.close();
+	return (bytesWritten > 0);
 }
 

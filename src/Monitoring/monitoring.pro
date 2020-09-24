@@ -12,7 +12,7 @@ CONFIG += c++17
 DESTDIR = ../../bin
 OBJECTS_DIR = $$MODE/objects
 MOC_DIR = $$MODE/moc
-QT += core gui widgets charts xmlpatterns network
+QT += widgets charts network
 
 
 win32-g++:LIBS += ../StaticLibs/SOURCES/Settings/$$MODE/libsettings.a

@@ -1,5 +1,0 @@
-<!DOCTYPE RCC><RCC version="1.0">
-<qresource prefix="xsd">
-	<file alias="genericProperties.xsd">../../../Resources/Other/genericProperties.xsd</file>
-</qresource>
-</RCC>

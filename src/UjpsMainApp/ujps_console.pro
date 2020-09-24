@@ -12,7 +12,7 @@ CONFIG += c++17 console
 DESTDIR = ../../bin
 OBJECTS_DIR = $$MODE/objects
 MOC_DIR = $$MODE/moc
-QT = core gui xmlpatterns network
+QT = core gui network
 DEFINES -= QT_NO_DEBUG
 
 

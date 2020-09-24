@@ -29,9 +29,9 @@
 MainWindow::MainWindow(QWidget *parent) : QMainWindow{parent}
 {
 	// read settings
-	ApplicationSettings& settings = ApplicationSettings::instance();
-	settings.readFile();
-	bool bWhiteList = settings.property("bWhiteListPid").toBool();
+	ApplicationSettings::readFile();
+	QJsonObject& settings = ApplicationSettings::getSettings();
+	bool bWhiteList = settings["bWhiteListPid"].toBool();
 	
 	// widgets
 	this->createActions();
@@ -57,8 +57,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow{parent}
 MainWindow::~MainWindow()
 {
 	// write settings
-	ApplicationSettings& settings = ApplicationSettings::instance();
-	if (!settings.isEmpty()) {settings.writeFile();}
+	QJsonObject& settings = ApplicationSettings::getSettings();
+	if (!settings.isEmpty()) {ApplicationSettings::writeFile();}
 	
 	// remove this application from the white list
 	// (to avoid to pollute the white list with many invalid pids)
@@ -185,8 +185,8 @@ void MainWindow::setData(const std::vector<GameController*> joysticks)
 	}
 	
 	// an additional column only if we white-list this app
-	ApplicationSettings& settings = ApplicationSettings::instance();
-	bool bVigemColumn = settings.property("bWhiteListPid").toBool();
+	QJsonObject &settings = ApplicationSettings::getSettings();
+	bool bVigemColumn = settings["bWhiteListPid"].toBool();
 	
 	// populate the grid
 	this->createHeaders(bVigemColumn);
