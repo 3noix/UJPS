@@ -1,4 +1,4 @@
-#include "MicrosoftXbox360Gamepad.h"
+#include "MicrosoftXboxController.h"
 #include "GameController.h"
 #include "Lim.h"
 #include <XInput.h>
@@ -30,7 +30,7 @@
 
 
 // CONSTRUCTEUR ET DESTRUCTEUR/////////////////////////////////////////////////
-MicrosoftXbox360Gamepad::MicrosoftXbox360Gamepad(GameController *c) : RealJoystick{c}
+MicrosoftXboxController::MicrosoftXboxController(GameController *c) : RealJoystick{c}
 {
 	m_leftMotorSpeed = 0;
 	m_rightMotorSpeed = 0;
@@ -45,14 +45,14 @@ MicrosoftXbox360Gamepad::MicrosoftXbox360Gamepad(GameController *c) : RealJoysti
 	
 	m_povsNames << "DPAD";
 	
-	this->addVirtualPov(MicrosoftXbox360Gamepad_::DPADU,
-						MicrosoftXbox360Gamepad_::DPADR,
-						MicrosoftXbox360Gamepad_::DPADD,
-						MicrosoftXbox360Gamepad_::DPADL,
+	this->addVirtualPov(MicrosoftXboxController_::DPADU,
+						MicrosoftXboxController_::DPADR,
+						MicrosoftXboxController_::DPADD,
+						MicrosoftXboxController_::DPADL,
 						"DPAD");
 }
 
-MicrosoftXbox360Gamepad::~MicrosoftXbox360Gamepad()
+MicrosoftXboxController::~MicrosoftXboxController()
 {
 	this->setData("LEFT_MOTOR_SPEED",0.0);
 	this->setData("RIGHT_MOTOR_SPEED",0.0);
@@ -65,9 +65,9 @@ MicrosoftXbox360Gamepad::~MicrosoftXbox360Gamepad()
 
 
 // DESCRIPTION ////////////////////////////////////////////////////////////////
-QString MicrosoftXbox360Gamepad::description() const
+QString MicrosoftXboxController::description() const
 {
-	return MicrosoftXbox360Gamepad_::Description;
+	return MicrosoftXboxController_::Description;
 }
 
 
@@ -76,13 +76,13 @@ QString MicrosoftXbox360Gamepad::description() const
 
 
 // BUTTONS COUNT ///////////////////////////////////////////////////////////////
-uint MicrosoftXbox360Gamepad::buttonsCount() const
+uint MicrosoftXboxController::buttonsCount() const
 {
 	return 14;
 }
 
 // BUTTON NAME ////////////////////////////////////////////////////////////////
-QString MicrosoftXbox360Gamepad::buttonName(uint button) const
+QString MicrosoftXboxController::buttonName(uint button) const
 {
 	if (button < 14)
 		return m_buttonsNames[button];
@@ -91,7 +91,7 @@ QString MicrosoftXbox360Gamepad::buttonName(uint button) const
 }
 
 // BUTTONS NAMES //////////////////////////////////////////////////////////////
-QStringList MicrosoftXbox360Gamepad::buttonsNames() const
+QStringList MicrosoftXboxController::buttonsNames() const
 {
 	return m_buttonsNames;
 }
@@ -102,13 +102,13 @@ QStringList MicrosoftXbox360Gamepad::buttonsNames() const
 
 
 // AXES COUNT /////////////////////////////////////////////////////////////////
-uint MicrosoftXbox360Gamepad::axesCount() const
+uint MicrosoftXboxController::axesCount() const
 {
 	return 6;
 }
 
 // AXIS NAME //////////////////////////////////////////////////////////////////
-QString MicrosoftXbox360Gamepad::axisName(uint axis) const
+QString MicrosoftXboxController::axisName(uint axis) const
 {
 	if (axis < 6)
 		return m_axesNames[axis];
@@ -117,7 +117,7 @@ QString MicrosoftXbox360Gamepad::axisName(uint axis) const
 }
 
 // AXES NAMES /////////////////////////////////////////////////////////////////
-QStringList MicrosoftXbox360Gamepad::axesNames() const
+QStringList MicrosoftXboxController::axesNames() const
 {
 	return m_axesNames;
 }
@@ -128,13 +128,13 @@ QStringList MicrosoftXbox360Gamepad::axesNames() const
 
 
 // POVS COUNT /////////////////////////////////////////////////////////////////
-uint MicrosoftXbox360Gamepad::povsCount() const
+uint MicrosoftXboxController::povsCount() const
 {
 	return 1;
 }
 
 // POV NAME ///////////////////////////////////////////////////////////////////
-QString MicrosoftXbox360Gamepad::povName(uint pov) const
+QString MicrosoftXboxController::povName(uint pov) const
 {
 	if (pov < 1)
 		return m_povsNames[pov];
@@ -143,7 +143,7 @@ QString MicrosoftXbox360Gamepad::povName(uint pov) const
 }
 
 // POVS NAMES /////////////////////////////////////////////////////////////////
-QStringList MicrosoftXbox360Gamepad::povsNames() const
+QStringList MicrosoftXboxController::povsNames() const
 {
 	return m_povsNames;
 }
@@ -154,7 +154,7 @@ QStringList MicrosoftXbox360Gamepad::povsNames() const
 
 
 // SET DATA ///////////////////////////////////////////////////////////////////
-void MicrosoftXbox360Gamepad::setData(const QString &str, QVariant v)
+void MicrosoftXboxController::setData(const QString &str, QVariant v)
 {
 	if (str == "LEFT_MOTOR_SPEED") // double between 0 and 100% expected
 	{
@@ -173,7 +173,7 @@ void MicrosoftXbox360Gamepad::setData(const QString &str, QVariant v)
 }
 
 // FLUSH //////////////////////////////////////////////////////////////////////
-void MicrosoftXbox360Gamepad::flush()
+void MicrosoftXboxController::flush()
 {
 	if (!m_bFirstWrite && !m_dataModified) {return;}
 	

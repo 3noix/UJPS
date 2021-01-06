@@ -7,7 +7,7 @@ CONFIG(release, debug|release) {
 
 
 TEMPLATE = lib
-TARGET = MicrosoftXbox360Gamepad
+TARGET = MicrosoftXboxController
 CONFIG += c++17 plugin
 DESTDIR = $$MODE
 OBJECTS_DIR = $$MODE/objects
@@ -29,8 +29,8 @@ INCLUDEPATH +=  ../../../StaticLibs/INCLUDES/QtGameControllerModif/ \
 
 
 HEADERS +=  CODE/RealJoystickFactory.h \
-			CODE/MicrosoftXbox360Gamepad.h
+			CODE/MicrosoftXboxController.h
 
 
-SOURCES +=  CODE/MicrosoftXbox360Gamepad.cpp
+SOURCES +=  CODE/MicrosoftXboxController.cpp
 

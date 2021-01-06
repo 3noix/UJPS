@@ -1,26 +1,26 @@
-#ifndef MICROSOFT_XBOX_360_GAMEPAD
-#define MICROSOFT_XBOX_360_GAMEPAD
+#ifndef MICROSOFT_XBOX_CONTROLLER
+#define MICROSOFT_XBOX_CONTROLLER
 
 
 #include "RealJoystick.h"
 class GameController;
 
 #define INSIDE_PLUGIN
-#include "../../../INCLUDES/MicrosoftXbox360Gamepad.h"
+#include "../../../INCLUDES/MicrosoftXboxController.h"
 
 
-class MicrosoftXbox360Gamepad : public RealJoystick
+class MicrosoftXboxController : public RealJoystick
 {
 	Q_OBJECT
 	
 	
 	public:
-		MicrosoftXbox360Gamepad(GameController *c);
-		MicrosoftXbox360Gamepad(const MicrosoftXbox360Gamepad &other) = delete;
-		MicrosoftXbox360Gamepad(MicrosoftXbox360Gamepad &&other) = delete;
-		MicrosoftXbox360Gamepad& operator=(const MicrosoftXbox360Gamepad &other) = delete;
-		MicrosoftXbox360Gamepad& operator=(MicrosoftXbox360Gamepad &&other) = delete;
-		~MicrosoftXbox360Gamepad();
+		MicrosoftXboxController(GameController *c);
+		MicrosoftXboxController(const MicrosoftXboxController &other) = delete;
+		MicrosoftXboxController(MicrosoftXboxController &&other) = delete;
+		MicrosoftXboxController& operator=(const MicrosoftXboxController &other) = delete;
+		MicrosoftXboxController& operator=(MicrosoftXboxController &&other) = delete;
+		~MicrosoftXboxController();
 		
 		QString description() const override final;
 		

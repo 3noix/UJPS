@@ -1,5 +1,5 @@
-#ifndef MICROSOFT_XBOX360_GAMEPAD_
-#define MICROSOFT_XBOX360_GAMEPAD_
+#ifndef MICROSOFT_XBOX_CONTROLLER_
+#define MICROSOFT_XBOX_CONTROLLER_
 
 
 #include <QString>
@@ -7,12 +7,12 @@ using uint = unsigned int;
 
 
 #ifndef INSIDE_PLUGIN
-namespace MicrosoftXbox360Gamepad
+namespace MicrosoftXboxController
 #else
-namespace MicrosoftXbox360Gamepad_
+namespace MicrosoftXboxController_
 #endif
 {
-	const QString Description = "Controller (XBOX 360 For Windows)";
+	const QString Description = "XBOX controller";
 	
 	const uint DPADU = 0;		// D-Pad up (POV up)
 	const uint DPADR = 1;		// D-Pad right (POV right)

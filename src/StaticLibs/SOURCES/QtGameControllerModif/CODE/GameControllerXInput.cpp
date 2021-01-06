@@ -69,7 +69,7 @@ float GameControllerXInput::shortToFloat(SHORT s)
 
 
 // DESCRIPTION ////////////////////////////////////////////////////////////////
-QString GameControllerXInput::description() {return "Controller (XBOX 360 For Windows)";}
+QString GameControllerXInput::description() {return "XBOX controller";}
 // HARDWARE ID ////////////////////////////////////////////////////////////////
 QString GameControllerXInput::hardwareId() {return {};}
 // ID /////////////////////////////////////////////////////////////////////////

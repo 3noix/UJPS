@@ -24,7 +24,7 @@ std::vector<GameController*> GameControllerEnumerator::enumerateControllers(QObj
 	for (uint i=0; i<NB_JOYSTICKS_MAX_DIRECTINPUT; ++i)
 	{
 		GameController *j = new GameControllerDirectInput{i,parent};
-		bool bIgnore = (bUseXInput && j->description() == "Controller (XBOX 360 For Windows)");
+		bool bIgnore = (bUseXInput && j->description().toLower().contains("xbox"));
 		if (j->isValid() && !bIgnore) {controllers.push_back(j);}
 		else {delete j;}
 	}
@@ -73,7 +73,7 @@ GameController* GameControllerEnumerator::nextController(QObject *parent)
 		for (uint i=m_indexDirectInput; i<NB_JOYSTICKS_MAX_DIRECTINPUT; ++i)
 		{
 			GameController *j = new GameControllerDirectInput{i,parent};
-			bool bIgnore = (bUseXInput && j->description() == "Controller (XBOX 360 For Windows)");
+			bool bIgnore = (bUseXInput && j->description().toLower().contains("xbox"));
 			++m_indexDirectInput;
 			
 			if (j->isValid() && !bIgnore) {return j;}
