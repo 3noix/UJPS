@@ -118,6 +118,10 @@ void StandardJoystickWidgetRaw::setupWidget()
 // INIT STATE /////////////////////////////////////////////////////////////////
 void StandardJoystickWidgetRaw::initState()
 {
+	// a raw GameController (not embedded in a real joystick) must be read one time
+	// before fetching the joystick values, otherwise it crashes
+	m_joystick->readGameController();
+
 	for (uint axis=0; axis<m_joystick->axesCount(); ++axis)
 		boxAxes->slotSetValue(axis,m_joystick->axisValue(axis));
 	
