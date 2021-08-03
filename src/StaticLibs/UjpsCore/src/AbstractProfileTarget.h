@@ -6,7 +6,7 @@
 #include <QVector>
 #include <vector>
 #include <map>
-#include "../../../RealJoysticks/src/JoystickChange.h"
+#include "../../RealJoysticks/src/JoystickChange.h"
 #include "MappingModifRequest.h"
 #include "LAYERS/LayerCalculator.h"
 #include "LAYERS/LayersCombo.h"

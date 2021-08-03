@@ -15,34 +15,34 @@ MOC_DIR = $$DESTDIR/moc
 QT += widgets websockets
 
 
-INCLUDEPATH += $$(UJPSPATH)/src/ControllersPlugins/INCLUDES
+INCLUDEPATH += $$(UJPSPATH)/src/ControllersPlugins/include
 
 
-HEADERS =   CODE/MfdWidget.h \
-			CODE/DEFAULT/MfdScene.h \
-			CODE/DEFAULT/MfdBezelSegmentH.h \
-			CODE/DEFAULT/MfdBezelSegmentV.h \
-			CODE/DEFAULT/MfdBezelCorner1.h \
-			CODE/DEFAULT/MfdBezelCorner2.h \
-			CODE/DEFAULT/MfdSquareButton.h \
-			CODE/DEFAULT/MfdRectangularButton.h \
-			CODE/DEFAULT/MfdScreen.h \
-			CODE/DEFAULT/Geometry.h \
-			CODE/DEFAULT/Brushs.h \
-			CODE/REMOTE/ConnectionWidget.h \
-			CODE/REMOTE/RemoteJoystickClient.h
+HEADERS =   src/MfdWidget.h \
+			src/default/MfdScene.h \
+			src/default/MfdBezelSegmentH.h \
+			src/default/MfdBezelSegmentV.h \
+			src/default/MfdBezelCorner1.h \
+			src/default/MfdBezelCorner2.h \
+			src/default/MfdSquareButton.h \
+			src/default/MfdRectangularButton.h \
+			src/default/MfdScreen.h \
+			src/default/Geometry.h \
+			src/default/Brushs.h \
+			src/remote/ConnectionWidget.h \
+			src/remote/RemoteJoystickClient.h
 
 
-SOURCES =   CODE/main.cpp \
-			CODE/MfdWidget.cpp \
-			CODE/DEFAULT/MfdScene.cpp \
-			CODE/DEFAULT/MfdBezelSegmentH.cpp \
-			CODE/DEFAULT/MfdBezelSegmentV.cpp \
-			CODE/DEFAULT/MfdBezelCorner1.cpp \
-			CODE/DEFAULT/MfdBezelCorner2.cpp \
-			CODE/DEFAULT/MfdSquareButton.cpp \
-			CODE/DEFAULT/MfdRectangularButton.cpp \
-			CODE/DEFAULT/MfdScreen.cpp \
-			CODE/REMOTE/ConnectionWidget.cpp \
-			CODE/REMOTE/RemoteJoystickClient.cpp
+SOURCES =   src/main.cpp \
+			src/MfdWidget.cpp \
+			src/default/MfdScene.cpp \
+			src/default/MfdBezelSegmentH.cpp \
+			src/default/MfdBezelSegmentV.cpp \
+			src/default/MfdBezelCorner1.cpp \
+			src/default/MfdBezelCorner2.cpp \
+			src/default/MfdSquareButton.cpp \
+			src/default/MfdRectangularButton.cpp \
+			src/default/MfdScreen.cpp \
+			src/remote/ConnectionWidget.cpp \
+			src/remote/RemoteJoystickClient.cpp
 

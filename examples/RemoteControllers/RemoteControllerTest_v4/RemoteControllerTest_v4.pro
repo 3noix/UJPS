@@ -15,13 +15,13 @@ MOC_DIR = $$DESTDIR/moc
 QT += widgets websockets
 
 
-HEADERS =   CODE/MainWindow.h \
-			CODE/ConnectionWidget.h \
-			CODE/RemoteJoystickClient.h
+HEADERS =   src/MainWindow.h \
+			src/ConnectionWidget.h \
+			src/RemoteJoystickClient.h
 
 
-SOURCES =   CODE/main.cpp \
-			CODE/MainWindow.cpp \
-			CODE/ConnectionWidget.cpp \
-			CODE/RemoteJoystickClient.cpp
+SOURCES =   src/main.cpp \
+			src/MainWindow.cpp \
+			src/ConnectionWidget.cpp \
+			src/RemoteJoystickClient.cpp
 

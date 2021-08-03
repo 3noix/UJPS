@@ -23,11 +23,11 @@ win32-msvc*:LIBS += ../../3rdparty/bin_lib_windows/x64/hid.lib
 win32-msvc*:LIBS += ../../3rdparty/bin_lib_windows/x64/setupapi.lib
 
 
-HEADERS +=  CODE/HidDevice.h \
-			CODE/VigemPidWhiteListerConsole.h
+HEADERS +=  src/HidDevice.h \
+			src/VigemPidWhiteListerConsole.h
 
 
-SOURCES +=  CODE/main.cpp \
-			CODE/HidDevice.cpp \
-			CODE/VigemPidWhiteListerConsole.cpp
+SOURCES +=  src/main.cpp \
+			src/HidDevice.cpp \
+			src/VigemPidWhiteListerConsole.cpp
 
