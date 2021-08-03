@@ -15,25 +15,23 @@ MOC_DIR = $$MODE/moc
 QT += widgets network
 
 
-win32-g++:LIBS += ../StaticLibs/SOURCES/Settings/$$MODE/libsettings.a
-win32-g++:LIBS += ../StaticLibs/SOURCES/VigemWrapper/$$MODE/libvigemWrapper.a
-win32-g++:LIBS += ../StaticLibs/SOURCES/QtGameControllerModif/$$MODE/libQtGameControllerModif.a
+win32-g++:LIBS += ../StaticLibs/Settings/$$MODE/libsettings.a
+win32-g++:LIBS += ../StaticLibs/VigemWrapper/$$MODE/libvigemWrapper.a
+win32-g++:LIBS += ../StaticLibs/QtGameControllerModif/$$MODE/libQtGameControllerModif.a
 
-win32-msvc*:LIBS += ../StaticLibs/SOURCES/Settings/$$MODE/settings.lib
-win32-msvc*:LIBS += ../StaticLibs/SOURCES/VigemWrapper/$$MODE/vigemWrapper.lib
-win32-msvc*:LIBS += ../StaticLibs/SOURCES/QtGameControllerModif/$$MODE/QtGameControllerModif.lib
+win32-msvc*:LIBS += ../StaticLibs/Settings/$$MODE/settings.lib
+win32-msvc*:LIBS += ../StaticLibs/VigemWrapper/$$MODE/vigemWrapper.lib
+win32-msvc*:LIBS += ../StaticLibs/QtGameControllerModif/$$MODE/QtGameControllerModif.lib
 
 		
-INCLUDEPATH +=  ../StaticLibs/INCLUDES/Settings/ \
-				../StaticLibs/INCLUDES/VigemWrapper/ \
-				../StaticLibs/INCLUDES/QtGameControllerModif/
+INCLUDEPATH +=  ../../include
 
 
-HEADERS +=  CODE/MainWindow.h
+HEADERS +=  src/MainWindow.h
 
 
-SOURCES +=  CODE/main.cpp \
-			CODE/MainWindow.cpp
+SOURCES +=  src/main.cpp \
+			src/MainWindow.cpp
 
 
 RESOURCES += resources.qrc

@@ -1,5 +1,5 @@
 cd %~dp0
-cd SOURCES
+cd src
 start cmd.exe /c build_LogitechExtreme3D.bat
 start cmd.exe /c build_LogitechX56Joystick.bat
 start cmd.exe /c build_LogitechX56Throttle.bat

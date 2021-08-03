@@ -21,33 +21,33 @@ cd ..
 
 
 REM compilation and deployment of CleanQtProjects
-cd %~dp0\src\CleanQtProjects
+cd %~dp0\utils\CleanQtProjects
 call build_CleanQtProjects_fct.bat
 cd ../..
 
 
 REM compilation of static lib Settings
-cd src/StaticLibs/SOURCES/Settings
+cd src/StaticLibs/Settings
 call build_Settings_fct.bat
-cd ../../../..
+cd ../../..
 
 
 REM compilation of static lib VigemWrapper
-cd src/StaticLibs/SOURCES/VigemWrapper
+cd src/StaticLibs/VigemWrapper
 call build_VigemWrapper_fct.bat
-cd ../../../..
+cd ../../..
 
 
 REM compilation of static lib QtGameControllerModif
-cd src/StaticLibs/SOURCES/QtGameControllerModif
+cd src/StaticLibs/QtGameControllerModif
 call build_QtGameControllerModif_fct.bat
-cd ../../../..
+cd ../../..
 
 
 REM compilation of static libRealJoysticks
-cd src/StaticLibs/SOURCES/RealJoysticks
+cd src/StaticLibs/RealJoysticks
 call build_RealJoysticks_fct.bat
-cd ../../../..
+cd ../../..
 
 
 REM build in parallel:
@@ -72,15 +72,15 @@ cd ../..
 
 
 REM compilation of static lib VirtualJoysticks
-cd src/StaticLibs/SOURCES/VirtualJoysticks
+cd src/StaticLibs/VirtualJoysticks
 call build_VirtualJoysticks_fct.bat
-cd ../../../..
+cd ../../..
 
 
 REM compilation of static lib UjpsCore
-cd src/StaticLibs/SOURCES/UjpsCore
+cd src/StaticLibs/UjpsCore
 call build_UjpsCore_fct.bat
-cd ../../../..
+cd ../../..
 
 
 REM compilation and deployment of UJPS main app
