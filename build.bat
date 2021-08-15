@@ -5,6 +5,7 @@ REM echo Setting up environment for Qt 5 usage...
 REM set PATH=C:\Qt\5.11.0\mingw53_32\bin;C:\Qt\Tools\mingw530_32\bin;%PATH%
 REM set PATH=E:\Qt5.11\5.11.0\mingw53_32\bin;E:/Qt5.11/Tools/mingw530_32\bin;%PATH%
 echo.
+cd %~dp0
 
 
 REM add the environment variable UJPSPATH
@@ -21,9 +22,20 @@ cd ..
 
 
 REM compilation and deployment of CleanQtProjects
-cd %~dp0\utils\CleanQtProjects
+cd utils/CleanQtProjects
 call build_CleanQtProjects_fct.bat
 cd ../..
+
+
+REM compilation of static lib HttpServer
+cd 3rdparty/HttpServer/src
+echo compiling HttpServer
+echo.
+qmake
+mingw32-make release
+echo.
+echo.
+cd ../../..
 
 
 REM compilation of static lib Settings

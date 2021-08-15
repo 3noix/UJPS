@@ -43,7 +43,7 @@ bool Profile::setupJoysticks()
 	Q_INIT_RESOURCE(resources);
 	
 	emit message("Now connect the remote controller", Qt::black);
-	remote = new RemoteJoystickServer{"remote",54321,54322,100,":/RESOURCES/"};
+	remote = new RemoteJoystickServer{"remote",54321,54322,100,":/resources/"};
 	if (!remote)
 	{
 		emit message("Failed to create remote joystick server!",Qt::red);

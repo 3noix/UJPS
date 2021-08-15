@@ -1,9 +1,10 @@
 #include "RemoteJoystickServer.h"
 #include "ExceptionFailedToConnect.h"
 #include <QNetworkInterface>
-#include <QHttpServer>
+#include "HttpServer.h"
 #include <QWebSocketServer>
 #include <QWebSocket>
+#include <QFile>
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -19,7 +20,7 @@
 //  DATA 2 STRING
 //  FLUSH
 //  SLOT NEW WS CONNECTION
-//  SLOT PROCESS MESSAGE
+//  SLOT PROCESS WS MESSAGE
 //  SLOT WS SOCKET DISCONNECTED
 //
 //  ID
@@ -115,8 +116,13 @@ QString RemoteJoystickServer::url() const
 // LISTEN /////////////////////////////////////////////////////////////////////
 bool RemoteJoystickServer::listen(QString *errorMessage)
 {
-	if (!m_httpServer) {m_httpServer = new QHttpServer{};}
-	//if (!m_httpServer && !m_resourcesPath.isEmpty()) {m_httpServer = new QHttpServer{};}
+	if (!m_httpServer)
+	{
+		HttpServerConfig httpConfig;
+		httpConfig.host = QHostAddress::Any;
+		httpConfig.port = m_httpPort;
+		m_httpServer = new HttpServer{httpConfig};
+	}
 	if (!m_wsServer)
 	{
 		m_wsServer = new QWebSocketServer{m_name,QWebSocketServer::NonSecureMode};
@@ -124,18 +130,37 @@ bool RemoteJoystickServer::listen(QString *errorMessage)
 	}
 	
 	// http routing for files (typically html, css, js, images, ...)
-	//if (m_httpServer)
-	//{
-		m_httpServer->route("/", [this] () {
-			return QHttpServerResponse::fromFile(m_resourcesPath + "/index.html");
-		});
-		m_httpServer->route("/<arg>", [this] (const QString &fileName) {
-			return QHttpServerResponse::fromFile(m_resourcesPath + "/" + fileName);
-		});
-	//}
+	HttpFunc sendIndexHtml = [this] (HttpDataPtr data) {
+		QString filePath = m_resourcesPath + "/index.html";
+		if (!data->response->sendFile(filePath)) {
+			data->response->setError(HttpStatus::NotFound);
+			return HttpPromise::resolve(data);
+		}
+		data->response->setStatus(HttpStatus::Ok);
+		return HttpPromise::resolve(data);
+	};
+
+	HttpFunc sendFileHtml = [this] (HttpDataPtr data) {
+		auto match = data->state["match"].value<QRegularExpressionMatch>();
+		QString relativeFilePath = match.captured(0);
+		if (relativeFilePath.contains("..")) {
+			data->response->setError(HttpStatus::BadRequest, "\"..\" are forbidden here");
+			return HttpPromise::resolve(data);
+		}
+		QString filePath = m_resourcesPath + relativeFilePath;
+		if (!data->response->sendFile(filePath)) {
+			data->response->setError(HttpStatus::NotFound);
+			return HttpPromise::resolve(data);
+		}
+		data->response->setStatus(HttpStatus::Ok);
+		return HttpPromise::resolve(data);
+	};
+
+	m_httpServer->addRoute("GET", "^/$", sendIndexHtml);
+	m_httpServer->addRoute("GET", "^/.*$", sendFileHtml);
 	
 	// start the servers
-	if (!m_httpServer->listen(QHostAddress::Any,m_httpPort))
+	if (!m_httpServer->listen())
 	{
 		if (errorMessage) {*errorMessage = "HTTP server failed to listen";}
 		return false;
@@ -155,9 +180,7 @@ void RemoteJoystickServer::close()
 {
 	if (m_httpServer)
 	{
-		// the destruction of the QHttpServer close the connections...
-		// QHttpServer does not provide a "close" function!
-		//delete m_httpServer;
+		m_httpServer->close();
 		m_httpServer->deleteLater();
 		m_httpServer = nullptr;
 	}
@@ -211,15 +234,15 @@ void RemoteJoystickServer::slotNewWsConnection()
 {
 	QWebSocket *socket = m_wsServer->nextPendingConnection();
 	
-	QObject::connect(socket, SIGNAL(textMessageReceived(QString)), this, SLOT(slotProcessMessage(QString)));
+	QObject::connect(socket, SIGNAL(textMessageReceived(QString)), this, SLOT(slotProcessWsMessage(QString)));
 	QObject::connect(socket, SIGNAL(disconnected()),               this, SLOT(slotWsSocketDisconnected()));
 	
 	m_wsClients.push_back(socket);
 	if (m_wsClients.size() == 1) {emit connected();}
 }
 
-// SLOT PROCESS MESSAGE ///////////////////////////////////////////////////////
-void RemoteJoystickServer::slotProcessMessage(const QString &msg)
+// SLOT PROCESS WS MESSAGE ////////////////////////////////////////////////////
+void RemoteJoystickServer::slotProcessWsMessage(const QString &msg)
 {
 	QStringList list = msg.split('/', Qt::KeepEmptyParts);
 	if (list.size() != 3) {return;}

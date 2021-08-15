@@ -12,7 +12,13 @@ CONFIG += c++17
 DESTDIR = $$MODE
 OBJECTS_DIR = $$MODE/objects
 MOC_DIR = $$MODE/moc
-QT += websockets httpserver
+QT += websockets
+
+
+INCLUDEPATH += ../../../3rdparty/HttpServer/3rdparty/QtPromise/include
+INCLUDEPATH += ../../../3rdparty/HttpServer/src
+win32-g++:LIBS += ../../../3rdparty/HttpServer/src/$$MODE/libhttpServer.a
+win32-msvc*:LIBS += ../../../3rdparty/HttpServer/src/$$MODE/libhttpServer.lib
 
 
 win32-g++:LIBS += ../QtGameControllerModif/$$MODE/libQtGameControllerModif.a

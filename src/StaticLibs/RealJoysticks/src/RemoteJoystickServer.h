@@ -5,7 +5,7 @@
 #include <QObject>
 #include <list>
 #include "AbstractRealJoystick.h"
-class QHttpServer;
+class HttpServer;
 class QWebSocketServer;
 class QWebSocket;
 
@@ -59,7 +59,7 @@ class RemoteJoystickServer : public QObject, public AbstractRealJoystick
 		
 	private slots:
 		void slotNewWsConnection();
-		void slotProcessMessage(const QString &msg);
+		void slotProcessWsMessage(const QString &msg);
 		void slotWsSocketDisconnected();
 		
 		
@@ -83,7 +83,7 @@ class RemoteJoystickServer : public QObject, public AbstractRealJoystick
 		std::array<float,4> m_povs;
 		
 		bool m_bDestructionInProgress;
-		QHttpServer *m_httpServer;
+		HttpServer *m_httpServer;
 		QWebSocketServer *m_wsServer;
 		std::list<QWebSocket*> m_wsClients;
 };

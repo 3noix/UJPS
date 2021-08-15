@@ -1,7 +1,7 @@
 <!DOCTYPE RCC><RCC version="1.0">
 <qresource>
-	<file>RESOURCES/index.html</file>
-	<file>RESOURCES/remote.css</file>
-	<file>RESOURCES/remote.js</file>
+	<file>resources/index.html</file>
+	<file>resources/remote.css</file>
+	<file>resources/remote.js</file>
 </qresource>
 </RCC>
