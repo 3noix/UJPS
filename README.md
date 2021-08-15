@@ -9,20 +9,39 @@ This project allows the user to "program a set of real joysticks": events from t
 
 It does not use GUI to define the profile such as in "Thrustmaster TARGET GUI", "Universal Control Remapper" or "Joystick Gremlin". All the profile are defined in C++ source code... but there is no need to have an accurate understanding of C++ to be able to use it, just like for Thrustmaster TARGET scripts with C language. The screenshot above is taken from the main program, which allows you to select your profile, compile it if needed and run it.
 
+UJPS also permits to create "remote controllers" (with HTML/CSS/JS or with C++ Qt). A "remote controller" is an application that runs on mobile devices (or on external screens of your PC) that can send "joystick events" to your profile -just like if it were a normal joystick- and receive inputs from it.
+
 
 ## Installation
 
-The whole procedure is described in details in the documentation (the pdf in the root directory). You will need to:
-- install vJoy for virtual joysticks: http://vjoystick.sourceforge.net/site/index.php/download-a-install/download
-- install Qt 5: https://www.qt.io/download-qt-installer/, including the additional QtCharts module
-- build UJPS by running "build.bat" then "deploy.bat"
+You will need to:
+- Install [vJoy](http://vjoystick.sourceforge.net/site/index.php/download-a-install/download), for virtual joysticks
+- Install [Qt](https://www.qt.io/download-qt-installer/). To avoid any Qt version and compilers issues, I recommend Qt 5.15.1 or 5.15.2 with MinGW 8.1.0 32-bit and including the additional QtCharts module. In the installation / maintenance tool, you should at least check the following items:
+```bash
++-- Qt
+  +-- Qt 5.15.1
+    +-- MinwGW 8.1.0 32-bit
+    +-- Qt Charts
++-- Developer and Designer Tools
+  +-- MinwGW 8.1.0 32-bit
+```
+- Get UJPS
+    - <strike>Using a release (not available yet)</strike>
+	- Cloning and building UJPS:
+	    - Version 1: open a git bash window, go the the directory where you want to add UJPS and type ```git clone https://github.com/3noix/UJPS.git --recurse-submodules```
+		- Version 2: perform an usual cloning, then add the submodules: ```cd 3rdparty/HttpServer```, ```git submodule init```, ```git submodule update```, ```cd 3rdparty/QtPromise```, ```git submodule init``` and ```git submodule update```
+	    - Finally build UJPS by running "build.bat" then "deploy.bat"
 
 Why no "binaries release"? Both building UJPS and compiling a profile requires Qt 5. So if you don't have Qt 5 installed you will only be able to run profiles done by other users without the slightest modification (profiles binaries are dll files). And as the "UJPS community" is really small right now and as it is really easy to build the tool, I don't provide a "binaries release" right now. I could reconsider if some of you are interested.
 
 
 ## Examples
 
-First, don't hesitate to take a look at the profiles examples in the "examples/Profiles" directory. But here is most of the code of a simple UJPS profile just for the demo. "tmwj" designates the ThrustMaster Warthog Joystick object and "TMWJ" the namespace that contains the names of its buttons, axes and povs:
+Currently UJPS offers 2 different ways to create profiles:
+- With Target-like functions, by subclassing the AbstractProfileTarget class ([see examples](https://github.com/3noix/UJPS/tree/master/examples/Profiles/Target))
+- [With rawer functions](https://github.com/3noix/UJPS/tree/master/src/StaticLibs/UjpsCore/src/BASIC), by subclassing the AbstractProfileBasic ([see examples](https://github.com/3noix/UJPS/tree/master/examples/Profiles/Basic))
+
+Here we will only take a look at the "Thrustmaster Target" way. <b>Don't hesitate to take a look at the profiles examples in the ["examples/Profiles"](https://github.com/3noix/UJPS/tree/master/examples/Profiles) directory, this is the easiest way to get started.</b> Just below is most of the code of a simple UJPS profile just for the demo. "tmwj" designates the ThrustMaster Warthog Joystick object and "TMWJ" the namespace that contains the names of its buttons, axes and povs:
 
 ```C++
 // file: Profile.h
@@ -167,10 +186,9 @@ Around the main UJPS program, a few other ones are provided:
 
 ## Remote controllers
 
-Moreover UJPS also provides classes to ease the creation of "remote controllers" (if you don't know what I am talking about, take a look at Roccat Power Grid, LEA extended input or GameGlass). A "remote controller" is an application that runs on mobile devices (or on external screens of your PC) that can send joystick events to your profile and receive inputs from it. The provided classes take care of the network communication between the remote controller and the profile, but you have to program the GUI yourself... I do not provide a GUI editor like in Roccat Power Grid or LEA extended input. I just provide 2 examples of "Thrustmaster MFD Cougar" implemented as remote controllers:
-- "MFD_dumb" which just simulates the bezel and sends the buttons changes to the profile
-- "MFD_smart" which is more evolved than the first one. It includes a few MFD pages with basic graphics (only text). It does not send button changes, but actions requests which can be different for the same button on different MFD pages
+Moreover UJPS permits to create "remote controllers" (if you don't know what I am talking about, take a look at Roccat Power Grid, LEA extended input or GameGlass). A "remote controller" is an application that runs on mobile devices (or on external screens of your PC) that can send "joystick events" to your profile and receive inputs from it. In the examples I provide 2 ways of creating such "remote controllers":
+- With a Qt desktop application ([see examples](https://github.com/3noix/UJPS/tree/master/examples/RemoteControllers)). Classes are already done to take care of the communication with the profile. So you can focus on the GUI in C++ Qt. I provide 2 examples ("MFD_dumb" and "MFD_smart") which reproduce a "Thrustmaster MFD Cougar". Both of them works with the ["ProfileMfd"](https://github.com/3noix/UJPS/tree/master/examples/Profiles/Target/ProfileMfd) profile.
+- With Web files: define your GUI in HTML, CSS (and optionnally JS) and use the provided JS functions to take care of the communication with the profile ([see examples](https://github.com/3noix/UJPS/tree/master/examples/Profiles/Basic/ProfileWebRemote)). Connect your mobile device to your local Wifi network, and type in a browser the url given by the UJPS main app (you must start the profile).
 
-These 2 examples can be run with the "ProfileMfd" profile provided.
 
 ![ScreenShot](https://i.imgur.com/NuoG9RB.png)
